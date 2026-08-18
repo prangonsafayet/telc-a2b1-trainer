@@ -1,0 +1,8 @@
+# Netlify config — static site, no build step
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
