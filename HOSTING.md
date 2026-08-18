@@ -92,6 +92,31 @@ nicer: **Site configuration → Site details → Change site name** → e.g. `sa
 
 Either way the new version is live in seconds and your database is untouched.
 
+## Troubleshooting: "Cloud sync — not active"
+
+Open **Settings** in the app. The panel now lists exactly what the running build was
+compiled with — whether the URL and the key were present, and whether they had the right
+shape. Work down that list.
+
+The one rule behind almost every case: **`VITE_*` values are baked in when the app is
+built, not read when it runs.** Setting them somewhere does nothing until a *new build*
+happens.
+
+| Where you are seeing it | Fix |
+| --- | --- |
+| Local `npm run dev` | Vite reads `.env` only at startup. Create/edit `.env`, then stop the dev server and start it again. |
+| Netlify, Git deploys | Add the variables under **Site configuration → Environment variables**, then **Deploys → Trigger deploy → Deploy site**. Adding variables does not rebuild the existing site. |
+| Netlify Drop (`dist` upload) | Run `npm run build` locally *with* `.env` present, then re-upload the fresh `dist`. |
+| Anywhere, after editing `.env` | Rebuild (`npm run build`) or restart the dev server. |
+
+`npm run build` also prints the verdict in the build log — either
+`Supabase cloud sync will be enabled (…)` or a `Building WITHOUT Supabase credentials`
+warning listing which variable is missing. Check your Netlify deploy log for that line.
+
+If the panel says your key is a **secret key**, stop and rotate it in Supabase: a
+`sb_secret_…` or `service_role` key bypasses row-level security and must never be sent to
+a browser. Use the **anon / publishable** key.
+
 ## Good to know
 
 - **The app still works offline / without any of this.** With no `.env` (or empty values) it behaves exactly as before — browser-local storage only, and the Settings page says so.

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Cloud, CloudOff, Loader2, LogOut, Mail, RefreshCw } from 'lucide-react';
+import { Check, Cloud, CloudOff, Loader2, LogOut, Mail, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx';
 import { Input } from '@/components/ui/input.jsx';
-import { rawUrl, urlValid } from '@/lib/sync.js';
+import { diagnostics } from '@/lib/sync.js';
 import { useSync } from '@/lib/sync-context.jsx';
 
 export default function SyncPanel() {
@@ -11,35 +11,74 @@ export default function SyncPanel() {
   const [email, setEmail] = useState('');
 
   if (!sync.configured) {
-    const misconfigured = rawUrl && !urlValid;
+    const d = diagnostics;
+    const rows = [
+      ['VITE_SUPABASE_URL', d.urlPresent, d.urlPresent ? d.projectUrl : 'not set in this build'],
+      ['…is a valid project URL', d.urlValid, d.urlValid ? 'looks right' : 'must be https://<project-ref>.supabase.co'],
+      ['VITE_SUPABASE_ANON_KEY', d.keyPresent, d.keyPresent ? d.keyPreview : 'not set in this build'],
+      ['…is a publishable key', d.keyLooksValid, d.keyIsSecret ? 'this is a SECRET key — never ship it' : d.keyPresent ? 'expected "sb_publishable_…" or "eyJ…"' : '—']
+    ];
+
     return (
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CloudOff className="size-4" /> Cloud sync — {misconfigured ? 'configuration error' : 'not configured'}
+            <CloudOff className="size-4" /> Cloud sync — not active
           </CardTitle>
+          <CardDescription>
+            Progress is saved in this browser only. Here is exactly what this build of the app was compiled with:
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm text-muted-foreground">
-          {misconfigured ? (
-            <>
-              <p className="text-destructive">
-                The <code>supabaseUrl</code> in <code>src/lib/sync-config.js</code> doesn't look like a project URL:{' '}
-                <code>{rawUrl}</code>
-              </p>
-              <p>
-                It must be exactly <code>https://&lt;project-ref&gt;.supabase.co</code> — nothing after ".supabase.co", no
-                dashboard link. Find it in Supabase under <b>Project Settings → Data API → Project URL</b>, fix the file,
-                and redeploy.
-              </p>
-            </>
-          ) : (
-            <p>
-              Your progress is currently saved only in this browser. To sync it to a free cloud database (so it survives
-              browser cleanups and follows you across devices), follow <b>HOSTING.md → Part 1</b>: create a free Supabase
-              project, run the SQL setup, and set <code>VITE_SUPABASE_URL</code> / <code>VITE_SUPABASE_ANON_KEY</code>{' '}
-              (or edit <code>src/lib/sync-config.js</code>).
+        <CardContent className="space-y-4 text-sm">
+          <ul className="space-y-1.5">
+            {rows.map(([label, ok, detail]) => (
+              <li key={label} className="flex items-start gap-2">
+                {ok
+                  ? <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--success)]" />
+                  : <X className="mt-0.5 size-4 shrink-0 text-destructive" />}
+                <span className="min-w-0">
+                  <code className="font-medium">{label}</code>
+                  <span className="block break-all text-xs text-muted-foreground">{detail}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {d.keyIsSecret ? (
+            <p className="rounded-md border-l-4 border-destructive bg-[color-mix(in_oklab,var(--destructive)_10%,transparent)] p-3 text-destructive">
+              <b>Stop.</b> That key is a service-role/secret key. It bypasses row-level security and must never be put in
+              a browser app. Rotate it in Supabase, then use the <b>anon / publishable</b> key instead.
             </p>
+          ) : (
+            <div className="rounded-md border-l-4 border-primary bg-accent/40 p-3">
+              <b>How to fix it</b>
+              <p className="mt-1 text-muted-foreground">
+                These values are baked in when the app is <i>built</i>, not read when it runs — so changing them always
+                needs a rebuild.
+              </p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-muted-foreground">
+                <li>
+                  <b>Running locally?</b> Put them in <code>.env</code> in the project root, then <b>restart</b>{' '}
+                  <code>npm run dev</code> — Vite only reads <code>.env</code> at startup.
+                </li>
+                <li>
+                  <b>Deployed on Netlify?</b> Add them under <b>Site configuration → Environment variables</b>, then
+                  trigger a <b>new deploy</b>. Adding variables alone does not update the already-built site.
+                </li>
+                <li>
+                  <b>Deployed by dragging <code>dist</code>?</b> Run <code>npm run build</code> again locally with{' '}
+                  <code>.env</code> in place, then re-upload the new <code>dist</code>.
+                </li>
+              </ul>
+              <p className="mt-2 text-muted-foreground">
+                Full walkthrough: <b>HOSTING.md → Part 1 and Part 2</b>.
+              </p>
+            </div>
           )}
+
+          <p className="text-xs text-muted-foreground">
+            Build mode: <code>{d.mode}</code>. Until sync is on, use <b>History → Export progress</b> to keep a backup.
+          </p>
         </CardContent>
       </Card>
     );

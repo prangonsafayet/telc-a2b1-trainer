@@ -22,7 +22,42 @@ export const projectUrl = normalizeUrl(cfg.supabaseUrl);
 export const urlValid = /^https:\/\/[a-z0-9-]+\.supabase\.(co|in|red|net)$/i.test(projectUrl);
 export const rawUrl = cfg.supabaseUrl;
 const anonKey = String(cfg.supabaseAnonKey || '').trim();
-export const configured = !!(projectUrl && anonKey && urlValid);
+
+/* A publishable key is either a legacy JWT ("eyJ…") or the newer "sb_publishable_…".
+   Anything starting with sb_secret_ / service_role must never reach the browser. */
+const keyIsSecret = /^sb_secret_/i.test(anonKey) || /"role"\s*:\s*"service_role"/.test(atobSafe(anonKey));
+const keyLooksValid = !!anonKey && !keyIsSecret && (/^sb_publishable_/i.test(anonKey) || /^eyJ/.test(anonKey));
+
+function atobSafe(jwt) {
+  try {
+    return atob(String(jwt).split('.')[1] || '');
+  } catch (e) {
+    return '';
+  }
+}
+
+export const configured = !!(projectUrl && urlValid && anonKey && keyLooksValid);
+
+/* Everything the Settings page needs to explain *why* sync is off. The values are
+   resolved when the bundle is built, so a deploy whose build lacked the variables shows
+   up here as "missing" no matter what the hosting dashboard says today. */
+export const diagnostics = {
+  mode: import.meta.env.MODE,
+  urlPresent: !!String(cfg.supabaseUrl || '').trim(),
+  urlValid,
+  projectUrl,
+  keyPresent: !!anonKey,
+  keyLooksValid,
+  keyIsSecret,
+  keyPreview: anonKey ? anonKey.slice(0, 12) + '…' + anonKey.slice(-4) : ''
+};
+
+if (keyIsSecret) {
+  console.error(
+    'Supabase: VITE_SUPABASE_ANON_KEY looks like a SECRET key. Never ship one to the browser — ' +
+    'use the anon / publishable key. Cloud sync has been disabled.'
+  );
+}
 
 const client = configured ? createClient(projectUrl, anonKey) : null;
 
