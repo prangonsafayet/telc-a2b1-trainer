@@ -1,0 +1,3 @@
+# Client-side routing: serve the app shell for every path so a refresh on
+# /history or /review/1723 does not 404.
+/*    /index.html   200

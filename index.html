@@ -3,48 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1a" media="(prefers-color-scheme: dark)">
+<meta name="description" content="10 full mock exams for the telc Deutsch A2·B1 exam — Lesen, Sprachbausteine, Hören, Schreiben, Sprechen, with real timing, scoring and review.">
 <title>telc Deutsch A2·B1 — Mock Exam Trainer</title>
-<link rel="stylesheet" href="styles.css">
+<script>
+  /* Apply the saved theme before first paint so there is no light-mode flash. */
+  (function () {
+    try {
+      var t = localStorage.getItem('telcTrainerTheme');
+      if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      if (t === 'dark') document.documentElement.classList.add('dark');
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">telc Deutsch A2·B1 Trainer<small>10 Modelltests · Lesen · Sprachbausteine · Hören · Schreiben · Sprechen</small></div>
-    <span class="countdown-chip" id="countdownChip"></span>
-    <span class="countdown-chip" id="syncChip" style="display:none"></span>
-    <nav id="mainNav">
-      <button data-view="dashboard" class="active">Dashboard</button>
-      <button data-view="learn">Learn (14-day plan)</button>
-      <button data-view="guide">Exam Guide</button>
-      <button data-view="history">History</button>
-      <button data-view="settings">Settings</button>
-    </nav>
-  </header>
-
-  <main class="wrap">
-    <section id="view-dashboard"></section>
-    <section id="view-learn" hidden></section>
-    <section id="view-guide" hidden></section>
-    <section id="view-history" hidden></section>
-    <section id="view-settings" hidden></section>
-    <section id="view-runner" hidden></section>
-    <section id="view-results" hidden></section>
-    <section id="view-review" hidden></section>
-  </main>
-
-  <script src="data/exam01.js"></script>
-  <script src="data/exam02.js"></script>
-  <script src="data/exam03.js"></script>
-  <script src="data/exam04.js"></script>
-  <script src="data/exam05.js"></script>
-  <script src="data/exam06.js"></script>
-  <script src="data/exam07.js"></script>
-  <script src="data/exam08.js"></script>
-  <script src="data/exam09.js"></script>
-  <script src="data/exam10.js"></script>
-  <script src="content.js"></script>
-  <script src="vendor/supabase.js"></script>
-  <script src="sync-config.js"></script>
-  <script src="sync.js"></script>
-  <script src="app.js"></script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
