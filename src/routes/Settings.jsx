@@ -1,11 +1,11 @@
 import { Trash2, Volume2 } from 'lucide-react';
 import { toast } from 'sonner';
+import ExamDatePicker from '@/components/ExamDatePicker.jsx';
 import SyncPanel from '@/components/SyncPanel.jsx';
 import { PageTitle } from '@/components/common.jsx';
 import { useConfirm } from '@/components/ConfirmProvider.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx';
-import { Input } from '@/components/ui/input.jsx';
 import { Label } from '@/components/ui/label.jsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.jsx';
 import { Separator } from '@/components/ui/separator.jsx';
@@ -99,7 +99,7 @@ export default function Settings() {
             </Field>
 
             <Field label="Your exam date">
-              <Input type="date" value={s.examDate} onChange={e => set('examDate', e.target.value || s.examDate)} />
+              <ExamDatePicker value={s.examDate} onChange={v => set('examDate', v)} />
             </Field>
           </div>
 

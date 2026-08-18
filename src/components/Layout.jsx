@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { BookOpen, CalendarClock, CloudOff, GraduationCap, History, LayoutDashboard, Settings2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge.jsx';
 import AccountMenu from '@/components/AccountMenu.jsx';
+import { daysUntil, parseISODate } from '@/components/ExamDatePicker.jsx';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { ThemeToggle } from '@/components/ThemeToggle.jsx';
 import { useDB } from '@/lib/store.jsx';
@@ -20,9 +21,9 @@ const NAV = [
 ];
 
 function Countdown({ examDate }) {
-  const d = new Date(examDate + 'T09:00:00');
-  const days = Math.ceil((d - new Date()) / 86400000);
-  if (isNaN(days)) return null;
+  const d = parseISODate(examDate);
+  const days = daysUntil(examDate);
+  if (!d || days == null) return null;
   return (
     <Badge variant={days < 0 ? 'warning' : days <= 14 ? 'destructive' : 'secondary'} className="gap-1.5 py-1">
       <CalendarClock className="size-3" />

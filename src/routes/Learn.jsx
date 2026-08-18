@@ -57,7 +57,11 @@ export default function Learn() {
 
   return (
     <>
-      <PageTitle lead={LEARN.intro}>AI-assisted learning — 14 days to mock-exam readiness</PageTitle>
+      {/* LEARN.intro is authored HTML in content.js (it bolds a few phrases), so it is
+          injected rather than rendered as text — same as the guide and the cheatsheets. */}
+      <PageTitle lead={<span dangerouslySetInnerHTML={{ __html: LEARN.intro }} />}>
+        AI-assisted learning — 14 days to mock-exam readiness
+      </PageTitle>
 
       <Card>
         <CardContent className="space-y-2">
