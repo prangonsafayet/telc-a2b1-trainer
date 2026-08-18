@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, PlayCircle, RotateCcw, TriangleAlert, Trophy } from 'lucide-react';
+import { CalendarClock, ClipboardCheck, LogIn, PlayCircle, RotateCcw, TriangleAlert, Trophy } from 'lucide-react';
 import HistoryChart from '@/components/HistoryChart.jsx';
-import { Meter, PageTitle, SectionTitle, difficultyVariant, resultVariant } from '@/components/common.jsx';
+import { Meter, PageTitle, SectionTitle, difficultyVariant, resultVariant, useCountUp } from '@/components/common.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx';
@@ -14,19 +14,29 @@ import { clearRun, loadRun, newRun, saveRun } from '@/lib/runState.js';
 import { useDB } from '@/lib/store.jsx';
 import { useSync } from '@/lib/sync-context.jsx';
 import { fmtDate } from '@/lib/util.js';
+import { cn } from '@/lib/utils';
 
 const SKILLS = [['lesen', 'Lesen'], ['hoeren', 'Hören'], ['schreiben', 'Schreiben'], ['sprechen', 'Sprechen']];
 
-function Stat({ label, value, sub }) {
+function Stat({ label, value, sub, icon: Icon }) {
   return (
-    <Card className="gap-2 py-4">
-      <CardContent className="px-4">
-        <div className="text-xs uppercase tracking-wide text-muted-foreground">{label}</div>
+    <Card className="card-hover gap-2 overflow-hidden py-4">
+      <CardContent className="relative px-4">
+        {Icon ? (
+          <Icon className="absolute right-0 top-0 size-10 text-primary/10" strokeWidth={1.5} />
+        ) : null}
+        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
         <div className="mt-1 text-2xl font-bold tabular-nums">{value}</div>
         <div className="mt-0.5 text-xs text-muted-foreground">{sub}</div>
       </CardContent>
     </Card>
   );
+}
+
+/* Counted-up integer, used for the headline numbers. */
+function Counted({ value }) {
+  const n = useCountUp(value);
+  return <>{n ?? '–'}</>;
 }
 
 export default function Dashboard() {
@@ -63,7 +73,7 @@ export default function Dashboard() {
       </PageTitle>
 
       {!signedIn ? (
-        <Card className="mb-6 border-l-4 border-l-[color:var(--warning)]">
+        <Card className="animate-fade-up mb-6 border-l-4 border-l-[color:var(--warning)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <TriangleAlert className="size-4 text-[color:var(--warning-foreground)]" />
@@ -89,7 +99,7 @@ export default function Dashboard() {
       ) : null}
 
       {running ? (
-        <Card className="mb-6 border-l-4 border-l-primary">
+        <Card className="animate-pop-in mb-6 border-l-4 border-l-primary shadow-md">
           <CardHeader>
             <CardTitle>You have an exam in progress</CardTitle>
             <CardDescription>
@@ -115,14 +125,21 @@ export default function Dashboard() {
         </Card>
       ) : null}
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <Stat label="Full exams taken" value={fa.length} sub={`${attempts.length - fa.length} module practice runs`} />
+      <div className="stagger grid gap-3 sm:grid-cols-3">
         <Stat
+          icon={ClipboardCheck}
+          label="Full exams taken"
+          value={<Counted value={fa.length} />}
+          sub={`${attempts.length - fa.length} module practice runs`}
+        />
+        <Stat
+          icon={Trophy}
           label="Best total"
-          value={<>{best != null ? best : '–'}<span className="text-base font-normal text-muted-foreground">/240</span></>}
+          value={<>{best != null ? <Counted value={best} /> : '–'}<span className="text-base font-normal text-muted-foreground">/240</span></>}
           sub={best != null ? (best >= 168 ? 'B1 territory 🎉' : best >= 96 ? 'A2 zone — push to 168' : 'keep training') : 'no full exam yet'}
         />
         <Stat
+          icon={CalendarClock}
           label="Last activity"
           value={<span className="text-lg">{last ? `${MOD_META[last.mode] ? MOD_META[last.mode].short : 'Full exam'} · Test ${last.examId}` : '–'}</span>}
           sub={last ? fmtDate(last.date) : 'start below'}
@@ -143,12 +160,15 @@ export default function Dashboard() {
       </div>
 
       <SectionTitle>Mock exams</SectionTitle>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {EXAMS.map(ex => {
           const b = bestFor(ex.id);
           const n = attempts.filter(a => a.examId === ex.id).length;
+          const accent =
+            ex.difficulty === 'easy' ? 'var(--success)' : ex.difficulty === 'medium' ? 'var(--warning)' : 'var(--primary)';
           return (
-            <Card key={ex.id} className="gap-4">
+            <Card key={ex.id} className="card-hover relative gap-4 overflow-hidden">
+              <span aria-hidden className="absolute inset-x-0 top-0 h-1" style={{ background: accent }} />
               <CardHeader>
                 <div className="flex items-start justify-between gap-2">
                   <CardTitle className="text-base">{ex.title}</CardTitle>

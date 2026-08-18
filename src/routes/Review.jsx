@@ -15,14 +15,21 @@ function ReviewItem({ ok, question, your, correct, children }) {
   return (
     <div
       className={cn(
-        'my-2 rounded-lg border border-l-4 p-3',
-        ok ? 'border-l-[color:var(--success)]' : 'border-l-destructive'
+        'animate-fade-up my-2 rounded-lg border border-l-4 p-3 transition-colors',
+        ok
+          ? 'border-l-[color:var(--success)] bg-[color-mix(in_oklab,var(--success)_5%,transparent)]'
+          : 'border-l-destructive bg-[color-mix(in_oklab,var(--destructive)_5%,transparent)]'
       )}
     >
       <div className="flex items-start gap-2">
-        {ok
-          ? <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--success)]" />
-          : <X className="mt-0.5 size-4 shrink-0 text-destructive" />}
+        <span
+          className={cn(
+            'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full',
+            ok ? 'bg-[color:var(--success)]/15 text-[color:var(--success)]' : 'bg-destructive/15 text-destructive'
+          )}
+        >
+          {ok ? <Check className="size-3.5" /> : <X className="size-3.5" />}
+        </span>
         <div className="min-w-0 flex-1 space-y-1">
           <div className="font-medium leading-relaxed">{question}</div>
           <div className={cn('text-sm', ok ? 'text-muted-foreground' : 'text-destructive')}>

@@ -213,7 +213,8 @@ export default function Runner() {
   /* ---------- briefing ---------- */
   if (run.phase === 'brief') {
     return (
-      <Card className="mx-auto max-w-2xl text-center">
+      <Card className="relative animate-pop-in mx-auto max-w-2xl overflow-hidden text-center shadow-md">
+        <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-primary" />
         <CardHeader className="items-center">
           <CardDescription>
             {exam.title} · {exam.level} ·{' '}
@@ -230,7 +231,9 @@ export default function Runner() {
             {currentMod !== 'sprechen' ? ' — auto-submits when time runs out' : ' (guideline)'}
           </Badge>
           <div className="flex flex-col items-center gap-2">
-            <Button size="lg" onClick={beginModule}>Start {meta.short} ▸</Button>
+            <Button size="lg" className="px-8 shadow-sm transition-transform hover:scale-[1.03]" onClick={beginModule}>
+              Start {meta.short} ▸
+            </Button>
             <Button variant="ghost" size="sm" onClick={abort}>Abort attempt</Button>
           </div>
         </CardContent>
@@ -272,8 +275,12 @@ export default function Runner() {
           </span>
           <span
             className={cn(
-              'ml-auto font-mono text-xl font-bold tabular-nums',
-              secLeft <= 60 ? 'animate-pulse text-destructive' : secLeft <= 300 ? 'text-[color:var(--warning-foreground)]' : ''
+              'ml-auto rounded-md px-2 py-0.5 font-mono text-xl font-bold tabular-nums transition-colors',
+              secLeft <= 60
+                ? 'animate-pulse bg-destructive/10 text-destructive'
+                : secLeft <= 300
+                  ? 'bg-[color-mix(in_oklab,var(--warning)_18%,transparent)] text-[color:var(--warning-foreground)]'
+                  : 'text-foreground'
             )}
           >
             {fmtClock(secLeft)}

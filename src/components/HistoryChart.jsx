@@ -37,16 +37,33 @@ export default function HistoryChart({ attempts }) {
                 </div>
               ))}
               <div className="flex h-full items-end gap-2">
-                {fa.map(a => (
-                  <div key={a.id} className="flex w-10 flex-col items-center gap-1" title={`Test ${a.examId} · ${fmtDate(a.date)} · ${a.total}/240 · ${a.result}`}>
-                    <span className="text-[11px] tabular-nums text-muted-foreground">{a.total}</span>
+                {fa.map((a, i) => {
+                  /* Colour each bar by its grade so the trend reads at a glance. */
+                  const tone =
+                    a.result === 'B1' ? 'var(--success)' : a.result === 'A2' ? 'var(--warning)' : 'var(--destructive)';
+                  return (
                     <div
-                      className="w-full rounded-t bg-primary transition-all hover:bg-primary/80"
-                      style={{ height: Math.max(2, (a.total / 240) * H) }}
-                    />
-                    <span className="text-[11px] text-muted-foreground">T{a.examId}</span>
-                  </div>
-                ))}
+                      key={a.id}
+                      className="group flex w-10 flex-col items-center gap-1"
+                      title={`Test ${a.examId} · ${fmtDate(a.date)} · ${a.total}/240 · ${a.result}`}
+                    >
+                      <span className="text-[11px] tabular-nums text-muted-foreground transition-colors group-hover:text-foreground">
+                        {a.total}
+                      </span>
+                      <div
+                        className="w-full origin-bottom rounded-t transition-[filter] duration-200 group-hover:brightness-110"
+                        style={{
+                          height: Math.max(2, (a.total / 240) * H),
+                          background: `linear-gradient(to top, ${tone}, color-mix(in oklab, ${tone} 60%, white))`,
+                          animation: `grow-up 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 60}ms both`
+                        }}
+                      />
+                      <span className="text-[11px] text-muted-foreground transition-colors group-hover:text-foreground">
+                        T{a.examId}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

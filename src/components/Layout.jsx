@@ -110,7 +110,10 @@ export default function Layout() {
 
         <main className="mx-auto max-w-6xl px-4 pb-24 pt-6 sm:px-6">
           <ErrorBoundary resetKey={pathname}>
-            <Outlet />
+            {/* Re-keying on the path restarts the entrance animation for each screen. */}
+            <div key={pathname} className="animate-fade-up">
+              <Outlet />
+            </div>
           </ErrorBoundary>
         </main>
       </div>

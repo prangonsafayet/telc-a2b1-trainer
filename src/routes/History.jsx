@@ -53,7 +53,7 @@ export default function History() {
 
       <HistoryChart attempts={db.attempts} />
 
-      <Card className="mt-6">
+      <Card className="mt-6 animate-fade-up" style={{ animationDelay: '80ms' }}>
         <CardContent>
           {rows.length ? (
             <Table>

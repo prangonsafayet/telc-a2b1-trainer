@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge.jsx';
 import { Label } from '@/components/ui/label.jsx';
 import { Progress } from '@/components/ui/progress.jsx';
@@ -24,7 +24,9 @@ export function Multiline({ text }) {
 export function PageTitle({ children, lead }) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{children}</h1>
+      <h1 className="bg-gradient-to-br from-foreground to-foreground/65 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl">
+        {children}
+      </h1>
       {lead ? <p className="mt-2 max-w-3xl text-muted-foreground">{lead}</p> : null}
     </div>
   );
@@ -34,10 +36,37 @@ export function SectionTitle({ children, className }) {
   return <h2 className={cn('mb-3 mt-8 text-lg font-semibold tracking-tight', className)}>{children}</h2>;
 }
 
+/* Counts from 0 to `to` once, so scores land rather than just appear. */
+export function useCountUp(to, ms = 700) {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (to == null) return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) { setN(to); return undefined; }
+    let raf;
+    const t0 = performance.now();
+    const tick = now => {
+      const p = Math.min(1, (now - t0) / ms);
+      setN(Math.round(to * (1 - Math.pow(1 - p, 3))));   // ease-out cubic
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [to, ms]);
+  return to == null ? null : n;
+}
+
 /* 70% is the B1 threshold — the marker shows it on every skill bar. */
 export function Meter({ label, value, of = 60, colorByScore = false }) {
   const pct = value != null ? Math.round((value / of) * 100) : 0;
   const tone = !colorByScore || pct >= 70 ? 'bg-primary' : pct >= 40 ? 'bg-[color:var(--warning)]' : 'bg-destructive';
+
+  /* Start empty, then fill on the next frame so the bar animates in. */
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(pct));
+    return () => cancelAnimationFrame(id);
+  }, [pct]);
+
   return (
     <div className="space-y-1.5">
       <div className="flex items-baseline justify-between text-sm">
@@ -45,7 +74,10 @@ export function Meter({ label, value, of = 60, colorByScore = false }) {
         <span className="tabular-nums text-muted-foreground">{value != null ? `${value}/${of}` : '—'}</span>
       </div>
       <div className="relative">
-        <Progress value={pct} indicatorClassName={tone} />
+        <Progress
+          value={shown}
+          indicatorClassName={cn(tone, 'transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]')}
+        />
         <div className="absolute inset-y-0 left-[70%] w-px bg-foreground/40" title="B1 threshold (70%)" />
       </div>
     </div>
@@ -139,7 +171,7 @@ export function QuestionText({ children }) {
 /* "Teil 1 — …" block wrapper. */
 export function Teil({ title, chip, anweisung, children }) {
   return (
-    <section className="mb-6 rounded-xl border bg-card p-4 shadow-sm sm:p-6">
+    <section className="animate-fade-up mb-6 rounded-xl border bg-card p-4 shadow-sm sm:p-6">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-base font-semibold">{title}</h3>
         {chip ? <Badge variant="secondary">{chip}</Badge> : null}

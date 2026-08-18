@@ -1,6 +1,6 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Home, ListChecks, RotateCcw } from 'lucide-react';
-import { Meter } from '@/components/common.jsx';
+import { Meter, useCountUp } from '@/components/common.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card.jsx';
 import { examById } from '@/data/exams.js';
@@ -9,6 +9,11 @@ import { newRun, saveRun } from '@/lib/runState.js';
 import { useDB } from '@/lib/store.jsx';
 import { fmtClock } from '@/lib/util.js';
 import { cn } from '@/lib/utils';
+
+function CountedTotal({ value }) {
+  const n = useCountUp(value, 900);
+  return <b>{n}</b>;
+}
 
 export default function Results() {
   const { attemptId } = useParams();
@@ -34,7 +39,16 @@ export default function Results() {
 
   return (
     <>
-      <Card className="text-center">
+      <Card className="relative animate-pop-in overflow-hidden text-center shadow-md">
+        <span
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-1"
+          style={{
+            background: full
+              ? a.result === 'B1' ? 'var(--success)' : a.result === 'A2' ? 'var(--warning)' : 'var(--destructive)'
+              : 'var(--primary)'
+          }}
+        />
         <CardHeader className="items-center">
           <CardDescription>
             {ex.title} · {ex.level} · {full ? 'Full exam' : `${MOD_META[a.mode].name} (practice)`}
@@ -43,9 +57,9 @@ export default function Results() {
         <CardContent className="space-y-2">
           {full ? (
             <>
-              <div className={cn('text-5xl font-bold tracking-tight', gradeTone)}>{a.result}</div>
+              <div className={cn('text-6xl font-bold tracking-tight', gradeTone)}>{a.result}</div>
               <div className="text-lg tabular-nums">
-                {a.total} / 240 points · time used {fmtClock(timeTotal)}
+                <CountedTotal value={a.total} /> / 240 points · time used {fmtClock(timeTotal)}
               </div>
               <p className="text-sm text-muted-foreground">
                 B1 rule: ≥42/60 in three skills + ≥24/60 in the fourth. A2 rule: ≥24/60 in three + ≥6/60 in the fourth.
@@ -63,7 +77,7 @@ export default function Results() {
         </CardContent>
       </Card>
 
-      <Card className="mt-6">
+      <Card className="mt-6 animate-fade-up" style={{ animationDelay: '120ms' }}>
         <CardContent className="grid gap-5 sm:grid-cols-2">
           {s.lesen != null ? <Meter label="Lesen" value={s.lesen} of={60} colorByScore /> : null}
           {s.hoeren != null ? <Meter label="Hören" value={s.hoeren} of={60} colorByScore /> : null}

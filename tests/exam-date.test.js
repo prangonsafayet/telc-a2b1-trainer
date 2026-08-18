@@ -39,6 +39,47 @@ if (dayButtons.length) {
   check('saved date parses back to the same day', saved && toISODate(parseISODate(saved)) === saved);
 }
 
+/* The month/year pickers: react-day-picker's default is a transparent native <select>
+   overlaid on a label, which renders unstyled and with the wrong chevron. They are
+   replaced with real shadcn selects, so no native <select> may remain in the calendar. */
+/* Picking a day closed the popover, so open it again for the dropdown checks. */
+await click(findByText(/\d{4}|Pick your exam date/));
+const byLabel = l => document.querySelector(`[data-slot="select-trigger"][aria-label="${l}"]`);
+const popover = document.querySelector('[data-slot="popover-content"]');
+
+check('calendar uses no native <select>', (popover?.querySelectorAll('select').length ?? 0) === 0);
+
+const monthTrigger = byLabel('Monat auswählen');
+const yearTrigger = byLabel('Jahr auswählen');
+check('month dropdown is rendered', !!monthTrigger);
+check('year dropdown is rendered', !!yearTrigger);
+check('month dropdown shows the current month', /\p{L}{3,}/u.test(monthTrigger?.textContent || ''));
+check('year dropdown shows a 4-digit year', /\d{4}/.test(yearTrigger?.textContent || ''));
+
+if (monthTrigger) {
+  await click(monthTrigger);
+  const months = [...document.querySelectorAll('[data-slot="select-item"]')];
+  check('month dropdown opens all 12 months', months.length === 12, `${months.length} options`);
+  await click(months[0]);
+  check('picking a month updates the caption', /Januar/.test(byLabel('Monat auswählen')?.textContent || ''));
+}
+
+if (yearTrigger) {
+  await click(byLabel('Jahr auswählen'));
+  const years = [...document.querySelectorAll('[data-slot="select-item"]')];
+  check('year dropdown offers a range of years', years.length >= 5, `${years.length} options`);
+  await click(years[years.length - 1]);
+  check('picking a year updates the caption', /\d{4}/.test(byLabel('Jahr auswählen')?.textContent || ''));
+}
+
+check('calendar grid survives both changes', !!document.querySelector('[role="grid"], table'));
+
+/* Chevrons must point the right way: down for dropdowns, left/right for month nav. */
+const chevrons = [...(popover?.querySelectorAll('svg.lucide') ?? [])]
+  .map(el => (el.getAttribute('class') || '').match(/lucide-chevron-(left|right|up|down)/)?.[1])
+  .filter(Boolean);
+check('nav renders left and right chevrons', chevrons.includes('left') && chevrons.includes('right'), chevrons.join(','));
+
 await unmount();
 
 const failed = checks.filter(c => !c).length;

@@ -74,11 +74,17 @@ export default function Learn() {
       </Card>
 
       <SectionTitle>The 14-day plan</SectionTitle>
-      <div className="space-y-4">
+      <div className="stagger space-y-4">
         {LEARN.days.map(d => {
           const dayDone = d.tasks.every((_, i) => done[`d${d.day}t${i}`]);
           return (
-            <Card key={d.day} className={cn(dayDone && 'border-l-4 border-l-[color:var(--success)]')}>
+            <Card
+              key={d.day}
+              className={cn(
+                'card-hover',
+                dayDone && 'border-l-4 border-l-[color:var(--success)] bg-[color-mix(in_oklab,var(--success)_4%,transparent)]'
+              )}
+            >
               <CardHeader>
                 <div className="flex flex-wrap items-center gap-2">
                   <CardTitle className="text-base">Day {d.day}: {d.title}</CardTitle>
@@ -112,7 +118,10 @@ export default function Learn() {
                 </div>
 
                 {d.ai.map((a, i) => (
-                  <div key={i} className="rounded-lg border-l-4 border-primary bg-accent/40 p-3">
+                  <div
+                    key={i}
+                    className="rounded-lg border-l-4 border-primary bg-accent/40 p-3 transition-colors hover:bg-accent/60"
+                  >
                     <div className="flex items-center gap-1.5 font-semibold">
                       <Sparkles className="size-4" /> AI practice — {a.t}
                     </div>
