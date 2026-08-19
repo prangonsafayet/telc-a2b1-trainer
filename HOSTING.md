@@ -72,17 +72,87 @@ nicer: **Site configuration → Site details → Change site name** → e.g. `sa
 > `dist/` (used by Option B). If you host somewhere else, you must add the equivalent rule
 > there, or refreshing any page but the home page returns 404.
 
-## Part 3 — Connect the login link to your new URL
+## Part 3 — Set up OAuth sign-in
 
-1. Back in Supabase: sidebar → **Authentication → URL Configuration**.
-2. Set **Site URL** to your Netlify address, e.g. `https://safayet-telc-trainer.netlify.app`, and save. (This is where the email magic link sends you after clicking.)
+Sign-in uses OAuth (Google / GitHub), so there are three places to configure. Do them in
+this order — the provider needs Supabase's callback URL, and Supabase needs your site URL.
+
+### 3a. Tell Supabase where your site lives
+
+1. Supabase → **Authentication → URL Configuration**.
+2. **Site URL**: your production address, e.g. `https://safayet-telc-trainer.netlify.app`.
+3. **Redirect URLs**: add every origin you will sign in from, one per line:
+   ```
+   https://safayet-telc-trainer.netlify.app/**
+   http://localhost:5173/**
+   ```
+   This is a security allowlist — Supabase refuses to send users anywhere else after login,
+   which is what stops an attacker from redirecting your sign-in to their own site. Save.
+4. Copy the **callback URL** shown on the Providers page — it looks like
+   `https://<project-ref>.supabase.co/auth/v1/callback`. You need it in the next step.
+
+### 3b. Create the OAuth app at the provider
+
+**Google** ([console.cloud.google.com](https://console.cloud.google.com)):
+
+1. Create a project (or reuse one) → **APIs & Services → OAuth consent screen**.
+   Choose **External**, fill in app name and your email, and save. While the app is in
+   *Testing* mode, only accounts you add under **Test users** can sign in — either add
+   yourself, or click **Publish app** for anyone to use it.
+2. **APIs & Services → Credentials → Create credentials → OAuth client ID**.
+   - Application type: **Web application**
+   - **Authorised redirect URIs**: paste the Supabase callback URL from 3a.4
+3. Copy the **Client ID** and **Client secret**.
+
+**GitHub** ([github.com/settings/developers](https://github.com/settings/developers)):
+
+1. **New OAuth App**.
+   - Homepage URL: your site URL
+   - **Authorization callback URL**: the Supabase callback URL from 3a.4
+2. Copy the **Client ID**, then **Generate a new client secret** and copy that too.
+
+### 3c. Enable the provider in Supabase
+
+1. Supabase → **Authentication → Providers** → open **Google** (and/or **GitHub**).
+2. Toggle it on, paste the **Client ID** and **Client secret**, and save.
+3. The client secret lives only in Supabase — it must never go into `.env` or the app
+   bundle. The app only ever sees the publishable key.
+
+### 3d. Tell the app which buttons to show
+
+In `.env` (and in Netlify's environment variables), list only the providers you enabled:
+
+```dotenv
+VITE_AUTH_PROVIDERS=google,github
+```
+
+Then rebuild. Offering a provider you have not enabled just produces an error toast.
 
 ## Part 4 — Sign in and sync
 
-1. Open your Netlify URL in the browser (works on your phone too).
-2. Go to **Settings** in the app → **☁ Cloud sync** → type your email → **Send magic link**.
-3. Open the email (check spam the first time) and click the link — it brings you back to the app, signed in.
-4. Done. From now on every attempt, learn-plan checkbox and setting **auto-syncs** to your database a moment after each change (watch the "☁ synced" chip in the top bar). Sign in on any other device with the same email and your progress appears there.
+1. Open your site (works on your phone too).
+2. **Settings → Cloud sync → Continue with Google** (or GitHub) → approve on the
+   provider's page → you land back in the app, signed in.
+3. Done. Every attempt, learn-plan checkbox and setting **auto-syncs** a moment after each
+   change — watch the account chip in the top bar. Sign in on any other device with the
+   same account and your progress appears there.
+
+## Security notes
+
+- **PKCE.** The app requests the `pkce` flow, so the redirect carries a single-use `code`
+  instead of an access token, and the code can only be exchanged by the browser that
+  started the sign-in. Nothing sensitive ever sits in a URL or in your history.
+- **Redirect allowlist.** `redirectTo` is always built from the page's own origin, and
+  Supabase independently enforces the list from 3a.3. Both must agree, so a tampered link
+  cannot redirect your session elsewhere.
+- **Row-level security.** `supabase-setup.sql` restricts every read and write to
+  `auth.uid() = user_id`, so the publishable key in the bundle grants access to nothing
+  but the signed-in user's own row. There is deliberately no delete policy.
+- **Only the publishable key ships.** The build refuses a `sb_secret_`/`service_role` key
+  and the Settings panel flags it. Client secrets belong in Supabase only.
+- **Shared computers.** Signing out clears the session but leaves the local copy of your
+  progress in that browser. On a machine that is not yours, use **Settings → Delete all
+  progress** afterwards.
 
 ## Updating the app later
 
@@ -123,6 +193,8 @@ a browser. Use the **anon / publishable** key.
 - **Rotate the key if it was ever committed.** Earlier versions of this project shipped the Supabase URL and anon key inside `sync-config.js`, so they are still in the Git history. The anon key is public by design, but if you would rather start clean: Supabase → **Project Settings → API Keys → rotate**, then update `.env` and the Netlify environment variables.
 - **Supabase free projects pause after ~1 week without activity.** Using the app counts as activity; if you take a long break, the dashboard shows a **Restore** button — one click, no data lost. Free tier includes 2 projects, 500 MB database, 50,000 monthly auth users — this app uses a tiny fraction of that.
 - **There is no double-clickable `index.html` any more.** The app is built with Vite; for local use run `npm run dev` and open the printed `http://localhost:5173`.
-- **Sign-in doesn't work from a `file://` page** because the email link can't redirect back to a local file. Use the Netlify URL (or `http://localhost:8000` via `python3 -m http.server`, after adding that URL under Supabase → Authentication → URL Configuration → Redirect URLs).
+- **Sign-in doesn't work from a `file://` page** because OAuth cannot redirect back to a local file. Use your deployed URL, or `http://localhost:5173` via `npm run dev` (add it to the Redirect URLs list first).
+- **"Unsupported provider" / "provider is not enabled"** means step 3c was skipped for that provider, or `VITE_AUTH_PROVIDERS` lists one you did not enable.
+- **"redirect_uri_mismatch"** from Google or GitHub means the callback URL in the provider's OAuth app does not exactly match Supabase's `/auth/v1/callback` URL.
 - **Conflict handling:** if two devices have different data, the app merges them — all exam attempts from both are kept, learn-plan ticks are combined, and the newest settings win.
 - **Backup:** History → Export progress still works and is a good occasional extra backup.

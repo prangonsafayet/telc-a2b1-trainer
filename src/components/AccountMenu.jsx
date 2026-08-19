@@ -15,7 +15,12 @@ export default function AccountMenu() {
   const navigate = useNavigate();
   const signedIn = sync.configured && !!sync.user;
 
-  const label = !sync.configured ? 'Local only' : signedIn ? sync.user.email : 'Not signed in';
+  const meta = sync.user?.user_metadata || {};
+  const displayName = meta.full_name || meta.name || sync.user?.email || '';
+  const avatarUrl = meta.avatar_url || meta.picture || '';
+  const providerId = sync.user?.app_metadata?.provider;
+
+  const label = !sync.configured ? 'Local only' : signedIn ? displayName : 'Not signed in';
   const Icon = !sync.configured ? HardDrive : signedIn ? Cloud : CloudOff;
 
   return (
@@ -26,7 +31,16 @@ export default function AccountMenu() {
           size="sm"
           className={cn('max-w-56 gap-1.5', !signedIn && 'border-[color:var(--warning)]/60 text-[color:var(--warning-foreground)]')}
         >
-          <Icon className="size-3.5" />
+          {signedIn && avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt=""
+              referrerPolicy="no-referrer"
+              className="size-5 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <Icon className="size-3.5" />
+          )}
           <span className="truncate">{label}</span>
         </Button>
       </DropdownMenuTrigger>
@@ -35,10 +49,20 @@ export default function AccountMenu() {
         {signedIn ? (
           <>
             <DropdownMenuLabel className="flex items-start gap-2 font-normal">
-              <User className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="" referrerPolicy="no-referrer" className="mt-0.5 size-8 rounded-full object-cover" />
+              ) : (
+                <User className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+              )}
               <span className="min-w-0">
-                <span className="block truncate font-medium">{sync.user.email}</span>
-                <span className="block text-xs text-muted-foreground">
+                <span className="block truncate font-medium">{displayName}</span>
+                {sync.user.email && sync.user.email !== displayName ? (
+                  <span className="block truncate text-xs text-muted-foreground">{sync.user.email}</span>
+                ) : null}
+                {providerId ? (
+                  <span className="block text-xs capitalize text-muted-foreground">via {providerId}</span>
+                ) : null}
+                <span className="mt-1 block text-xs text-muted-foreground">
                   {sync.lastSyncedAt
                     ? `Synced ${sync.lastSyncedAt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} — progress is backed up and follows you across devices.`
                     : 'Signed in — progress syncs automatically after each change.'}

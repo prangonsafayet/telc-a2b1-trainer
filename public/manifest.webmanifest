@@ -1,0 +1,16 @@
+{
+  "name": "telc Deutsch A2·B1 — Mock Exam Trainer",
+  "short_name": "telc Trainer",
+  "description": "10 full mock exams for the telc Deutsch A2·B1 exam, with real timing, official scoring and full review.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f9f9f7",
+  "theme_color": "#2a78d6",
+  "categories": ["education"],
+  "lang": "en",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

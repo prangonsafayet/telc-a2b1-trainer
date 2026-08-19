@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { BookOpen, CalendarClock, CloudOff, GraduationCap, History, LayoutDashboard, Settings2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge.jsx';
 import AccountMenu from '@/components/AccountMenu.jsx';
+import Logo from '@/components/Logo.jsx';
 import { daysUntil, parseISODate } from '@/components/ExamDatePicker.jsx';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { ThemeToggle } from '@/components/ThemeToggle.jsx';
@@ -69,11 +70,14 @@ export default function Layout() {
       <div className="min-h-screen bg-background">
         <header ref={headerRef} className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6">
-            <NavLink to="/" className="mr-auto leading-tight">
-              <div className="text-base font-bold tracking-tight">telc Deutsch A2·B1 Trainer</div>
-              <div className="hidden text-xs text-muted-foreground sm:block">
-                10 Modelltests · Lesen · Sprachbausteine · Hören · Schreiben · Sprechen
-              </div>
+            <NavLink to="/" className="group mr-auto flex items-center gap-2.5 leading-tight" aria-label="telc A2·B1 Trainer — dashboard">
+              <Logo className="size-9 shrink-0 transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3" />
+              <span>
+                <span className="block text-base font-bold tracking-tight">telc Deutsch A2·B1 Trainer</span>
+                <span className="hidden text-xs text-muted-foreground sm:block">
+                  10 Modelltests · Lesen · Sprachbausteine · Hören · Schreiben · Sprechen
+                </span>
+              </span>
             </NavLink>
 
             <Countdown examDate={db.settings.examDate} />

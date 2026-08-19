@@ -6,6 +6,53 @@ import tailwindcss from '@tailwindcss/vite';
 /* VITE_* values are inlined at build time, so a build that runs without them produces a
    site with cloud sync permanently off — and nothing in the hosting dashboard will say
    so. Fail loudly in the build log instead. */
+/* Crawlers require absolute URLs in canonical/OG tags, so the deploy URL is injected at
+   build time from VITE_SITE_URL (Netlify also exposes it as URL / DEPLOY_PRIME_URL). */
+function siteUrlHtml(env) {
+  const site = (env.VITE_SITE_URL || env.DEPLOY_PRIME_URL || env.URL || '').trim().replace(/\/+$/, '');
+  return {
+    name: 'site-url-html',
+    /* Must run before vite:build-html, which decodeURI()s href attributes and would
+       choke on a placeholder token. */
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html) {
+          if (!site) {
+          this.warn?.('VITE_SITE_URL is not set — canonical, og:url and og:image tags are omitted from index.html.');
+        /* Better to omit these tags than to publish a wrong absolute URL. */
+          /* Better to omit these than to publish a wrong absolute URL. */
+          return html
+            .replace(/^.*(?:rel="canonical"|property="og:url"|property="og:image"|name="twitter:image").*$\n?/gm, '')
+            .replace(/__SITE_URL__/g, '');
+        }
+        return html.replace(/__SITE_URL__/g, site);
+      }
+    },
+    generateBundle() {
+      if (!site) return;
+      const pages = ['/', '/learn', '/guide'];
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source:
+          '<?xml version="1.0" encoding="UTF-8"?>\n' +
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+          pages.map(u => `  <url><loc>${site}${u}</loc><changefreq>monthly</changefreq></url>`).join('\n') +
+          '\n</urlset>\n'
+      });
+      this.emitFile({
+        type: 'asset',
+        fileName: 'robots.txt',
+        source:
+          'User-agent: *\nAllow: /\n\n' +
+          '# Per-user attempt screens hold nothing crawlable.\n' +
+          'Disallow: /exam/\nDisallow: /results/\nDisallow: /review/\n\n' +
+          `Sitemap: ${site}/sitemap.xml\n`
+      });
+    }
+  };
+}
+
 function supabaseEnvCheck(env) {
   return {
     name: 'supabase-env-check',
@@ -34,7 +81,7 @@ function supabaseEnvCheck(env) {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    plugins: [react(), tailwindcss(), supabaseEnvCheck(env)],
+    plugins: [react(), tailwindcss(), supabaseEnvCheck(env), siteUrlHtml(env)],
     resolve: {
       alias: { '@': path.resolve(process.cwd(), './src') }
     },

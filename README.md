@@ -31,7 +31,7 @@ sync (see `HOSTING.md`). Without it the app runs fully offline on browser storag
 
 Your progress is saved in the browser (localStorage) on that computer. Use **History → Export progress** to back it up or move it to another machine.
 
-**Host it online with a persistent cloud database (recommended):** see **`HOSTING.md`** for a 15-minute, fully free setup — Netlify hosts the built app at a public URL and Supabase (free Postgres) stores your progress behind an email magic-link login, syncing automatically across all your devices.
+**Host it online with a persistent cloud database (recommended):** see **`HOSTING.md`** for a 15-minute, fully free setup — Netlify hosts the built app at a public URL and Supabase (free Postgres) stores your progress behind a Google/GitHub sign-in, syncing automatically across all your devices.
 
 ## What's inside the app
 

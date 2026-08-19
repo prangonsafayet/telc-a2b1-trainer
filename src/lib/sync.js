@@ -38,6 +38,21 @@ function atobSafe(jwt) {
 
 export const configured = !!(projectUrl && urlValid && anonKey && keyLooksValid);
 
+/* Which OAuth providers to offer. Supabase supports many; these are the ones with a
+   button here. Override with VITE_AUTH_PROVIDERS=google,github so the sign-in card only
+   advertises providers you actually enabled in the Supabase dashboard. */
+export const PROVIDER_META = {
+  google: { label: 'Google' },
+  github: { label: 'GitHub' },
+  azure: { label: 'Microsoft' },
+  apple: { label: 'Apple' }
+};
+
+export const providers = String(import.meta.env.VITE_AUTH_PROVIDERS || 'google,github')
+  .split(',')
+  .map(p => p.trim().toLowerCase())
+  .filter(p => p && PROVIDER_META[p]);
+
 /* Everything the Settings page needs to explain *why* sync is off. The values are
    resolved when the bundle is built, so a deploy whose build lacked the variables shows
    up here as "missing" no matter what the hosting dashboard says today. */
@@ -59,7 +74,26 @@ if (keyIsSecret) {
   );
 }
 
-const client = configured ? createClient(projectUrl, anonKey) : null;
+/* Auth hardening:
+   - flowType 'pkce' keeps tokens out of the URL. The redirect carries a short-lived
+     one-time `code` that is exchanged for a session using a verifier held in this
+     browser only, so a leaked/shared callback URL cannot be replayed into a session.
+   - detectSessionInUrl completes that exchange on load and strips the code from the URL.
+   - autoRefreshToken + persistSession keep the session alive across reloads without the
+     app ever handling a refresh token itself.
+   - redirectTo is always built from window.location.origin, so it cannot be pointed at
+     another host; Supabase's own redirect allowlist is the second gate. */
+const client = configured
+  ? createClient(projectUrl, anonKey, {
+      auth: {
+        flowType: 'pkce',
+        detectSessionInUrl: true,
+        autoRefreshToken: true,
+        persistSession: true,
+        storageKey: 'telcTrainerAuth'
+      }
+    })
+  : null;
 
 /* ---------- merge: union attempts, OR learn tasks, newer settings ---------- */
 export function mergeDB(local, remote) {
@@ -137,6 +171,20 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }) {
     }
   }, [user, dbRef, replaceLocal, push]);
 
+  /* If the provider bounced us back with an error, say so — otherwise the user just
+     lands on the dashboard still signed out with no explanation. */
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const err = q.get('error_description') || q.get('error') || hash.get('error_description') || hash.get('error');
+    if (!err) return;
+    toast.error('Sign-in was not completed', { description: decodeURIComponent(err).replace(/\+/g, ' ') });
+    const url = new URL(window.location.href);
+    ['error', 'error_description', 'error_code'].forEach(k => url.searchParams.delete(k));
+    url.hash = '';
+    window.history.replaceState({}, '', url.toString());
+  }, []);
+
   /* Watch the session. */
   useEffect(() => {
     if (!client) return undefined;
@@ -173,24 +221,42 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }) {
     return () => clearTimeout(timerRef.current);
   }, [updatedAt, user, push, dbRef]);
 
-  const [sendingLink, setSendingLink] = useState(false);
+  const [pendingProvider, setPendingProvider] = useState(null);
 
-  const sendMagicLink = useCallback(async email => {
-    setSendingLink(true);
-    setStatus('Sending link…');
+  /* Hands off to the provider's consent screen. Supabase sends the browser back to
+     `redirectTo` with a ?code= that supabase-js exchanges for a session on load
+     (detectSessionInUrl), which fires onAuthStateChange and triggers the first sync. */
+  const signInWithProvider = useCallback(async provider => {
+    setPendingProvider(provider);
+    setStatus(`Redirecting to ${PROVIDER_META[provider]?.label || provider}…`);
     try {
-      const { error } = await client.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: window.location.origin + window.location.pathname }
+      const { error } = await client.auth.signInWithOAuth({
+        provider,
+        options: {
+          /* Same-origin by construction — never interpolate user input here. */
+          redirectTo: window.location.origin + window.location.pathname,
+          ...(provider === 'google' ? { queryParams: { prompt: 'select_account' } } : null)
+        }
       });
       if (error) throw error;
-      setStatus('✓ Check your inbox and click the login link (also check spam). Then come back to this tab or the one it opens.');
-      toast.success('Magic link sent', { description: `Check the inbox for ${email} — the link signs you straight in.` });
+      /* On success the browser navigates away, so nothing after this runs. */
     } catch (e) {
-      setStatus('Could not send link: ' + (e.message || e));
-      toast.error('Could not send the login link', { description: e.message || String(e) });
-    } finally {
-      setSendingLink(false);
+      const msg = String(e.message || e);
+      const notEnabled = /provider is not enabled|Unsupported provider/i.test(msg);
+      setStatus(
+        notEnabled
+          ? `${PROVIDER_META[provider]?.label || provider} is not enabled for this Supabase project yet.`
+          : 'Sign-in failed: ' + msg
+      );
+      toast.error(
+        notEnabled ? `${PROVIDER_META[provider]?.label || provider} sign-in is not enabled` : 'Could not start sign-in',
+        {
+          description: notEnabled
+            ? 'Enable it in Supabase → Authentication → Providers, then try again. See HOSTING.md.'
+            : msg
+        }
+      );
+      setPendingProvider(null);
     }
   }, []);
 
@@ -207,5 +273,8 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }) {
     setLastSyncedAt(null);
   }, []);
 
-  return { configured, user, status, lastSyncedAt, chip, syncing, sendingLink, fullSync, sendMagicLink, signOut };
+  return {
+    configured, user, status, lastSyncedAt, chip, syncing,
+    providers, pendingProvider, signInWithProvider, fullSync, signOut
+  };
 }

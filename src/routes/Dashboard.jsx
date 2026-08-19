@@ -85,7 +85,7 @@ export default function Dashboard() {
                 : 'Attempts you record will live in this browser\'s storage.'}{' '}
               Clearing site data, private browsing, or moving to another device or browser will lose them.
               {sync.configured
-                ? ' Signing in backs everything up and syncs it across your devices — no password, just an email link.'
+                ? ' Signing in with Google or GitHub backs everything up and syncs it across your devices.'
                 : ' Cloud sync is not configured for this build (see HOSTING.md), so export a backup file regularly.'}
             </CardDescription>
           </CardHeader>

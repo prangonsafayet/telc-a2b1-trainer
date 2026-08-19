@@ -1,14 +1,12 @@
-import { useState } from 'react';
-import { Check, Cloud, CloudOff, Loader2, LogOut, Mail, RefreshCw, X } from 'lucide-react';
+import { Check, Cloud, CloudOff, Loader2, LockKeyhole, LogOut, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx';
-import { Input } from '@/components/ui/input.jsx';
-import { diagnostics } from '@/lib/sync.js';
+import { PROVIDER_ICONS } from '@/components/ProviderIcons.jsx';
+import { PROVIDER_META, diagnostics } from '@/lib/sync.js';
 import { useSync } from '@/lib/sync-context.jsx';
 
 export default function SyncPanel() {
   const sync = useSync();
-  const [email, setEmail] = useState('');
 
   if (!sync.configured) {
     const d = diagnostics;
@@ -90,33 +88,50 @@ export default function SyncPanel() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><Cloud className="size-4" /> Cloud sync — sign in</CardTitle>
           <CardDescription>
-            You will get an email with a login link — no password needed. After signing in, every attempt syncs
-            automatically.
+            Sign in with an account you already have. Your progress then syncs automatically after every change and
+            follows you to any other device you sign in on.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {window.location.protocol === 'file:' ? (
             <p className="text-sm text-destructive">
-              ⚠ You opened the app as a file. The email login link cannot bring you back here — use your hosted URL (or
-              http://localhost) to sign in.
+              ⚠ You opened the app as a file. OAuth cannot redirect back to a local file — use your hosted URL or
+              http://localhost.
             </p>
           ) : null}
-          <form
-            className="flex flex-wrap gap-2"
-            onSubmit={e => { e.preventDefault(); if (email.trim()) sync.sendMagicLink(email.trim()); }}
-          >
-            <Input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="max-w-xs"
-            />
-            <Button type="submit" disabled={sync.sendingLink || !email.trim()}>
-              {sync.sendingLink ? <Loader2 className="animate-spin" /> : <Mail />}
-              {sync.sendingLink ? 'Sending…' : 'Send magic link'}
-            </Button>
-          </form>
+
+          {sync.providers.length ? (
+            <div className="grid gap-2 sm:max-w-sm">
+              {sync.providers.map(p => {
+                const Icon = PROVIDER_ICONS[p];
+                const busy = sync.pendingProvider === p;
+                return (
+                  <Button
+                    key={p}
+                    variant="outline"
+                    className="h-11 justify-start gap-3 text-base"
+                    disabled={!!sync.pendingProvider}
+                    onClick={() => sync.signInWithProvider(p)}
+                  >
+                    {busy ? <Loader2 className="size-5 animate-spin" /> : <Icon className="size-5" />}
+                    {busy ? 'Redirecting…' : `Continue with ${PROVIDER_META[p]?.label || p}`}
+                  </Button>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-sm text-destructive">
+              No OAuth providers are configured. Set <code>VITE_AUTH_PROVIDERS</code> (e.g.{' '}
+              <code>google,github</code>) and rebuild.
+            </p>
+          )}
+
+          <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
+            <LockKeyhole className="mt-0.5 size-3.5 shrink-0" />
+            We only receive your email address and name from the provider — never your password. Row-level security in
+            Supabase means only your account can read your progress.
+          </p>
+
           {sync.status ? <p className="text-sm text-muted-foreground">{sync.status}</p> : null}
         </CardContent>
       </Card>
@@ -128,7 +143,9 @@ export default function SyncPanel() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2"><Cloud className="size-4" /> Cloud sync — active</CardTitle>
         <CardDescription>
-          Signed in as <b>{sync.user.email}</b>. Progress auto-syncs after every change.
+          Signed in as <b>{sync.user.user_metadata?.full_name || sync.user.user_metadata?.name || sync.user.email}</b>
+          {sync.user.app_metadata?.provider ? <> via <span className="capitalize">{sync.user.app_metadata.provider}</span></> : null}.
+          Progress auto-syncs after every change.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
