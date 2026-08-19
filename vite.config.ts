@@ -106,15 +106,24 @@ const { version } = JSON.parse(readFileSync(new URL('./package.json', import.met
   version: string;
 };
 
+/**
+ * Build-time constants the app reads through `@shared/config/appInfo.ts`. Exported so the
+ * test config defines them the same way — without them, importing anything that reaches
+ * appInfo fails with "__APP_VERSION__ is not defined".
+ */
+export function appDefines(commitRef: string): Record<string, string> {
+  return {
+    __APP_VERSION__: JSON.stringify(version),
+    /* Netlify exposes the deployed commit; empty locally and in tests. */
+    __APP_COMMIT__: JSON.stringify(commitRef.slice(0, 7))
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     plugins: [react(), tailwindcss(), supabaseEnvCheck(env), siteUrlHtml(env)],
-    define: {
-      __APP_VERSION__: JSON.stringify(version),
-      /* Netlify exposes the deployed commit; empty locally. */
-      __APP_COMMIT__: JSON.stringify((env.COMMIT_REF ?? '').slice(0, 7))
-    },
+    define: appDefines(env.COMMIT_REF ?? ''),
     resolve: { alias: LAYER_ALIASES },
     build: {
       outDir: 'dist',
