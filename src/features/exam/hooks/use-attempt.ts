@@ -28,7 +28,7 @@ export function useRetryExam(): (examId: number, mode: AttemptMode) => void {
     (examId, mode) => {
       const queue: readonly ExamModule[] = mode === 'full' ? EXAM_MODULES : [mode];
       saveRun(createRun(examId, mode, queue));
-      navigate(`/exam/${String(examId)}/${mode}`);
+      void navigate(`/exam/${String(examId)}/${mode}`);
     },
     [navigate]
   );

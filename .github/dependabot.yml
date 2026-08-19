@@ -5,6 +5,17 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # typescript-eslint peers `typescript >=4.8.4 <6.1.0`, so TS 7 would silently
+      # disable type-aware linting. Revisit when typescript-eslint supports it.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      # eslint-plugin-jsx-a11y and eslint-plugin-react both peer at eslint ^9, so
+      # ESLint 10 cannot be installed without breaking the plugin set.
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
+      - dependency-name: '@eslint/js'
+        update-types: [version-update:semver-major]
     groups:
       # One PR per concern keeps review meaningful instead of a wall of bumps.
       react:

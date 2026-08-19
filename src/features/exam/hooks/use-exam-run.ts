@@ -165,7 +165,7 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
         });
       }
 
-      navigate(`/results/${String(attempt.id)}`, { replace: true });
+      void navigate(`/results/${String(attempt.id)}`, { replace: true });
     },
     [exam, update, navigate]
   );
@@ -260,7 +260,7 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
     clearRun();
     stopSpeech();
     toast.info('Attempt aborted', { description: 'Nothing was saved. Start again whenever you are ready.' });
-    navigate('/');
+    void navigate('/');
   }, [navigate]);
 
   /*

@@ -138,6 +138,34 @@ Versioning: `MAJOR.MINOR.PATCH`, where a change to exam timing, scoring or the n
 of audio plays is at least a MINOR — past attempts stop being comparable, and that
 deserves to be visible in the version.
 
+## Dependencies
+
+```bash
+npx ncu           # what is out of date
+npx ncu -u        # bump package.json, then `npm install` and run the suite
+```
+
+Two majors are deliberately held back, in `.ncurc.json` and `.github/dependabot.yml`:
+
+| Held                           | Why                                                                                                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `typescript` at 6.x            | `typescript-eslint` peers `typescript >=4.8.4 <6.1.0`. TypeScript 7 would silently disable type-aware linting, which is most of what the config buys. |
+| `eslint` / `@eslint/js` at 9.x | `eslint-plugin-jsx-a11y` and `eslint-plugin-react` both peer at `eslint ^9`. ESLint 10 cannot be installed without dropping one of them.              |
+
+Remove the entry once the plugins catch up — do not force it with `--legacy-peer-deps`.
+
+**Never hand-edit `package-lock.json`, and never commit one produced by a partial
+install.** CI runs `npm ci` on Linux, which needs the platform-specific native
+binaries (`@rolldown/binding-linux-x64-gnu`, `@tailwindcss/oxide-linux-x64-gnu`,
+`@unrs/resolver-binding-linux-x64-gnu`) recorded in the lockfile. A lockfile built up
+by repeated `npm install -D one-package` on macOS can omit them, and `npm ci` then
+fails with `Missing: … from lock file` while everything works locally. If that
+happens, regenerate it:
+
+```bash
+rm -rf node_modules package-lock.json && npm install
+```
+
 ## 9. Deploy
 
 Netlify builds from `main`. Before or after a release, walk the `ship` skill or

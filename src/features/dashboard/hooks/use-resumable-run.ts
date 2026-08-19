@@ -27,14 +27,14 @@ export function useResumableRun(): ResumableRun {
   }, []);
 
   const resume = useCallback(() => {
-    if (run) navigate(`/exam/${String(run.examId)}/${run.mode}`);
+    if (run) void navigate(`/exam/${String(run.examId)}/${run.mode}`);
   }, [navigate, run]);
 
   const start = useCallback(
     (examId: number, mode: AttemptMode) => {
       const queue: readonly ExamModule[] = mode === 'full' ? EXAM_MODULES : [mode];
       saveRun(createRun(examId, mode, queue));
-      navigate(`/exam/${String(examId)}/${mode}`);
+      void navigate(`/exam/${String(examId)}/${mode}`);
     },
     [navigate]
   );

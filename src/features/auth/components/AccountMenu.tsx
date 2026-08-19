@@ -92,7 +92,7 @@ export function AccountMenu() {
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
-                navigate('/settings');
+                void navigate('/settings');
               }}
             >
               <Settings2 /> Sync settings
@@ -118,7 +118,7 @@ export function AccountMenu() {
             {identity.configured ? (
               <DropdownMenuItem
                 onSelect={() => {
-                  navigate('/settings');
+                  void navigate('/settings');
                 }}
               >
                 <LogIn /> Sign in to sync
