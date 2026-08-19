@@ -46,6 +46,12 @@ jobs:
   e2e:
     name: End-to-end tests
     runs-on: ubuntu-latest
+    # The official image ships the browsers and every OS library they need. Installing
+    # them on a bare runner means `playwright install --with-deps` shelling out to apt for
+    # ~20 MB of fonts and libs, which is slow and has hung the job outright.
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -54,26 +60,20 @@ jobs:
           cache: npm
       - run: npm ci
 
-      # Browsers are ~1-2 minutes to download and change only when Playwright does,
-      # so key the cache on the lockfile. The OS dependencies still have to be
-      # installed on a hit, but that part is quick.
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: playwright-${{ runner.os }}-
-
-      - name: Install browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Install browser system dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+      # The image's browsers only match one Playwright version. If the dependency is
+      # bumped without bumping the image tag, fail here rather than in a confusing way.
+      - name: Check the image matches the Playwright version
+        run: |
+          WANT=$(node -p "require('@playwright/test/package.json').version")
+          if [ "$WANT" != "1.62.1" ]; then
+            echo "::error::Playwright is $WANT but the container image is pinned to 1.62.1."
+            echo "Update the image tag in .github/workflows/ci.yml and release.yml."
+            exit 1
+          fi
+          echo "Playwright $WANT matches the image."
 
       - run: npm run test:e2e -- --project=chromium
+
       - uses: actions/upload-artifact@v7
         if: failure()
         with:

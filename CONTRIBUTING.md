@@ -211,6 +211,13 @@ Two majors are deliberately held back, in `.ncurc.json` and `.github/dependabot.
 
 Remove the entry once the plugins catch up — do not force it with `--legacy-peer-deps`.
 
+**Bumping Playwright means bumping the CI image.** The end-to-end job runs inside
+`mcr.microsoft.com/playwright:v<version>-noble`, which ships the browsers and every OS
+library they need. Installing them on a bare runner instead means
+`playwright install --with-deps` shelling out to apt for ~20 MB of fonts, which is slow
+and has hung the job outright. The image tag is pinned in both workflows and a guard step
+fails loudly if the dependency and the tag drift apart.
+
 **Node 24 or newer.** `.nvmrc` pins it because jsdom calls
 `webidl.util.markAsUncloneable`, which Node 20's bundled undici does not have — the
 suites fail with `TypeError: webidl.util.markAsUncloneable is not a function` on
