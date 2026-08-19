@@ -3,9 +3,9 @@ import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 import { DEFAULT_SETTINGS } from '@/shared/config/exam.ts';
-import { useGermanVoices } from '@/shared/hooks/use-german-voices.ts';
+import { useGermanVoices } from '@/shared/hooks/useGermanVoices.ts';
 import { speakScript } from '@/shared/lib/speech.ts';
-import { useConfirm } from '@/shared/providers/use-confirm.ts';
+import { useConfirm } from '@/shared/providers/useConfirm.ts';
 import { type Settings } from '@/shared/types';
 
 import { stamp, useProgress } from '@/features/progress';

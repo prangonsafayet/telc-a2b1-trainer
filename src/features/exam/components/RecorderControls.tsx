@@ -2,8 +2,8 @@ import { Circle, Mic, Square } from 'lucide-react';
 
 import { Button } from '@/shared/components/ui/button.tsx';
 
-import { type SpeakingPart } from '../hooks/use-exam-run.ts';
-import { useRecorder } from '../hooks/use-recorder.ts';
+import { type SpeakingPart } from '../hooks/useExamRun.ts';
+import { useRecorder } from '../hooks/useRecorder.ts';
 
 interface RecorderControlsProps {
   readonly part: SpeakingPart;

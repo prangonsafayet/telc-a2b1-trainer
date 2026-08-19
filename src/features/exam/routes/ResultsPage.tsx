@@ -5,15 +5,15 @@ import { Meter } from '@/shared/components';
 import { Button } from '@/shared/components/ui/button.tsx';
 import { Card, CardContent, CardDescription, CardHeader } from '@/shared/components/ui/card.tsx';
 import { MODULE_META, moduleMinutes } from '@/shared/config/exam.ts';
-import { useCountUp } from '@/shared/hooks/use-count-up.ts';
+import { useCountUp } from '@/shared/hooks/useCountUp.ts';
 import { cn } from '@/shared/lib/cn.ts';
 import { fmtClock } from '@/shared/lib/format.ts';
 import { type ExamModule } from '@/shared/types';
 
 import { useProgress } from '@/features/progress';
 
-import { useAttempt, useRetryExam } from '../hooks/use-attempt.ts';
-import { summarizeAttempt } from '../lib/attempt-summary.ts';
+import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
+import { summarizeAttempt } from '../lib/attemptSummary.ts';
 
 function CountedTotal({ value }: { readonly value: number }) {
   const shown = useCountUp(value, 900);

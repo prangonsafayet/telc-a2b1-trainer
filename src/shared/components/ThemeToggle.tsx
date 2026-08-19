@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 
 import { Button } from '@/shared/components/ui/button.tsx';
-import { readLocal, writeLocal } from '@/shared/lib/local-storage.ts';
+import { readLocal, writeLocal } from '@/shared/lib/storage.ts';
 
 type Theme = 'light' | 'dark';
 

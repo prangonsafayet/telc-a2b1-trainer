@@ -138,6 +138,29 @@ Versioning: `MAJOR.MINOR.PATCH`, where a change to exam timing, scoring or the n
 of audio plays is at least a MINOR — past attempts stop being comparable, and that
 deserves to be visible in the version.
 
+## Naming
+
+Enforced by `check-file` rules in `eslint.config.js`, so a wrong name fails lint
+rather than surviving review:
+
+| Thing                        | Convention             | Example                               |
+| ---------------------------- | ---------------------- | ------------------------------------- |
+| Component / route module     | `PascalCase.tsx`       | `ExamCard.tsx`, `DashboardPage.tsx`   |
+| Hook                         | `useThing.ts`          | `useExamRun.ts`, `useCountUp.ts`      |
+| Util, config, types, context | `camelCase.ts`         | `attemptSummary.ts`, `runState.ts`    |
+| Folder                       | `kebab-case`           | `exam-ui/`, `data-display/`           |
+| Module constant              | `SCREAMING_SNAKE_CASE` | `EXAM_MODULES`, `MIN_PASSWORD_LENGTH` |
+| Type / interface             | `PascalCase`           | `ExamRun`, `SignUpOutcome`            |
+| Everything else              | `camelCase`            |                                       |
+
+One exemption: `src/shared/components/ui/` stays kebab-case because the shadcn CLI
+writes files there, and renaming them would break `npx shadcn add`.
+
+Identifier casing is enforced separately by
+`@typescript-eslint/naming-convention`, which allows PascalCase where a value is a
+component or a namespace import, and permits `snake_case` / `UPPER_CASE` in type
+properties that mirror external contracts (Supabase columns, `VITE_` env vars).
+
 ## Dependencies
 
 ```bash
@@ -153,6 +176,11 @@ Two majors are deliberately held back, in `.ncurc.json` and `.github/dependabot.
 | `eslint` / `@eslint/js` at 9.x | `eslint-plugin-jsx-a11y` and `eslint-plugin-react` both peer at `eslint ^9`. ESLint 10 cannot be installed without dropping one of them.              |
 
 Remove the entry once the plugins catch up — do not force it with `--legacy-peer-deps`.
+
+**Node 24 or newer.** `.nvmrc` pins it because jsdom calls
+`webidl.util.markAsUncloneable`, which Node 20's bundled undici does not have — the
+suites fail with `TypeError: webidl.util.markAsUncloneable is not a function` on
+older runtimes. GitHub has deprecated Node 20 on runners anyway.
 
 **Never hand-edit `package-lock.json`, and never commit one produced by a partial
 install.** CI runs `npm ci` on Linux, which needs the platform-specific native

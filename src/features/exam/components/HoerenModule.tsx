@@ -14,7 +14,7 @@ import { Input } from '@/shared/components/ui/input.tsx';
 import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '../lib/answers.ts';
 
 import { AudioPlayButton } from './AudioPlayButton.tsx';
-import { type ExamModuleProps } from './module-props.ts';
+import { type ExamModuleProps } from './moduleProps.ts';
 
 export function HoerenModule({ exam, answers, setAnswer, settings, plays, onConsumePlay }: ExamModuleProps) {
   const { hoeren } = exam;

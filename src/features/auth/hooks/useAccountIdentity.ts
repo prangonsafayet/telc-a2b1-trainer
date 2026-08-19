@@ -1,4 +1,4 @@
-import { useSync } from './use-sync.ts';
+import { useSync } from './useSync.ts';
 
 export interface AccountIdentity {
   readonly signedIn: boolean;

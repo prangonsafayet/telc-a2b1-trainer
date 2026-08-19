@@ -11,7 +11,7 @@ import {
   SelectValue
 } from '@/shared/components/ui/select.tsx';
 import { cn } from '@/shared/lib/cn.ts';
-import { optional } from '@/shared/lib/optional-props.ts';
+import { optional } from '@/shared/lib/optionalProps.ts';
 
 const CHEVRONS = { left: ChevronLeft, right: ChevronRight, up: ChevronUp, down: ChevronDown } as const;
 

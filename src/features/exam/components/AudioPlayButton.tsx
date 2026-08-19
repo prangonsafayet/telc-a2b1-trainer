@@ -4,7 +4,7 @@ import { Badge } from '@/shared/components/ui/badge.tsx';
 import { Button } from '@/shared/components/ui/button.tsx';
 import { type Exam, type Settings } from '@/shared/types';
 
-import { useAudioPlayback } from '../hooks/use-audio-playback.ts';
+import { useAudioPlayback } from '../hooks/useAudioPlayback.ts';
 
 interface AudioPlayButtonProps {
   readonly exam: Exam;

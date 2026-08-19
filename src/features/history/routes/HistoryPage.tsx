@@ -8,8 +8,8 @@ import { Card, CardContent } from '@/shared/components/ui/card.tsx';
 import { useProgress } from '@/features/progress';
 
 import { AttemptTable } from '../components/AttemptTable.tsx';
-import { useProgressBackup } from '../hooks/use-progress-backup.ts';
-import { buildAttemptRows } from '../lib/attempt-rows.ts';
+import { useProgressBackup } from '../hooks/useProgressBackup.ts';
+import { buildAttemptRows } from '../lib/attemptRows.ts';
 
 export function HistoryPage() {
   const { db } = useProgress();

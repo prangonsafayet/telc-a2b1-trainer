@@ -2,11 +2,7 @@
    only signal is an empty `identities` array. Both bugs this guards against were live:
    an existing user being told to check an inbox nothing was sent to, and an unconfirmed
    user re-signing-up and never getting another email. */
-import {
-  interpretSignUp,
-  isRateLimited,
-  retryAfterSeconds
-} from '../src/features/auth/lib/sign-up-outcome.ts';
+import { interpretSignUp, isRateLimited, retryAfterSeconds } from '../src/features/auth/lib/signUpOutcome.ts';
 
 const checks = [];
 const check = (name, cond, extra = '') => {

@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.0.0",
   "type": "module",
-  "description": "telc Deutsch A2\u00b7B1 mock exam trainer \u2014 10 full model tests, React + Vite",
+  "description": "telc Deutsch A2·B1 mock exam trainer — 10 full model tests, React + Vite",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -68,6 +68,7 @@
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-check-file": "^3.3.2",
     "eslint-plugin-import-x": "^4.17.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",

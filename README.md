@@ -113,7 +113,7 @@ interactive elements in feature code, and every animation behind
 
 ## Running it
 
-Node 20+.
+Node 24+.
 
 ```bash
 npm install

@@ -9,7 +9,7 @@ import { type Attempt, type AttemptMode, type Exam, type ExamModule } from '@/sh
 
 import { useProgress } from '@/features/progress';
 
-import { createRun, saveRun } from '../lib/run-state.ts';
+import { createRun, saveRun } from '../lib/runState.ts';
 
 /** Looks up a stored attempt and its exam by the id in the route. */
 export function useAttempt(attemptId: string | undefined): {

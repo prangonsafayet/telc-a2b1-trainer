@@ -25,7 +25,7 @@ import {
   saveRun,
   secondsLeft,
   type ExamRun
-} from '../lib/run-state.ts';
+} from '../lib/runState.ts';
 import {
   countUnanswered,
   gradeFullExam,

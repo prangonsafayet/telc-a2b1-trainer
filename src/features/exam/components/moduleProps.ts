@@ -1,6 +1,6 @@
 import { type AnswerMap, type AnswerValue, type Exam, type PlayBudget, type Settings } from '@/shared/types';
 
-import { type RecordingMap, type SpeakingPart } from '../hooks/use-exam-run.ts';
+import { type RecordingMap, type SpeakingPart } from '../hooks/useExamRun.ts';
 
 /** Everything a module component may receive. Each uses only the parts it needs. */
 export interface ExamModuleProps {

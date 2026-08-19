@@ -13,7 +13,7 @@ import {
 import { buttonVariants } from '@/shared/components/ui/button.tsx';
 import { cn } from '@/shared/lib/cn.ts';
 
-import { ConfirmContext, type ConfirmOptions } from './confirm-context.ts';
+import { ConfirmContext, type ConfirmOptions } from './confirmContext.ts';
 
 interface ResolvedOptions extends Required<Omit<ConfirmOptions, 'description'>> {
   readonly description: string;

@@ -7,8 +7,8 @@ import { Label } from '@/shared/components/ui/label.tsx';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs.tsx';
 import { cn } from '@/shared/lib/cn.ts';
 
-import { usePasswordAuth, type AuthMode, type SignUpFeedback } from '../hooks/use-password-auth.ts';
-import { MIN_PASSWORD_LENGTH, strengthLabel } from '../lib/password-policy.ts';
+import { usePasswordAuth, type AuthMode, type SignUpFeedback } from '../hooks/usePasswordAuth.ts';
+import { MIN_PASSWORD_LENGTH, strengthLabel } from '../lib/passwordPolicy.ts';
 
 const STRENGTH_COLORS = [
   'bg-muted',

@@ -2,7 +2,7 @@ import { Mic } from 'lucide-react';
 
 import { Callout, Teil } from '@/shared/components';
 
-import { type ExamModuleProps } from './module-props.ts';
+import { type ExamModuleProps } from './moduleProps.ts';
 import { RecorderControls } from './RecorderControls.tsx';
 
 function Redemittel({ items }: { readonly items: readonly string[] }) {

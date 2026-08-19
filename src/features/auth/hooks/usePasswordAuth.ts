@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { checkPassword, isValidEmail, type PasswordCheck } from '../lib/password-policy.ts';
+import { checkPassword, isValidEmail, type PasswordCheck } from '../lib/passwordPolicy.ts';
 
-import { useSync } from './use-sync.ts';
+import { useSync } from './useSync.ts';
 
 export type AuthMode = 'signin' | 'signup';
 

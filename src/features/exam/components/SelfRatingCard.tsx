@@ -5,8 +5,8 @@ import { Separator } from '@/shared/components/ui/separator.tsx';
 import { Slider } from '@/shared/components/ui/slider.tsx';
 import { type Exam } from '@/shared/types';
 
-import { type RecordingMap, type SpeakingPart } from '../hooks/use-exam-run.ts';
-import { useSelfRating } from '../hooks/use-self-rating.ts';
+import { type RecordingMap, type SpeakingPart } from '../hooks/useExamRun.ts';
+import { useSelfRating } from '../hooks/useSelfRating.ts';
 
 interface SelfRatingCardProps {
   readonly module: 'schreiben' | 'sprechen';

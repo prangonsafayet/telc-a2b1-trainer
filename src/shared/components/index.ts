@@ -8,6 +8,6 @@ export { Meter } from './data-display/Meter.tsx';
 export { PageTitle } from './layout/PageTitle.tsx';
 export { SectionTitle } from './layout/SectionTitle.tsx';
 
-export { LetterSelect, MultipleChoice, RichtigFalsch } from './exam-ui/answer-inputs.tsx';
-export { Callout, QuestionItem, QuestionText, ReadingText, Teil } from './exam-ui/exam-layout.tsx';
+export { LetterSelect, MultipleChoice, RichtigFalsch } from './exam-ui/AnswerInputs.tsx';
+export { Callout, QuestionItem, QuestionText, ReadingText, Teil } from './exam-ui/ExamLayout.tsx';
 export { Transcript } from './exam-ui/Transcript.tsx';

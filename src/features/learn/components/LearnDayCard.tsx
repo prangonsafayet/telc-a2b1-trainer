@@ -7,7 +7,7 @@ import { Label } from '@/shared/components/ui/label.tsx';
 import { cn } from '@/shared/lib/cn.ts';
 import { type Cheatsheet, type LearnDay } from '@/shared/types';
 
-import { learnTaskKey } from '../lib/plan-progress.ts';
+import { learnTaskKey } from '../lib/planProgress.ts';
 
 import { CopyPromptButton } from './CopyPromptButton.tsx';
 

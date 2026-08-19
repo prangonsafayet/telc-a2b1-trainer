@@ -11,9 +11,9 @@ import {
 import { LETTERS } from '@/shared/lib/format.ts';
 
 import { itemKey, numberAnswer } from '../lib/answers.ts';
-import { splitGapText } from '../lib/gap-text.ts';
+import { splitGapText } from '../lib/gapText.ts';
 
-import { type ExamModuleProps } from './module-props.ts';
+import { type ExamModuleProps } from './moduleProps.ts';
 
 interface InlineGapProps {
   readonly label: string;

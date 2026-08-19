@@ -109,6 +109,9 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    server: { open: true }
+    /* Deliberately no `server.open`: it launches a real browser that races the dependency
+       optimizer against the one Playwright drives, which surfaces as
+       "require_react is not a function" and a blank page. Use `npm run dev -- --open`. */
+    server: {}
   };
 });

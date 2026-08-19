@@ -72,10 +72,13 @@ anything derived, persisted, timed or networked belongs outside it. See
 Radix and own their own logic. If a primitive is missing, add it to
 `src/shared/components/ui` in the same style rather than reaching for raw HTML.
 
-**Naming.** Files: `PascalCase.tsx` for components, `kebab-case.ts` for hooks,
-libs and types. Hooks are `use-thing.ts` exporting `useThing`. Identifiers are
-camelCase, PascalCase for components/types/namespaces, UPPER_CASE for module
-constants. Imports use the `@/` alias with explicit `.ts`/`.tsx` extensions.
+**Naming.** Enforced by `check-file`, so getting it wrong fails lint:
+`PascalCase.tsx` for components and route screens, `useThing.ts` for hooks,
+`camelCase.ts` for utils/config/types/contexts, `kebab-case` folders.
+`src/shared/components/ui/` is exempt and stays kebab-case for shadcn CLI
+compatibility. Identifiers: camelCase, PascalCase for components/types/namespaces,
+SCREAMING_SNAKE_CASE for module constants. Imports use the `@/` alias with explicit
+`.ts`/`.tsx` extensions.
 
 **Types.** Strict mode plus `noUncheckedIndexedAccess` and
 `exactOptionalPropertyTypes`. No `any`, no non-null assertions — narrow instead.

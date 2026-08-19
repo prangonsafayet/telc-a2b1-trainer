@@ -3,9 +3,9 @@ import { Textarea } from '@/shared/components/ui/textarea.tsx';
 import { cn } from '@/shared/lib/cn.ts';
 
 import { textAnswer, WRITING_ANSWER_KEY } from '../lib/answers.ts';
-import { describeWordCount } from '../lib/word-count.ts';
+import { describeWordCount } from '../lib/wordCount.ts';
 
-import { type ExamModuleProps } from './module-props.ts';
+import { type ExamModuleProps } from './moduleProps.ts';
 
 export function SchreibenModule({ exam, answers, setAnswer }: ExamModuleProps) {
   const { schreiben } = exam;

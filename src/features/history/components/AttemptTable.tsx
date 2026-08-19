@@ -10,9 +10,9 @@ import {
   TableHeader,
   TableRow
 } from '@/shared/components/ui/table.tsx';
-import { gradeTone } from '@/shared/lib/exam-badges.ts';
+import { gradeTone } from '@/shared/lib/examBadges.ts';
 
-import { ATTEMPT_COLUMNS, type AttemptRow } from '../lib/attempt-rows.ts';
+import { ATTEMPT_COLUMNS, type AttemptRow } from '../lib/attemptRows.ts';
 
 interface AttemptTableProps {
   readonly rows: readonly AttemptRow[];

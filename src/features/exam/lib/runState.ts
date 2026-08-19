@@ -1,4 +1,4 @@
-import { readLocalJson, removeLocal, writeLocal } from '@/shared/lib/local-storage.ts';
+import { readLocalJson, removeLocal, writeLocal } from '@/shared/lib/storage.ts';
 import {
   type AnswerMap,
   type AttemptMode,

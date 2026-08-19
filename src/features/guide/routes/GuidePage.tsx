@@ -1,6 +1,6 @@
 import { GUIDE_HTML } from '@/content/guide.ts';
 
-import { useHashScroll } from '../hooks/use-hash-scroll.ts';
+import { useHashScroll } from '../hooks/useHashScroll.ts';
 
 /** The exam guide is authored HTML in content/guide.ts and injected into a prose container. */
 export function GuidePage() {

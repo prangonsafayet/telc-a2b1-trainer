@@ -7,8 +7,8 @@ import { Card, CardContent } from '@/shared/components/ui/card.tsx';
 import { fmtDate } from '@/shared/lib/format.ts';
 
 import { ReviewEntryCard } from '../components/ReviewEntryCard.tsx';
-import { useAttempt, useRetryExam } from '../hooks/use-attempt.ts';
-import { attemptIncludes, buildReviewSections } from '../lib/review-items.ts';
+import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
+import { attemptIncludes, buildReviewSections } from '../lib/reviewItems.ts';
 
 export function ReviewPage() {
   const { attemptId } = useParams<{ attemptId: string }>();

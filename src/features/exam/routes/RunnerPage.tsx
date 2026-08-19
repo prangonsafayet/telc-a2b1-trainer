@@ -6,21 +6,21 @@ import { findExamById } from '@/content/exams';
 
 import { Button } from '@/shared/components/ui/button.tsx';
 import { EXAM_MODULES, MODULE_META } from '@/shared/config/exam.ts';
-import { useConfirm } from '@/shared/providers/use-confirm.ts';
+import { useConfirm } from '@/shared/providers/useConfirm.ts';
 import { type AttemptMode, type Exam } from '@/shared/types';
 
 import { useProgress } from '@/features/progress';
 
 import { HoerenModule } from '../components/HoerenModule.tsx';
 import { LesenModule } from '../components/LesenModule.tsx';
-import { type ExamModuleProps } from '../components/module-props.ts';
 import { ModuleBriefing } from '../components/ModuleBriefing.tsx';
+import { type ExamModuleProps } from '../components/moduleProps.ts';
 import { ModuleToolbar } from '../components/ModuleToolbar.tsx';
 import { SchreibenModule } from '../components/SchreibenModule.tsx';
 import { SelfRatingCard } from '../components/SelfRatingCard.tsx';
 import { SprachbausteineModule } from '../components/SprachbausteineModule.tsx';
 import { SprechenModule } from '../components/SprechenModule.tsx';
-import { useExamRun } from '../hooks/use-exam-run.ts';
+import { useExamRun } from '../hooks/useExamRun.ts';
 import { textAnswer, WRITING_ANSWER_KEY } from '../lib/answers.ts';
 
 const MODULE_COMPONENTS: Readonly<Record<string, ComponentType<ExamModuleProps>>> = {

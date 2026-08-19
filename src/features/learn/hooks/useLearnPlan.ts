@@ -6,7 +6,7 @@ import { LEARN } from '@/content/learn.ts';
 
 import { useProgress } from '@/features/progress';
 
-import { learnTaskKey, summarizePlan, type PlanSummary } from '../lib/plan-progress.ts';
+import { learnTaskKey, summarizePlan, type PlanSummary } from '../lib/planProgress.ts';
 
 export interface LearnPlanState {
   readonly summary: PlanSummary;

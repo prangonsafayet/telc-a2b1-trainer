@@ -1,6 +1,6 @@
 /* Drives a real attempt end to end, including a mid-module page refresh. */
 import { click, findByText, mount } from './setup.js';
-import { clearRun, loadRun } from '../src/features/exam/lib/run-state.ts';
+import { clearRun, loadRun } from '../src/features/exam/lib/runState.ts';
 
 const checks = [];
 const check = (name, cond, extra = '') => {

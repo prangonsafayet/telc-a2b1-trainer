@@ -23,8 +23,8 @@ import {
 } from '@/shared/components/ui/dropdown-menu.tsx';
 import { cn } from '@/shared/lib/cn.ts';
 
-import { useAccountIdentity } from '../hooks/use-account-identity.ts';
-import { useSync } from '../hooks/use-sync.ts';
+import { useAccountIdentity } from '../hooks/useAccountIdentity.ts';
+import { useSync } from '../hooks/useSync.ts';
 
 /**
  * Always-visible account state. Whether progress leaves this browser is the one thing a

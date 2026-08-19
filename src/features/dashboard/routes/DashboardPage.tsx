@@ -4,7 +4,7 @@ import { Meter, PageTitle, SectionTitle } from '@/shared/components';
 import { ScoreHistoryChart } from '@/shared/components/data-display/ScoreHistoryChart.tsx';
 import { Card, CardContent } from '@/shared/components/ui/card.tsx';
 import { MODULE_META } from '@/shared/config/exam.ts';
-import { useCountUp } from '@/shared/hooks/use-count-up.ts';
+import { useCountUp } from '@/shared/hooks/useCountUp.ts';
 import { fmtDate } from '@/shared/lib/format.ts';
 
 import { useAccountIdentity } from '@/features/auth';
@@ -14,8 +14,8 @@ import { ExamCard } from '../components/ExamCard.tsx';
 import { LocalOnlyNotice } from '../components/LocalOnlyNotice.tsx';
 import { ResumeRunNotice } from '../components/ResumeRunNotice.tsx';
 import { StatTile } from '../components/StatTile.tsx';
-import { useDashboardStats } from '../hooks/use-dashboard-stats.ts';
-import { useResumableRun } from '../hooks/use-resumable-run.ts';
+import { useDashboardStats } from '../hooks/useDashboardStats.ts';
+import { useResumableRun } from '../hooks/useResumableRun.ts';
 
 const SKILL_LABELS = [
   ['lesen', 'Lesen'],

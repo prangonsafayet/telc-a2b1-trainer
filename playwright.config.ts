@@ -21,7 +21,13 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev -- --port 5173 --strictPort',
     url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000
+    /*
+     * Never inherit a server. A dev server left over from an earlier run keeps a module
+     * graph and an optimized-dependency set from before the current checkout, which
+     * renders a blank page and fails every test for reasons that have nothing to do with
+     * the code under test. Paying a few seconds of startup is worth not chasing that.
+     */
+    reuseExistingServer: false,
+    timeout: 120_000
   }
 });

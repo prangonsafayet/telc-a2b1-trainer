@@ -2,7 +2,7 @@ import { Check, Copy } from 'lucide-react';
 
 import { Button } from '@/shared/components/ui/button.tsx';
 
-import { useCopyToClipboard } from '../hooks/use-copy-to-clipboard.ts';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard.ts';
 
 interface CopyPromptButtonProps {
   readonly prompt: string;

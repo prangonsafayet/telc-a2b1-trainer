@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { ConfirmContext, type ConfirmFn } from './confirm-context.ts';
+import { ConfirmContext, type ConfirmFn } from './confirmContext.ts';
 
 export function useConfirm(): ConfirmFn {
   const confirm = useContext(ConfirmContext);

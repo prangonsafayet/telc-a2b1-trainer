@@ -12,7 +12,7 @@ import { useProgress } from '@/features/progress';
 
 import { ExamCountdownBadge } from './ExamCountdownBadge.tsx';
 import { MainNav } from './MainNav.tsx';
-import { useHeaderHeight } from './use-header-height.ts';
+import { useHeaderHeight } from './useHeaderHeight.ts';
 
 export function AppLayout() {
   const { db, dbRef, replaceLocal } = useProgress();

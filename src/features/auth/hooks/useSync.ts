@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { type CloudSyncState } from './use-cloud-sync.ts';
+import { type CloudSyncState } from './useCloudSync.ts';
 
 export const SyncContext = createContext<CloudSyncState | null>(null);
 

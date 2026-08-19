@@ -5,15 +5,15 @@ import { toast } from 'sonner';
 
 import { type ProgressDatabase } from '@/shared/types';
 
-import { mergeProgress } from '../lib/merge-progress.ts';
-import { enabledProviders, providerLabel, type OAuthProvider } from '../lib/oauth-providers.ts';
+import { mergeProgress } from '../lib/mergeProgress.ts';
+import { enabledProviders, providerLabel, type OAuthProvider } from '../lib/oauthProviders.ts';
 import {
   interpretSignUp,
   isRateLimited,
   retryAfterSeconds,
   type SignUpOutcome
-} from '../lib/sign-up-outcome.ts';
-import { isSyncConfigured, PROGRESS_TABLE, supabase } from '../lib/supabase-client.ts';
+} from '../lib/signUpOutcome.ts';
+import { isSyncConfigured, PROGRESS_TABLE, supabase } from '../lib/supabaseClient.ts';
 
 /** Short status shown in the header. */
 export interface SyncChip {

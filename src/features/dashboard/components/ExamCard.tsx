@@ -11,10 +11,10 @@ import {
   SelectValue
 } from '@/shared/components/ui/select.tsx';
 import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@/shared/config/exam.ts';
-import { difficultyTone, gradeTone } from '@/shared/lib/exam-badges.ts';
+import { difficultyTone, gradeTone } from '@/shared/lib/examBadges.ts';
 import { type AttemptMode, type Settings } from '@/shared/types';
 
-import { type ExamCardStats } from '../hooks/use-dashboard-stats.ts';
+import { type ExamCardStats } from '../hooks/useDashboardStats.ts';
 
 interface ExamCardProps {
   readonly stats: ExamCardStats;

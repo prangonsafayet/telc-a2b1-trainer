@@ -12,7 +12,7 @@ import { LETTERS } from '@/shared/lib/format.ts';
 
 import { booleanAnswer, itemKey, numberAnswer } from '../lib/answers.ts';
 
-import { type ExamModuleProps } from './module-props.ts';
+import { type ExamModuleProps } from './moduleProps.ts';
 
 const TEXT_LABELS = ['A', 'B'] as const;
 

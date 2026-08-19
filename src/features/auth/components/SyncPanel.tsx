@@ -4,12 +4,12 @@ import { Button } from '@/shared/components/ui/button.tsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
 import { Separator } from '@/shared/components/ui/separator.tsx';
 
-import { useSync } from '../hooks/use-sync.ts';
-import { providerLabel } from '../lib/oauth-providers.ts';
-import { syncDiagnostics } from '../lib/supabase-client.ts';
+import { useSync } from '../hooks/useSync.ts';
+import { providerLabel } from '../lib/oauthProviders.ts';
+import { syncDiagnostics } from '../lib/supabaseClient.ts';
 
 import { PasswordAuthForm } from './PasswordAuthForm.tsx';
-import { PROVIDER_ICONS } from './provider-icon-map.ts';
+import { PROVIDER_ICONS } from './providerIconMap.ts';
 
 function DiagnosticRow({
   label,

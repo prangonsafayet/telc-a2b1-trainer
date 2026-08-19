@@ -11,7 +11,7 @@ import {
 
 import { type ProgressDatabase } from '@/shared/types';
 
-import { loadDatabase, normalizeDatabase, persistDatabase, stamp } from '../lib/progress-db.ts';
+import { loadDatabase, normalizeDatabase, persistDatabase, stamp } from '../lib/progressDb.ts';
 
 /** A change to the stored document, expressed as a pure function. */
 export type ProgressRecipe = (current: ProgressDatabase) => ProgressDatabase;

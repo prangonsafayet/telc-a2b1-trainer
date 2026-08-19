@@ -3,7 +3,7 @@ import { forwardRef, useMemo, type ComponentPropsWithoutRef, type ComponentRef }
 import * as SliderPrimitive from '@radix-ui/react-slider';
 
 import { cn } from '@/shared/lib/cn.ts';
-import { optional } from '@/shared/lib/optional-props.ts';
+import { optional } from '@/shared/lib/optionalProps.ts';
 
 export const Slider = forwardRef<
   ComponentRef<typeof SliderPrimitive.Root>,

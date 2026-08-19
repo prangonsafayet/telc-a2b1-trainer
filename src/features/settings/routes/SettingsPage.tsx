@@ -18,7 +18,7 @@ import { Separator } from '@/shared/components/ui/separator.tsx';
 import { SyncPanel } from '@/features/auth';
 
 import { ExamDatePicker } from '../components/ExamDatePicker.tsx';
-import { useExamSettings } from '../hooks/use-exam-settings.ts';
+import { useExamSettings } from '../hooks/useExamSettings.ts';
 
 interface FieldProps {
   readonly label: string;

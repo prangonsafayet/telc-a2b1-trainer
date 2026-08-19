@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-import { SUPABASE_CONFIG } from './supabase-config.ts';
+import { SUPABASE_CONFIG } from './supabaseConfig.ts';
 
 /**
  * Normalises the project URL so common paste mistakes still work:

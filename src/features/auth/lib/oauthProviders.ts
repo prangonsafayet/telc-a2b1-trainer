@@ -1,4 +1,4 @@
-import { CONFIGURED_PROVIDER_IDS } from './supabase-config.ts';
+import { CONFIGURED_PROVIDER_IDS } from './supabaseConfig.ts';
 
 /** OAuth providers this app supports. Email sign-in is handled separately. */
 export const OAUTH_PROVIDERS = ['google', 'github'] as const;

@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/shared/components/ui/card.tsx';
 import { Progress } from '@/shared/components/ui/progress.tsx';
 
 import { LearnDayCard } from '../components/LearnDayCard.tsx';
-import { useLearnPlan } from '../hooks/use-learn-plan.ts';
+import { useLearnPlan } from '../hooks/useLearnPlan.ts';
 
 export function LearnPage() {
   const plan = useLearnPlan();

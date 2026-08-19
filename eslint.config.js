@@ -5,6 +5,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import checkFile from 'eslint-plugin-check-file';
 import importX from 'eslint-plugin-import-x';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import prettier from 'eslint-config-prettier';
@@ -108,7 +109,8 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       'jsx-a11y': jsxA11y,
-      'import-x': importX
+      'import-x': importX,
+      'check-file': checkFile
     },
     rules: {
       ...react.configs.flat.recommended.rules,
@@ -117,6 +119,43 @@ export default tseslint.config(
       ...jsxA11y.flatConfigs.recommended.rules,
 
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+
+      /* --- file and folder naming ---
+       *
+       * The filename says what a module is, so the convention is enforced rather than
+       * hoped for:
+       *   components and route screens   PascalCase.tsx   (they export components)
+       *   hooks                          useThing.ts      (camelCase, `use` prefix)
+       *   utils, config, types, providers camelCase.ts
+       *   folders                        kebab-case
+       *
+       * `src/shared/components/ui` is exempt: the shadcn CLI writes kebab-case there,
+       * and fighting it would break `npx shadcn add`.
+       */
+      'check-file/filename-naming-convention': [
+        'error',
+        {
+          'src/**/components/!(ui)/**/*.tsx': 'PASCAL_CASE',
+          'src/**/components/*.tsx': 'PASCAL_CASE',
+          'src/**/routes/**/*.tsx': 'PASCAL_CASE',
+          'src/**/hooks/**/*.ts': 'use+([A-Z])*([a-zA-Z0-9])',
+          'src/**/layout/use*.ts': 'use+([A-Z])*([a-zA-Z0-9])',
+          'src/**/lib/**/*.ts': 'CAMEL_CASE',
+          'src/**/config/**/*.ts': 'CAMEL_CASE',
+          'src/**/types/**/*.ts': 'CAMEL_CASE',
+          'src/**/providers/*.ts': 'CAMEL_CASE',
+          'src/**/providers/*.tsx': 'PASCAL_CASE',
+          'src/content/*.ts': 'CAMEL_CASE'
+        },
+        { ignoreMiddleExtensions: true }
+      ],
+      'check-file/folder-naming-convention': [
+        'error',
+        {
+          'src/features/*/': 'KEBAB_CASE',
+          'src/**/!(__)*/': 'KEBAB_CASE'
+        }
+      ],
 
       /* --- naming convention --- */
       '@typescript-eslint/naming-convention': [
