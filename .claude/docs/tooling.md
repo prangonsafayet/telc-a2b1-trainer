@@ -40,6 +40,26 @@ Defined in `.claude/`:
 - **`frontend-reviewer`** agent — reviews against the layer boundaries, the
   components-visual-only rule, and the pitfalls list.
 
+## caveman — the local context layer
+
+Installed at `~/.caveman/bin` (six native binaries; `npx -y "github:JuliusBrussee/caveman#v2.1.0" <cmd>`
+drives them, there is no global `caveman` on PATH). It is a **local** token/context
+optimisation layer — no account needed for the `tools` subcommands.
+
+| Want                                                                       | Command                                      |
+| -------------------------------------------------------------------------- | -------------------------------------------- |
+| Run an agent through the layer                                             | `caveman claude`                             |
+| Keep a big command's output recoverable instead of dumping it into context | `caveman tools shrink -- <cmd>`              |
+| Durable context across sessions                                            | `caveman tools mem`                          |
+| See where context is being wasted                                          | `caveman learn`, `caveman status`            |
+| Measure a before/after                                                     | `caveman tools trial`, `caveman tools stats` |
+
+Worth using here specifically for **`shrink`**: this repo's verification commands are
+verbose — `npm test` prints ~120 lines of passing assertions, `npx playwright test` prints
+one line per test — and piping those through the layer keeps the detail recoverable without
+spending the window on it. `caveman learn` on this project already reports that most turns
+run past half the model window, which is exactly the failure mode it exists to fix.
+
 ## Memory across sessions
 
 **claude-mem** is installed and captures observations automatically. Before starting

@@ -16,6 +16,7 @@ This file stays short on purpose. Load the detail page for the work in front of 
 | Touching dates, timers, answers, auth, env vars or content | [`.claude/docs/pitfalls.md`](.claude/docs/pitfalls.md)         |
 | Writing or fixing tests                                    | [`.claude/docs/testing.md`](.claude/docs/testing.md)           |
 | Picking a tool, skill, agent or plugin for the task        | [`.claude/docs/tooling.md`](.claude/docs/tooling.md)           |
+| Verbose output eating the context window                   | `caveman tools shrink` — see tooling.md                        |
 | Branching, reviewing, releasing, deploying                 | [`CONTRIBUTING.md`](CONTRIBUTING.md)                           |
 | Authoring exam content                                     | the `exam-author` agent                                        |
 

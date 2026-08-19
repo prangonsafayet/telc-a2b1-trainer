@@ -46,6 +46,20 @@ jobs:
   e2e:
     name: End-to-end tests
     runs-on: ubuntu-latest
+    # Obviously-fake Supabase configuration. Without it CI has no .env, so
+    # `isSyncConfigured` in src/features/auth/lib/supabaseClient.ts is false and SyncPanel
+    # renders the "Cloud sync — not active" diagnostics card instead of the sign-in card
+    # that e2e/auth.spec.js and e2e/signup.spec.js assert on. These values exist only to
+    # satisfy that client-side validation: the specs stub every `**/auth/v1/*` request, so
+    # no real network call is made and no real Supabase project is contacted. Nothing here
+    # is a credential — do not replace it with one, and do not move it into a secret.
+    env:
+      VITE_SUPABASE_URL: https://e2e-not-a-real-project.supabase.co
+      VITE_SUPABASE_ANON_KEY: sb_publishable_e2e_not-a-real-key_000000000000
+      VITE_AUTH_PROVIDERS: google,github
+      # Absolute site URL, so index.html keeps its canonical / og:url / og:image tags and
+      # the site-url-html plugin stops warning. Matches the dev server the specs drive.
+      VITE_SITE_URL: http://localhost:5173
     # The official image ships the browsers and every OS library they need. Installing
     # them on a bare runner means `playwright install --with-deps` shelling out to apt for
     # ~20 MB of fonts and libs, which is slow and has hung the job outright.
