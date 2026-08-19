@@ -1,3 +1,5 @@
+import { Info, Sparkles } from 'lucide-react';
+
 import { LEARN } from '@content/learn.ts';
 
 import { PageTitle, SectionTitle } from '@shared/components';
@@ -6,24 +8,39 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  Alert,
+  AlertDescription,
   Card,
   CardContent,
   Progress
 } from '@shared/ui';
 
 import { LearnDayCard } from '../components/LearnDayCard.tsx';
+import { LearnSlotSection } from '../components/LearnSlotSection.tsx';
 import { useLearnPlan } from '../hooks/useLearnPlan.ts';
+import { useScheduledLearn } from '../hooks/useScheduledLearn.ts';
 
 export function LearnPage() {
   const plan = useLearnPlan();
+  const scheduled = useScheduledLearn();
 
   return (
     <>
-      {/* LEARN.intro is authored HTML in content/learn.ts (it bolds a few phrases), so it
-          is injected rather than rendered as text — same as the guide and cheatsheets. */}
-      <PageTitle lead={<span dangerouslySetInnerHTML={{ __html: LEARN.intro }} />}>
-        AI-assisted learning — 14 days to mock-exam readiness
+      <PageTitle
+        /* LEARN.intro is authored HTML in content/learn.ts (it bolds a few phrases), so it is
+           injected rather than rendered as text — same as the guide and cheatsheets. It is
+           the fallback for a date no plan can be built from. */
+        lead={scheduled.lead ?? <span dangerouslySetInnerHTML={{ __html: LEARN.intro }} />}
+      >
+        {scheduled.headline}
       </PageTitle>
+
+      {scheduled.notice ? (
+        <Alert className="mb-4">
+          <Info aria-hidden />
+          <AlertDescription>{scheduled.notice}</AlertDescription>
+        </Alert>
+      ) : null}
 
       <Card>
         <CardContent className="space-y-2">
@@ -37,24 +54,104 @@ export function LearnPage() {
         </CardContent>
       </Card>
 
-      <SectionTitle>The 14-day plan</SectionTitle>
-      <div className="stagger space-y-4">
-        {LEARN.days.map(day => (
-          <LearnDayCard
-            key={day.day}
-            day={day}
-            complete={plan.isDayComplete(day.day)}
-            cheatsheets={LEARN.cheatsheets}
-            isTaskDone={index => plan.isTaskDone(day.day, index)}
-            onToggleTask={(index, done) => {
-              plan.toggleTask(day.day, index, done);
-            }}
-          />
-        ))}
-      </div>
+      {scheduled.scheduled ? (
+        <>
+          <SectionTitle>Your schedule</SectionTitle>
+          <div className="stagger space-y-8">
+            {scheduled.groups.map(group => (
+              <LearnSlotSection
+                key={group.key}
+                heading={group.heading}
+                kindLabel={group.kindLabel}
+                isToday={group.isToday}
+                days={group.days}
+                plan={plan}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <SectionTitle>The 28-day curriculum</SectionTitle>
+          <div className="stagger space-y-4">
+            {scheduled.pending.map(day => (
+              <LearnDayCard
+                key={day.day}
+                day={day}
+                complete={false}
+                cheatsheets={LEARN.cheatsheets}
+                isTaskDone={index => plan.isTaskDone(day.day, index)}
+                onToggleTask={(index, done) => {
+                  plan.toggleTask(day.day, index, done);
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      {scheduled.extra.length > 0 ? (
+        <>
+          <SectionTitle>Extra material</SectionTitle>
+          <p className="mb-3 text-muted-foreground">
+            Not scheduled at your pace — these {scheduled.extra.length} B1 days are worth doing if you find
+            the time, and they move into the plan automatically if your exam date moves.
+          </p>
+          <div className="stagger space-y-4">
+            {scheduled.extra.map(day => (
+              <LearnDayCard
+                key={day.day}
+                day={day}
+                complete={false}
+                cheatsheets={LEARN.cheatsheets}
+                isTaskDone={index => plan.isTaskDone(day.day, index)}
+                onToggleTask={(index, done) => {
+                  plan.toggleTask(day.day, index, done);
+                }}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      {scheduled.done.length > 0 ? (
+        <>
+          <SectionTitle>Done</SectionTitle>
+          <Card>
+            <CardContent>
+              <Accordion type="single" collapsible>
+                <AccordionItem value="done" className="border-b-0">
+                  <AccordionTrigger className="text-base font-semibold">
+                    {scheduled.done.length} day{scheduled.done.length === 1 ? '' : 's'} finished
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4">
+                      {scheduled.done.map(day => (
+                        <LearnDayCard
+                          key={day.day}
+                          day={day}
+                          complete
+                          cheatsheets={LEARN.cheatsheets}
+                          isTaskDone={index => plan.isTaskDone(day.day, index)}
+                          onToggleTask={(index, done) => {
+                            plan.toggleTask(day.day, index, done);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+        </>
+      ) : null}
 
       <SectionTitle>Cheatsheets</SectionTitle>
-      <p className="mb-3 text-muted-foreground">Open, study, and come back before every mock exam.</p>
+      <p className="mb-3 flex items-center gap-1.5 text-muted-foreground">
+        <Sparkles className="size-4 shrink-0" aria-hidden />
+        Open, study, and come back before every mock exam.
+      </p>
       <Card>
         <CardContent>
           <Accordion

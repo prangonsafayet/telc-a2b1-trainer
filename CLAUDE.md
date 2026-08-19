@@ -1,9 +1,10 @@
 # CLAUDE.md
 
-A React study app with ten full mock exams for the **telc Deutsch A2·B1** German exam.
-It runs timed modules, scores them by the official rules, and stores progress locally
-with optional Supabase sync. It is also a portfolio project, so code quality and
-presentation count as much as features.
+A React study app for the **telc Deutsch A2·B1** German exam: fifteen full mock exams
+and a 28-day curriculum that re-paces itself around the user's exam date. It runs timed
+modules, scores them by the official rules, and stores progress locally with optional
+Supabase sync. It is also a portfolio project, so code quality and presentation count as
+much as features.
 
 ## Read this first
 
@@ -24,7 +25,7 @@ This file stays short on purpose. Load the detail page for the work in front of 
 
 ```bash
 npm run dev          # dev server on :5173
-npm test             # typecheck → lint → format → exam data → jsdom suites
+npm test             # typecheck → lint → exam data → vitest (logic + render)
 npm run test:e2e     # Playwright (Chromium + a mobile profile)
 npm run build        # production build into dist/
 ```
@@ -45,4 +46,4 @@ npm run build        # production build into dist/
 ## Reporting
 
 Say what you actually ran and what it printed. If appearance matters, verify it in a real
-browser (Playwright MCP is available) rather than asserting it from a passing jsdom test.
+browser (Playwright MCP is available) rather than asserting it from a passing unit test.

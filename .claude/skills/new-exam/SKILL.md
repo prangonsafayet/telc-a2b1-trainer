@@ -51,7 +51,7 @@ sorted by `id`, so order in the file does not matter, but keep it tidy.
 
 ```bash
 npm run validate     # counts, duplicate ids, answer ranges, mixed booleans
-npm test             # types + the content-render guard
+npm test             # types + the content and injection guards
 ```
 
 The dashboard, history and runner all read from the index, so nothing else needs

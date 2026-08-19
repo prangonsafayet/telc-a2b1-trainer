@@ -11,6 +11,23 @@ west of Greenwich. Always use `parseIsoDate` / `toIsoDate` / `daysUntil` from
 The header countdown and the Settings hint once disagreed by a day because one rounded
 from 09:00 and the other from midnight. They now share the same helper.
 
+## The schedule
+
+`daysUntil` reads the clock; `daysBetween` does not. Schedule maths uses `daysBetween` and
+takes `today` as an argument — a pure engine is the only reason the invariants can be swept
+across every runway length in a unit test.
+
+`addDays` builds the new date from its parts rather than adding 86_400_000 ms, so a DST
+boundary cannot turn "+1 day" into "same day, 23:00".
+
+The tier rule is load-bearing: core days 1–14 are always scheduled, compressed several to a
+day if the runway is short, and extension days 15–28 only appear once every core day has a
+day of its own. Anything that changes lesson selection has to preserve that, and the sweep
+test will say so if it does not.
+
+A hardcoded default exam date rots. `defaultExamDate()` is a runway from first open, because
+a fixed date turns every new user past-due the day it passes.
+
 ## Timers
 
 The exam clock stores an **absolute `deadline`**, not a countdown, so it stays correct
@@ -67,9 +84,19 @@ through `useSyncExternalStore`.
 - **`npm ci` failing with `Missing: … from lock file` while local installs work** means
   the lockfile lacks other platforms' native binaries. Regenerate it:
   `rm -rf node_modules package-lock.json && npm install`. It happened because `vite-node`
-  pulled a second, nested Vite.
+  pulled a second, nested Vite — which is one reason the suites now run on Vitest instead.
 - **A blank page and `require_react is not a function` under Playwright** was
   `server.open: true` racing the dependency optimizer, plus `reuseExistingServer` serving
   a stale module graph. Both are fixed in config; do not reintroduce either.
-- **jsdom needs Node ≥ 22.** On Node 20 the suites die with
-  `webidl.util.markAsUncloneable is not a function`. `.nvmrc` pins 24.
+- **The toolchain needs Node ≥ 22, and `.nvmrc` pins 24.** Vite 8's rolldown binaries,
+  Vitest 4 and happy-dom are all built against current Node.
+- **ESLint flat config only lints extensions a `files` pattern names.** A directory
+  pattern like `tests/**/*` counts as universal and opts none in, so `.ts` files under it
+  were silently skipped with "File ignored because no matching configuration was supplied".
+  List the extensions.
+- **A `*/` inside a block comment closes it.** Writing a glob such as `tests/**/*` in a
+  `/* ... */` comment in `eslint.config.js` truncates the comment and breaks the config
+  with `SyntaxError: Unexpected token '*'`.
+- **react-day-picker marks its month navigation with `aria-disabled`, not `disabled`.**
+  Day cells use both (`<td data-disabled>` plus a real `disabled` button), so a test that
+  checks only one attribute will conclude the constraint is not applied when it is.

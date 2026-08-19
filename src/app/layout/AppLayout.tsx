@@ -46,7 +46,7 @@ export function AppLayout() {
               <span>
                 <span className="block text-base font-bold tracking-tight">telc Deutsch A2·B1 Trainer</span>
                 <span className="hidden text-xs text-muted-foreground sm:block">
-                  10 Modelltests · Lesen · Sprachbausteine · Hören · Schreiben · Sprechen
+                  15 Modelltests · Lesen · Sprachbausteine · Hören · Schreiben · Sprechen
                 </span>
               </span>
             </NavLink>

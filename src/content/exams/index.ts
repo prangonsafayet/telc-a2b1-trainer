@@ -10,6 +10,11 @@ import exam07 from './exam07.ts';
 import exam08 from './exam08.ts';
 import exam09 from './exam09.ts';
 import exam10 from './exam10.ts';
+import exam11 from './exam11.ts';
+import exam12 from './exam12.ts';
+import exam13 from './exam13.ts';
+import exam14 from './exam14.ts';
+import exam15 from './exam15.ts';
 
 /** All Modelltests, ordered easiest first. */
 export const EXAMS: readonly Exam[] = [
@@ -22,7 +27,12 @@ export const EXAMS: readonly Exam[] = [
   exam07,
   exam08,
   exam09,
-  exam10
+  exam10,
+  exam11,
+  exam12,
+  exam13,
+  exam14,
+  exam15
 ].toSorted((a, b) => a.id - b.id);
 
 /** Looks up an exam by id; accepts the string form that arrives from route params. */

@@ -66,15 +66,23 @@ text-to-speech voice installed, and a timer that stalled whenever you typed.
 
 Which layer:
 
-- **jsdom** (`tests/`) for structure and behaviour — routes mounting, state
-  persisting, content rendering as text vs HTML, pure logic.
-- **Playwright** (`e2e/`) for anything jsdom cannot judge — layout, CSS, animation,
-  real reload behaviour, popover positioning, network-level stubbing.
+- **Vitest `logic`** (`tests/unit/`) for pure functions — the schedule engine, date
+  maths, response interpretation, content shape. Runs in Node; prefer a
+  parameterised sweep over a spot check when the input is a range.
+- **Vitest `render`** (`tests/render/`) for the app mounted in happy-dom — routes
+  mounting, state persisting, content rendering as text vs HTML, a page re-shaping
+  when its inputs change.
+- **Playwright** (`e2e/`) for anything a DOM emulation cannot judge — layout, CSS,
+  animation, real reload behaviour, popover positioning, network-level stubbing.
 
 ```bash
-npm test           # typecheck, lint, format, exam data, jsdom
+npm test           # typecheck, lint, exam data, both Vitest projects
+npm run test:watch # Vitest in watch mode while you work
 npm run test:e2e   # real browsers
 ```
+
+Exam dates in tests are always seeded relative to today (`seedProgress({ daysUntilExam })`).
+A hardcoded date passes today and silently becomes a "past-due" assertion next month.
 
 ## 5. Commit
 
@@ -82,7 +90,7 @@ Husky gates this:
 
 - **pre-commit** — lints and formats staged files; a commit either lands clean or
   does not land.
-- **pre-push** — typecheck, exam-data validation, jsdom suites.
+- **pre-push** — typecheck, exam-data validation, both Vitest projects.
 
 Message style: an imperative subject under ~72 characters, a blank line, then a body
 that explains _why_ and calls out anything surprising. Reference the issue.
@@ -110,7 +118,7 @@ The template asks what you verified. Fill it in honestly; "ran `npm test`" and
 "clicked through it" are different claims. Include before/after screenshots for
 visual changes.
 
-CI runs typecheck, lint, format, data validation, the jsdom suites, Playwright on
+CI runs typecheck, lint, format, data validation, the Vitest suites, Playwright on
 Chromium, and a production build **with no secrets present** — which is what a fork
 gets, and catches anything that silently depends on your local `.env`.
 
@@ -229,10 +237,9 @@ library they need. Installing them on a bare runner instead means
 and has hung the job outright. The image tag is pinned in both workflows and a guard step
 fails loudly if the dependency and the tag drift apart.
 
-**Node 24 or newer.** `.nvmrc` pins it because jsdom calls
-`webidl.util.markAsUncloneable`, which Node 20's bundled undici does not have — the
-suites fail with `TypeError: webidl.util.markAsUncloneable is not a function` on
-older runtimes. GitHub has deprecated Node 20 on runners anyway.
+**Node 24 or newer.** `.nvmrc` pins it: the toolchain (Vite 8's rolldown binaries,
+Vitest 4, happy-dom) is built against current Node, and GitHub has deprecated Node 20
+on runners anyway.
 
 **Never hand-edit `package-lock.json`, and never commit one produced by a partial
 install.** CI runs `npm ci` on Linux, which needs the platform-specific native

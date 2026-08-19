@@ -38,6 +38,25 @@ export function toIsoDate(date: Date): string {
   return `${String(date.getFullYear())}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
+/** `iso` shifted by whole days, or null when `iso` is not a date. */
+export function addDays(iso: string | undefined, days: number): string | null {
+  const start = parseIsoDate(iso);
+  if (!start) return null;
+  const shifted = new Date(start.getFullYear(), start.getMonth(), start.getDate() + days);
+  return toIsoDate(shifted);
+}
+
+/**
+ * Whole days from `fromIso` to `toIso`; negative when `toIso` is earlier. Unlike
+ * `daysUntil` this reads no clock, so schedule maths stays a pure function of its input.
+ */
+export function daysBetween(fromIso: string | undefined, toIso: string | undefined): number | null {
+  const from = parseIsoDate(fromIso);
+  const to = parseIsoDate(toIso);
+  if (!from || !to) return null;
+  return Math.round((to.getTime() - from.getTime()) / 86_400_000);
+}
+
 /** Whole days from today to `iso`; negative once the date has passed. */
 export function daysUntil(iso: string | undefined): number | null {
   const target = parseIsoDate(iso);

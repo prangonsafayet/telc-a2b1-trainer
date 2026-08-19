@@ -46,8 +46,27 @@ score-history chart live there.
 | Screen                    | `features/<f>/routes/`                     | `DashboardPage.tsx`            |
 | Feature-private component | `features/<f>/components/`                 | `ExamCard.tsx`                 |
 | Feature logic             | `features/<f>/hooks/`, `features/<f>/lib/` | `useExamRun.ts`, `runState.ts` |
-| Cross-feature component   | `shared/components/<group>/`               | `data-display/Meter.tsx`       |
-| Design-system primitive   | `shared/ui/` (shadcn CLI writes here)      | `button.tsx`                   |
-| Domain type               | `shared/types/`                            | `exam.ts`, `progress.ts`       |
-| Shared constant           | `shared/config/`                           | `exam.ts`, `appInfo.ts`        |
-| Exam or study content     | `content/`                                 | `exams/exam07.ts`, `learn.ts`  |
+
+## The `plan` feature
+
+`features/plan` owns the adaptive schedule and is the one feature every screen reads:
+dashboard, learn and settings all import it through `@features/plan`.
+
+- `lib/buildSchedule.ts` — the engine. A pure function of (exam date, today, finished
+  lessons, taken exams). It reads no clock: `today` is an argument, which is what makes it
+  testable and deterministic.
+- `lib/distribute.ts` — the bucketing helpers it compresses and spaces slots with.
+- `lib/describeSchedule.ts` — every user-facing string about the plan, so no component
+  builds copy of its own.
+- `hooks/useSchedule.ts` / `hooks/useToday.ts` — the React surface; `useToday` re-reads the
+  date at local midnight and on `visibilitychange`, since the tab stays open overnight.
+
+The schedule is derived on render and **never persisted**. Its inputs — `settings.examDate`,
+`learnDone`, `attempts` — are the only stored state, so a plan can never disagree with
+progress. Constants live in `@shared/config/schedule.ts` and the types in
+`@shared/types/schedule.ts`.
+| Cross-feature component | `shared/components/<group>/` | `data-display/Meter.tsx` |
+| Design-system primitive | `shared/ui/` (shadcn CLI writes here) | `button.tsx` |
+| Domain type | `shared/types/` | `exam.ts`, `progress.ts` |
+| Shared constant | `shared/config/` | `exam.ts`, `appInfo.ts` |
+| Exam or study content | `content/` | `exams/exam07.ts`, `learn.ts` |

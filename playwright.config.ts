@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/* Real-browser tests. These complement the fast jsdom suites in tests/: jsdom can prove
+/* Real-browser tests. These complement the Vitest suites in tests/: happy-dom can prove
    structure and behaviour but never layout, CSS or animation, so anything visual belongs
    here. The dev server is started automatically. */
 export default defineConfig({

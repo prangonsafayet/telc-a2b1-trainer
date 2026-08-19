@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-/* The behaviour the jsdom suite proves structurally, re-proven in a real browser where
+/* The behaviour the render suite proves structurally, re-proven in a real browser where
    the timer, the popover positioning and the persistence all genuinely run. */
 test('an exam survives a mid-module reload with its clock and answers', async ({ page }) => {
   await page.goto('/');

@@ -29,8 +29,8 @@ grading rule — **B1 = ≥42/60 in three skills plus ≥24/60 in the fourth**.
 
 ## What it does
 
-- **Ten full Modelltests**, ramping from early A2 to solid B1, covering all five
-  modules: Leseverstehen, Sprachbausteine, Hörverstehen, Schreiben, Sprechen.
+- **Fifteen full Modelltests**, ramping from early A2 to solid B1, covering all
+  five modules: Leseverstehen, Sprachbausteine, Hörverstehen, Schreiben, Sprechen.
 - **Real exam conditions.** Per-module countdowns that auto-submit, a play budget
   per listening item, and no preparation time in the speaking module.
 - **Refresh-safe attempts.** The running exam — current module, every answer, the
@@ -41,8 +41,13 @@ grading rule — **B1 = ≥42/60 in three skills plus ≥24/60 in the fourth**.
   has to grade, against sample answers and telc-style criteria.
 - **Full review** of any past attempt: every answer against the correct one, with
   the listening transcripts revealed only afterwards.
-- **A 14-day study plan** with cheatsheets and copy-paste prompts that turn any
-  AI chat into a tutor, examiner or speaking partner.
+- **A study plan that adapts to your exam date.** Tell it when you sit the exam
+  and it lays out one dated day at a time: a 28-day curriculum in twelve
+  cheatsheets and copy-paste prompts that turn any AI chat into a tutor, examiner
+  or speaking partner, then the mock exams. Three weeks left and it compresses the
+  essentials and offers the rest as optional; three months and it spreads
+  everything out with review days between. Five days and it becomes an emergency
+  sprint. Nothing is ever hidden — only re-paced.
 - **Progress that follows you.** Optional cloud sync behind Google, GitHub or
   email + password; without it everything stays local, and the app says so
   clearly rather than letting you assume otherwise.
@@ -51,9 +56,15 @@ grading rule — **B1 = ≥42/60 in three skills plus ≥24/60 in the fourth**.
 
 ## Screens
 
-<img src="docs/screenshots/dashboard.png" alt="Dashboard — skill progress, score history and the ten mock exams">
+<img src="docs/screenshots/dashboard.png" alt="Dashboard — today's plan, skill progress, score history and the mock exams">
 
 <table>
+  <tr>
+    <td colspan="2"><img src="docs/screenshots/learn-plan.png" alt="The study plan, grouped into dated days from today"></td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>The plan</strong> — the curriculum laid out as dated days from today, re-paced whenever the exam date changes. Finished days drop out; days that no longer fit become optional extra material.</td>
+  </tr>
   <tr>
     <td width="50%"><img src="docs/screenshots/runner.png" alt="Exam runner with a sticky countdown"></td>
     <td width="50%"><img src="docs/screenshots/results.png" alt="Results screen with the official grade"></td>
@@ -94,13 +105,16 @@ hook and maps over data.
 data files are checked against the domain types with `satisfies`, so a malformed
 Modelltest fails the build rather than the exam.
 
-**Two test layers, because they catch different things.** Fast jsdom suites
-assert structure and behaviour — including that an attempt survives a mid-module
-reload with its clock still running. Playwright covers what jsdom cannot judge:
-layout at three breakpoints, dark-mode persistence, popover positioning, and that
-the OAuth handoff is really PKCE rather than an implicit flow. Between them they
+**Two test layers, because they catch different things.** Vitest runs the pure
+logic in Node and the mounted app in happy-dom — 877 assertions in under five
+seconds, including a sweep of the schedule engine across every runway length from
+five days to ninety, and a check that an attempt survives a mid-module reload with
+its clock still running. Playwright covers what no DOM emulation can judge: layout
+at three breakpoints, dark-mode persistence, popover positioning, and that the
+OAuth handoff is really PKCE rather than an implicit flow. Between them they
 caught an infinite render loop that only reproduced on machines with no German
-text-to-speech voice installed, and a timer that stalled whenever you typed.
+text-to-speech voice installed, a timer that stalled whenever you typed, and a
+long study plan that banked nine review days in a row instead of spacing them.
 
 **Auth done carefully.** PKCE so no token ever lands in a URL, a redirect target
 built from the page's own origin, row-level security scoping every row to
@@ -123,7 +137,7 @@ npm run dev          # http://localhost:5173
 | Command            | Purpose                                                   |
 | ------------------ | --------------------------------------------------------- |
 | `npm run build`    | Production build into `dist/`                             |
-| `npm test`         | Typecheck, lint, validate exam data, jsdom suites         |
+| `npm test`         | Typecheck, lint, validate exam data, Vitest suites        |
 | `npm run test:e2e` | Playwright (needs `npx playwright install chromium` once) |
 | `npm run test:all` | Everything                                                |
 

@@ -1,10 +1,11 @@
-import { PlayCircle, RotateCcw, Trophy } from 'lucide-react';
+import { CalendarClock, PlayCircle, RotateCcw, Trophy } from 'lucide-react';
 
 import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
 import { difficultyTone, gradeTone } from '@shared/lib/examBadges.ts';
 import { type AttemptMode, type Settings } from '@shared/types';
 import {
   Badge,
+  type BadgeVariant,
   Button,
   Card,
   CardContent,
@@ -23,13 +24,22 @@ import { type ExamCardStats } from '../hooks/useDashboardStats.ts';
 interface ExamCardProps {
   readonly stats: ExamCardStats;
   readonly settings: Settings;
+  /** Where the plan puts this exam: `today`, `planned Do, 28. Aug`, `optional`, or nothing. */
+  readonly scheduleLabel: string | null;
   readonly onStart: (examId: number, mode: AttemptMode) => void;
+}
+
+/** `today` earns the loud badge; a future date is quieter; optional is quietest. */
+function scheduleTone(label: string): BadgeVariant {
+  if (label === 'today') return 'default';
+  if (label === 'tomorrow') return 'info';
+  return label === 'optional' ? 'outline' : 'secondary';
 }
 
 /** Difficulty accent, so the ramp from A2 to B1 is visible at a glance. */
 const ACCENTS = { easy: 'var(--success)', medium: 'var(--warning)', b1: 'var(--primary)' } as const;
 
-export function ExamCard({ stats, settings, onStart }: ExamCardProps) {
+export function ExamCard({ stats, settings, scheduleLabel, onStart }: ExamCardProps) {
   const { exam, best, attemptCount } = stats;
   const attempted = best !== null || attemptCount > 0;
 
@@ -46,6 +56,13 @@ export function ExamCard({ stats, settings, onStart }: ExamCardProps) {
           <Badge variant={difficultyTone(exam.difficulty)}>{exam.level}</Badge>
         </div>
         <CardDescription>{exam.theme}</CardDescription>
+        {scheduleLabel ? (
+          <div>
+            <Badge variant={scheduleTone(scheduleLabel)}>
+              <CalendarClock aria-hidden /> {scheduleLabel}
+            </Badge>
+          </div>
+        ) : null}
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex items-center gap-2 text-sm">
