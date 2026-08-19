@@ -150,8 +150,10 @@ turns "why is sync off?" into a five-second answer.
   live in the tab and are never uploaded.
 - Sprachbausteine is tracked separately, since in the real exam it feeds the
   reading and writing subtests rather than forming its own 60-point skill.
-- `npm run validate` checks the ten data files; `CLAUDE.md` documents the
-  architecture and conventions in full.
+- `npm run validate` checks the ten data files. [`CLAUDE.md`](CLAUDE.md) documents
+  the architecture and conventions, [`CONTRIBUTING.md`](CONTRIBUTING.md) the
+  issue → branch → PR → release workflow, and [`SECURITY.md`](SECURITY.md) how auth
+  and data are protected.
 
 ---
 

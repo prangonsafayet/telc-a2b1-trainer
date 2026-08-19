@@ -1,0 +1,16 @@
+changelog:
+  exclude:
+    labels: [ignore-for-release]
+  categories:
+    - title: Features
+      labels: [enhancement]
+    - title: Fixes
+      labels: [bug]
+    - title: Exam content
+      labels: [content]
+    - title: Architecture and tooling
+      labels: [refactor, tooling, ci]
+    - title: Documentation
+      labels: [documentation]
+    - title: Other
+      labels: ['*']

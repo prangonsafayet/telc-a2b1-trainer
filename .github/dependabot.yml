@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One PR per concern keeps review meaningful instead of a wall of bumps.
+      react:
+        patterns: ['react', 'react-dom', 'react-router-dom', '@types/react*']
+      radix:
+        patterns: ['@radix-ui/*']
+      tooling:
+        patterns: ['eslint*', '@typescript-eslint/*', 'typescript', 'prettier', 'vite', '@vitejs/*']
+      testing:
+        patterns: ['@playwright/*', 'jsdom', 'vite-node']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

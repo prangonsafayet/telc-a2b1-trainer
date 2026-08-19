@@ -1,0 +1,49 @@
+name: Bug report
+description: Something behaves incorrectly
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start Modelltest 3 → Lesen
+        2. Answer item 1, then reload the page
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Exam runner (timing, answers, submission)
+        - Scoring or review
+        - Dashboard / history
+        - Learn plan or exam guide
+        - Auth or cloud sync
+        - Settings
+        - Layout, styling or animation
+        - Exam content (a wrong or ambiguous answer key)
+        - Build, tooling or CI
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and OS
+      placeholder: Chrome 141 on macOS 15
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before filing
+      options:
+        - label: I can reproduce this on a fresh reload
+        - label: I checked the browser console for errors

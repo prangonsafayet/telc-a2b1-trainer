@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose a change or addition
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What is hard or impossible today? Describe the situation, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Does this change exam realism?
+      description: Anything that alters timing, scoring or the number of audio plays makes past attempts less comparable.
+      options:
+        - 'No — UI, tooling or convenience only'
+        - 'Yes — it changes how the exam behaves'
+    validations:
+      required: true
