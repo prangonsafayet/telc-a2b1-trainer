@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { prefersReducedMotion } from '@/shared/lib/motion.ts';
+import { prefersReducedMotion } from '@shared/lib/motion.ts';
 
 /**
  * Counts from 0 to `to` once, so a score lands rather than simply appearing.

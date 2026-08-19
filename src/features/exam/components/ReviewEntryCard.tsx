@@ -1,7 +1,7 @@
 import { Check, X } from 'lucide-react';
 
-import { Transcript } from '@/shared/components';
-import { cn } from '@/shared/lib/cn.ts';
+import { Transcript } from '@shared/components';
+import { cn } from '@shared/lib/cn.ts';
 
 import { type ReviewEntry } from '../lib/reviewItems.ts';
 

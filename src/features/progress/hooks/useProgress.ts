@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { type Settings } from '@/shared/types';
+import { type Settings } from '@shared/types';
 
 import { ProgressContext, type ProgressContextValue } from '../providers/ProgressProvider.tsx';
 

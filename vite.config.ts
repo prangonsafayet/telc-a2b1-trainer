@@ -101,7 +101,15 @@ export default defineConfig(({ mode }) => {
       __APP_COMMIT__: JSON.stringify((env.COMMIT_REF ?? '').slice(0, 7))
     },
     resolve: {
-      alias: { '@': path.resolve(import.meta.dirname, './src') }
+      /* One alias per layer, so an import statement shows which layer it crosses. There is
+         deliberately no catch-all '@': two spellings of the same path would let a boundary
+         violation slip past the no-restricted-imports patterns in eslint.config.js. */
+      alias: {
+        '@app': path.resolve(import.meta.dirname, './src/app'),
+        '@features': path.resolve(import.meta.dirname, './src/features'),
+        '@shared': path.resolve(import.meta.dirname, './src/shared'),
+        '@content': path.resolve(import.meta.dirname, './src/content')
+      }
     },
     build: {
       outDir: 'dist',

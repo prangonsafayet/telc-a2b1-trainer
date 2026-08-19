@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import { EXAMS } from '@/content/exams';
+import { EXAMS } from '@content/exams';
 
-import { type Attempt, type Exam, type SkillKey } from '@/shared/types';
+import { type Attempt, type Exam, type SkillKey } from '@shared/types';
 
-import { useProgress } from '@/features/progress';
+import { useProgress } from '@features/progress';
 
 /** B1 needs 168/240 overall; A2 territory starts around 96. */
 const B1_TOTAL = 168;

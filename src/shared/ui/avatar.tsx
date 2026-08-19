@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from 're
 
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 export const Avatar = forwardRef<
   ComponentRef<typeof AvatarPrimitive.Root>,

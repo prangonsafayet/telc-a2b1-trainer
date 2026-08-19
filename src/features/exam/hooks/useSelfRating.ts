@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { RATING_CRITERIA } from '@/shared/config/exam.ts';
+import { RATING_CRITERIA } from '@shared/config/exam.ts';
 
 /** Each criterion scores 0–5; the sum is multiplied by 3 for a 60-point module score. */
 const POINTS_PER_CRITERION_POINT = 3;

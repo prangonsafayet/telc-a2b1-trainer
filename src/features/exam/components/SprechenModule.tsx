@@ -1,6 +1,6 @@
 import { Mic } from 'lucide-react';
 
-import { Callout, Teil } from '@/shared/components';
+import { Callout, Teil } from '@shared/components';
 
 import { type ExamModuleProps } from './moduleProps.ts';
 import { RecorderControls } from './RecorderControls.tsx';

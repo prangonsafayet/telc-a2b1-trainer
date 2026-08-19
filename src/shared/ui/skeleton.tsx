@@ -1,6 +1,6 @@
 import { type ComponentPropsWithoutRef } from 'react';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 export function Skeleton({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   return (

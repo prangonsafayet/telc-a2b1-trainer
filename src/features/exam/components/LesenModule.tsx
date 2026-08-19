@@ -7,8 +7,8 @@ import {
   ReadingText,
   RichtigFalsch,
   Teil
-} from '@/shared/components';
-import { LETTERS } from '@/shared/lib/format.ts';
+} from '@shared/components';
+import { LETTERS } from '@shared/lib/format.ts';
 
 import { booleanAnswer, itemKey, numberAnswer } from '../lib/answers.ts';
 

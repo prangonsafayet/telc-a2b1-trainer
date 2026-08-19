@@ -1,4 +1,4 @@
-import { type Attempt, type LearnDoneMap, type ProgressDatabase } from '@/shared/types';
+import { type Attempt, type LearnDoneMap, type ProgressDatabase } from '@shared/types';
 
 /**
  * Merges the local and remote documents without losing work from either side.

@@ -1,7 +1,7 @@
 import { BookOpen, GraduationCap, History, LayoutDashboard, Settings2, type LucideIcon } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 interface NavEntry {
   readonly to: string;

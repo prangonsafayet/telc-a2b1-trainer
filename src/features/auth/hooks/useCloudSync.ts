@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { type User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
 
-import { type ProgressDatabase } from '@/shared/types';
+import { type ProgressDatabase } from '@shared/types';
 
 import { mergeProgress } from '../lib/mergeProgress.ts';
 import { enabledProviders, providerLabel, type OAuthProvider } from '../lib/oauthProviders.ts';

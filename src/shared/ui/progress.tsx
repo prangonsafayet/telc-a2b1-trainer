@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from 're
 
 import * as ProgressPrimitive from '@radix-ui/react-progress';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 export interface ProgressProps extends ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
   /** Styles the filled portion — used to tone bars by score. */

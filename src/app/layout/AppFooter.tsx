@@ -1,4 +1,4 @@
-import { APP_BUILD_LABEL } from '@/shared/config/appInfo.ts';
+import { APP_BUILD_LABEL } from '@shared/config/appInfo.ts';
 
 /**
  * Shows which build you are looking at. Worth having in a study app: a stale service

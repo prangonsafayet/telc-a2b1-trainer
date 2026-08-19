@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 
-import { cn } from '@/shared/lib/cn.ts';
-import { Badge } from '@/shared/ui';
+import { cn } from '@shared/lib/cn.ts';
+import { Badge } from '@shared/ui';
 
 interface TeilProps {
   readonly title: string;

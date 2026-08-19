@@ -3,12 +3,12 @@ import { useEffect } from 'react';
 import { CloudOff } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
-import { ErrorBoundary, Logo, ThemeToggle } from '@/shared/components';
-import { stopSpeech } from '@/shared/lib/speech.ts';
-import { Badge } from '@/shared/ui';
+import { ErrorBoundary, Logo, ThemeToggle } from '@shared/components';
+import { stopSpeech } from '@shared/lib/speech.ts';
+import { Badge } from '@shared/ui';
 
-import { AccountMenu, SyncContext, useCloudSync } from '@/features/auth';
-import { useProgress } from '@/features/progress';
+import { AccountMenu, SyncContext, useCloudSync } from '@features/auth';
+import { useProgress } from '@features/progress';
 
 import { AppFooter } from './AppFooter.tsx';
 import { ExamCountdownBadge } from './ExamCountdownBadge.tsx';

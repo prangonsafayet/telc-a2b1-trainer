@@ -1,4 +1,4 @@
-import { wordCount } from '@/shared/lib/format.ts';
+import { wordCount } from '@shared/lib/format.ts';
 
 /** The official task asks for roughly 40–60 words; past 80 is a warning sign. */
 const TARGET_MIN = 40;

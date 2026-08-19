@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 
-import { getGermanVoices, subscribeToVoices } from '@/shared/lib/speech.ts';
+import { getGermanVoices, subscribeToVoices } from '@shared/lib/speech.ts';
 
 /**
  * The browser's German voice list, which Chrome populates asynchronously after load.

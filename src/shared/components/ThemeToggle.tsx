@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { Moon, Sun } from 'lucide-react';
 
-import { readLocal, writeLocal } from '@/shared/lib/storage.ts';
-import { Button } from '@/shared/ui';
+import { readLocal, writeLocal } from '@shared/lib/storage.ts';
+import { Button } from '@shared/ui';
 
 type Theme = 'light' | 'dark';
 

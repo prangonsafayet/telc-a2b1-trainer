@@ -1,6 +1,6 @@
-import { MODULE_META } from '@/shared/config/exam.ts';
-import { fmtClock, fmtDate } from '@/shared/lib/format.ts';
-import { type Attempt, type ExamGrade } from '@/shared/types';
+import { MODULE_META } from '@shared/config/exam.ts';
+import { fmtClock, fmtDate } from '@shared/lib/format.ts';
+import { type Attempt, type ExamGrade } from '@shared/types';
 
 /** One table row, pre-formatted so the table component stays presentational. */
 export interface AttemptRow {

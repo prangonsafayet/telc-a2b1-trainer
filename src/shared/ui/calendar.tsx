@@ -2,8 +2,8 @@ import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react'
 import { DayPicker, type ChevronProps, type DropdownProps } from 'react-day-picker';
 import { de } from 'react-day-picker/locale';
 
-import { cn } from '@/shared/lib/cn.ts';
-import { optional } from '@/shared/lib/optionalProps.ts';
+import { cn } from '@shared/lib/cn.ts';
+import { optional } from '@shared/lib/optionalProps.ts';
 
 import { buttonVariants } from './button.tsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select.tsx';

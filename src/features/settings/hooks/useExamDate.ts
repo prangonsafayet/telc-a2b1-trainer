@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { daysUntil, parseIsoDate, toIsoDate } from '@/shared/lib/format.ts';
+import { daysUntil, parseIsoDate, toIsoDate } from '@shared/lib/format.ts';
 
 export interface ExamDateState {
   readonly open: boolean;

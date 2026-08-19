@@ -1,6 +1,6 @@
-import { Multiline } from '@/shared/components';
-import { type Exam } from '@/shared/types';
-import { Button, Card, CardContent, CardHeader, CardTitle, Separator, Slider } from '@/shared/ui';
+import { Multiline } from '@shared/components';
+import { type Exam } from '@shared/types';
+import { Button, Card, CardContent, CardHeader, CardTitle, Separator, Slider } from '@shared/ui';
 
 import { type RecordingMap, type SpeakingPart } from '../hooks/useExamRun.ts';
 import { useSelfRating } from '../hooks/useSelfRating.ts';

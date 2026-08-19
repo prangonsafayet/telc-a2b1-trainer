@@ -1,7 +1,7 @@
 import { CalendarClock } from 'lucide-react';
 
-import { daysUntil, parseIsoDate } from '@/shared/lib/format.ts';
-import { Badge } from '@/shared/ui';
+import { daysUntil, parseIsoDate } from '@shared/lib/format.ts';
+import { Badge } from '@shared/ui';
 
 interface ExamCountdownBadgeProps {
   /** `YYYY-MM-DD`. */

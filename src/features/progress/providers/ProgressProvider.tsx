@@ -9,7 +9,7 @@ import {
   type RefObject
 } from 'react';
 
-import { type ProgressDatabase } from '@/shared/types';
+import { type ProgressDatabase } from '@shared/types';
 
 import { loadDatabase, normalizeDatabase, persistDatabase, stamp } from '../lib/progressDb.ts';
 

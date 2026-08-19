@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { toast } from 'sonner';
 
-import { normalizeDatabase, stamp, useProgress } from '@/features/progress';
+import { normalizeDatabase, stamp, useProgress } from '@features/progress';
 
 export interface ProgressBackup {
   readonly exportToFile: () => void;

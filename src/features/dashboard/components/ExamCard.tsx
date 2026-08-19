@@ -1,8 +1,8 @@
 import { PlayCircle, RotateCcw, Trophy } from 'lucide-react';
 
-import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@/shared/config/exam.ts';
-import { difficultyTone, gradeTone } from '@/shared/lib/examBadges.ts';
-import { type AttemptMode, type Settings } from '@/shared/types';
+import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
+import { difficultyTone, gradeTone } from '@shared/lib/examBadges.ts';
+import { type AttemptMode, type Settings } from '@shared/types';
 import {
   Badge,
   Button,
@@ -16,7 +16,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/shared/ui';
+} from '@shared/ui';
 
 import { type ExamCardStats } from '../hooks/useDashboardStats.ts';
 

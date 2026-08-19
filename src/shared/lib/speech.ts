@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 
-import { type AudioScript, type Exam, type Settings } from '@/shared/types';
+import { type AudioScript, type Exam, type Settings } from '@shared/types';
 
 type VoiceListener = () => void;
 

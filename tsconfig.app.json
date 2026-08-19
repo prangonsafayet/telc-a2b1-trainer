@@ -31,12 +31,17 @@
     "allowUnusedLabels": false,
     "forceConsistentCasingInFileNames": true,
 
-    "paths": { "@/*": ["./src/*"] },
+    "paths": {
+      "@app/*": ["./src/app/*"],
+      "@features/*": ["./src/features/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@content/*": ["./src/content/*"]
+    },
     "types": ["vite/client"],
 
     /* The test suites are plain JS that imports typed source. Including them here means
-       every file in the repo belongs to a project — so the editor resolves the `@/`
-       alias inside them — while checkJs keeps them out of the type-check itself. A
+       every file in the repo belongs to a project — so the editor resolves the path
+       aliases inside them — while checkJs keeps them out of the type-check itself. A
        composite project must list every file it touches, which is why they cannot live
        in a separate project that imports src. */
     "allowJs": true,

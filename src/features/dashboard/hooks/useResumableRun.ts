@@ -3,10 +3,10 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { EXAM_MODULES } from '@/shared/config/exam.ts';
-import { type AttemptMode, type ExamModule } from '@/shared/types';
+import { EXAM_MODULES } from '@shared/config/exam.ts';
+import { type AttemptMode, type ExamModule } from '@shared/types';
 
-import { clearRun, createRun, loadRun, saveRun, type ExamRun } from '@/features/exam';
+import { clearRun, createRun, loadRun, saveRun, type ExamRun } from '@features/exam';
 
 export interface ResumableRun {
   readonly run: ExamRun | null;

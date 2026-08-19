@@ -17,86 +17,76 @@ import prettier from 'eslint-config-prettier';
  *                 feature's internals — cross-feature use goes through its index.ts.
  *   src/shared    reusable building blocks. May not import features or app.
  *   src/content   plain data. May not import anything from the app at all.
+ *
+ * `no-restricted-imports` is configured, not accumulated: when two flat-config entries
+ * both set it for the same file, the later entry replaces the earlier one's options
+ * outright instead of merging the pattern lists. So every entry below restates each
+ * pattern that applies to its files. Leaving that out is silent: the repo-wide barrel
+ * rule matched `src/**` and switched the layer rules off for every file it also matched.
  */
-const NO_CROSS_FEATURE_INTERNALS = {
-  name: 'no-cross-feature-internals',
-  files: ['src/features/*/**/*.{ts,tsx}'],
-  rules: {
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['@/features/*/*/**'],
-            message:
-              "Import another feature only through its public surface: '@/features/<name>'. Reaching into its folders couples you to its internals."
-          },
-          {
-            group: ['@/app/**'],
-            message: 'Features must not import the app shell — that inverts the dependency direction.'
-          }
-        ]
-      }
-    ]
-  }
+const UI_BY_FILE = {
+  group: ['@shared/ui/*', '**/shared/ui/*'],
+  message:
+    "Import primitives from '@shared/ui', not from the file directly. Those files are written by the shadcn CLI and treated as vendored; the barrel is the stable surface."
 };
 
-/* The design system is consumed through its barrel, never file by file. */
+const CROSS_FEATURE_INTERNALS = {
+  group: ['@features/*/*/**'],
+  message:
+    "Import another feature only through its public surface: '@features/<name>'. Reaching into its folders couples you to its internals."
+};
+
+const APP_SHELL = {
+  group: ['@app/**'],
+  message: 'Features must not import the app shell — that inverts the dependency direction.'
+};
+
+const FEATURES_AND_APP = {
+  group: ['@features/**', '@app/**'],
+  message: 'src/shared must stay feature-agnostic. If it needs feature knowledge it belongs in that feature.'
+};
+
+const APPLICATION_CODE = {
+  group: ['@features/**', '@app/**', '@shared/components/**'],
+  message: 'src/content is inert data. It must not depend on application code.'
+};
+
+const restrict = (...patterns) => ({ 'no-restricted-imports': ['error', { patterns }] });
+
+/* The design system is consumed through its barrel, never file by file. This is the
+   repo-wide baseline; the layer entries below re-include UI_BY_FILE. */
 const UI_THROUGH_BARREL = {
   name: 'ui-through-barrel',
   files: ['src/**/*.{ts,tsx}'],
   ignores: ['src/shared/ui/**'],
-  rules: {
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['@/shared/ui/*', '**/shared/ui/*'],
-            message:
-              "Import primitives from '@/shared/ui', not from the file directly. Those files are written by the shadcn CLI and treated as vendored; the barrel is the stable surface."
-          }
-        ]
-      }
-    ]
-  }
+  rules: restrict(UI_BY_FILE)
+};
+
+const NO_CROSS_FEATURE_INTERNALS = {
+  name: 'no-cross-feature-internals',
+  files: ['src/features/*/**/*.{ts,tsx}'],
+  rules: restrict(CROSS_FEATURE_INTERNALS, APP_SHELL, UI_BY_FILE)
 };
 
 const SHARED_STAYS_GENERIC = {
   name: 'shared-stays-generic',
   files: ['src/shared/**/*.{ts,tsx}'],
-  rules: {
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['@/features/**', '@/app/**'],
-            message:
-              'src/shared must stay feature-agnostic. If it needs feature knowledge it belongs in that feature.'
-          }
-        ]
-      }
-    ]
-  }
+  ignores: ['src/shared/ui/**'],
+  rules: restrict(FEATURES_AND_APP, UI_BY_FILE)
+};
+
+/* The vendored shadcn files are exempt from the barrel rule — they import their siblings
+   directly — but they are still part of src/shared and must stay feature-agnostic. */
+const SHARED_UI_STAYS_GENERIC = {
+  name: 'shared-ui-stays-generic',
+  files: ['src/shared/ui/**/*.{ts,tsx}'],
+  rules: restrict(FEATURES_AND_APP)
 };
 
 const CONTENT_IS_DATA_ONLY = {
   name: 'content-is-data-only',
   files: ['src/content/**/*.ts'],
-  rules: {
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['@/features/**', '@/app/**', '@/shared/components/**'],
-            message: 'src/content is inert data. It must not depend on application code.'
-          }
-        ]
-      }
-    ]
-  }
+  rules: restrict(APPLICATION_CODE, UI_BY_FILE)
 };
 
 export default tseslint.config(
@@ -229,10 +219,10 @@ export default tseslint.config(
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
           pathGroups: [
             { pattern: 'react', group: 'external', position: 'before' },
-            { pattern: '@/content/**', group: 'internal', position: 'after' },
-            { pattern: '@/shared/**', group: 'internal', position: 'after' },
-            { pattern: '@/features/**', group: 'internal', position: 'after' },
-            { pattern: '@/app/**', group: 'internal', position: 'after' }
+            { pattern: '@content/**', group: 'internal', position: 'after' },
+            { pattern: '@shared/**', group: 'internal', position: 'after' },
+            { pattern: '@features/**', group: 'internal', position: 'after' },
+            { pattern: '@app/**', group: 'internal', position: 'after' }
           ],
           pathGroupsExcludedImportTypes: ['react'],
           'newlines-between': 'always',
@@ -252,9 +242,12 @@ export default tseslint.config(
     }
   },
 
-  NO_CROSS_FEATURE_INTERNALS,
+  /* Order matters: the repo-wide barrel rule first, then the layer entries that
+     restate it, so the more specific configuration is the one that survives. */
   UI_THROUGH_BARREL,
+  NO_CROSS_FEATURE_INTERNALS,
   SHARED_STAYS_GENERIC,
+  SHARED_UI_STAYS_GENERIC,
   CONTENT_IS_DATA_ONLY,
 
   {

@@ -2,12 +2,12 @@ import { useCallback } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { findExamById } from '@/content/exams';
+import { findExamById } from '@content/exams';
 
-import { EXAM_MODULES } from '@/shared/config/exam.ts';
-import { type Attempt, type AttemptMode, type Exam, type ExamModule } from '@/shared/types';
+import { EXAM_MODULES } from '@shared/config/exam.ts';
+import { type Attempt, type AttemptMode, type Exam, type ExamModule } from '@shared/types';
 
-import { useProgress } from '@/features/progress';
+import { useProgress } from '@features/progress';
 
 import { createRun, saveRun } from '../lib/runState.ts';
 

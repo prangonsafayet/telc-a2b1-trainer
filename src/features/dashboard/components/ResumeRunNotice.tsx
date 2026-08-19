@@ -1,9 +1,9 @@
 import { PlayCircle } from 'lucide-react';
 
-import { MODULE_META } from '@/shared/config/exam.ts';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui';
+import { MODULE_META } from '@shared/config/exam.ts';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui';
 
-import { type ExamRun } from '@/features/exam';
+import { type ExamRun } from '@features/exam';
 
 interface ResumeRunNoticeProps {
   readonly run: ExamRun;

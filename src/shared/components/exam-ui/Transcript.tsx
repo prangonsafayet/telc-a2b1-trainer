@@ -1,5 +1,5 @@
-import { type AudioScript } from '@/shared/types';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui';
+import { type AudioScript } from '@shared/types';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@shared/ui';
 
 interface TranscriptProps {
   readonly audio: AudioScript;

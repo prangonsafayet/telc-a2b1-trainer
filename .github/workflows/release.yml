@@ -1,8 +1,10 @@
-# Cuts a release: verifies main, bumps the version, tags it, publishes notes.
-# Manually dispatched, because choosing patch/minor/major is a judgement call — this
-# project does not use conventional commits, so it cannot be inferred.
+# Phase 1 of the release: verify main, bump the version, open a release PR.
 #
-# It does not deploy. Netlify deploys every push to main, including the release commit.
+# It deliberately does not push to `main`. Branch protection requires a pull request for
+# everyone, and `github-actions[bot]` has write access but no admin bypass — a workflow that
+# pushed to main directly would simply fail, and granting it a bypass would put a hole in
+# the gate that protects every other change. Phase 2 (tag-release.yml) tags the version
+# once the release PR is merged.
 name: Release
 
 on:
@@ -15,7 +17,7 @@ on:
         type: choice
         options: [patch, minor, major]
       dry-run:
-        description: 'Verify and print the next version without pushing'
+        description: 'Verify and print the next version without opening a PR'
         required: false
         default: false
         type: boolean
@@ -25,12 +27,55 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  release:
-    name: Verify, bump and publish
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run validate
+      - run: npm run test:unit
+      - run: npm run build
+
+  e2e:
+    name: End-to-end tests
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --user 1001
+    # Fake, non-secret configuration so the sign-in UI the specs assert on actually renders.
+    # See the same block in ci.yml for why these are inline rather than repository secrets.
+    env:
+      VITE_SUPABASE_URL: https://e2e-not-a-real-project.supabase.co
+      VITE_SUPABASE_ANON_KEY: sb_publishable_e2e_not-a-real-key_000000000000
+      VITE_AUTH_PROVIDERS: google,github
+      VITE_SITE_URL: http://localhost:5173
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run test:e2e -- --project=chromium
+
+  prepare:
+    name: Open the release PR
+    needs: [verify, e2e]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,59 +89,53 @@ jobs:
 
       - run: npm ci
 
-      # A tag is a promise that this commit works, so the full suite runs here even
-      # though CI already ran it on the merge. This is the one deliberate overlap.
-      - name: Verify
-        run: |
-          npm run typecheck
-          npm run lint
-          npm run format:check
-          npm run validate
-          npm run test:unit
-
-      - name: Install browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: End-to-end tests
-        run: npm run test:e2e -- --project=chromium
-
-      - name: Build
-        run: npm run build
-
       - name: Bump the version
         id: bump
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # --no-git-tag-version so the commit message and tag are ours to control.
           npm version "${{ inputs.bump }}" --no-git-tag-version
           VERSION="v$(node -p "require('./package.json').version")"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "branch=release/$VERSION" >> "$GITHUB_OUTPUT"
           echo "Next version: $VERSION"
 
       - name: Stop here on a dry run
         if: inputs.dry-run
         run: |
-          echo "Dry run — would release ${{ steps.bump.outputs.version }}"
-          git diff --stat
+          echo "Dry run — would open a PR for ${{ steps.bump.outputs.version }}"
+          git --no-pager diff --stat
 
-      - name: Commit, tag and push
+      - name: Push the release branch and open the PR
         if: ${{ !inputs.dry-run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.bump.outputs.version }}
+          BRANCH: ${{ steps.bump.outputs.branch }}
         run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
           git add package.json package-lock.json
-          git commit -m "Release ${{ steps.bump.outputs.version }}"
-          git tag -a "${{ steps.bump.outputs.version }}" -m "${{ steps.bump.outputs.version }}"
-          git push origin main --follow-tags
+          git commit -m "Release $VERSION"
+          git push origin "$BRANCH"
 
-      - name: Package the built site
-        if: ${{ !inputs.dry-run }}
-        run: tar -czf "telc-trainer-${{ steps.bump.outputs.version }}.tar.gz" -C dist .
+          # Body via a file: a multi-line string inline here would have to survive both
+          # YAML and shell quoting, and gets unreadable fast.
+          cat > /tmp/pr-body.md <<'BODY'
+          Version bump opened by the Release workflow.
 
-      - name: Publish the GitHub release
-        if: ${{ !inputs.dry-run }}
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ steps.bump.outputs.version }}
-          name: ${{ steps.bump.outputs.version }}
-          generate_release_notes: true
-          files: telc-trainer-${{ steps.bump.outputs.version }}.tar.gz
+          `main` was verified before this branch was cut: typecheck, lint, format, exam-data
+          validation, the jsdom suites, the end-to-end suite and a production build all passed.
+
+          Merging this tags the release. `tag-release.yml` sees the new version land on `main`,
+          creates the tag, publishes the GitHub release with notes generated from the merged PR
+          labels, and attaches the built site. Netlify deploys the same commit, so the version in
+          the app footer matches the tag.
+          BODY
+          sed -i 's/^          //' /tmp/pr-body.md
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "Release $VERSION" \
+            --label ignore-for-release \
+            --body-file /tmp/pr-body.md

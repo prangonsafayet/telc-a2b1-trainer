@@ -19,7 +19,7 @@ Pick a theme not already used (`exam.theme`) and set `difficulty` to `easy`,
 Create `src/content/exams/examNN.ts` following the exact shape of its neighbours:
 
 ```ts
-import { type Exam } from '@/shared/types';
+import { type Exam } from '@shared/types';
 
 const exam = {
   id: NN,

@@ -2,9 +2,9 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { LEARN } from '@/content/learn.ts';
+import { LEARN } from '@content/learn.ts';
 
-import { useProgress } from '@/features/progress';
+import { useProgress } from '@features/progress';
 
 import { learnTaskKey, summarizePlan, type PlanSummary } from '../lib/planProgress.ts';
 

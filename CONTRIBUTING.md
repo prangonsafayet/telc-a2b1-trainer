@@ -35,14 +35,20 @@ that always passes.
 
 ## 3. Build it
 
-Read [`CLAUDE.md`](CLAUDE.md) first if you have not. The rules that matter most:
+Read [`CLAUDE.md`](CLAUDE.md) first if you have not — it is short and points at the detail
+under [`.claude/docs/`](.claude/docs/). The rules that matter most:
 
 - Components are visual; logic goes in a `use-*.ts` hook or a pure `lib/` util.
-- Use a shadcn primitive from `@/shared/components/ui` — no raw `<button>`,
+- Use a shadcn primitive from `@shared/ui` — no raw `<button>`,
   `<input>`, `<select>`, `<textarea>`, `<table>` or `<label>` in feature code.
 - Features do not import each other's internals or the app shell. If two features
   need the same thing, it belongs in `src/shared`.
+- Primitives come from `@shared/ui`, never from a file inside it.
 - No `any`, no non-null assertions.
+
+The traps this codebase invites are catalogued in
+[`.claude/docs/pitfalls.md`](.claude/docs/pitfalls.md) — worth a minute before touching
+dates, timers, answers, auth or content.
 
 Run the app while you work:
 
@@ -116,7 +122,7 @@ most easily:
 - Answer-map access without the `features/exam/lib/answers.ts` accessors.
 - Anything touching passwords client-side.
 - Authored HTML rendered as text, or content text injected as HTML.
-- Primitives imported from `@/shared/ui/<file>` instead of `@/shared/ui`.
+- Primitives imported from `@shared/ui/<file>` instead of `@shared/ui`.
 
 Every pull request also gets a **Netlify deploy preview**, so a visual change can be
 clicked rather than imagined.
@@ -157,11 +163,20 @@ To release, run the **Release** workflow from the Actions tab and pick a bump:
 | `minor` | New capability, or **any change to exam timing, scoring or audio plays** — past attempts stop being comparable, and that deserves to be visible |
 | `major` | A breaking change to stored progress or the persisted answer format                                                                             |
 
-The workflow verifies `main`, runs `npm version <bump>`, commits `Release vX.Y.Z`, tags
-it, pushes, and publishes a GitHub release with notes generated from the merged PR
-labels. Pushing that commit to `main` is what triggers the Netlify deploy — the release
-never deploys by itself. There is a `dry-run` input that verifies and prints the next
-version without pushing.
+Releasing is two phases, because `main` is protected and requires a pull request — a
+workflow that pushed the bump straight to `main` would simply be rejected, and giving the
+Actions bot a bypass would put a hole in the gate that protects every other change.
+
+1. **Release** (`release.yml`, manual dispatch) verifies `main` end to end, runs
+   `npm version <bump>`, and opens a **release PR** from `release/vX.Y.Z`. A `dry-run`
+   input verifies and prints the next version without opening anything.
+2. Review and squash-merge that PR like any other. It has to clear the same four gates.
+3. **Tag** (`tag-release.yml`) sees the new version land on `main`, creates the tag,
+   publishes the GitHub release with notes generated from the merged PR labels, and
+   attaches the built site. It is a no-op when the version is already tagged, so an
+   ordinary dependency change that touches `package.json` does not accidentally release.
+4. Netlify deploys that same merge commit, so the tag, the release, the version in the app
+   footer and the deployed build all agree.
 
 Do not bump the version by hand, and do not tag manually: the workflow is what keeps
 the tag, the release notes, the version in the footer and the deployed build in step.
@@ -204,6 +219,13 @@ Two majors are deliberately held back, in `.ncurc.json` and `.github/dependabot.
 | `eslint` / `@eslint/js` at 9.x | `eslint-plugin-jsx-a11y` and `eslint-plugin-react` both peer at `eslint ^9`. ESLint 10 cannot be installed without dropping one of them.              |
 
 Remove the entry once the plugins catch up — do not force it with `--legacy-peer-deps`.
+
+**Bumping Playwright means bumping the CI image.** The end-to-end job runs inside
+`mcr.microsoft.com/playwright:v<version>-noble`, which ships the browsers and every OS
+library they need. Installing them on a bare runner instead means
+`playwright install --with-deps` shelling out to apt for ~20 MB of fonts, which is slow
+and has hung the job outright. The image tag is pinned in both workflows and a guard step
+fails loudly if the dependency and the tag drift apart.
 
 **Node 24 or newer.** `.nvmrc` pins it because jsdom calls
 `webidl.util.markAsUncloneable`, which Node 20's bundled undici does not have — the

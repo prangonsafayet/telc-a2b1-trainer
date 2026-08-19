@@ -1,0 +1,76 @@
+# Phase 2 of the release: tag and publish once a version bump lands on main.
+#
+# Split from release.yml because branch protection requires a pull request, so the bump
+# arrives as a merge rather than a direct push. This watches for that merge and does the
+# tagging, which keeps the tag, the GitHub release, the version in the app footer and the
+# deployed build all pointing at the same commit.
+name: Tag release
+
+on:
+  push:
+    branches: [main]
+    paths: ['package.json']
+
+concurrency:
+  group: tag-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    name: Tag and publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Read the version and check whether it is already tagged
+        id: check
+        run: |
+          VERSION="v$(node -p "require('./package.json').version")"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "$VERSION is already tagged — nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "$VERSION is new — tagging."
+          fi
+
+      # A push touching package.json is usually a dependency change, not a release, so the
+      # tag guard above is what makes this safe to run on every such push.
+      - run: npm ci
+        if: steps.check.outputs.exists == 'false'
+
+      - name: Build the site to attach
+        if: steps.check.outputs.exists == 'false'
+        run: npm run build
+
+      - name: Package the built site
+        if: steps.check.outputs.exists == 'false'
+        run: tar -czf "telc-trainer-${{ steps.check.outputs.version }}.tar.gz" -C dist .
+
+      - name: Tag the commit
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.check.outputs.version }}" -m "${{ steps.check.outputs.version }}"
+          git push origin "${{ steps.check.outputs.version }}"
+
+      - name: Publish the GitHub release
+        if: steps.check.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.check.outputs.version }}
+          name: ${{ steps.check.outputs.version }}
+          generate_release_notes: true
+          files: telc-trainer-${{ steps.check.outputs.version }}.tar.gz

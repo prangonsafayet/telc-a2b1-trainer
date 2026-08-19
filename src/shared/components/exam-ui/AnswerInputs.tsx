@@ -1,4 +1,4 @@
-import { LETTERS } from '@/shared/lib/format.ts';
+import { LETTERS } from '@shared/lib/format.ts';
 import {
   Label,
   RadioGroup,
@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/shared/ui';
+} from '@shared/ui';
 
 interface RichtigFalschProps {
   /** Item id, e.g. `l4.2`; used to tie labels to inputs. */

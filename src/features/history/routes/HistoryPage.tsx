@@ -1,10 +1,10 @@
 import { Download, Upload } from 'lucide-react';
 
-import { PageTitle } from '@/shared/components';
-import { ScoreHistoryChart } from '@/shared/components/data-display/ScoreHistoryChart.tsx';
-import { Button, Card, CardContent } from '@/shared/ui';
+import { PageTitle } from '@shared/components';
+import { ScoreHistoryChart } from '@shared/components/data-display/ScoreHistoryChart.tsx';
+import { Button, Card, CardContent } from '@shared/ui';
 
-import { useProgress } from '@/features/progress';
+import { useProgress } from '@features/progress';
 
 import { AttemptTable } from '../components/AttemptTable.tsx';
 import { useProgressBackup } from '../hooks/useProgressBackup.ts';

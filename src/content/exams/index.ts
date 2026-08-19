@@ -1,4 +1,4 @@
-import { type Exam } from '@/shared/types';
+import { type Exam } from '@shared/types';
 
 import exam01 from './exam01.ts';
 import exam02 from './exam02.ts';

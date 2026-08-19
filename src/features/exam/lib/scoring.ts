@@ -7,7 +7,7 @@ import {
   type NoteGap,
   type SkillScores,
   type SprachbausteineScore
-} from '@/shared/types';
+} from '@shared/types';
 
 /** Points awarded per correct item in Lesen and Hören. */
 const POINTS_PER_ITEM = 3;
