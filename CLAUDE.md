@@ -125,6 +125,24 @@ Add a regression case for every bug fixed. The suites have already caught an
 infinite render loop that only occurred with no German TTS voice installed, and a
 timer that stalled while typing.
 
+## Git hooks
+
+Husky runs two gates, installed by `npm install` via the `prepare` script:
+
+- **pre-commit** — `lint-staged` runs `eslint --max-warnings 0 --fix` then
+  `prettier --write` over staged files only. Fast, and it rewrites the file in
+  place, so a commit either lands formatted or does not land.
+- **pre-push** — `typecheck`, `validate`, `test:unit`. Staged-file linting cannot
+  see a type error in a file you did not touch or a route that stopped rendering,
+  so the real pipeline runs before anything leaves the machine.
+
+Playwright is deliberately not in a hook — it is slow and needs browsers
+installed. Run `npm run test:e2e` yourself when the change is visual or
+navigational.
+
+To bypass in a genuine emergency: `git commit --no-verify`. Do not make a habit
+of it; the pre-push gate exists because these suites have caught real bugs.
+
 ## Commits
 
 No AI attribution — no `Co-Authored-By`, no "generated with" footer. Write the

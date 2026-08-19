@@ -1,0 +1,5 @@
+# The staged-file checks cannot catch a type error in a file you did not touch, or a
+# broken route. Run the real pipeline before anything leaves the machine.
+npm run typecheck
+npm run validate
+npm run test:unit
