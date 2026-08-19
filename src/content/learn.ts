@@ -1,12 +1,12 @@
 import { type LearnPlan } from '@shared/types/learn.ts';
 
-/* The 14-day study plan, its cheatsheets and the copy-paste AI tutor prompts.
+/* The 28-day study plan, its cheatsheets and the copy-paste AI tutor prompts.
    `intro` and every `cheatsheets[].html` are authored HTML and are injected; all other
    strings are plain text and are rendered as text. */
 export const LEARN = {
-  intro: `You have a <b>2-week learning phase</b> before mock-exam season. Work through one day per box below (60–90 min/day).
+  intro: `The plan below adapts to your exam date — set it in <b>Settings</b> and the days re-pace themselves.
   Each day = focused study + a cheatsheet + an <b>AI practice session</b>: copy the prompt into Claude (or any AI chat) and it becomes your personal tutor, speaking partner or corrector.
-  After Day 14, switch to the Dashboard and take the mock exams — roughly one per day, easiest first, reviewing every mistake.`,
+  Days 1–14 are the <b>core curriculum</b> and are always scheduled; days 15–28 deepen everything to full B1 when your date leaves room for them.`,
 
   cheatsheets: {
     cases: {

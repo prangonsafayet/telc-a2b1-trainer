@@ -8,14 +8,18 @@ import { fmtDate } from '@shared/lib/format.ts';
 import { Card, CardContent } from '@shared/ui';
 
 import { useAccountIdentity } from '@features/auth';
+import { describeMockLead, examSlotLabel } from '@features/plan';
 import { useProgress } from '@features/progress';
 
 import { ExamCard } from '../components/ExamCard.tsx';
 import { LocalOnlyNotice } from '../components/LocalOnlyNotice.tsx';
 import { ResumeRunNotice } from '../components/ResumeRunNotice.tsx';
+import { SchedulePhaseNotice } from '../components/SchedulePhaseNotice.tsx';
 import { StatTile } from '../components/StatTile.tsx';
+import { TodayPlanCard } from '../components/TodayPlanCard.tsx';
 import { useDashboardStats } from '../hooks/useDashboardStats.ts';
 import { useResumableRun } from '../hooks/useResumableRun.ts';
+import { useTodayPlan } from '../hooks/useTodayPlan.ts';
 
 const SKILL_LABELS = [
   ['lesen', 'Lesen'],
@@ -34,6 +38,7 @@ export function DashboardPage() {
   const stats = useDashboardStats();
   const identity = useAccountIdentity();
   const resumable = useResumableRun();
+  const plan = useTodayPlan();
 
   const last = stats.lastAttempt;
   const lastLabel = last
@@ -45,8 +50,10 @@ export function DashboardPage() {
       <PageTitle
         lead={
           <>
-            10 Modelltests, easiest first. Take them in order under real timing. Aim:{' '}
-            <b className="text-foreground">≥ 42/60 in three skills</b> and ≥ 24/60 in the fourth = B1.
+            {plan.schedule
+              ? describeMockLead(plan.schedule, stats.examCards.length)
+              : `${String(stats.examCards.length)} Modelltests, easiest first. Take them in order under real timing.`}{' '}
+            Aim: <b className="text-foreground">≥ 42/60 in three skills</b> and ≥ 24/60 in the fourth = B1.
           </>
         }
       >
@@ -59,6 +66,17 @@ export function DashboardPage() {
 
       {resumable.run ? (
         <ResumeRunNotice run={resumable.run} onResume={resumable.resume} onDiscard={resumable.discard} />
+      ) : null}
+
+      {plan.notice ? <SchedulePhaseNotice message={plan.notice} needsNewDate={plan.needsNewDate} /> : null}
+
+      {plan.today ? (
+        <TodayPlanCard
+          plan={plan.today}
+          onStartExam={examId => {
+            resumable.start(examId, 'full');
+          }}
+        />
       ) : null}
 
       <div className="stagger grid gap-3 sm:grid-cols-3">
@@ -103,7 +121,13 @@ export function DashboardPage() {
       <SectionTitle>Mock exams</SectionTitle>
       <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.examCards.map(card => (
-          <ExamCard key={card.exam.id} stats={card} settings={db.settings} onStart={resumable.start} />
+          <ExamCard
+            key={card.exam.id}
+            stats={card}
+            settings={db.settings}
+            scheduleLabel={examSlotLabel(plan.schedule, card.exam.id)}
+            onStart={resumable.start}
+          />
         ))}
       </div>
     </>

@@ -1,3 +1,4 @@
+import { addDays, toIsoDate } from '@shared/lib/format.ts';
 import { type ExamModule, type Settings } from '@shared/types';
 
 /** Module order of a full exam, matching the real sitting. */
@@ -62,10 +63,22 @@ export const RATING_CRITERIA: Readonly<
   ]
 };
 
+/**
+ * A new user has not told us their exam date yet, and a hardcoded one silently rots: the
+ * day it passes, everyone who has not changed it gets a past-due plan. So the default is a
+ * comfortable runway from whenever the app is first opened, which the schedule can work
+ * with and the user can correct in Settings.
+ */
+export const DEFAULT_PREP_DAYS = 30;
+
+export function defaultExamDate(): string {
+  return addDays(toIsoDate(new Date()), DEFAULT_PREP_DAYS) ?? toIsoDate(new Date());
+}
+
 export const DEFAULT_SETTINGS: Settings = {
   writingMinutes: 10,
   ttsRate: 1,
   voiceName: '',
-  examDate: '2026-09-12',
+  examDate: defaultExamDate(),
   playsAllowed: 2
 };

@@ -90,4 +90,4 @@ Teil 1: introduce yourself · Teil 2: talk about a topic / exchange opinions · 
 </div>
 `;
 
-/* ---------------- 14-day AI-assisted learning plan ---------------- */
+/* ---------------- AI-assisted learning plan ---------------- */

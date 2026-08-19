@@ -21,7 +21,7 @@ import {
 
 import { SyncPanel } from '@features/auth';
 
-import { ExamDatePicker } from '../components/ExamDatePicker.tsx';
+import { ExamDateControls } from '../components/ExamDateControls.tsx';
 import { useExamSettings } from '../hooks/useExamSettings.ts';
 
 interface FieldProps {
@@ -147,7 +147,7 @@ export function SettingsPage() {
             </Field>
 
             <Field label="Your exam date">
-              <ExamDatePicker
+              <ExamDateControls
                 value={settings.examDate}
                 onChange={iso => {
                   setSetting('examDate', iso);
