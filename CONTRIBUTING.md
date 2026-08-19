@@ -35,14 +35,20 @@ that always passes.
 
 ## 3. Build it
 
-Read [`CLAUDE.md`](CLAUDE.md) first if you have not. The rules that matter most:
+Read [`CLAUDE.md`](CLAUDE.md) first if you have not — it is short and points at the detail
+under [`.claude/docs/`](.claude/docs/). The rules that matter most:
 
 - Components are visual; logic goes in a `use-*.ts` hook or a pure `lib/` util.
 - Use a shadcn primitive from `@/shared/components/ui` — no raw `<button>`,
   `<input>`, `<select>`, `<textarea>`, `<table>` or `<label>` in feature code.
 - Features do not import each other's internals or the app shell. If two features
   need the same thing, it belongs in `src/shared`.
+- Primitives come from `@/shared/ui`, never from a file inside it.
 - No `any`, no non-null assertions.
+
+The traps this codebase invites are catalogued in
+[`.claude/docs/pitfalls.md`](.claude/docs/pitfalls.md) — worth a minute before touching
+dates, timers, answers, auth or content.
 
 Run the app while you work:
 
