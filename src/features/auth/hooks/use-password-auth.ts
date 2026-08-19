@@ -6,6 +6,14 @@ import { useSync } from './use-sync.ts';
 
 export type AuthMode = 'signin' | 'signup';
 
+/** What the form should say after a sign-up attempt. */
+export type SignUpFeedback =
+  | { readonly kind: 'none' }
+  /** Awaiting email confirmation for this address; offer a resend. */
+  | { readonly kind: 'awaiting-confirmation'; readonly email: string }
+  /** The address already belongs to a confirmed account. */
+  | { readonly kind: 'already-registered'; readonly email: string };
+
 export interface PasswordAuthState {
   readonly mode: AuthMode;
   readonly setMode: (mode: AuthMode) => void;
@@ -25,6 +33,8 @@ export interface PasswordAuthState {
   readonly submit: () => void;
   readonly resetPassword: () => void;
   readonly onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  readonly signUpFeedback: SignUpFeedback;
+  readonly resendConfirmation: () => void;
 }
 
 /**
@@ -38,6 +48,7 @@ export function usePasswordAuth(): PasswordAuthState {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [signUpFeedback, setSignUpFeedback] = useState<SignUpFeedback>({ kind: 'none' });
 
   const passwordCheck = useMemo(() => checkPassword(password), [password]);
 
@@ -59,14 +70,45 @@ export function usePasswordAuth(): PasswordAuthState {
 
   const submit = useCallback(() => {
     if (!canSubmit) return;
-    const run = mode === 'signup' ? sync.signUpWithPassword : sync.signInWithPassword;
-    void run(email.trim(), password).then(succeeded => {
-      if (succeeded) {
-        setPassword('');
-        setConfirmPassword('');
+    const address = email.trim();
+
+    if (mode === 'signin') {
+      void sync.signInWithPassword(address, password).then(succeeded => {
+        if (succeeded) setPassword('');
+      });
+      return;
+    }
+
+    void sync.signUpWithPassword(address, password).then(outcome => {
+      switch (outcome.kind) {
+        case 'signed-in':
+          setSignUpFeedback({ kind: 'none' });
+          setPassword('');
+          setConfirmPassword('');
+          break;
+        case 'confirmation-sent':
+          setSignUpFeedback({ kind: 'awaiting-confirmation', email: address });
+          setPassword('');
+          setConfirmPassword('');
+          break;
+        case 'already-registered':
+          /* Send them where they can actually get in, keeping the address they typed. */
+          setSignUpFeedback({ kind: 'already-registered', email: address });
+          setMode('signin');
+          setPassword('');
+          setConfirmPassword('');
+          break;
+        case 'failed':
+          break;
       }
     });
   }, [canSubmit, mode, sync, email, password]);
+
+  const resendConfirmation = useCallback(() => {
+    const address = signUpFeedback.kind === 'none' ? email.trim() : signUpFeedback.email;
+    if (!isValidEmail(address) || sync.busyWithEmail) return;
+    void sync.resendConfirmation(address);
+  }, [signUpFeedback, email, sync]);
 
   const resetPassword = useCallback(() => {
     if (!isValidEmail(email) || sync.busyWithEmail) return;
@@ -88,6 +130,9 @@ export function usePasswordAuth(): PasswordAuthState {
     setMode(next);
     setPassword('');
     setConfirmPassword('');
+    /* Keep an awaiting-confirmation notice visible across tabs — the user still needs to
+       act on it — but drop the "already registered" nudge once they are on sign-in. */
+    setSignUpFeedback(current => (current.kind === 'awaiting-confirmation' ? current : { kind: 'none' }));
   }, []);
 
   return {
@@ -109,6 +154,8 @@ export function usePasswordAuth(): PasswordAuthState {
     busy: sync.busyWithEmail,
     submit,
     resetPassword,
-    onKeyDown
+    onKeyDown,
+    signUpFeedback,
+    resendConfirmation
   };
 }

@@ -1,12 +1,13 @@
-import { Eye, EyeOff, KeyRound, Loader2, UserPlus } from 'lucide-react';
+import { Eye, EyeOff, KeyRound, Loader2, MailCheck, RotateCcw, TriangleAlert, UserPlus } from 'lucide-react';
 
+import { Alert, AlertDescription, AlertTitle } from '@/shared/components/ui/alert.tsx';
 import { Button } from '@/shared/components/ui/button.tsx';
 import { Input } from '@/shared/components/ui/input.tsx';
 import { Label } from '@/shared/components/ui/label.tsx';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs.tsx';
 import { cn } from '@/shared/lib/cn.ts';
 
-import { usePasswordAuth, type AuthMode } from '../hooks/use-password-auth.ts';
+import { usePasswordAuth, type AuthMode, type SignUpFeedback } from '../hooks/use-password-auth.ts';
 import { MIN_PASSWORD_LENGTH, strengthLabel } from '../lib/password-policy.ts';
 
 const STRENGTH_COLORS = [
@@ -36,6 +37,54 @@ function StrengthMeter({ strength }: { readonly strength: number }) {
   );
 }
 
+interface SignUpNoticeProps {
+  readonly feedback: SignUpFeedback;
+  readonly busy: boolean;
+  readonly onResend: () => void;
+}
+
+/**
+ * The two outcomes Supabase hides behind a generic success response. Without this the form
+ * would tell someone who already has an account to check an inbox nothing was sent to.
+ */
+function SignUpNotice({ feedback, busy, onResend }: SignUpNoticeProps) {
+  if (feedback.kind === 'already-registered') {
+    return (
+      <Alert variant="warning">
+        <TriangleAlert />
+        <AlertTitle>{feedback.email} already has an account</AlertTitle>
+        <AlertDescription>
+          <p>
+            It is already confirmed, so no email was sent. Sign in below — or use <b>Forgot password?</b> if
+            you cannot remember the password.
+          </p>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (feedback.kind === 'awaiting-confirmation') {
+    return (
+      <Alert variant="info">
+        <MailCheck />
+        <AlertTitle>Confirm {feedback.email}</AlertTitle>
+        <AlertDescription>
+          <p>
+            Click the link in that email, then sign in. Check your spam folder — and if it still has not
+            arrived, send it again.
+          </p>
+          <Button variant="outline" size="sm" className="mt-2" onClick={onResend} disabled={busy}>
+            {busy ? <Loader2 className="animate-spin" /> : <RotateCcw />}
+            Resend confirmation email
+          </Button>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  return null;
+}
+
 /** Email + password sign-in and sign-up, as two tabs over one form. */
 export function PasswordAuthForm() {
   const auth = usePasswordAuth();
@@ -59,6 +108,7 @@ export function PasswordAuthForm() {
 
       {(['signin', 'signup'] as const).map(mode => (
         <TabsContent key={mode} value={mode} className="space-y-3">
+          <SignUpNotice feedback={auth.signUpFeedback} busy={auth.busy} onResend={auth.resendConfirmation} />
           <div className="space-y-1.5">
             <Label htmlFor={`${mode}-email`}>Email</Label>
             <Input

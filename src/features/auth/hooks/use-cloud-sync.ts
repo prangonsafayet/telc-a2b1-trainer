@@ -7,6 +7,12 @@ import { type ProgressDatabase } from '@/shared/types';
 
 import { mergeProgress } from '../lib/merge-progress.ts';
 import { enabledProviders, providerLabel, type OAuthProvider } from '../lib/oauth-providers.ts';
+import {
+  interpretSignUp,
+  isRateLimited,
+  retryAfterSeconds,
+  type SignUpOutcome
+} from '../lib/sign-up-outcome.ts';
 import { isSyncConfigured, PROGRESS_TABLE, supabase } from '../lib/supabase-client.ts';
 
 /** Short status shown in the header. */
@@ -27,7 +33,8 @@ export interface CloudSyncState {
   readonly busyWithEmail: boolean;
   readonly signInWithProvider: (provider: OAuthProvider) => Promise<void>;
   readonly signInWithPassword: (email: string, password: string) => Promise<boolean>;
-  readonly signUpWithPassword: (email: string, password: string) => Promise<boolean>;
+  readonly signUpWithPassword: (email: string, password: string) => Promise<SignUpOutcome>;
+  readonly resendConfirmation: (email: string) => Promise<boolean>;
   readonly sendPasswordReset: (email: string) => Promise<void>;
   readonly fullSync: (options?: { readonly announce?: boolean }) => Promise<void>;
   readonly signOut: () => Promise<void>;
@@ -274,11 +281,11 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
   }, []);
 
   /**
-   * Creates an account. Depending on the project's settings Supabase either signs the user
-   * straight in or emails a confirmation link first, so both outcomes are handled.
+   * Creates an account. Three outcomes are possible and they are not distinguishable from
+   * the presence of a session alone — see `interpretSignUp` for why.
    */
-  const signUpWithPassword = useCallback(async (email: string, password: string): Promise<boolean> => {
-    if (!supabase) return false;
+  const signUpWithPassword = useCallback(async (email: string, password: string): Promise<SignUpOutcome> => {
+    if (!supabase) return { kind: 'failed', message: 'Cloud sync is not configured.' };
     setBusyWithEmail(true);
     setStatus('Creating your account…');
     try {
@@ -287,23 +294,77 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
         password,
         options: { emailRedirectTo: window.location.origin + window.location.pathname }
       });
-      if (error) throw new Error(error.message);
+      const outcome = interpretSignUp(data, error);
 
-      if (data.session) {
-        setStatus('');
-        toast.success('Account created', { description: 'You are signed in and your progress is syncing.' });
-      } else {
-        setStatus('✓ Check your inbox (and spam) for the confirmation link, then sign in.');
-        toast.success('Confirm your email', { description: `We sent a confirmation link to ${email}.` });
+      switch (outcome.kind) {
+        case 'signed-in':
+          setStatus('');
+          toast.success('Account created', {
+            description: 'You are signed in and your progress is syncing.'
+          });
+          break;
+        case 'confirmation-sent':
+          setStatus('✓ Check your inbox (and spam) for the confirmation link, then sign in.');
+          toast.success('Confirm your email', { description: `We sent a confirmation link to ${email}.` });
+          break;
+        case 'already-registered':
+          setStatus('That email already has a confirmed account. Sign in instead, or reset the password.');
+          toast.info('You already have an account', {
+            description: 'Signing in is the way in — use "Forgot password?" if you need to.'
+          });
+          break;
+        case 'failed':
+          setStatus(outcome.message);
+          toast.error('Could not create the account', { description: outcome.message });
+          break;
       }
+
+      return outcome;
+    } catch (error) {
+      const message = errorMessage(error);
+      setStatus(message);
+      toast.error('Could not create the account', { description: message });
+      return { kind: 'failed', message };
+    } finally {
+      setBusyWithEmail(false);
+    }
+  }, []);
+
+  /**
+   * Re-sends the sign-up confirmation.
+   *
+   * `signUp` is documented to resend for an unconfirmed account, but it is rate limited
+   * and silently does nothing once the window is hit — which reads to the user as "the
+   * email never arrived". `auth.resend` is the explicit API and surfaces the rate limit as
+   * an error we can show.
+   */
+  const resendConfirmation = useCallback(async (email: string): Promise<boolean> => {
+    if (!supabase) return false;
+    setBusyWithEmail(true);
+    setStatus('Re-sending the confirmation email…');
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: { emailRedirectTo: window.location.origin + window.location.pathname }
+      });
+      if (error) throw new Error(error.message);
+      setStatus('✓ Sent again — check your inbox and your spam folder.');
+      toast.success('Confirmation email re-sent', { description: `Check the inbox for ${email}.` });
       return true;
     } catch (error) {
       const message = errorMessage(error);
-      const friendly = /already registered|already exists/i.test(message)
-        ? 'That email already has an account — sign in instead.'
-        : message;
-      setStatus(friendly);
-      toast.error('Could not create the account', { description: friendly });
+      if (isRateLimited(message)) {
+        const wait = retryAfterSeconds(message);
+        const friendly = wait
+          ? `Too many requests — try again in ${String(wait)} seconds.`
+          : 'Too many requests — wait a minute before trying again.';
+        setStatus(friendly);
+        toast.warning('Slow down a moment', { description: friendly });
+      } else {
+        setStatus(message);
+        toast.error('Could not re-send the email', { description: message });
+      }
       return false;
     } finally {
       setBusyWithEmail(false);
@@ -357,6 +418,7 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     signInWithProvider,
     signInWithPassword,
     signUpWithPassword,
+    resendConfirmation,
     sendPasswordReset,
     fullSync,
     signOut

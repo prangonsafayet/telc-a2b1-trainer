@@ -3,6 +3,10 @@
   <h1>telc Deutsch A2·B1 — Mock Exam Trainer</h1>
   <p><strong>Ten complete German exam simulations, under real timing, with official scoring.</strong></p>
   <p>
+    <a href="https://github.com/prangonsafayet/telc-a2b1-trainer/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/prangonsafayet/telc-a2b1-trainer/actions/workflows/ci.yml/badge.svg"></a>
+    <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
+  </p>
+  <p>
     <img alt="React" src="https://img.shields.io/badge/React-18-087ea4?logo=react&logoColor=white">
     <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white">
     <img alt="Vite" src="https://img.shields.io/badge/Vite-5-646cff?logo=vite&logoColor=white">
@@ -47,13 +51,26 @@ grading rule — **B1 = ≥42/60 in three skills plus ≥24/60 in the fourth**.
 
 ## Screens
 
-| Dashboard                                            | Results                                        |
-| ---------------------------------------------------- | ---------------------------------------------- |
-| Progress per skill, score history, and the ten tests | Official grade, per-skill breakdown, time used |
+<img src="docs/screenshots/dashboard.png" alt="Dashboard — skill progress, score history and the ten mock exams">
 
-| Exam runner                                                | Review                                       |
-| ---------------------------------------------------------- | -------------------------------------------- |
-| Sticky countdown, per-module briefing, limited audio plays | Every item, right or wrong, with transcripts |
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/runner.png" alt="Exam runner with a sticky countdown"></td>
+    <td width="50%"><img src="docs/screenshots/results.png" alt="Results screen with the official grade"></td>
+  </tr>
+  <tr>
+    <td><strong>Exam runner</strong> — per-module countdown that auto-submits, limited audio plays, and a briefing before each module.</td>
+    <td><strong>Results</strong> — the official grade, per-skill breakdown against the B1 threshold, and time used per module.</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/review.png" alt="Answer review with correct answers and transcripts"></td>
+    <td><img src="docs/screenshots/dashboard-dark.png" alt="The dashboard in dark mode"></td>
+  </tr>
+  <tr>
+    <td><strong>Review</strong> — every item marked, with the listening transcripts revealed only now.</td>
+    <td><strong>Dark mode</strong> — follows the system, with a toggle, and no flash on load.</td>
+  </tr>
+</table>
 
 ## Engineering notes
 

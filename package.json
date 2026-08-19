@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.0.0",
   "type": "module",
-  "description": "telc Deutsch A2·B1 mock exam trainer — 10 full model tests, React + Vite",
+  "description": "telc Deutsch A2\u00b7B1 mock exam trainer \u2014 10 full model tests, React + Vite",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -15,7 +15,7 @@
     "test:auth": "vite-node tests/auth-visibility.test.js",
     "test:content": "vite-node tests/content-render.test.js",
     "test:date": "vite-node tests/exam-date.test.js",
-    "test:unit": "npm run test:routes && npm run test:content && npm run test:auth && npm run test:date && npm run test:flow",
+    "test:unit": "npm run test:routes && npm run test:content && npm run test:auth && npm run test:signup && npm run test:date && npm run test:flow",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:all": "npm test && npm run test:e2e",
@@ -24,7 +24,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:signup": "vite-node tests/sign-up-outcome.test.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",
