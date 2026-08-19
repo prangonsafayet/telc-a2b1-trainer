@@ -163,11 +163,20 @@ To release, run the **Release** workflow from the Actions tab and pick a bump:
 | `minor` | New capability, or **any change to exam timing, scoring or audio plays** — past attempts stop being comparable, and that deserves to be visible |
 | `major` | A breaking change to stored progress or the persisted answer format                                                                             |
 
-The workflow verifies `main`, runs `npm version <bump>`, commits `Release vX.Y.Z`, tags
-it, pushes, and publishes a GitHub release with notes generated from the merged PR
-labels. Pushing that commit to `main` is what triggers the Netlify deploy — the release
-never deploys by itself. There is a `dry-run` input that verifies and prints the next
-version without pushing.
+Releasing is two phases, because `main` is protected and requires a pull request — a
+workflow that pushed the bump straight to `main` would simply be rejected, and giving the
+Actions bot a bypass would put a hole in the gate that protects every other change.
+
+1. **Release** (`release.yml`, manual dispatch) verifies `main` end to end, runs
+   `npm version <bump>`, and opens a **release PR** from `release/vX.Y.Z`. A `dry-run`
+   input verifies and prints the next version without opening anything.
+2. Review and squash-merge that PR like any other. It has to clear the same four gates.
+3. **Tag** (`tag-release.yml`) sees the new version land on `main`, creates the tag,
+   publishes the GitHub release with notes generated from the merged PR labels, and
+   attaches the built site. It is a no-op when the version is already tagged, so an
+   ordinary dependency change that touches `package.json` does not accidentally release.
+4. Netlify deploys that same merge commit, so the tag, the release, the version in the app
+   footer and the deployed build all agree.
 
 Do not bump the version by hand, and do not tag manually: the workflow is what keeps
 the tag, the release notes, the version in the footer and the deployed build in step.
