@@ -2,10 +2,20 @@
 import { captureErrors, mount } from './setup.js';
 
 const ROUTES = [
-  '/', '/learn', '/guide', '/history', '/settings',
-  '/exam/1/full', '/exam/3/lesen', '/exam/2/sprachbausteine',
-  '/exam/1/hoeren', '/exam/1/schreiben', '/exam/1/sprechen',
-  '/results/999', '/review/999', '/nope'
+  '/',
+  '/learn',
+  '/guide',
+  '/history',
+  '/settings',
+  '/exam/1/full',
+  '/exam/3/lesen',
+  '/exam/2/sprachbausteine',
+  '/exam/1/hoeren',
+  '/exam/1/schreiben',
+  '/exam/1/sprechen',
+  '/results/999',
+  '/review/999',
+  '/nope'
 ];
 
 const cap = captureErrors();

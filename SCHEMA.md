@@ -4,7 +4,7 @@ Each exam lives in `data/examNN.js` and pushes ONE object onto the global array:
 
 ```js
 window.TELC_EXAMS = window.TELC_EXAMS || [];
-window.TELC_EXAMS.push({ /* exam object */ });
+window.TELC_EXAMS.push({/* exam object */});
 ```
 
 All **exam content** (texts, questions, options) is in **German**, appropriate to the stated

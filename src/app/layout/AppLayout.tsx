@@ -1,0 +1,78 @@
+import { useEffect } from 'react';
+
+import { CloudOff } from 'lucide-react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+
+import { ErrorBoundary, Logo, ThemeToggle } from '@/shared/components';
+import { Badge } from '@/shared/components/ui/badge.tsx';
+import { stopSpeech } from '@/shared/lib/speech.ts';
+
+import { AccountMenu, SyncContext, useCloudSync } from '@/features/auth';
+import { useProgress } from '@/features/progress';
+
+import { ExamCountdownBadge } from './ExamCountdownBadge.tsx';
+import { MainNav } from './MainNav.tsx';
+import { useHeaderHeight } from './use-header-height.ts';
+
+export function AppLayout() {
+  const { db, dbRef, replaceLocal } = useProgress();
+  const sync = useCloudSync({ dbRef, replaceLocal, updatedAt: db._updatedAt });
+  const { pathname } = useLocation();
+  const headerRef = useHeaderHeight<HTMLElement>();
+
+  /* Every navigation starts at the top and with the speaker silent. */
+  useEffect(() => {
+    stopSpeech();
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  const offline = sync.chip?.text.includes('offline') ?? false;
+
+  return (
+    <SyncContext.Provider value={sync}>
+      <div className="min-h-screen bg-background">
+        <header
+          ref={headerRef}
+          className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70"
+        >
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6">
+            <NavLink
+              to="/"
+              className="group mr-auto flex items-center gap-2.5 leading-tight"
+              aria-label="telc A2·B1 Trainer — dashboard"
+            >
+              <Logo className="size-9 shrink-0 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105" />
+              <span>
+                <span className="block text-base font-bold tracking-tight">telc Deutsch A2·B1 Trainer</span>
+                <span className="hidden text-xs text-muted-foreground sm:block">
+                  10 Modelltests · Lesen · Sprachbausteine · Hören · Schreiben · Sprechen
+                </span>
+              </span>
+            </NavLink>
+
+            <ExamCountdownBadge examDate={db.settings.examDate} />
+
+            {offline ? (
+              <Badge variant="warning" className="gap-1.5 py-1" title={sync.chip?.title}>
+                <CloudOff className="size-3" aria-hidden /> offline
+              </Badge>
+            ) : null}
+
+            <AccountMenu />
+            <ThemeToggle />
+            <MainNav />
+          </div>
+        </header>
+
+        <main className="mx-auto max-w-6xl px-4 pb-24 pt-6 sm:px-6">
+          <ErrorBoundary resetKey={pathname}>
+            {/* Re-keying on the path restarts the entrance animation for each screen. */}
+            <div key={pathname} className="animate-fade-up">
+              <Outlet />
+            </div>
+          </ErrorBoundary>
+        </main>
+      </div>
+    </SyncContext.Provider>
+  );
+}

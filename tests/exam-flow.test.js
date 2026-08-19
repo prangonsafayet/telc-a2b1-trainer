@@ -1,6 +1,6 @@
 /* Drives a real attempt end to end, including a mid-module page refresh. */
 import { click, findByText, mount } from './setup.js';
-import { clearRun, loadRun } from '../src/lib/runState.js';
+import { clearRun, loadRun } from '../src/features/exam/lib/run-state.ts';
 
 const checks = [];
 const check = (name, cond, extra = '') => {
@@ -60,9 +60,13 @@ check('in-progress run cleared', loadRun() === null);
 
 const db = JSON.parse(localStorage.getItem('telcTrainerV1') || '{}');
 check('attempt saved', (db.attempts || []).length === 1);
-check('attempt has a Lesen score', typeof (db.attempts?.[0]?.scores?.lesen) === 'number');
+check('attempt has a Lesen score', typeof db.attempts?.[0]?.scores?.lesen === 'number');
 
 await view.unmount();
 const failed = checks.filter(c => !c).length;
-console.log(failed ? `\nEXAM FLOW FAILED (${failed}/${checks.length})` : `\nEXAM FLOW PASSED (${checks.length}/${checks.length})`);
+console.log(
+  failed
+    ? `\nEXAM FLOW FAILED (${failed}/${checks.length})`
+    : `\nEXAM FLOW PASSED (${checks.length}/${checks.length})`
+);
 process.exit(failed ? 1 : 0);

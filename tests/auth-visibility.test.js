@@ -21,9 +21,16 @@ await unmount();
 /* The warning must not appear on the guide, which has no dashboard banner — but the
    header status must still be there. */
 const guide = await mount('/guide');
-check('header status persists across routes', /Not signed in|Local only/.test(document.querySelector('header')?.textContent || ''));
+check(
+  'header status persists across routes',
+  /Not signed in|Local only/.test(document.querySelector('header')?.textContent || '')
+);
 await guide.unmount();
 
 const failed = checks.filter(c => !c).length;
-console.log(failed ? `\nAUTH VISIBILITY FAILED (${failed}/${checks.length})` : `\nAUTH VISIBILITY PASSED (${checks.length}/${checks.length})`);
+console.log(
+  failed
+    ? `\nAUTH VISIBILITY FAILED (${failed}/${checks.length})`
+    : `\nAUTH VISIBILITY PASSED (${checks.length}/${checks.length})`
+);
 process.exit(failed ? 1 : 0);

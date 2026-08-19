@@ -1,0 +1,26 @@
+import { Check, Copy } from 'lucide-react';
+
+import { Button } from '@/shared/components/ui/button.tsx';
+
+import { useCopyToClipboard } from '../hooks/use-copy-to-clipboard.ts';
+
+interface CopyPromptButtonProps {
+  readonly prompt: string;
+}
+
+export function CopyPromptButton({ prompt }: CopyPromptButtonProps) {
+  const { copied, copy } = useCopyToClipboard();
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      className="mt-2"
+      onClick={() => {
+        copy(prompt);
+      }}
+    >
+      {copied ? <Check /> : <Copy />}
+      {copied ? 'Copied' : 'Copy prompt'}
+    </Button>
+  );
+}

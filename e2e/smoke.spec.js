@@ -13,7 +13,9 @@ test.describe('shell', () => {
     test(`${path} renders and survives a reload`, async ({ page }) => {
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
-      page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+      page.on('console', m => {
+        if (m.type() === 'error') errors.push(m.text());
+      });
 
       await page.goto(path);
       await expect(page.getByRole('heading', { name: heading, level: 1 })).toBeVisible();
@@ -38,8 +40,8 @@ test.describe('shell', () => {
     for (const width of [360, 768, 1280]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto('/');
-      const overflow = await page.evaluate(() =>
-        document.documentElement.scrollWidth - document.documentElement.clientWidth
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth
       );
       expect(overflow, `viewport ${width}px overflows`).toBeLessThanOrEqual(1);
     }
@@ -73,7 +75,13 @@ test.describe('SEO head', () => {
   });
 
   test('icons and the social image actually resolve', async ({ request }) => {
-    for (const path of ['/favicon.svg', '/logo.svg', '/apple-touch-icon.png', '/og-image.png', '/manifest.webmanifest']) {
+    for (const path of [
+      '/favicon.svg',
+      '/logo.svg',
+      '/apple-touch-icon.png',
+      '/og-image.png',
+      '/manifest.webmanifest'
+    ]) {
       const res = await request.get(path);
       expect(res.status(), `${path} should be served`).toBe(200);
     }

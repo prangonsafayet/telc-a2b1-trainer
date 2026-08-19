@@ -16,13 +16,13 @@ npm run dev          # then open the printed http://localhost:5173
 
 Other scripts:
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Dev server with hot reload |
-| `npm run build` | Production build into `dist/` |
-| `npm run preview` | Serve the production build locally |
-| `npm test` | Validate the exam data, then render every route and drive a full attempt in jsdom |
-| `npm run validate` | Check the 10 exam data files only |
+| Command            | What it does                                                                      |
+| ------------------ | --------------------------------------------------------------------------------- |
+| `npm run dev`      | Dev server with hot reload                                                        |
+| `npm run build`    | Production build into `dist/`                                                     |
+| `npm run preview`  | Serve the production build locally                                                |
+| `npm test`         | Validate the exam data, then render every route and drive a full attempt in jsdom |
+| `npm run validate` | Check the 10 exam data files only                                                 |
 
 Optional: copy `.env.example` to `.env` and fill in your Supabase keys to turn on cloud
 sync (see `HOSTING.md`). Without it the app runs fully offline on browser storage.

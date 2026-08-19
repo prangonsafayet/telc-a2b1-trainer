@@ -4,7 +4,10 @@ import { expect, test } from '@playwright/test';
    the timer, the popover positioning and the persistence all genuinely run. */
 test('an exam survives a mid-module reload with its clock and answers', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: /Start full exam/ }).first().click();
+  await page
+    .getByRole('button', { name: /Start full exam/ })
+    .first()
+    .click();
   await expect(page.getByText('Leseverstehen')).toBeVisible();
 
   await page.getByRole('button', { name: /^Start Lesen/ }).click();
@@ -32,7 +35,10 @@ test('an exam survives a mid-module reload with its clock and answers', async ({
 
 test('the dashboard offers to resume an abandoned attempt', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: /Start full exam/ }).first().click();
+  await page
+    .getByRole('button', { name: /Start full exam/ })
+    .first()
+    .click();
   await page.getByRole('button', { name: /^Start Lesen/ }).click();
   await expect(page.getByText('Teil 1 — Anzeigen zuordnen')).toBeVisible();
 

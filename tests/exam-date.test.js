@@ -1,6 +1,6 @@
 /* The exam-date picker must write a local-time YYYY-MM-DD and drive the header countdown. */
 import { click, findByText, mount } from './setup.js';
-import { daysUntil, parseISODate, toISODate } from '../src/components/ExamDatePicker.jsx';
+import { daysUntil, parseIsoDate, toIsoDate } from '../src/shared/lib/format.ts';
 
 const checks = [];
 const check = (name, cond, extra = '') => {
@@ -9,11 +9,14 @@ const check = (name, cond, extra = '') => {
 };
 
 /* Pure helpers first — the timezone bug this guards against is invisible in the UI. */
-const d = parseISODate('2026-09-12');
-check('parseISODate keeps the calendar day in local time', d.getFullYear() === 2026 && d.getMonth() === 8 && d.getDate() === 12);
-check('toISODate round-trips', toISODate(d) === '2026-09-12');
-check('parseISODate rejects junk', parseISODate('not-a-date') === null && parseISODate('') === null);
-check('daysUntil(today) is 0', daysUntil(toISODate(new Date())) === 0);
+const d = parseIsoDate('2026-09-12');
+check(
+  'parseIsoDate keeps the calendar day in local time',
+  d.getFullYear() === 2026 && d.getMonth() === 8 && d.getDate() === 12
+);
+check('toIsoDate round-trips', toIsoDate(d) === '2026-09-12');
+check('parseIsoDate rejects junk', parseIsoDate('not-a-date') === null && parseIsoDate('') === null);
+check('daysUntil(today) is 0', daysUntil(toIsoDate(new Date())) === 0);
 
 localStorage.clear();
 const { container, unmount } = await mount('/settings');
@@ -36,7 +39,7 @@ if (dayButtons.length) {
   const db = JSON.parse(localStorage.getItem('telcTrainerV1') || '{}');
   const saved = db.settings?.examDate;
   check('picking a day saves an ISO date', /^\d{4}-\d{2}-\d{2}$/.test(saved || ''), String(saved));
-  check('saved date parses back to the same day', saved && toISODate(parseISODate(saved)) === saved);
+  check('saved date parses back to the same day', saved && toIsoDate(parseIsoDate(saved)) === saved);
 }
 
 /* The month/year pickers: react-day-picker's default is a transparent native <select>
@@ -78,10 +81,18 @@ check('calendar grid survives both changes', !!document.querySelector('[role="gr
 const chevrons = [...(popover?.querySelectorAll('svg.lucide') ?? [])]
   .map(el => (el.getAttribute('class') || '').match(/lucide-chevron-(left|right|up|down)/)?.[1])
   .filter(Boolean);
-check('nav renders left and right chevrons', chevrons.includes('left') && chevrons.includes('right'), chevrons.join(','));
+check(
+  'nav renders left and right chevrons',
+  chevrons.includes('left') && chevrons.includes('right'),
+  chevrons.join(',')
+);
 
 await unmount();
 
 const failed = checks.filter(c => !c).length;
-console.log(failed ? `\nEXAM DATE FAILED (${failed}/${checks.length})` : `\nEXAM DATE PASSED (${checks.length}/${checks.length})`);
+console.log(
+  failed
+    ? `\nEXAM DATE FAILED (${failed}/${checks.length})`
+    : `\nEXAM DATE PASSED (${checks.length}/${checks.length})`
+);
 process.exit(failed ? 1 : 0);

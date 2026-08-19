@@ -30,7 +30,7 @@ Do them in this order (the database first, because you must paste two values int
    Save the file. `.env` is git-ignored, so your keys never end up in the repository —
    but note that Vite **inlines** them into the built JavaScript, which is exactly right
    for the anon/publishable key (it is meant to be public and is protected by the
-   row-level security you just set up). Never put a *service-role* key here.
+   row-level security you just set up). Never put a _service-role_ key here.
 
 ## Part 2 — Host the app (Netlify)
 
@@ -46,7 +46,7 @@ not the project folder. Pick one of the two routes.
    - **Publish directory:** `dist`
 4. **Before the first deploy**, add your keys: **Site configuration → Environment variables → Add a variable**, and add both
    `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` with the values from Part 1.
-   Your `.env` is deliberately *not* in the repository, so without this step the deployed
+   Your `.env` is deliberately _not_ in the repository, so without this step the deployed
    site builds fine but starts with cloud sync switched off.
 5. Deploy. Every push to `main` now rebuilds automatically.
 
@@ -97,7 +97,7 @@ this order — the provider needs Supabase's callback URL, and Supabase needs yo
 
 1. Create a project (or reuse one) → **APIs & Services → OAuth consent screen**.
    Choose **External**, fill in app name and your email, and save. While the app is in
-   *Testing* mode, only accounts you add under **Test users** can sign in — either add
+   _Testing_ mode, only accounts you add under **Test users** can sign in — either add
    yourself, or click **Publish app** for anyone to use it.
 2. **APIs & Services → Credentials → Create credentials → OAuth client ID**.
    - Application type: **Web application**
@@ -169,15 +169,15 @@ compiled with — whether the URL and the key were present, and whether they had
 shape. Work down that list.
 
 The one rule behind almost every case: **`VITE_*` values are baked in when the app is
-built, not read when it runs.** Setting them somewhere does nothing until a *new build*
+built, not read when it runs.** Setting them somewhere does nothing until a _new build_
 happens.
 
-| Where you are seeing it | Fix |
-| --- | --- |
-| Local `npm run dev` | Vite reads `.env` only at startup. Create/edit `.env`, then stop the dev server and start it again. |
-| Netlify, Git deploys | Add the variables under **Site configuration → Environment variables**, then **Deploys → Trigger deploy → Deploy site**. Adding variables does not rebuild the existing site. |
-| Netlify Drop (`dist` upload) | Run `npm run build` locally *with* `.env` present, then re-upload the fresh `dist`. |
-| Anywhere, after editing `.env` | Rebuild (`npm run build`) or restart the dev server. |
+| Where you are seeing it        | Fix                                                                                                                                                                           |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local `npm run dev`            | Vite reads `.env` only at startup. Create/edit `.env`, then stop the dev server and start it again.                                                                           |
+| Netlify, Git deploys           | Add the variables under **Site configuration → Environment variables**, then **Deploys → Trigger deploy → Deploy site**. Adding variables does not rebuild the existing site. |
+| Netlify Drop (`dist` upload)   | Run `npm run build` locally _with_ `.env` present, then re-upload the fresh `dist`.                                                                                           |
+| Anywhere, after editing `.env` | Rebuild (`npm run build`) or restart the dev server.                                                                                                                          |
 
 `npm run build` also prints the verdict in the build log — either
 `Supabase cloud sync will be enabled (…)` or a `Building WITHOUT Supabase credentials`
