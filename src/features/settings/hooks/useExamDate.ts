@@ -38,7 +38,7 @@ export interface ExamDateState {
   readonly endMonth: Date;
 }
 
-function describeCountdown(days: number | null): string | null {
+const describeCountdown = (days: number | null): string | null => {
   if (days == null) return null;
   if (days > 0) {
     return `${String(days)} day${days === 1 ? '' : 's'} to go — the countdown in the header follows this date.`;
@@ -46,13 +46,13 @@ function describeCountdown(days: number | null): string | null {
   if (days === 0) return 'That is today. Viel Erfolg! 🍀';
   const past = Math.abs(days);
   return `That was ${String(past)} day${past === 1 ? '' : 's'} ago — pick a new date.`;
-}
+};
 
 /**
  * A date outside the plannable window is still allowed — it is the user's exam, not ours —
  * but the plan it produces is a fallback, so it is said out loud.
  */
-function describeRange(days: number | null): string | null {
+const describeRange = (days: number | null): string | null => {
   if (days == null) return 'That date could not be read. Pick one from the calendar.';
   if (days < 0) return 'This date has passed, so there is no plan to build. Pick your next exam date.';
   if (days < MIN_PREP_DAYS) {
@@ -62,13 +62,13 @@ function describeRange(days: number | null): string | null {
     return `More than ${String(MAX_PREP_DAYS)} days out. The plan covers the next ${String(MAX_PREP_DAYS)} days and re-paces itself as the date gets closer.`;
   }
   return null;
-}
+};
 
 /**
  * A number the plan cannot use is refused rather than silently ignored — the field keeps
  * showing what was typed, says why it is not accepted, and reverts on blur.
  */
-function describeDaysError(draft: string): string | null {
+const describeDaysError = (draft: string): string | null => {
   if (draft === '') return `Enter a number between ${String(MIN_PREP_DAYS)} and ${String(MAX_PREP_DAYS)}.`;
   if (!/^\d{1,3}$/.test(draft)) return 'Whole days only.';
   const days = Number(draft);
@@ -77,10 +77,10 @@ function describeDaysError(draft: string): string | null {
   }
   if (days > MAX_PREP_DAYS) return `${String(MAX_PREP_DAYS)} days is the longest plan.`;
   return null;
-}
+};
 
 /** Presentation state for the exam-date controls. */
-export function useExamDate(value: string, onChange: (iso: string) => void): ExamDateState {
+export const useExamDate = (value: string, onChange: (iso: string) => void): ExamDateState => {
   const today = useToday();
   const [open, setOpen] = useState(false);
   const selected = parseIsoDate(value) ?? undefined;
@@ -171,4 +171,4 @@ export function useExamDate(value: string, onChange: (iso: string) => void): Exa
     startMonth,
     endMonth
   };
-}
+};

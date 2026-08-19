@@ -14,7 +14,13 @@ interface AudioPlayButtonProps {
 }
 
 /** Play/stop plus the remaining-plays badge for one listening item. */
-export function AudioPlayButton({ exam, settings, itemKey, playsLeft, onConsumePlay }: AudioPlayButtonProps) {
+export const AudioPlayButton = ({
+  exam,
+  settings,
+  itemKey,
+  playsLeft,
+  onConsumePlay
+}: AudioPlayButtonProps) => {
   const { playing, canPlay, toggle } = useAudioPlayback({
     exam,
     settings,
@@ -37,4 +43,4 @@ export function AudioPlayButton({ exam, settings, itemKey, playsLeft, onConsumeP
       <Badge variant={canPlay ? 'secondary' : 'destructive'}>{playsLeft}× left</Badge>
     </div>
   );
-}
+};

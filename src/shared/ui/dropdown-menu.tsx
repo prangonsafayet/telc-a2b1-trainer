@@ -12,7 +12,7 @@ export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 export const DropdownMenuContent = forwardRef<
   ComponentRef<typeof DropdownMenuPrimitive.Content>,
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(function DropdownMenuContent({ className, sideOffset = 4, ...props }, ref) {
+>(({ className, sideOffset = 4, ...props }, ref) => {
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
@@ -37,7 +37,7 @@ export interface DropdownMenuItemProps extends ComponentPropsWithoutRef<typeof D
 export const DropdownMenuItem = forwardRef<
   ComponentRef<typeof DropdownMenuPrimitive.Item>,
   DropdownMenuItemProps
->(function DropdownMenuItem({ className, inset, variant = 'default', ...props }, ref) {
+>(({ className, inset, variant = 'default', ...props }, ref) => {
   return (
     <DropdownMenuPrimitive.Item
       ref={ref}
@@ -60,7 +60,7 @@ export interface DropdownMenuLabelProps extends ComponentPropsWithoutRef<typeof 
 export const DropdownMenuLabel = forwardRef<
   ComponentRef<typeof DropdownMenuPrimitive.Label>,
   DropdownMenuLabelProps
->(function DropdownMenuLabel({ className, inset, ...props }, ref) {
+>(({ className, inset, ...props }, ref) => {
   return (
     <DropdownMenuPrimitive.Label
       ref={ref}
@@ -74,7 +74,7 @@ export const DropdownMenuLabel = forwardRef<
 export const DropdownMenuSeparator = forwardRef<
   ComponentRef<typeof DropdownMenuPrimitive.Separator>,
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
->(function DropdownMenuSeparator({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <DropdownMenuPrimitive.Separator
       ref={ref}

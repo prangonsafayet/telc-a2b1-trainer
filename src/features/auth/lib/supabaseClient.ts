@@ -6,7 +6,7 @@ import { SUPABASE_CONFIG } from './supabaseConfig.ts';
  * Normalises the project URL so common paste mistakes still work:
  * a dashboard link, a bare host, or a URL with `/rest/v1` appended.
  */
-function normalizeProjectUrl(raw: string): string {
+const normalizeProjectUrl = (raw: string): string => {
   const trimmed = raw.trim().replace(/\/+$/, '');
   const dashboard = /supabase\.com\/dashboard\/project\/([a-z0-9-]+)/i.exec(trimmed);
   if (dashboard) return `https://${dashboard[1] ?? ''}.supabase.co`;
@@ -14,15 +14,15 @@ function normalizeProjectUrl(raw: string): string {
   const withPath = /^(https?:\/\/[a-z0-9-]+\.supabase\.(?:co|in|red|net))(\/.*)?$/i.exec(trimmed);
   if (withPath?.[1]) return withPath[1].replace(/^http:/i, 'https:');
   return trimmed;
-}
+};
 
-function decodeJwtPayload(token: string): string {
+const decodeJwtPayload = (token: string): string => {
   try {
     return atob(token.split('.')[1] ?? '');
   } catch {
     return '';
   }
-}
+};
 
 const projectUrl = normalizeProjectUrl(SUPABASE_CONFIG.url);
 const anonKey = SUPABASE_CONFIG.anonKey.trim();

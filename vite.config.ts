@@ -9,7 +9,7 @@ import tailwindcss from '@tailwindcss/vite';
    so. Fail loudly in the build log instead. */
 /* Crawlers require absolute URLs in canonical/OG tags, so the deploy URL is injected at
    build time from VITE_SITE_URL (Netlify also exposes it as URL / DEPLOY_PRIME_URL). */
-function siteUrlHtml(env: Record<string, string>): Plugin {
+const siteUrlHtml = (env: Record<string, string>): Plugin => {
   const site = (env.VITE_SITE_URL || env.DEPLOY_PRIME_URL || env.URL || '').trim().replace(/\/+$/, '');
   return {
     name: 'site-url-html',
@@ -17,7 +17,7 @@ function siteUrlHtml(env: Record<string, string>): Plugin {
        choke on a placeholder token. */
     transformIndexHtml: {
       order: 'pre',
-      handler(html: string) {
+      handler: (html: string) => {
         if (!site) {
           console.warn(
             '[site-url-html] VITE_SITE_URL is not set — canonical, og:url and og:image tags are omitted from index.html.'
@@ -57,34 +57,32 @@ function siteUrlHtml(env: Record<string, string>): Plugin {
       });
     }
   };
-}
+};
 
-function supabaseEnvCheck(env: Record<string, string>): Plugin {
-  return {
-    name: 'supabase-env-check',
-    apply: 'build',
-    buildStart() {
-      const url = (env.VITE_SUPABASE_URL || '').trim();
-      const key = (env.VITE_SUPABASE_ANON_KEY || '').trim();
-      if (url && key) {
-        this.info(`Supabase cloud sync will be enabled (${url}).`);
-        if (/^sb_secret_/i.test(key)) {
-          this.error(
-            'VITE_SUPABASE_ANON_KEY is a SECRET key. Use the anon / publishable key — never ship a secret to the browser.'
-          );
-        }
-        return;
+const supabaseEnvCheck = (env: Record<string, string>): Plugin => ({
+  name: 'supabase-env-check',
+  apply: 'build',
+  buildStart() {
+    const url = (env.VITE_SUPABASE_URL || '').trim();
+    const key = (env.VITE_SUPABASE_ANON_KEY || '').trim();
+    if (url && key) {
+      this.info(`Supabase cloud sync will be enabled (${url}).`);
+      if (/^sb_secret_/i.test(key)) {
+        this.error(
+          'VITE_SUPABASE_ANON_KEY is a SECRET key. Use the anon / publishable key — never ship a secret to the browser.'
+        );
       }
-      this.warn(
-        'Building WITHOUT Supabase credentials — cloud sync will be off in this build.\n' +
-          `    VITE_SUPABASE_URL      ${url ? 'ok' : 'MISSING'}\n` +
-          `    VITE_SUPABASE_ANON_KEY ${key ? 'ok' : 'MISSING'}\n` +
-          '    Locally: create .env (see .env.example). On Netlify: Site configuration →\n' +
-          '    Environment variables, then trigger a new deploy. See HOSTING.md.'
-      );
+      return;
     }
-  };
-}
+    this.warn(
+      'Building WITHOUT Supabase credentials — cloud sync will be off in this build.\n' +
+        `    VITE_SUPABASE_URL      ${url ? 'ok' : 'MISSING'}\n` +
+        `    VITE_SUPABASE_ANON_KEY ${key ? 'ok' : 'MISSING'}\n` +
+        '    Locally: create .env (see .env.example). On Netlify: Site configuration →\n' +
+        '    Environment variables, then trigger a new deploy. See HOSTING.md.'
+    );
+  }
+});
 
 /**
  * One alias per layer, so an import statement shows which layer it crosses. There is
@@ -111,13 +109,11 @@ const { version } = JSON.parse(readFileSync(new URL('./package.json', import.met
  * test config defines them the same way — without them, importing anything that reaches
  * appInfo fails with "__APP_VERSION__ is not defined".
  */
-export function appDefines(commitRef: string): Record<string, string> {
-  return {
-    __APP_VERSION__: JSON.stringify(version),
-    /* Netlify exposes the deployed commit; empty locally and in tests. */
-    __APP_COMMIT__: JSON.stringify(commitRef.slice(0, 7))
-  };
-}
+export const appDefines = (commitRef: string): Record<string, string> => ({
+  __APP_VERSION__: JSON.stringify(version),
+  /* Netlify exposes the deployed commit; empty locally and in tests. */
+  __APP_COMMIT__: JSON.stringify(commitRef.slice(0, 7))
+});
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -131,7 +127,7 @@ export default defineConfig(({ mode }) => {
         output: {
           /* Keep the vendor libraries and the exam content in their own long-lived
              cache entries, so shipping app changes does not re-download them. */
-          manualChunks(id: string) {
+          manualChunks: (id: string) => {
             if (id.includes('src/data/')) return 'exam-data';
             if (id.includes('src/content/')) return 'content';
             if (id.includes('@supabase')) return 'supabase';

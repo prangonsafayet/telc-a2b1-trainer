@@ -9,7 +9,7 @@ import { syncDiagnostics } from '../lib/supabaseClient.ts';
 import { PasswordAuthForm } from './PasswordAuthForm.tsx';
 import { PROVIDER_ICONS } from './providerIconMap.ts';
 
-function DiagnosticRow({
+const DiagnosticRow = ({
   label,
   ok,
   detail
@@ -17,23 +17,21 @@ function DiagnosticRow({
   readonly label: string;
   readonly ok: boolean;
   readonly detail: string;
-}) {
-  return (
-    <li className="flex items-start gap-2">
-      {ok ? (
-        <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--success)]" />
-      ) : (
-        <X className="mt-0.5 size-4 shrink-0 text-destructive" />
-      )}
-      <span className="min-w-0">
-        <code className="font-medium">{label}</code>
-        <span className="block break-all text-xs text-muted-foreground">{detail}</span>
-      </span>
-    </li>
-  );
-}
+}) => (
+  <li className="flex items-start gap-2">
+    {ok ? (
+      <Check className="mt-0.5 size-4 shrink-0 text-[color:var(--success)]" />
+    ) : (
+      <X className="mt-0.5 size-4 shrink-0 text-destructive" />
+    )}
+    <span className="min-w-0">
+      <code className="font-medium">{label}</code>
+      <span className="block break-all text-xs text-muted-foreground">{detail}</span>
+    </span>
+  </li>
+);
 
-function NotConfiguredCard() {
+const NotConfiguredCard = () => {
   const d = syncDiagnostics;
   return (
     <Card>
@@ -115,9 +113,9 @@ function NotConfiguredCard() {
       </CardContent>
     </Card>
   );
-}
+};
 
-function SignInCard() {
+const SignInCard = () => {
   const sync = useSync();
   return (
     <Card>
@@ -182,9 +180,9 @@ function SignInCard() {
       </CardContent>
     </Card>
   );
-}
+};
 
-function ActiveCard() {
+const ActiveCard = () => {
   const sync = useSync();
   const meta = sync.user?.user_metadata as { full_name?: string; name?: string } | undefined;
   const displayName = meta?.full_name ?? meta?.name ?? sync.user?.email ?? '';
@@ -230,11 +228,11 @@ function ActiveCard() {
       </CardContent>
     </Card>
   );
-}
+};
 
-export function SyncPanel() {
+export const SyncPanel = () => {
   const sync = useSync();
   if (!sync.configured) return <NotConfiguredCard />;
   if (!sync.user) return <SignInCard />;
   return <ActiveCard />;
-}
+};

@@ -7,6 +7,5 @@
  * `optional` drops the key entirely when the value is nullish, which is exactly what those
  * libraries expect.
  */
-export function optional<K extends string, V>(key: K, value: V | null | undefined): Partial<Record<K, V>> {
-  return value == null ? {} : ({ [key]: value } as Record<K, V>);
-}
+export const optional = <K extends string, V>(key: K, value: V | null | undefined): Partial<Record<K, V>> =>
+  value == null ? {} : ({ [key]: value } as Record<K, V>);

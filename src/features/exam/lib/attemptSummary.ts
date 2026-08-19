@@ -23,7 +23,7 @@ export interface AttemptSummary {
 }
 
 /** Turns a stored attempt into the numbers and labels the results screen renders. */
-export function summarizeAttempt(attempt: Attempt): AttemptSummary {
+export const summarizeAttempt = (attempt: Attempt): AttemptSummary => {
   const isFull = attempt.mode === 'full';
   const { scores, sb } = attempt;
 
@@ -62,4 +62,4 @@ export function summarizeAttempt(attempt: Attempt): AttemptSummary {
     headlineScore,
     headlineSuffix: firstSkillScore != null ? '/60' : ''
   };
-}
+};

@@ -27,9 +27,8 @@ export const MODULE_META: Readonly<Record<ExamModule, ModuleMeta>> = {
   sprechen: { name: 'Sprechen', short: 'Sprechen', minutes: () => 15, isSkill: true }
 };
 
-export function moduleMinutes(module: ExamModule, settings: Settings): number {
-  return MODULE_META[module].minutes(settings);
-}
+export const moduleMinutes = (module: ExamModule, settings: Settings): number =>
+  MODULE_META[module].minutes(settings);
 
 /** Shown on the briefing screen before each module starts. */
 export const MODULE_BRIEFING: Readonly<Record<ExamModule, string>> = {
@@ -71,9 +70,8 @@ export const RATING_CRITERIA: Readonly<
  */
 export const DEFAULT_PREP_DAYS = 30;
 
-export function defaultExamDate(): string {
-  return addDays(toIsoDate(new Date()), DEFAULT_PREP_DAYS) ?? toIsoDate(new Date());
-}
+export const defaultExamDate = (): string =>
+  addDays(toIsoDate(new Date()), DEFAULT_PREP_DAYS) ?? toIsoDate(new Date());
 
 export const DEFAULT_SETTINGS: Settings = {
   writingMinutes: 10,

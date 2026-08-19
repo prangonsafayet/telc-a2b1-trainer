@@ -12,7 +12,7 @@ import { useToday } from './useToday.ts';
  * The current study plan, or null when the stored exam date is unusable. Recomputed from
  * the stored document rather than persisted, so it is always consistent with progress.
  */
-export function useSchedule(): Schedule | null {
+export const useSchedule = (): Schedule | null => {
   const { db } = useProgress();
   const today = useToday();
 
@@ -28,4 +28,4 @@ export function useSchedule(): Schedule | null {
       }),
     [db.settings.examDate, today, db.learnDone, attemptedExamIds]
   );
-}
+};

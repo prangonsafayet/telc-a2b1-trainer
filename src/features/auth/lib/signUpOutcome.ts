@@ -34,7 +34,7 @@ interface SignUpResponse {
  * With obfuscation off, Supabase returns an explicit "User already registered" error
  * instead, so both shapes are handled.
  */
-export function interpretSignUp(response: SignUpResponse | null, error: AuthError | null): SignUpOutcome {
+export const interpretSignUp = (response: SignUpResponse | null, error: AuthError | null): SignUpOutcome => {
   if (error) {
     if (/already registered|already exists|user_already_exists/i.test(error.message)) {
       return { kind: 'already-registered' };
@@ -47,15 +47,14 @@ export function interpretSignUp(response: SignUpResponse | null, error: AuthErro
   if ((response.user.identities?.length ?? 0) === 0) return { kind: 'already-registered' };
 
   return { kind: 'confirmation-sent' };
-}
+};
 
 /** True when a resend was refused because the last one was too recent. */
-export function isRateLimited(message: string): boolean {
-  return /rate limit|too many requests|only request this after|for security purposes/i.test(message);
-}
+export const isRateLimited = (message: string): boolean =>
+  /rate limit|too many requests|only request this after|for security purposes/i.test(message);
 
 /** Seconds to wait, if the error names a delay. */
-export function retryAfterSeconds(message: string): number | null {
+export const retryAfterSeconds = (message: string): number | null => {
   const match = /after (\d+) seconds?/i.exec(message);
   return match?.[1] ? Number(match[1]) : null;
-}
+};

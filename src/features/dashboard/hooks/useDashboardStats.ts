@@ -29,15 +29,15 @@ export interface DashboardStats {
 
 const SKILL_KEYS: readonly SkillKey[] = ['lesen', 'hoeren', 'schreiben', 'sprechen'];
 
-function captionForBest(best: number | null): string {
+const captionForBest = (best: number | null): string => {
   if (best == null) return 'no full exam yet';
   if (best >= B1_TOTAL) return 'B1 territory 🎉';
   if (best >= A2_TOTAL) return 'A2 zone — push to 168';
   return 'keep training';
-}
+};
 
 /** Everything the dashboard displays, derived from the stored attempts. */
-export function useDashboardStats(): DashboardStats {
+export const useDashboardStats = (): DashboardStats => {
   const { db } = useProgress();
 
   return useMemo(() => {
@@ -73,4 +73,4 @@ export function useDashboardStats(): DashboardStats {
       examCards
     };
   }, [db.attempts]);
-}
+};

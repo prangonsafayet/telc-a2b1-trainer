@@ -4,10 +4,7 @@ import { cn } from '@shared/lib/cn.ts';
 
 export type InputProps = ComponentPropsWithoutRef<'input'>;
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, type, ...props },
-  ref
-) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
   return (
     <input
       ref={ref}

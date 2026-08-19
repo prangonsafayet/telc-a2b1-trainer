@@ -30,16 +30,16 @@ interface ExamCardProps {
 }
 
 /** `today` earns the loud badge; a future date is quieter; optional is quietest. */
-function scheduleTone(label: string): BadgeVariant {
+const scheduleTone = (label: string): BadgeVariant => {
   if (label === 'today') return 'default';
   if (label === 'tomorrow') return 'info';
   return label === 'optional' ? 'outline' : 'secondary';
-}
+};
 
 /** Difficulty accent, so the ramp from A2 to B1 is visible at a glance. */
 const ACCENTS = { easy: 'var(--success)', medium: 'var(--warning)', b1: 'var(--primary)' } as const;
 
-export function ExamCard({ stats, settings, scheduleLabel, onStart }: ExamCardProps) {
+export const ExamCard = ({ stats, settings, scheduleLabel, onStart }: ExamCardProps) => {
   const { exam, best, attemptCount } = stats;
   const attempted = best !== null || attemptCount > 0;
 
@@ -111,4 +111,4 @@ export function ExamCard({ stats, settings, scheduleLabel, onStart }: ExamCardPr
       </CardContent>
     </Card>
   );
-}
+};

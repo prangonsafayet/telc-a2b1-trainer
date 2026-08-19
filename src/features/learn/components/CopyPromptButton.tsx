@@ -1,14 +1,14 @@
 import { Check, Copy } from 'lucide-react';
 
+import { useCopyToClipboard } from '@shared/hooks/useCopyToClipboard.ts';
 import { Button } from '@shared/ui';
 
-import { useCopyToClipboard } from '../hooks/useCopyToClipboard.ts';
 
 interface CopyPromptButtonProps {
   readonly prompt: string;
 }
 
-export function CopyPromptButton({ prompt }: CopyPromptButtonProps) {
+export const CopyPromptButton = ({ prompt }: CopyPromptButtonProps) => {
   const { copied, copy } = useCopyToClipboard();
   return (
     <Button
@@ -23,4 +23,4 @@ export function CopyPromptButton({ prompt }: CopyPromptButtonProps) {
       {copied ? 'Copied' : 'Copy prompt'}
     </Button>
   );
-}
+};

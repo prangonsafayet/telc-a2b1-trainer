@@ -18,7 +18,7 @@ export interface LearnPlanState {
   readonly setOpenCheatsheets: (ids: string[]) => void;
 }
 
-export function useLearnPlan(): LearnPlanState {
+export const useLearnPlan = (): LearnPlanState => {
   const { db, update } = useProgress();
   const { hash } = useLocation();
   const done = db.learnDone;
@@ -56,4 +56,4 @@ export function useLearnPlan(): LearnPlanState {
   const summary = useMemo(() => summarizePlan(done), [done]);
 
   return { summary, isTaskDone, toggleTask, isDayComplete, openCheatsheets, setOpenCheatsheets };
-}
+};

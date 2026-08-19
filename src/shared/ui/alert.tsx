@@ -25,10 +25,7 @@ const alertVariants = cva(
 
 export interface AlertProps extends ComponentPropsWithoutRef<'div'>, VariantProps<typeof alertVariants> {}
 
-export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { className, variant, ...props },
-  ref
-) {
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(({ className, variant, ...props }, ref) => {
   return (
     <div
       ref={ref}
@@ -40,22 +37,21 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   );
 });
 
-export const AlertTitle = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function AlertTitle(
-  { className, ...props },
-  ref
-) {
-  return (
-    <div
-      ref={ref}
-      data-slot="alert-title"
-      className={cn('col-start-2 min-h-4 font-medium tracking-tight', className)}
-      {...props}
-    />
-  );
-});
+export const AlertTitle = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        data-slot="alert-title"
+        className={cn('col-start-2 min-h-4 font-medium tracking-tight', className)}
+        {...props}
+      />
+    );
+  }
+);
 
 export const AlertDescription = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
-  function AlertDescription({ className, ...props }, ref) {
+  ({ className, ...props }, ref) => {
     return (
       <div
         ref={ref}

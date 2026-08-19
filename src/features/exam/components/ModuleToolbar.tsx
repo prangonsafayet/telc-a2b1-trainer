@@ -16,7 +16,7 @@ interface ModuleToolbarProps {
 const CRITICAL_SECONDS = 60;
 const WARNING_SECONDS = 300;
 
-export function ModuleToolbar({ exam, module, minutes, secondsRemaining, step }: ModuleToolbarProps) {
+export const ModuleToolbar = ({ exam, module, minutes, secondsRemaining, step }: ModuleToolbarProps) => {
   const elapsedPct = Math.min(100, Math.max(0, 100 - (secondsRemaining / (minutes * 60)) * 100));
   const critical = secondsRemaining <= CRITICAL_SECONDS;
   const warning = !critical && secondsRemaining <= WARNING_SECONDS;
@@ -53,4 +53,4 @@ export function ModuleToolbar({ exam, module, minutes, secondsRemaining, step }:
       />
     </div>
   );
-}
+};

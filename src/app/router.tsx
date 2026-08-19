@@ -35,23 +35,21 @@ const ReviewPage = lazy(() =>
   import('@features/exam/routes/ReviewPage.tsx').then(m => ({ default: m.ReviewPage }))
 );
 
-export function AppRouter() {
-  return (
-    <Suspense fallback={<RouteFallback />}>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/learn" element={<LearnPage />} />
-          <Route path="/guide" element={<GuidePage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/exam/:examId/:mode" element={<RunnerPage />} />
-          <Route path="/results/:attemptId" element={<ResultsPage />} />
-          <Route path="/review/:attemptId" element={<ReviewPage />} />
-          <Route path="/dashboard" element={<Navigate to="/" replace />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </Suspense>
-  );
-}
+export const AppRouter = () => (
+  <Suspense fallback={<RouteFallback />}>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/learn" element={<LearnPage />} />
+        <Route path="/guide" element={<GuidePage />} />
+        <Route path="/history" element={<HistoryPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/exam/:examId/:mode" element={<RunnerPage />} />
+        <Route path="/results/:attemptId" element={<ResultsPage />} />
+        <Route path="/review/:attemptId" element={<ReviewPage />} />
+        <Route path="/dashboard" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  </Suspense>
+);

@@ -15,7 +15,7 @@ import { ExamCountdownBadge } from './ExamCountdownBadge.tsx';
 import { MainNav } from './MainNav.tsx';
 import { useHeaderHeight } from './useHeaderHeight.ts';
 
-export function AppLayout() {
+export const AppLayout = () => {
   const { db, dbRef, replaceLocal } = useProgress();
   const sync = useCloudSync({ dbRef, replaceLocal, updatedAt: db._updatedAt });
   const { pathname } = useLocation();
@@ -78,4 +78,4 @@ export function AppLayout() {
       </div>
     </SyncContext.Provider>
   );
-}
+};

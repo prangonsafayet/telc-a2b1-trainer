@@ -3,7 +3,7 @@ import { GUIDE_HTML } from '@content/guide.ts';
 import { useHashScroll } from '../hooks/useHashScroll.ts';
 
 /** The exam guide is authored HTML in content/guide.ts and injected into a prose container. */
-export function GuidePage() {
+export const GuidePage = () => {
   useHashScroll();
 
   return (
@@ -12,4 +12,4 @@ export function GuidePage() {
       dangerouslySetInnerHTML={{ __html: GUIDE_HTML }}
     />
   );
-}
+};

@@ -10,9 +10,7 @@ export const MIN_PASSWORD_LENGTH = 8;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function isValidEmail(email: string): boolean {
-  return EMAIL_PATTERN.test(email.trim());
-}
+export const isValidEmail = (email: string): boolean => EMAIL_PATTERN.test(email.trim());
 
 export interface PasswordCheck {
   readonly valid: boolean;
@@ -22,7 +20,7 @@ export interface PasswordCheck {
   readonly strength: number;
 }
 
-export function checkPassword(password: string): PasswordCheck {
+export const checkPassword = (password: string): PasswordCheck => {
   if (password.length === 0) return { valid: false, problem: null, strength: 0 };
   if (password.length < MIN_PASSWORD_LENGTH) {
     return { valid: false, problem: `Use at least ${String(MIN_PASSWORD_LENGTH)} characters.`, strength: 1 };
@@ -34,11 +32,9 @@ export function checkPassword(password: string): PasswordCheck {
   const strength = Math.min(4, Math.max(1, variety + (password.length >= 12 ? 1 : 0) - 1));
 
   return { valid: true, problem: null, strength };
-}
+};
 
 const STRENGTH_LABELS = ['weak', 'fair', 'good', 'strong'] as const;
 
 /** Human label for a 0–4 strength score; an em dash when there is nothing to judge. */
-export function strengthLabel(strength: number): string {
-  return STRENGTH_LABELS[strength - 1] ?? '—';
-}
+export const strengthLabel = (strength: number): string => STRENGTH_LABELS[strength - 1] ?? '—';

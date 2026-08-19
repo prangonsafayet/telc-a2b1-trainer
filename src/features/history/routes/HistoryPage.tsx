@@ -10,7 +10,7 @@ import { AttemptTable } from '../components/AttemptTable.tsx';
 import { useProgressBackup } from '../hooks/useProgressBackup.ts';
 import { buildAttemptRows } from '../lib/attemptRows.ts';
 
-export function HistoryPage() {
+export const HistoryPage = () => {
   const { db } = useProgress();
   const backup = useProgressBackup();
   const rows = buildAttemptRows(db.attempts);
@@ -39,4 +39,4 @@ export function HistoryPage() {
       </div>
     </>
   );
-}
+};

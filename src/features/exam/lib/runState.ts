@@ -37,49 +37,45 @@ export interface ExamRun {
 
 const RUN_STORAGE_KEY = 'telcTrainerRunV1';
 
-function isExamRun(value: unknown): value is ExamRun {
+const isExamRun = (value: unknown): value is ExamRun => {
   if (typeof value !== 'object' || value === null) return false;
   const candidate = value as Partial<ExamRun>;
   return typeof candidate.examId === 'number' && Array.isArray(candidate.queue);
-}
+};
 
-export function loadRun(): ExamRun | null {
+export const loadRun = (): ExamRun | null => {
   const raw = readLocalJson(RUN_STORAGE_KEY);
   return isExamRun(raw) ? raw : null;
-}
+};
 
-export function saveRun(run: ExamRun): void {
+export const saveRun = (run: ExamRun): void => {
   writeLocal(RUN_STORAGE_KEY, JSON.stringify(run));
-}
+};
 
-export function clearRun(): void {
+export const clearRun = (): void => {
   removeLocal(RUN_STORAGE_KEY);
-}
+};
 
-export function createRun(examId: number, mode: AttemptMode, queue: readonly ExamModule[]): ExamRun {
-  return {
-    runId: Date.now(),
-    examId,
-    mode,
-    queue,
-    index: 0,
-    phase: 'brief',
-    answers: {},
-    times: {},
-    plays: {},
-    ratings: {},
-    deadline: null,
-    moduleStart: null
-  };
-}
+export const createRun = (examId: number, mode: AttemptMode, queue: readonly ExamModule[]): ExamRun => ({
+  runId: Date.now(),
+  examId,
+  mode,
+  queue,
+  index: 0,
+  phase: 'brief',
+  answers: {},
+  times: {},
+  plays: {},
+  ratings: {},
+  deadline: null,
+  moduleStart: null
+});
 
 /** Whole seconds left on the current module, never negative. */
-export function secondsLeft(run: ExamRun | null): number {
+export const secondsLeft = (run: ExamRun | null): number => {
   if (!run?.deadline) return 0;
   return Math.max(0, Math.round((run.deadline - Date.now()) / 1000));
-}
+};
 
 /** The module currently being worked on, if any. */
-export function currentModule(run: ExamRun): ExamModule | undefined {
-  return run.queue[run.index];
-}
+export const currentModule = (run: ExamRun): ExamModule | undefined => run.queue[run.index];

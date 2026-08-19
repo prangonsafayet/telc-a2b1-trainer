@@ -7,7 +7,7 @@ import { cn } from '@shared/lib/cn.ts';
 export const Label = forwardRef<
   ComponentRef<typeof LabelPrimitive.Root>,
   ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(function Label({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <LabelPrimitive.Root
       ref={ref}

@@ -14,12 +14,12 @@ import { useProgress } from '@features/progress';
 import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
 import { summarizeAttempt } from '../lib/attemptSummary.ts';
 
-function CountedTotal({ value }: { readonly value: number }) {
+const CountedTotal = ({ value }: { readonly value: number }) => {
   const shown = useCountUp(value, 900);
   return <b>{shown}</b>;
-}
+};
 
-export function ResultsPage() {
+export const ResultsPage = () => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const { attempt, exam } = useAttempt(attemptId);
   const { db } = useProgress();
@@ -120,4 +120,4 @@ export function ResultsPage() {
       </div>
     </>
   );
-}
+};

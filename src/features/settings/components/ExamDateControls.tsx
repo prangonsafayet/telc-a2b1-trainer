@@ -12,7 +12,7 @@ interface ExamDateControlsProps {
 }
 
 /** The exam date, the runway in days, and what the two of them do to the plan. */
-export function ExamDateControls({ value, onChange }: ExamDateControlsProps) {
+export const ExamDateControls = ({ value, onChange }: ExamDateControlsProps) => {
   const picker = useExamDate(value, onChange);
 
   return (
@@ -30,4 +30,4 @@ export function ExamDateControls({ value, onChange }: ExamDateControlsProps) {
       ) : null}
     </div>
   );
-}
+};

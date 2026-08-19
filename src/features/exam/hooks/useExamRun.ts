@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import { type SpeakingPart } from '@shared/components';
 import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
 import { stopSpeech } from '@shared/lib/speech.ts';
 import {
@@ -34,8 +35,8 @@ import {
   scoreSprachbausteine
 } from '../lib/scoring.ts';
 
-/** The three parts of the oral exam. */
-export type SpeakingPart = 't1' | 't2' | 't3';
+
+export type { SpeakingPart };
 
 /** Blob URLs for the speaking module. Session-only — never persisted. */
 export type RecordingMap = Partial<Record<SpeakingPart, string>>;
@@ -62,16 +63,14 @@ interface ExamRunOptions {
   readonly mode: AttemptMode;
 }
 
-function queueForMode(mode: AttemptMode): readonly ExamModule[] {
-  return mode === 'full' ? EXAM_MODULES : [mode];
-}
+const queueForMode = (mode: AttemptMode): readonly ExamModule[] => (mode === 'full' ? EXAM_MODULES : [mode]);
 
 /**
  * Owns the whole attempt: which module is open, the answers, the clock, and turning a
  * finished run into a stored attempt. Every transition writes through to localStorage, so
  * a reload resumes exactly where the user was.
  */
-export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
+export const useExamRun = ({ exam, mode }: ExamRunOptions): ExamRunController => {
   const navigate = useNavigate();
   const { db, update } = useProgress();
 
@@ -326,4 +325,4 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
       abort
     ]
   );
-}
+};

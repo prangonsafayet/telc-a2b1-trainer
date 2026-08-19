@@ -10,13 +10,13 @@ type Theme = 'light' | 'dark';
 /** Must match the pre-paint script in index.html, which avoids a flash of the wrong theme. */
 const THEME_KEY = 'telcTrainerTheme';
 
-function initialTheme(): Theme {
+const initialTheme = (): Theme => {
   const saved = readLocal(THEME_KEY);
   if (saved === 'dark' || saved === 'light') return saved;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
+};
 
-export function ThemeToggle() {
+export const ThemeToggle = () => {
   const [theme, setTheme] = useState<Theme>(initialTheme);
 
   useEffect(() => {
@@ -36,4 +36,4 @@ export function ThemeToggle() {
       {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
     </Button>
   );
-}
+};

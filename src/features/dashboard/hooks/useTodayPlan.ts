@@ -26,7 +26,7 @@ export interface SchedulePlan {
 }
 
 /** What the plan asks for today, and whether the date behind it needs attention. */
-export function useTodayPlan(): SchedulePlan {
+export const useTodayPlan = (): SchedulePlan => {
   const schedule = useSchedule();
 
   return useMemo(() => {
@@ -61,4 +61,4 @@ export function useTodayPlan(): SchedulePlan {
       needsNewDate: false
     };
   }, [schedule]);
-}
+};

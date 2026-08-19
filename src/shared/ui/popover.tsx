@@ -11,7 +11,7 @@ export const PopoverAnchor = PopoverPrimitive.Anchor;
 export const PopoverContent = forwardRef<
   ComponentRef<typeof PopoverPrimitive.Content>,
   ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
->(function PopoverContent({ className, align = 'center', sideOffset = 4, ...props }, ref) {
+>(({ className, align = 'center', sideOffset = 4, ...props }, ref) => {
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content

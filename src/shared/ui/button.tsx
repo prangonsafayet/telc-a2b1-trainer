@@ -36,19 +36,18 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'>, Variant
   readonly asChild?: boolean;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant, size, asChild = false, ...props },
-  ref
-) {
-  const Comp = asChild ? Slot : 'button';
-  return (
-    <Comp
-      ref={ref}
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
-});
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
+    return (
+      <Comp
+        ref={ref}
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...props}
+      />
+    );
+  }
+);
 
 export { buttonVariants };

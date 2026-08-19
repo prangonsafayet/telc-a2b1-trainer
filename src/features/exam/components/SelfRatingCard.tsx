@@ -16,7 +16,7 @@ interface SelfRatingCardProps {
 const SPEAKING_PARTS: readonly SpeakingPart[] = ['t1', 't2', 't3'];
 
 /** Schreiben and Sprechen are self-scored against the sample answer / Redemittel. */
-export function SelfRatingCard({ module, exam, writtenText, recordings, onConfirm }: SelfRatingCardProps) {
+export const SelfRatingCard = ({ module, exam, writtenText, recordings, onConfirm }: SelfRatingCardProps) => {
   const { criteria, values, total, setValue } = useSelfRating(module);
   const isWriting = module === 'schreiben';
 
@@ -126,4 +126,4 @@ export function SelfRatingCard({ module, exam, writtenText, recordings, onConfir
       </Card>
     </div>
   );
-}
+};

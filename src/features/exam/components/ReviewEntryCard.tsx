@@ -9,7 +9,7 @@ interface ReviewEntryCardProps {
   readonly entry: ReviewEntry;
 }
 
-export function ReviewEntryCard({ entry }: ReviewEntryCardProps) {
+export const ReviewEntryCard = ({ entry }: ReviewEntryCardProps) => {
   const { correct } = entry;
 
   return (
@@ -47,4 +47,4 @@ export function ReviewEntryCard({ entry }: ReviewEntryCardProps) {
       </div>
     </div>
   );
-}
+};

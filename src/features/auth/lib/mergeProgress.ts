@@ -8,10 +8,10 @@ import { type Attempt, type LearnDoneMap, type ProgressDatabase } from '@shared/
  * silently undo progress recorded on another, so only an explicit `false` is dropped.
  * Settings are last-write-wins, decided by `_updatedAt`.
  */
-export function mergeProgress(
+export const mergeProgress = (
   local: ProgressDatabase | null,
   remote: ProgressDatabase | null
-): ProgressDatabase {
+): ProgressDatabase => {
   if (!remote) {
     if (!local) throw new Error('mergeProgress needs at least one document');
     return local;
@@ -35,4 +35,4 @@ export function mergeProgress(
   const updatedAt = localIsNewer ? local._updatedAt : remote._updatedAt;
 
   return { attempts, learnDone, settings, ...(updatedAt ? { _updatedAt: updatedAt } : {}) };
-}
+};

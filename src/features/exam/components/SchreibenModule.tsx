@@ -7,7 +7,7 @@ import { describeWordCount } from '../lib/wordCount.ts';
 
 import { type ExamModuleProps } from './moduleProps.ts';
 
-export function SchreibenModule({ exam, answers, setAnswer }: ExamModuleProps) {
+export const SchreibenModule = ({ exam, answers, setAnswer }: ExamModuleProps) => {
   const { schreiben } = exam;
   const text = textAnswer(answers, WRITING_ANSWER_KEY);
   const { count, hint, inRange } = describeWordCount(text);
@@ -53,4 +53,4 @@ export function SchreibenModule({ exam, answers, setAnswer }: ExamModuleProps) {
       </div>
     </Teil>
   );
-}
+};

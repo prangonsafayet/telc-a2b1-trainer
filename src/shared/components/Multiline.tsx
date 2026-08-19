@@ -6,7 +6,7 @@ interface MultilineProps {
 }
 
 /** Renders newline-separated text without `dangerouslySetInnerHTML`. */
-export function Multiline({ text }: MultilineProps) {
+export const Multiline = ({ text }: MultilineProps) => {
   const lines = (text ?? '').split('\n');
   return (
     <>
@@ -18,4 +18,4 @@ export function Multiline({ text }: MultilineProps) {
       ))}
     </>
   );
-}
+};

@@ -9,7 +9,7 @@ interface AttemptTableProps {
   readonly rows: readonly AttemptRow[];
 }
 
-export function AttemptTable({ rows }: AttemptTableProps) {
+export const AttemptTable = ({ rows }: AttemptTableProps) => {
   if (rows.length === 0) {
     return <p className="py-8 text-center text-sm text-muted-foreground">No attempts yet.</p>;
   }
@@ -49,4 +49,4 @@ export function AttemptTable({ rows }: AttemptTableProps) {
       </TableBody>
     </Table>
   );
-}
+};

@@ -2,10 +2,10 @@ import { Fragment } from 'react';
 
 import { MultipleChoice, QuestionItem, QuestionText, Teil } from '@shared/components';
 import { LETTERS } from '@shared/lib/format.ts';
+import { splitGapText } from '@shared/lib/gapText.ts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui';
 
 import { itemKey, numberAnswer } from '../lib/answers.ts';
-import { splitGapText } from '../lib/gapText.ts';
 
 import { type ExamModuleProps } from './moduleProps.ts';
 
@@ -16,59 +16,55 @@ interface InlineGapProps {
   readonly onChange: (value: number) => void;
 }
 
-function InlineGap({ label, options, value, onChange }: InlineGapProps) {
-  return (
-    <Select
-      value={value == null ? '' : String(value)}
-      onValueChange={next => {
-        onChange(Number(next));
-      }}
+const InlineGap = ({ label, options, value, onChange }: InlineGapProps) => (
+  <Select
+    value={value == null ? '' : String(value)}
+    onValueChange={next => {
+      onChange(Number(next));
+    }}
+  >
+    <SelectTrigger
+      size="sm"
+      aria-label={`Lücke ${label}`}
+      className="mx-1 inline-flex h-7 max-w-52 bg-background align-baseline"
     >
-      <SelectTrigger
-        size="sm"
-        aria-label={`Lücke ${label}`}
-        className="mx-1 inline-flex h-7 max-w-52 bg-background align-baseline"
-      >
-        <SelectValue placeholder={`[${label}]`} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option, index) => (
-          <SelectItem key={index} value={String(index)}>
-            <span className="text-muted-foreground">{LETTERS[index]})</span> {option}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-}
+      <SelectValue placeholder={`[${label}]`} />
+    </SelectTrigger>
+    <SelectContent>
+      {options.map((option, index) => (
+        <SelectItem key={index} value={String(index)}>
+          <span className="text-muted-foreground">{LETTERS[index]})</span> {option}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+);
 
 interface GapTextProps {
   readonly text: string;
   readonly renderGap: (gapIndex: number, label: string) => React.ReactNode;
 }
 
-function GapText({ text, renderGap }: GapTextProps) {
-  return (
-    <div className="rounded-lg border bg-muted/40 p-4 text-base leading-loose">
-      {splitGapText(text).map((segment, index) =>
-        segment.kind === 'gap' ? (
-          <Fragment key={index}>{renderGap(segment.gapIndex, segment.label)}</Fragment>
-        ) : (
-          <Fragment key={index}>
-            {segment.lines.map((line, lineIndex) => (
-              <Fragment key={lineIndex}>
-                {line}
-                {lineIndex < segment.lines.length - 1 ? <br /> : null}
-              </Fragment>
-            ))}
-          </Fragment>
-        )
-      )}
-    </div>
-  );
-}
+const GapText = ({ text, renderGap }: GapTextProps) => (
+  <div className="rounded-lg border bg-muted/40 p-4 text-base leading-loose">
+    {splitGapText(text).map((segment, index) =>
+      segment.kind === 'gap' ? (
+        <Fragment key={index}>{renderGap(segment.gapIndex, segment.label)}</Fragment>
+      ) : (
+        <Fragment key={index}>
+          {segment.lines.map((line, lineIndex) => (
+            <Fragment key={lineIndex}>
+              {line}
+              {lineIndex < segment.lines.length - 1 ? <br /> : null}
+            </Fragment>
+          ))}
+        </Fragment>
+      )
+    )}
+  </div>
+);
 
-export function SprachbausteineModule({ exam, answers, setAnswer }: ExamModuleProps) {
+export const SprachbausteineModule = ({ exam, answers, setAnswer }: ExamModuleProps) => {
   const { sprachbausteine } = exam;
 
   return (
@@ -131,4 +127,4 @@ export function SprachbausteineModule({ exam, answers, setAnswer }: ExamModulePr
       </Teil>
     </>
   );
-}
+};

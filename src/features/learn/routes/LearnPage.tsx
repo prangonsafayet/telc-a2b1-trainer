@@ -20,7 +20,7 @@ import { LearnSlotSection } from '../components/LearnSlotSection.tsx';
 import { useLearnPlan } from '../hooks/useLearnPlan.ts';
 import { useScheduledLearn } from '../hooks/useScheduledLearn.ts';
 
-export function LearnPage() {
+export const LearnPage = () => {
   const plan = useLearnPlan();
   const scheduled = useScheduledLearn();
 
@@ -175,4 +175,4 @@ export function LearnPage() {
       </Card>
     </>
   );
-}
+};

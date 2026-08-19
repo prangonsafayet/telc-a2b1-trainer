@@ -23,16 +23,16 @@ const CORE_DAYS = LEARN.days.filter(day => day.tier === 'core').map(day => day.d
 const EXTENSION_DAYS = LEARN.days.filter(day => day.tier === 'extension').map(day => day.day);
 const ALL_EXAM_IDS = EXAMS.map(exam => exam.id);
 
-function isoIn(days: number): string {
+const isoIn = (days: number): string => {
   const iso = addDays(TODAY, days);
   if (iso === null) throw new Error('unreachable: TODAY is a valid date');
   return iso;
-}
+};
 
-function build(
+const build = (
   daysLeft: number,
   options: { readonly done?: LearnDoneMap; readonly attempted?: readonly number[] } = {}
-): Schedule {
+): Schedule => {
   const schedule = buildSchedule({
     examDate: isoIn(daysLeft),
     today: TODAY,
@@ -41,10 +41,10 @@ function build(
   });
   if (!schedule) throw new Error('unreachable: a valid date always builds a plan');
   return schedule;
-}
+};
 
 /** Every checkbox of days 1..`through`, so those days read as complete. */
-function completeThrough(through: number): LearnDoneMap {
+const completeThrough = (through: number): LearnDoneMap => {
   const done: Record<string, boolean> = {};
   for (const day of LEARN.days.filter(candidate => candidate.day <= through)) {
     day.tasks.forEach((_, index) => {
@@ -52,7 +52,7 @@ function completeThrough(through: number): LearnDoneMap {
     });
   }
   return done;
-}
+};
 
 const learnDaysIn = (schedule: Schedule): readonly number[] => schedule.slots.flatMap(slot => slot.learnDays);
 const examIdsIn = (schedule: Schedule): readonly number[] => schedule.slots.flatMap(slot => slot.examIds);

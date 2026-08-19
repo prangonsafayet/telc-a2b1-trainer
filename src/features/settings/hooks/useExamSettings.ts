@@ -20,7 +20,7 @@ export interface ExamSettingsState {
   readonly deleteAllProgress: () => Promise<void>;
 }
 
-export function useExamSettings(): ExamSettingsState {
+export const useExamSettings = (): ExamSettingsState => {
   const { db, update, replaceLocal } = useProgress();
   const confirm = useConfirm();
   const voices = useGermanVoices();
@@ -52,4 +52,4 @@ export function useExamSettings(): ExamSettingsState {
   }, [confirm, replaceLocal]);
 
   return { settings, voices, setSetting, testVoice, deleteAllProgress };
-}
+};

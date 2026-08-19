@@ -19,13 +19,13 @@ export interface AudioPlaybackState {
 }
 
 /** Play/stop for one listening item, enforcing the real-exam play budget. */
-export function useAudioPlayback({
+export const useAudioPlayback = ({
   exam,
   settings,
   itemKey,
   playsLeft,
   onConsumePlay
-}: AudioPlaybackOptions): AudioPlaybackState {
+}: AudioPlaybackOptions): AudioPlaybackState => {
   const [playing, setPlaying] = useState(false);
 
   /* Never leave the speaker running when the module unmounts. */
@@ -52,4 +52,4 @@ export function useAudioPlayback({
   }, [playing, playsLeft, onConsumePlay, itemKey, exam, settings]);
 
   return { playing, canPlay: playsLeft > 0, toggle };
-}
+};

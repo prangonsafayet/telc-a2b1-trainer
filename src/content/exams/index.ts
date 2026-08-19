@@ -36,7 +36,7 @@ export const EXAMS: readonly Exam[] = [
 ].toSorted((a, b) => a.id - b.id);
 
 /** Looks up an exam by id; accepts the string form that arrives from route params. */
-export function findExamById(id: string | number | undefined): Exam | undefined {
+export const findExamById = (id: string | number | undefined): Exam | undefined => {
   const numeric = Number(id);
   return Number.isFinite(numeric) ? EXAMS.find(exam => exam.id === numeric) : undefined;
-}
+};

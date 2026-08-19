@@ -8,7 +8,7 @@ import { cn } from '@shared/lib/cn.ts';
 export const Checkbox = forwardRef<
   ComponentRef<typeof CheckboxPrimitive.Root>,
   ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
->(function Checkbox({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <CheckboxPrimitive.Root
       ref={ref}

@@ -28,12 +28,12 @@ const SKILL_LABELS = [
   ['sprechen', 'Sprechen']
 ] as const;
 
-function Counted({ value }: { readonly value: number | null }) {
+const Counted = ({ value }: { readonly value: number | null }) => {
   const shown = useCountUp(value);
   return <>{shown ?? '–'}</>;
-}
+};
 
-export function DashboardPage() {
+export const DashboardPage = () => {
   const { db } = useProgress();
   const stats = useDashboardStats();
   const identity = useAccountIdentity();
@@ -132,4 +132,4 @@ export function DashboardPage() {
       </div>
     </>
   );
-}
+};

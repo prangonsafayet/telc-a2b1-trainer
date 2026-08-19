@@ -20,15 +20,15 @@ export interface ScoreBar {
   readonly color: string;
 }
 
-function colorForGrade(result: ExamGrade): string {
+const colorForGrade = (result: ExamGrade): string => {
   if (result === 'B1') return 'var(--success)';
   if (result === 'A2') return 'var(--warning)';
   return 'var(--destructive)';
-}
+};
 
 /** The last dozen full attempts, as bar geometry. */
-export function buildScoreHistory(attempts: readonly Attempt[]): readonly ScoreBar[] {
-  return attempts
+export const buildScoreHistory = (attempts: readonly Attempt[]): readonly ScoreBar[] =>
+  attempts
     .filter(attempt => attempt.mode === 'full')
     .slice(-MAX_BARS)
     .map<ScoreBar>(attempt => {
@@ -44,4 +44,3 @@ export function buildScoreHistory(attempts: readonly Attempt[]): readonly ScoreB
         color: colorForGrade(result)
       };
     });
-}

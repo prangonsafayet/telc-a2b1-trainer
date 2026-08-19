@@ -15,7 +15,7 @@ interface ModuleBriefingProps {
 }
 
 /** The "what to do" screen shown before each module starts. */
-export function ModuleBriefing({ exam, module, minutes, step, onBegin, onAbort }: ModuleBriefingProps) {
+export const ModuleBriefing = ({ exam, module, minutes, step, onBegin, onAbort }: ModuleBriefingProps) => {
   const meta = MODULE_META[module];
 
   return (
@@ -51,4 +51,4 @@ export function ModuleBriefing({ exam, module, minutes, step, onBegin, onAbort }
       </CardContent>
     </Card>
   );
-}
+};

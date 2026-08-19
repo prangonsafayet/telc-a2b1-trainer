@@ -18,31 +18,29 @@ interface RichtigFalschProps {
 }
 
 /** richtig / falsch. Radix works in strings, so the boolean is encoded on the way through. */
-export function RichtigFalsch({ name, value, onChange }: RichtigFalschProps) {
-  return (
-    <RadioGroup
-      className="flex flex-wrap gap-x-6 gap-y-2"
-      value={value == null ? '' : String(value)}
-      onValueChange={next => {
-        onChange(next === 'true');
-      }}
-    >
-      {(
-        [
-          ['true', 'richtig'],
-          ['false', 'falsch']
-        ] as const
-      ).map(([raw, label]) => (
-        <div className="flex items-center gap-2" key={raw}>
-          <RadioGroupItem value={raw} id={`${name}-${raw}`} />
-          <Label htmlFor={`${name}-${raw}`} className="cursor-pointer font-normal">
-            {label}
-          </Label>
-        </div>
-      ))}
-    </RadioGroup>
-  );
-}
+export const RichtigFalsch = ({ name, value, onChange }: RichtigFalschProps) => (
+  <RadioGroup
+    className="flex flex-wrap gap-x-6 gap-y-2"
+    value={value == null ? '' : String(value)}
+    onValueChange={next => {
+      onChange(next === 'true');
+    }}
+  >
+    {(
+      [
+        ['true', 'richtig'],
+        ['false', 'falsch']
+      ] as const
+    ).map(([raw, label]) => (
+      <div className="flex items-center gap-2" key={raw}>
+        <RadioGroupItem value={raw} id={`${name}-${raw}`} />
+        <Label htmlFor={`${name}-${raw}`} className="cursor-pointer font-normal">
+          {label}
+        </Label>
+      </div>
+    ))}
+  </RadioGroup>
+);
 
 interface MultipleChoiceProps {
   readonly name: string;
@@ -52,29 +50,27 @@ interface MultipleChoiceProps {
   readonly onChange: (value: number) => void;
 }
 
-export function MultipleChoice({ name, options, value, onChange }: MultipleChoiceProps) {
-  return (
-    <RadioGroup
-      className="gap-2"
-      value={value == null ? '' : String(value)}
-      onValueChange={next => {
-        onChange(Number(next));
-      }}
-    >
-      {options.map((option, index) => (
-        <div className="flex items-start gap-2" key={index}>
-          <RadioGroupItem value={String(index)} id={`${name}-${String(index)}`} className="mt-1" />
-          <Label
-            htmlFor={`${name}-${String(index)}`}
-            className="cursor-pointer items-start font-normal leading-relaxed"
-          >
-            <span className="text-muted-foreground">{LETTERS[index]})</span> {option}
-          </Label>
-        </div>
-      ))}
-    </RadioGroup>
-  );
-}
+export const MultipleChoice = ({ name, options, value, onChange }: MultipleChoiceProps) => (
+  <RadioGroup
+    className="gap-2"
+    value={value == null ? '' : String(value)}
+    onValueChange={next => {
+      onChange(Number(next));
+    }}
+  >
+    {options.map((option, index) => (
+      <div className="flex items-start gap-2" key={index}>
+        <RadioGroupItem value={String(index)} id={`${name}-${String(index)}`} className="mt-1" />
+        <Label
+          htmlFor={`${name}-${String(index)}`}
+          className="cursor-pointer items-start font-normal leading-relaxed"
+        >
+          <span className="text-muted-foreground">{LETTERS[index]})</span> {option}
+        </Label>
+      </div>
+    ))}
+  </RadioGroup>
+);
 
 interface LetterSelectProps {
   readonly count: number;
@@ -84,24 +80,22 @@ interface LetterSelectProps {
 }
 
 /** Letter dropdown (a–h) for the matching parts of Lesen. */
-export function LetterSelect({ count, value, onChange, placeholder = '–' }: LetterSelectProps) {
-  return (
-    <Select
-      value={value == null ? '' : String(value)}
-      onValueChange={next => {
-        onChange(Number(next));
-      }}
-    >
-      <SelectTrigger size="sm" className="w-20">
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {Array.from({ length: count }, (_, index) => (
-          <SelectItem key={index} value={String(index)}>
-            {LETTERS[index]}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-}
+export const LetterSelect = ({ count, value, onChange, placeholder = '–' }: LetterSelectProps) => (
+  <Select
+    value={value == null ? '' : String(value)}
+    onValueChange={next => {
+      onChange(Number(next));
+    }}
+  >
+    <SelectTrigger size="sm" className="w-20">
+      <SelectValue placeholder={placeholder} />
+    </SelectTrigger>
+    <SelectContent>
+      {Array.from({ length: count }, (_, index) => (
+        <SelectItem key={index} value={String(index)}>
+          {LETTERS[index]}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+);

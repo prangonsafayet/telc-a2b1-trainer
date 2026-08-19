@@ -31,12 +31,11 @@ const MODULE_COMPONENTS: Readonly<Record<string, ComponentType<ExamModuleProps>>
   sprechen: SprechenModule
 };
 
-function isAttemptMode(value: string | undefined): value is AttemptMode {
-  return value === 'full' || (EXAM_MODULES as readonly string[]).includes(value ?? '');
-}
+const isAttemptMode = (value: string | undefined): value is AttemptMode =>
+  value === 'full' || (EXAM_MODULES as readonly string[]).includes(value ?? '');
 
 /** Drives one attempt: briefing → module → optional self-scoring → results. */
-export function RunnerPage() {
+export const RunnerPage = () => {
   const { examId, mode } = useParams<{ examId: string; mode: string }>();
   const exam = findExamById(examId);
   const validMode = isAttemptMode(mode);
@@ -44,7 +43,7 @@ export function RunnerPage() {
   /* An unknown exam or mode is a bad URL, not a state worth rendering. */
   if (!exam || !validMode) return <Navigate to="/" replace />;
   return <RunnerView exam={exam} mode={mode} />;
-}
+};
 
 interface RunnerViewProps {
   readonly exam: Exam;
@@ -52,7 +51,7 @@ interface RunnerViewProps {
 }
 
 /** Split out so the run hook is only created once the route params are known good. */
-function RunnerView({ exam, mode }: RunnerViewProps) {
+const RunnerView = ({ exam, mode }: RunnerViewProps) => {
   const confirm = useConfirm();
   const { db } = useProgress();
   const run = useExamRun({ exam, mode });
@@ -141,4 +140,4 @@ function RunnerView({ exam, mode }: RunnerViewProps) {
       </div>
     </>
   );
-}
+};

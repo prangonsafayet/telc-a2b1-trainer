@@ -49,12 +49,10 @@ interface CloudSyncOptions {
 
 const PUSH_DEBOUNCE_MS = 1500;
 
-function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
-}
+const errorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
 /** Drives cloud sync: session, pull/merge/push, and the OAuth handoff. */
-export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOptions): CloudSyncState {
+export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOptions): CloudSyncState => {
   const [user, setUser] = useState<User | null>(null);
   const [status, setStatus] = useState('');
   const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
@@ -423,4 +421,4 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     fullSync,
     signOut
   };
-}
+};

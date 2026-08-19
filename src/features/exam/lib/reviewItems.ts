@@ -26,16 +26,15 @@ export interface ReviewSection {
 const RICHTIG = 'richtig';
 const FALSCH = 'falsch';
 
-function boolLabel(value: boolean | undefined): string | null {
+const boolLabel = (value: boolean | undefined): string | null => {
   if (value == null) return null;
   return value ? RICHTIG : FALSCH;
-}
+};
 
-function optionLabel(options: readonly string[], index: number | undefined): string | null {
-  return index == null ? null : (options[index] ?? null);
-}
+const optionLabel = (options: readonly string[], index: number | undefined): string | null =>
+  index == null ? null : (options[index] ?? null);
 
-function buildLesen(exam: Exam, attempt: Attempt): ReviewSection {
+const buildLesen = (exam: Exam, attempt: Attempt): ReviewSection => {
   const { lesen } = exam;
   const { answers } = attempt;
   const entries: ReviewEntry[] = [];
@@ -85,9 +84,9 @@ function buildLesen(exam: Exam, attempt: Attempt): ReviewSection {
   });
 
   return { module: 'lesen', heading: `Lesen — ${String(attempt.scores.lesen ?? 0)}/60`, entries };
-}
+};
 
-function buildSprachbausteine(exam: Exam, attempt: Attempt): ReviewSection | null {
+const buildSprachbausteine = (exam: Exam, attempt: Attempt): ReviewSection | null => {
   if (!attempt.sb) return null;
   const { sprachbausteine } = exam;
   const { answers } = attempt;
@@ -131,9 +130,9 @@ function buildSprachbausteine(exam: Exam, attempt: Attempt): ReviewSection | nul
     heading: `Sprachbausteine — ${String(attempt.sb.correct)}/${String(attempt.sb.of)} (${String(attempt.sb.percent)}%)`,
     entries
   };
-}
+};
 
-function buildHoeren(exam: Exam, attempt: Attempt): ReviewSection {
+const buildHoeren = (exam: Exam, attempt: Attempt): ReviewSection => {
   const { hoeren } = exam;
   const { answers } = attempt;
   const entries: ReviewEntry[] = [];
@@ -202,10 +201,10 @@ function buildHoeren(exam: Exam, attempt: Attempt): ReviewSection {
     entries,
     transcripts: [hoeren.teil4.audio, hoeren.teil5.audio]
   };
-}
+};
 
 /** Every auto-scored section of an attempt, ready to render. */
-export function buildReviewSections(exam: Exam, attempt: Attempt): readonly ReviewSection[] {
+export const buildReviewSections = (exam: Exam, attempt: Attempt): readonly ReviewSection[] => {
   const includes = (module: ExamModule): boolean => attempt.mode === 'full' || attempt.mode === module;
   const sections: ReviewSection[] = [];
 
@@ -217,8 +216,7 @@ export function buildReviewSections(exam: Exam, attempt: Attempt): readonly Revi
   if (includes('hoeren')) sections.push(buildHoeren(exam, attempt));
 
   return sections;
-}
+};
 
-export function attemptIncludes(attempt: Attempt, module: ExamModule): boolean {
-  return attempt.mode === 'full' || attempt.mode === module;
-}
+export const attemptIncludes = (attempt: Attempt, module: ExamModule): boolean =>
+  attempt.mode === 'full' || attempt.mode === module;

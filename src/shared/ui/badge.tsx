@@ -32,9 +32,9 @@ export interface BadgeProps extends ComponentPropsWithoutRef<'span'>, VariantPro
   readonly asChild?: boolean;
 }
 
-export function Badge({ className, variant, asChild = false, ...props }: BadgeProps) {
+export const Badge = ({ className, variant, asChild = false, ...props }: BadgeProps) => {
   const Comp = asChild ? Slot : 'span';
   return <Comp data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />;
-}
+};
 
 export { badgeVariants };

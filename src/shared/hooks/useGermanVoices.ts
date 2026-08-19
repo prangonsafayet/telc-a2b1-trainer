@@ -7,6 +7,5 @@ import { getGermanVoices, subscribeToVoices } from '@shared/lib/speech.ts';
  * It is external mutable state, so it is read through `useSyncExternalStore` rather than
  * mirrored into component state.
  */
-export function useGermanVoices(): readonly SpeechSynthesisVoice[] {
-  return useSyncExternalStore(subscribeToVoices, getGermanVoices, getGermanVoices);
-}
+export const useGermanVoices = (): readonly SpeechSynthesisVoice[] =>
+  useSyncExternalStore(subscribeToVoices, getGermanVoices, getGermanVoices);

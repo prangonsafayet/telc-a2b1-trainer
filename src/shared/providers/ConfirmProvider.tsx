@@ -31,7 +31,7 @@ const DEFAULTS: ResolvedOptions = {
  * Promise-based replacement for `window.confirm`, so the exam flow can await a real
  * dialog instead of a native modal that blocks the whole page.
  */
-export function ConfirmProvider({ children }: { readonly children: ReactNode }) {
+export const ConfirmProvider = ({ children }: { readonly children: ReactNode }) => {
   const [options, setOptions] = useState<ResolvedOptions | null>(null);
   const resolverRef = useRef<((value: boolean) => void) | null>(null);
 
@@ -87,4 +87,4 @@ export function ConfirmProvider({ children }: { readonly children: ReactNode }) 
       </AlertDialog>
     </ConfirmContext.Provider>
   );
-}
+};

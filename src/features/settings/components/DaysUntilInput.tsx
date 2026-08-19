@@ -7,7 +7,7 @@ interface DaysUntilInputProps {
 }
 
 /** "I have six weeks" is easier to type than a date, so both spellings are offered. */
-export function DaysUntilInput({ picker }: DaysUntilInputProps) {
+export const DaysUntilInput = ({ picker }: DaysUntilInputProps) => {
   const invalid = picker.daysError !== null && picker.daysInput !== '';
 
   return (
@@ -37,4 +37,4 @@ export function DaysUntilInput({ picker }: DaysUntilInputProps) {
       ) : null}
     </div>
   );
-}
+};

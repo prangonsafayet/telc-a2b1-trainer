@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
  * sit right beneath it. The header wraps to two rows on narrow screens, so a fixed offset
  * would be wrong there.
  */
-export function useHeaderHeight<T extends HTMLElement>(): React.RefObject<T | null> {
+export const useHeaderHeight = <T extends HTMLElement>(): React.RefObject<T | null> => {
   const ref = useRef<T | null>(null);
 
   useEffect(() => {
@@ -25,4 +25,4 @@ export function useHeaderHeight<T extends HTMLElement>(): React.RefObject<T | nu
   }, []);
 
   return ref;
-}
+};

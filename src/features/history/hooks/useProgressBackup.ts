@@ -17,7 +17,7 @@ const EXPORT_FILENAME = 'telc-trainer-progress.json';
  * input is still reachable by assistive technology, and a ref would have to cross the
  * hook boundary for no benefit.
  */
-export function useProgressBackup(): ProgressBackup {
+export const useProgressBackup = (): ProgressBackup => {
   const { db, replaceLocal } = useProgress();
 
   const exportToFile = useCallback(() => {
@@ -55,4 +55,4 @@ export function useProgressBackup(): ProgressBackup {
   }, [replaceLocal]);
 
   return { exportToFile, importFromFile };
-}
+};

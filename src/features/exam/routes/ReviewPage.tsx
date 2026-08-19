@@ -9,7 +9,7 @@ import { ReviewEntryCard } from '../components/ReviewEntryCard.tsx';
 import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
 import { attemptIncludes, buildReviewSections } from '../lib/reviewItems.ts';
 
-export function ReviewPage() {
+export const ReviewPage = () => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const { attempt, exam } = useAttempt(attemptId);
   const retry = useRetryExam();
@@ -93,4 +93,4 @@ export function ReviewPage() {
       </div>
     </>
   );
-}
+};

@@ -14,7 +14,7 @@ import { afterEach } from 'vitest';
  * in-memory one is also better for tests than the real thing: every file starts empty
  * instead of inheriting what the last run wrote.
  */
-function createStorage(): Storage {
+const createStorage = (): Storage => {
   const entries = new Map<string, string>();
   return {
     get length(): number {
@@ -30,14 +30,14 @@ function createStorage(): Storage {
       entries.set(key, String(value));
     }
   } as unknown as Storage;
-}
+};
 
-function installStorage(name: 'localStorage' | 'sessionStorage'): void {
+const installStorage = (name: 'localStorage' | 'sessionStorage'): void => {
   const storage = createStorage();
   for (const target of [globalThis, window]) {
     Object.defineProperty(target, name, { value: storage, configurable: true, writable: true });
   }
-}
+};
 
 if (typeof globalThis.localStorage === 'undefined') installStorage('localStorage');
 if (typeof globalThis.sessionStorage === 'undefined') installStorage('sessionStorage');

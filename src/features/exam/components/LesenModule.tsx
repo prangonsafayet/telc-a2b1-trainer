@@ -16,20 +16,18 @@ import { type ExamModuleProps } from './moduleProps.ts';
 
 const TEXT_LABELS = ['A', 'B'] as const;
 
-function OptionCards({ items }: { readonly items: readonly string[] }) {
-  return (
-    <div className="my-4 grid gap-2 sm:grid-cols-2">
-      {items.map((item, index) => (
-        <div key={index} className="rounded-lg border bg-muted/40 p-3 text-sm leading-relaxed">
-          <b className="mr-1.5 text-primary">{LETTERS[index]})</b>
-          {item}
-        </div>
-      ))}
-    </div>
-  );
-}
+const OptionCards = ({ items }: { readonly items: readonly string[] }) => (
+  <div className="my-4 grid gap-2 sm:grid-cols-2">
+    {items.map((item, index) => (
+      <div key={index} className="rounded-lg border bg-muted/40 p-3 text-sm leading-relaxed">
+        <b className="mr-1.5 text-primary">{LETTERS[index]})</b>
+        {item}
+      </div>
+    ))}
+  </div>
+);
 
-export function LesenModule({ exam, answers, setAnswer }: ExamModuleProps) {
+export const LesenModule = ({ exam, answers, setAnswer }: ExamModuleProps) => {
   const { lesen } = exam;
 
   return (
@@ -121,4 +119,4 @@ export function LesenModule({ exam, answers, setAnswer }: ExamModuleProps) {
       </Teil>
     </>
   );
-}
+};

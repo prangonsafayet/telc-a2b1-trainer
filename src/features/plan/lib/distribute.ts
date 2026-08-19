@@ -6,7 +6,7 @@
  * in the order it was authored. Returns empty buckets when there are fewer items than
  * buckets, and no buckets at all when `buckets < 1`.
  */
-export function chunkEvenly<T>(items: readonly T[], buckets: number): readonly T[][] {
+export const chunkEvenly = <T>(items: readonly T[], buckets: number): readonly T[][] => {
   if (buckets < 1) return [];
   const out: T[][] = [];
   let taken = 0;
@@ -18,15 +18,15 @@ export function chunkEvenly<T>(items: readonly T[], buckets: number): readonly T
     taken += size;
   }
   return out;
-}
+};
 
 /** Splits `items` into contiguous groups of at most `size`. */
-export function chunkBySize<T>(items: readonly T[], size: number): readonly T[][] {
+export const chunkBySize = <T>(items: readonly T[], size: number): readonly T[][] => {
   if (size < 1) return [];
   const out: T[][] = [];
   for (let index = 0; index < items.length; index += size) out.push(items.slice(index, index + size));
   return out;
-}
+};
 
 /**
  * Interleaves `fillers` empty groups between the given groups, so spare days become
@@ -37,11 +37,11 @@ export function chunkBySize<T>(items: readonly T[], size: number): readonly T[][
  * until they fit, because a 90-day plan should alternate lesson and review rather than
  * teach for four weeks and then idle for three.
  */
-export function interleaveFillers<T>(
+export const interleaveFillers = <T>(
   groups: readonly (readonly T[])[],
   fillers: number,
   groupsPerFiller: number
-): readonly (readonly T[])[] {
+): readonly (readonly T[])[] => {
   if (fillers < 1) return groups;
   /* Nothing to interleave between: everything trails the work. */
   if (groups.length === 0) return emptyGroups<T>(fillers);
@@ -67,8 +67,7 @@ export function interleaveFillers<T>(
     }
   }
   return out;
-}
+};
 
-function emptyGroups<T>(count: number): readonly T[][] {
-  return Array.from({ length: Math.max(0, count) }, () => []);
-}
+const emptyGroups = <T>(count: number): readonly T[][] =>
+  Array.from({ length: Math.max(0, count) }, () => []);

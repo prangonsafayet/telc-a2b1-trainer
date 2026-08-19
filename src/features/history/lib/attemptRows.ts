@@ -20,13 +20,11 @@ export interface AttemptRow {
 
 const DASH = '–';
 
-function score(value: number | undefined): string {
-  return value == null ? DASH : String(value);
-}
+const score = (value: number | undefined): string => (value == null ? DASH : String(value));
 
 /** Newest first — the most recent attempt is the one you want to see. */
-export function buildAttemptRows(attempts: readonly Attempt[]): readonly AttemptRow[] {
-  return attempts.toReversed().map<AttemptRow>(attempt => {
+export const buildAttemptRows = (attempts: readonly Attempt[]): readonly AttemptRow[] =>
+  attempts.toReversed().map<AttemptRow>(attempt => {
     const seconds = Object.values(attempt.times).reduce<number>((sum, value) => sum + value, 0);
     return {
       id: attempt.id,
@@ -43,7 +41,6 @@ export function buildAttemptRows(attempts: readonly Attempt[]): readonly Attempt
       time: fmtClock(seconds)
     };
   });
-}
 
 export const ATTEMPT_COLUMNS = [
   'Date',

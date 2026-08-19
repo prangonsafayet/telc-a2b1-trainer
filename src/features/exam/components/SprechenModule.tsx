@@ -1,36 +1,31 @@
 import { Mic } from 'lucide-react';
 
-import { Callout, Teil } from '@shared/components';
+import { Callout, Teil, RecorderControls  } from '@shared/components';
 
 import { type ExamModuleProps } from './moduleProps.ts';
-import { RecorderControls } from './RecorderControls.tsx';
 
-function Redemittel({ items }: { readonly items: readonly string[] }) {
-  return (
-    <div className="my-4 rounded-lg border-l-4 border-[color:var(--warning)] bg-[color-mix(in_oklab,var(--warning)_10%,transparent)] p-3">
-      <b className="text-sm">Redemittel:</b>
-      <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm">
-        {items.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function Punkte({ items }: { readonly items: readonly string[] }) {
-  return (
-    <div className="my-4 grid gap-2 sm:grid-cols-2">
+const Redemittel = ({ items }: { readonly items: readonly string[] }) => (
+  <div className="my-4 rounded-lg border-l-4 border-[color:var(--warning)] bg-[color-mix(in_oklab,var(--warning)_10%,transparent)] p-3">
+    <b className="text-sm">Redemittel:</b>
+    <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm">
       {items.map((item, index) => (
-        <div key={index} className="rounded-lg border bg-muted/40 p-3 text-sm">
-          {item}
-        </div>
+        <li key={index}>{item}</li>
       ))}
-    </div>
-  );
-}
+    </ul>
+  </div>
+);
 
-export function SprechenModule({ exam, recordings, onRecorded }: ExamModuleProps) {
+const Punkte = ({ items }: { readonly items: readonly string[] }) => (
+  <div className="my-4 grid gap-2 sm:grid-cols-2">
+    {items.map((item, index) => (
+      <div key={index} className="rounded-lg border bg-muted/40 p-3 text-sm">
+        {item}
+      </div>
+    ))}
+  </div>
+);
+
+export const SprechenModule = ({ exam, recordings, onRecorded }: ExamModuleProps) => {
   const { sprechen } = exam;
 
   return (
@@ -76,4 +71,4 @@ export function SprechenModule({ exam, recordings, onRecorded }: ExamModuleProps
       </Teil>
     </>
   );
-}
+};

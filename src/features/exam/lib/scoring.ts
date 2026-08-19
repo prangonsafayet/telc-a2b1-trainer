@@ -23,17 +23,16 @@ export interface ModuleScore {
  * leading article is dropped, and a time written "8" matches "8 Uhr". The real exam marks
  * content, not orthography.
  */
-function normalizeGapAnswer(value: AnswerValue | undefined): string {
-  return String(value ?? '')
+const normalizeGapAnswer = (value: AnswerValue | undefined): string =>
+  String(value ?? '')
     .toLowerCase()
     .trim()
     .replace(/[.,!?;:"'()]/g, '')
     .replace(/^((der|die|das|den|dem|ein|eine|einen|am|um|im) )+/, '')
     .replace(/ uhr$/, '')
     .replace(/\s+/g, ' ');
-}
 
-export function isGapCorrect(gap: NoteGap, value: AnswerValue | undefined): boolean {
+export const isGapCorrect = (gap: NoteGap, value: AnswerValue | undefined): boolean => {
   const given = normalizeGapAnswer(value);
   if (!given) return false;
 
@@ -44,9 +43,9 @@ export function isGapCorrect(gap: NoteGap, value: AnswerValue | undefined): bool
   const digitsOnly = (text: string): string => text.replace(/[^0-9]/g, '');
   const expectedDigits = digitsOnly(gap.answer);
   return expectedDigits !== '' && digitsOnly(given) === expectedDigits;
-}
+};
 
-export function scoreLesen(exam: Exam, answers: AnswerMap): ModuleScore {
+export const scoreLesen = (exam: Exam, answers: AnswerMap): ModuleScore => {
   let correct = 0;
   exam.lesen.teil1.answers.forEach((expected, i) => {
     if (answers[`l1.${String(i)}`] === expected) correct++;
@@ -61,9 +60,9 @@ export function scoreLesen(exam: Exam, answers: AnswerMap): ModuleScore {
     if (answers[`l4.${String(i)}`] === statement.answer) correct++;
   });
   return { correct, of: 20, points: correct * POINTS_PER_ITEM };
-}
+};
 
-export function scoreHoeren(exam: Exam, answers: AnswerMap): ModuleScore {
+export const scoreHoeren = (exam: Exam, answers: AnswerMap): ModuleScore => {
   let correct = 0;
   exam.hoeren.teil1.items.forEach((item, i) => {
     if (answers[`h1.${String(i)}`] === item.answer) correct++;
@@ -81,9 +80,9 @@ export function scoreHoeren(exam: Exam, answers: AnswerMap): ModuleScore {
     if (isGapCorrect(gap, answers[`h5.${String(i)}`])) correct++;
   });
   return { correct, of: 20, points: correct * POINTS_PER_ITEM };
-}
+};
 
-export function scoreSprachbausteine(exam: Exam, answers: AnswerMap): SprachbausteineScore {
+export const scoreSprachbausteine = (exam: Exam, answers: AnswerMap): SprachbausteineScore => {
   let correct = 0;
   exam.sprachbausteine.teil1.gaps.forEach((gap, i) => {
     if (answers[`s1.${String(i)}`] === gap.answer) correct++;
@@ -96,7 +95,7 @@ export function scoreSprachbausteine(exam: Exam, answers: AnswerMap): Sprachbaus
   });
   const of = 17;
   return { correct, of, percent: Math.round((correct / of) * 100) };
-}
+};
 
 export interface FullExamGrade {
   readonly total: number;
@@ -107,16 +106,16 @@ export interface FullExamGrade {
  * The official rule: B1 needs ≥42/60 in three of the four skills and ≥24/60 in the
  * fourth; A2 needs ≥24/60 in three and ≥6/60 in the fourth.
  */
-export function gradeFullExam(scores: SkillScores): FullExamGrade {
+export const gradeFullExam = (scores: SkillScores): FullExamGrade => {
   const values = (['lesen', 'hoeren', 'schreiben', 'sprechen'] as const).map(key => scores[key] ?? 0);
   const total = values.reduce((sum, value) => sum + value, 0);
   const isB1 = values.filter(v => v >= 42).length >= 3 && values.every(v => v >= 24);
   const isA2 = values.filter(v => v >= 24).length >= 3 && values.every(v => v >= 6);
   return { total, result: isB1 ? 'B1' : isA2 ? 'A2' : 'Nicht bestanden' };
-}
+};
 
 /** How many items of a module are still blank — drives the submit warning. */
-export function countUnanswered(exam: Exam, module: ExamModule, answers: AnswerMap): number {
+export const countUnanswered = (exam: Exam, module: ExamModule, answers: AnswerMap): number => {
   const missing = (keys: readonly string[]): number =>
     keys.filter(key => {
       const value = answers[key];
@@ -152,4 +151,4 @@ export function countUnanswered(exam: Exam, module: ExamModule, answers: AnswerM
   }
   /* Schreiben and Sprechen are self-scored; there is nothing to count. */
   return 0;
-}
+};

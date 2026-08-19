@@ -36,7 +36,7 @@ export interface ScheduledLearn {
 }
 
 /** Turns the plan into the sections the Learn page renders. */
-export function useScheduledLearn(): ScheduledLearn {
+export const useScheduledLearn = (): ScheduledLearn => {
   const { db } = useProgress();
   const schedule = useSchedule();
   const done = db.learnDone;
@@ -82,4 +82,4 @@ export function useScheduledLearn(): ScheduledLearn {
       pending
     };
   }, [schedule, done]);
-}
+};

@@ -25,24 +25,22 @@ const STRENGTH_COLORS = [
   'bg-[color:var(--success)]'
 ] as const;
 
-function StrengthMeter({ strength }: { readonly strength: number }) {
-  return (
-    <div className="space-y-1">
-      <div className="flex gap-1" aria-hidden>
-        {[1, 2, 3, 4].map(step => (
-          <div
-            key={step}
-            className={cn(
-              'h-1 flex-1 rounded-full transition-colors',
-              step <= strength ? STRENGTH_COLORS[strength] : 'bg-muted'
-            )}
-          />
-        ))}
-      </div>
-      <p className="text-xs text-muted-foreground">Password strength: {strengthLabel(strength)}</p>
+const StrengthMeter = ({ strength }: { readonly strength: number }) => (
+  <div className="space-y-1">
+    <div className="flex gap-1" aria-hidden>
+      {[1, 2, 3, 4].map(step => (
+        <div
+          key={step}
+          className={cn(
+            'h-1 flex-1 rounded-full transition-colors',
+            step <= strength ? STRENGTH_COLORS[strength] : 'bg-muted'
+          )}
+        />
+      ))}
     </div>
-  );
-}
+    <p className="text-xs text-muted-foreground">Password strength: {strengthLabel(strength)}</p>
+  </div>
+);
 
 interface SignUpNoticeProps {
   readonly feedback: SignUpFeedback;
@@ -54,7 +52,7 @@ interface SignUpNoticeProps {
  * The two outcomes Supabase hides behind a generic success response. Without this the form
  * would tell someone who already has an account to check an inbox nothing was sent to.
  */
-function SignUpNotice({ feedback, busy, onResend }: SignUpNoticeProps) {
+const SignUpNotice = ({ feedback, busy, onResend }: SignUpNoticeProps) => {
   if (feedback.kind === 'already-registered') {
     return (
       <Alert variant="warning">
@@ -90,10 +88,10 @@ function SignUpNotice({ feedback, busy, onResend }: SignUpNoticeProps) {
   }
 
   return null;
-}
+};
 
 /** Email + password sign-in and sign-up, as two tabs over one form. */
-export function PasswordAuthForm() {
+export const PasswordAuthForm = () => {
   const auth = usePasswordAuth();
   const isSignUp = auth.mode === 'signup';
 
@@ -194,4 +192,4 @@ export function PasswordAuthForm() {
       ))}
     </Tabs>
   );
-}
+};

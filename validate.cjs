@@ -18,22 +18,15 @@ const err = (f, msg) => {
   console.error(`  ✗ [${f}] ${msg}`);
 };
 
-function distinct(arr) {
-  return new Set(arr).size === arr.length;
-}
-function inRange(arr, n) {
-  return arr.every(i => Number.isInteger(i) && i >= 0 && i < n);
-}
-function mixedBool(items, key) {
+const distinct = arr => new Set(arr).size === arr.length;
+const inRange = (arr, n) => arr.every(i => Number.isInteger(i) && i >= 0 && i < n);
+const mixedBool = (items, key) => {
   const vals = items.map(i => i[key]);
   return vals.includes(true) && vals.includes(false);
-}
-function isStr(s) {
-  return typeof s === 'string' && s.trim().length > 0;
-}
-function audioOk(a) {
-  return isStr(a) || (Array.isArray(a) && a.length >= 2 && a.every(t => isStr(t.speaker) && isStr(t.text)));
-}
+};
+const isStr = s => typeof s === 'string' && s.trim().length > 0;
+const audioOk = a =>
+  isStr(a) || (Array.isArray(a) && a.length >= 2 && a.every(t => isStr(t.speaker) && isStr(t.text)));
 
 const seenIds = new Set();
 for (const file of files) {

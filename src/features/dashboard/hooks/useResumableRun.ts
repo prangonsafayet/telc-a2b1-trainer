@@ -16,7 +16,7 @@ export interface ResumableRun {
   readonly start: (examId: number, mode: AttemptMode) => void;
 }
 
-export function useResumableRun(): ResumableRun {
+export const useResumableRun = (): ResumableRun => {
   const navigate = useNavigate();
   const [run, setRun] = useState<ExamRun | null>(() => loadRun());
 
@@ -40,4 +40,4 @@ export function useResumableRun(): ResumableRun {
   );
 
   return { run, discard, resume, start };
-}
+};

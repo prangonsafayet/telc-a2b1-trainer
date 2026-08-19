@@ -8,7 +8,7 @@ import { optional } from '@shared/lib/optionalProps.ts';
 export const Slider = forwardRef<
   ComponentRef<typeof SliderPrimitive.Root>,
   ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }, ref) {
+>(({ className, defaultValue, value, min = 0, max = 100, ...props }, ref) => {
   /* One thumb per value; falls back to a two-thumb range when uncontrolled. */
   const thumbs = useMemo(
     () => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),

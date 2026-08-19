@@ -16,7 +16,14 @@ import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '../lib/answers
 import { AudioPlayButton } from './AudioPlayButton.tsx';
 import { type ExamModuleProps } from './moduleProps.ts';
 
-export function HoerenModule({ exam, answers, setAnswer, settings, plays, onConsumePlay }: ExamModuleProps) {
+export const HoerenModule = ({
+  exam,
+  answers,
+  setAnswer,
+  settings,
+  plays,
+  onConsumePlay
+}: ExamModuleProps) => {
   const { hoeren } = exam;
 
   const playButton = (key: string) => (
@@ -138,4 +145,4 @@ export function HoerenModule({ exam, answers, setAnswer, settings, plays, onCons
       </Teil>
     </>
   );
-}
+};

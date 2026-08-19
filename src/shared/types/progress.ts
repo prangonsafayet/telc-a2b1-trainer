@@ -1,4 +1,5 @@
 import { type AttemptMode, type ExamGrade, type ExamModule, type SkillKey } from './exam.ts';
+import { type LevelTrainerDoc } from './trainer.ts';
 
 /**
  * An answer value. Matching/multiple-choice answers are option indices, richtig/falsch
@@ -65,6 +66,12 @@ export interface ProgressDatabase {
   readonly attempts: readonly Attempt[];
   readonly learnDone: LearnDoneMap;
   readonly settings: Settings;
+  /**
+   * The B1 and B2 trainer documents. Optional so documents written by older builds
+   * stay readable; `normalizeDatabase` fills them in.
+   */
+  readonly b1?: LevelTrainerDoc;
+  readonly b2?: LevelTrainerDoc;
   /** ISO timestamp of the last local change; drives sync conflict resolution. */
   readonly _updatedAt?: string;
 }

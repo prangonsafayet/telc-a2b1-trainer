@@ -7,6 +7,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import checkFile from 'eslint-plugin-check-file';
 import importX from 'eslint-plugin-import-x';
+import preferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import prettier from 'eslint-config-prettier';
 
@@ -264,6 +265,14 @@ export default tseslint.config(
     rules: { '@typescript-eslint/naming-convention': 'off' }
   },
   {
+    /* The shadcn CLI writes named function expressions inside `forwardRef`; the arrow
+       rule strips the inline name, so the display-name heuristic can no longer infer
+       one. Display names only matter in devtools, and these files are vendored. */
+    name: 'vendored-ui-display-names',
+    files: ['src/shared/ui/*.tsx'],
+    rules: { 'react/display-name': 'off' }
+  },
+  {
     /* Barrels and provider modules intentionally export types, hooks and constants
        alongside components; the fast-refresh heuristic cannot know that. */
     name: 'module-surfaces',
@@ -305,6 +314,36 @@ export default tseslint.config(
     name: 'commonjs-tooling',
     files: ['**/*.cjs'],
     languageOptions: { sourceType: 'commonjs', globals: { ...globals.node } }
+  },
+
+  {
+    /* Every function is an arrow: declarations and `function` expressions are rejected
+       and autofixed to `const fn = () => …`. Class methods are exempt — React lifecycle
+       methods cannot be converted in place, and a method is not a free function. Ambient
+       `.d.ts` declarations are excluded because `declare function` has no arrow form. */
+    name: 'arrow-functions-only',
+    files: [
+      'src/**/*.{ts,tsx}',
+      'tests/**/*.{ts,tsx}',
+      'e2e/**/*.ts',
+      'scripts/**/*.{js,mjs,ts}',
+      '*.{js,mjs,cjs,ts}'
+    ],
+    ignores: ['**/*.d.ts'],
+    plugins: { 'prefer-arrow-functions': preferArrowFunctions },
+    rules: {
+      'prefer-arrow-callback': 'error',
+      'func-style': ['error', 'expression', { allowArrowFunctions: true }],
+      'prefer-arrow-functions/prefer-arrow-functions': [
+        'error',
+        {
+          allowNamedFunctions: false,
+          classPropertiesAllowed: false,
+          disallowPrototype: true,
+          returnStyle: 'unchanged'
+        }
+      ]
+    }
   },
 
   prettier

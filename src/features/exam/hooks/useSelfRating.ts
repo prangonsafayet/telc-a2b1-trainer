@@ -13,7 +13,7 @@ export interface SelfRatingState {
   readonly setValue: (index: number, value: number) => void;
 }
 
-export function useSelfRating(module: 'schreiben' | 'sprechen'): SelfRatingState {
+export const useSelfRating = (module: 'schreiben' | 'sprechen'): SelfRatingState => {
   const criteria = RATING_CRITERIA[module];
   const [values, setValues] = useState<readonly number[]>(() => criteria.map(() => DEFAULT_SCORE));
 
@@ -27,4 +27,4 @@ export function useSelfRating(module: 'schreiben' | 'sprechen'): SelfRatingState
   );
 
   return { criteria, values, total, setValue };
-}
+};

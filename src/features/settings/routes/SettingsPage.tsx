@@ -35,24 +35,22 @@ interface FieldProps {
   readonly children: ReactNode;
 }
 
-function Field({ label, htmlFor, hint, children }: FieldProps) {
-  return (
-    <div className="space-y-1.5">
-      {htmlFor === undefined ? (
-        <span className="text-sm font-medium leading-none">{label}</span>
-      ) : (
-        <Label htmlFor={htmlFor}>{label}</Label>
-      )}
-      {children}
-      {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
-    </div>
-  );
-}
+const Field = ({ label, htmlFor, hint, children }: FieldProps) => (
+  <div className="space-y-1.5">
+    {htmlFor === undefined ? (
+      <span className="text-sm font-medium leading-none">{label}</span>
+    ) : (
+      <Label htmlFor={htmlFor}>{label}</Label>
+    )}
+    {children}
+    {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
+  </div>
+);
 
 /** "Auto" is stored as an empty voice name; Radix Select needs a non-empty value. */
 const AUTO_VOICE = 'auto';
 
-export function SettingsPage() {
+export const SettingsPage = () => {
   const { settings, voices, setSetting, testVoice, deleteAllProgress } = useExamSettings();
 
   return (
@@ -180,4 +178,4 @@ export function SettingsPage() {
       </div>
     </>
   );
-}
+};

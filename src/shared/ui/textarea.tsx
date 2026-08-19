@@ -4,10 +4,7 @@ import { cn } from '@shared/lib/cn.ts';
 
 export type TextareaProps = ComponentPropsWithoutRef<'textarea'>;
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { className, ...props },
-  ref
-) {
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
   return (
     <textarea
       ref={ref}
