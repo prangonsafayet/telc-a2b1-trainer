@@ -1,18 +1,22 @@
 import { PlayCircle, RotateCcw, Trophy } from 'lucide-react';
 
-import { Badge } from '@/shared/components/ui/badge.tsx';
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
+import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@/shared/config/exam.ts';
+import { difficultyTone, gradeTone } from '@/shared/lib/examBadges.ts';
+import { type AttemptMode, type Settings } from '@/shared/types';
 import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/shared/components/ui/select.tsx';
-import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@/shared/config/exam.ts';
-import { difficultyTone, gradeTone } from '@/shared/lib/examBadges.ts';
-import { type AttemptMode, type Settings } from '@/shared/types';
+} from '@/shared/ui';
 
 import { type ExamCardStats } from '../hooks/useDashboardStats.ts';
 

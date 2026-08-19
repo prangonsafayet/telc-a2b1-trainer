@@ -1,11 +1,18 @@
 import { Eye, EyeOff, KeyRound, Loader2, MailCheck, RotateCcw, TriangleAlert, UserPlus } from 'lucide-react';
 
-import { Alert, AlertDescription, AlertTitle } from '@/shared/components/ui/alert.tsx';
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Input } from '@/shared/components/ui/input.tsx';
-import { Label } from '@/shared/components/ui/label.tsx';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs.tsx';
 import { cn } from '@/shared/lib/cn.ts';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Input,
+  Label,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
+} from '@/shared/ui';
 
 import { usePasswordAuth, type AuthMode, type SignUpFeedback } from '../hooks/usePasswordAuth.ts';
 import { MIN_PASSWORD_LENGTH, strengthLabel } from '../lib/passwordPolicy.ts';

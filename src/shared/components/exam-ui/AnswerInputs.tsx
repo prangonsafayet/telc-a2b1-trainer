@@ -1,13 +1,14 @@
-import { Label } from '@/shared/components/ui/label.tsx';
-import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group.tsx';
+import { LETTERS } from '@/shared/lib/format.ts';
 import {
+  Label,
+  RadioGroup,
+  RadioGroupItem,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/shared/components/ui/select.tsx';
-import { LETTERS } from '@/shared/lib/format.ts';
+} from '@/shared/ui';
 
 interface RichtigFalschProps {
   /** Item id, e.g. `l4.2`; used to tie labels to inputs. */

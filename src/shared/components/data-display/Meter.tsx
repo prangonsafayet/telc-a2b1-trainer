@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { Progress } from '@/shared/components/ui/progress.tsx';
 import { cn } from '@/shared/lib/cn.ts';
+import { Progress } from '@/shared/ui';
 
 interface MeterProps {
   readonly label: string;

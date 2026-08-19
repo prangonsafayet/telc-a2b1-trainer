@@ -9,7 +9,7 @@ import {
   RichtigFalsch,
   Teil
 } from '@/shared/components';
-import { Input } from '@/shared/components/ui/input.tsx';
+import { Input } from '@/shared/ui';
 
 import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '../lib/answers.ts';
 

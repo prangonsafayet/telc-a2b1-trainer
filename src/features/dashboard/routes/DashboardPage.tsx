@@ -2,10 +2,10 @@ import { CalendarClock, ClipboardCheck, Trophy } from 'lucide-react';
 
 import { Meter, PageTitle, SectionTitle } from '@/shared/components';
 import { ScoreHistoryChart } from '@/shared/components/data-display/ScoreHistoryChart.tsx';
-import { Card, CardContent } from '@/shared/components/ui/card.tsx';
 import { MODULE_META } from '@/shared/config/exam.ts';
 import { useCountUp } from '@/shared/hooks/useCountUp.ts';
 import { fmtDate } from '@/shared/lib/format.ts';
+import { Card, CardContent } from '@/shared/ui';
 
 import { useAccountIdentity } from '@/features/auth';
 import { useProgress } from '@/features/progress';

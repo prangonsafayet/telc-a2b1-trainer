@@ -4,10 +4,10 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import { findExamById } from '@/content/exams';
 
-import { Button } from '@/shared/components/ui/button.tsx';
 import { EXAM_MODULES, MODULE_META } from '@/shared/config/exam.ts';
 import { useConfirm } from '@/shared/providers/useConfirm.ts';
 import { type AttemptMode, type Exam } from '@/shared/types';
+import { Button } from '@/shared/ui';
 
 import { useProgress } from '@/features/progress';
 

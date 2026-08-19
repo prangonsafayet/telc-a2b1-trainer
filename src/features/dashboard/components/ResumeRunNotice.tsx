@@ -1,8 +1,7 @@
 import { PlayCircle } from 'lucide-react';
 
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
 import { MODULE_META } from '@/shared/config/exam.ts';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui';
 
 import { type ExamRun } from '@/features/exam';
 

@@ -11,17 +11,19 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar.tsx';
-import { Button } from '@/shared/components/ui/button.tsx';
+import { cn } from '@/shared/lib/cn.ts';
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/shared/components/ui/dropdown-menu.tsx';
-import { cn } from '@/shared/lib/cn.ts';
+} from '@/shared/ui';
 
 import { useAccountIdentity } from '../hooks/useAccountIdentity.ts';
 import { useSync } from '../hooks/useSync.ts';

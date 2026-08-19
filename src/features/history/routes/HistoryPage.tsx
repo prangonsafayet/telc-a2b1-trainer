@@ -2,8 +2,7 @@ import { Download, Upload } from 'lucide-react';
 
 import { PageTitle } from '@/shared/components';
 import { ScoreHistoryChart } from '@/shared/components/data-display/ScoreHistoryChart.tsx';
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Card, CardContent } from '@/shared/components/ui/card.tsx';
+import { Button, Card, CardContent } from '@/shared/ui';
 
 import { useProgress } from '@/features/progress';
 

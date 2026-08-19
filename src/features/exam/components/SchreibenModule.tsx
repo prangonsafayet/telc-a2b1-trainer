@@ -1,6 +1,6 @@
 import { Multiline, Teil } from '@/shared/components';
-import { Textarea } from '@/shared/components/ui/textarea.tsx';
 import { cn } from '@/shared/lib/cn.ts';
+import { Textarea } from '@/shared/ui';
 
 import { textAnswer, WRITING_ANSWER_KEY } from '../lib/answers.ts';
 import { describeWordCount } from '../lib/wordCount.ts';

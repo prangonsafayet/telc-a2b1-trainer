@@ -1,8 +1,7 @@
 import { LogIn, TriangleAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { Alert, AlertDescription, AlertTitle } from '@/shared/components/ui/alert.tsx';
-import { Button } from '@/shared/components/ui/button.tsx';
+import { Alert, AlertDescription, AlertTitle, Button } from '@/shared/ui';
 
 interface LocalOnlyNoticeProps {
   readonly attemptCount: number;

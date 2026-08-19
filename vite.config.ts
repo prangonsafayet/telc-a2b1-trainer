@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -85,10 +86,20 @@ function supabaseEnvCheck(env: Record<string, string>): Plugin {
   };
 }
 
+/** Single source of truth for the version: package.json, bumped by the release workflow. */
+const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
+  version: string;
+};
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     plugins: [react(), tailwindcss(), supabaseEnvCheck(env), siteUrlHtml(env)],
+    define: {
+      __APP_VERSION__: JSON.stringify(version),
+      /* Netlify exposes the deployed commit; empty locally. */
+      __APP_COMMIT__: JSON.stringify((env.COMMIT_REF ?? '').slice(0, 7))
+    },
     resolve: {
       alias: { '@': path.resolve(import.meta.dirname, './src') }
     },

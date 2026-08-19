@@ -1,8 +1,8 @@
-import { Progress } from '@/shared/components/ui/progress.tsx';
 import { MODULE_META } from '@/shared/config/exam.ts';
 import { cn } from '@/shared/lib/cn.ts';
 import { fmtClock } from '@/shared/lib/format.ts';
 import { type Exam, type ExamModule } from '@/shared/types';
+import { Progress } from '@/shared/ui';
 
 interface ModuleToolbarProps {
   readonly exam: Exam;

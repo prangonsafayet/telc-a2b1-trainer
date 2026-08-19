@@ -3,8 +3,8 @@ import { type ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ErrorBoundary } from '@/shared/components';
-import { Toaster } from '@/shared/components/ui/sonner.tsx';
 import { ConfirmProvider } from '@/shared/providers/ConfirmProvider.tsx';
+import { Toaster } from '@/shared/ui';
 
 import { ProgressProvider } from '@/features/progress';
 

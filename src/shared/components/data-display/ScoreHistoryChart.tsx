@@ -1,7 +1,7 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
 import { fmtDate } from '@/shared/lib/format.ts';
 import { buildScoreHistory, CHART_HEIGHT, GRIDLINES } from '@/shared/lib/scoreHistory.ts';
 import { type Attempt } from '@/shared/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui';
 
 interface ScoreHistoryChartProps {
   readonly attempts: readonly Attempt[];

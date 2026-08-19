@@ -116,27 +116,55 @@ most easily:
 - Answer-map access without the `features/exam/lib/answers.ts` accessors.
 - Anything touching passwords client-side.
 - Authored HTML rendered as text, or content text injected as HTML.
+- Primitives imported from `@/shared/ui/<file>` instead of `@/shared/ui`.
 
-Squash-merge so `main` reads as one commit per change, and delete the branch.
+Every pull request also gets a **Netlify deploy preview**, so a visual change can be
+clicked rather than imagined.
 
-## 8. Release
+`main` is protected. A PR cannot merge until all four CI gates are green, the branch
+is up to date with `main`, and every review conversation is resolved. Squash-merge so
+`main` reads as one commit per change, then delete the branch.
 
-Releases are tag-driven. Tag `main` once it is green:
+## 8. The pipeline
 
-```bash
-git switch main && git pull
-git tag -a v2.1.0 -m "Password sign-up and account-exists handling"
-git push origin v2.1.0
-```
+Three systems, one responsibility each, deliberately not overlapping:
 
-`.github/workflows/release.yml` then re-runs the full suite plus Playwright, builds
-the site, and publishes a GitHub release with notes generated from the merged PR
-labels, attaching the built site as a tarball. A tag that does not pass does not
-become a release.
+| Stage                       | Trigger                        | What it does                                                                            | What it does **not** do       |
+| --------------------------- | ------------------------------ | --------------------------------------------------------------------------------------- | ----------------------------- |
+| **CI** (`ci.yml`)           | every PR, every push to `main` | Four independent gates: static analysis, unit tests, end-to-end tests, production build | Never deploys, never versions |
+| **Netlify**                 | push to `main`; PR (preview)   | Builds and deploys the site                                                             | Never runs the test suite     |
+| **Release** (`release.yml`) | manual dispatch                | Verifies `main`, bumps the version, tags, publishes notes and a build tarball           | Never deploys directly        |
 
-Versioning: `MAJOR.MINOR.PATCH`, where a change to exam timing, scoring or the number
-of audio plays is at least a MINOR — past attempts stop being comparable, and that
-deserves to be visible in the version.
+The four CI gates are separate jobs on purpose: they run in parallel, and a failure
+names itself — "End-to-end tests" failing tells you something different from "Static
+analysis" failing.
+
+The release workflow re-runs the full suite even though CI already passed on the merge.
+That is the one intentional overlap: a tag is a promise that the commit works, and it
+costs a few minutes to keep that promise honest.
+
+## 9. Versioning and releases
+
+Semantic versioning, with the version living in `package.json` as the single source of
+truth. It is injected into the bundle at build time and shown in the app footer
+alongside the deployed commit, so "which build am I looking at?" is never a guess.
+
+To release, run the **Release** workflow from the Actions tab and pick a bump:
+
+| Bump    | When                                                                                                                                            |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `patch` | Bug fixes, copy, dependencies, internal refactors                                                                                               |
+| `minor` | New capability, or **any change to exam timing, scoring or audio plays** — past attempts stop being comparable, and that deserves to be visible |
+| `major` | A breaking change to stored progress or the persisted answer format                                                                             |
+
+The workflow verifies `main`, runs `npm version <bump>`, commits `Release vX.Y.Z`, tags
+it, pushes, and publishes a GitHub release with notes generated from the merged PR
+labels. Pushing that commit to `main` is what triggers the Netlify deploy — the release
+never deploys by itself. There is a `dry-run` input that verifies and prints the next
+version without pushing.
+
+Do not bump the version by hand, and do not tag manually: the workflow is what keeps
+the tag, the release notes, the version in the footer and the deployed build in step.
 
 ## Naming
 
@@ -193,13 +221,3 @@ happens, regenerate it:
 ```bash
 rm -rf node_modules package-lock.json && npm install
 ```
-
-## 9. Deploy
-
-Netlify builds from `main`. Before or after a release, walk the `ship` skill or
-`.github`-adjacent notes:
-
-- The build log must say `Supabase cloud sync will be enabled (…)`. `VITE_*` values
-  are inlined at build time, so changing an environment variable requires a **new
-  deploy** — setting it in the dashboard alone changes nothing.
-- Supabase redirect URLs must list every origin you sign in from.

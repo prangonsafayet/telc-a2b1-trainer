@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 
 import { type LucideIcon } from 'lucide-react';
 
-import { Card, CardContent } from '@/shared/components/ui/card.tsx';
+import { Card, CardContent } from '@/shared/ui';
 
 interface StatTileProps {
   readonly label: string;

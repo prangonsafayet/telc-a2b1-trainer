@@ -2,8 +2,7 @@ import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 import { AlertTriangle, Home, RotateCcw } from 'lucide-react';
 
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui';
 
 interface ErrorBoundaryProps {
   readonly children: ReactNode;

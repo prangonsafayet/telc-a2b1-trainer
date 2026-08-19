@@ -41,6 +41,27 @@ const NO_CROSS_FEATURE_INTERNALS = {
   }
 };
 
+/* The design system is consumed through its barrel, never file by file. */
+const UI_THROUGH_BARREL = {
+  name: 'ui-through-barrel',
+  files: ['src/**/*.{ts,tsx}'],
+  ignores: ['src/shared/ui/**'],
+  rules: {
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@/shared/ui/*', '**/shared/ui/*'],
+            message:
+              "Import primitives from '@/shared/ui', not from the file directly. Those files are written by the shadcn CLI and treated as vendored; the barrel is the stable surface."
+          }
+        ]
+      }
+    ]
+  }
+};
+
 const SHARED_STAYS_GENERIC = {
   name: 'shared-stays-generic',
   files: ['src/shared/**/*.{ts,tsx}'],
@@ -135,7 +156,7 @@ export default tseslint.config(
       'check-file/filename-naming-convention': [
         'error',
         {
-          'src/**/components/!(ui)/**/*.tsx': 'PASCAL_CASE',
+          'src/**/components/**/*.tsx': 'PASCAL_CASE',
           'src/**/components/*.tsx': 'PASCAL_CASE',
           'src/**/routes/**/*.tsx': 'PASCAL_CASE',
           'src/**/hooks/**/*.ts': 'use+([A-Z])*([a-zA-Z0-9])',
@@ -232,9 +253,17 @@ export default tseslint.config(
   },
 
   NO_CROSS_FEATURE_INTERNALS,
+  UI_THROUGH_BARREL,
   SHARED_STAYS_GENERIC,
   CONTENT_IS_DATA_ONLY,
 
+  {
+    /* Ambient declarations for Vite's build-time defines use the conventional
+       __NAME__ form, which the naming rule would otherwise reject. */
+    name: 'ambient-declarations',
+    files: ['src/**/*.d.ts'],
+    rules: { '@typescript-eslint/naming-convention': 'off' }
+  },
   {
     /* Exam data files are enormous literals; naming rules there are pure noise. */
     name: 'content-data',
@@ -248,7 +277,8 @@ export default tseslint.config(
     files: [
       'src/**/index.ts',
       'src/**/providers/*.tsx',
-      'src/shared/components/ui/*.tsx',
+      'src/shared/ui/*.tsx',
+      'src/shared/ui/index.ts',
       'src/shared/components/exam-ui/*.tsx'
     ],
     rules: { 'react-refresh/only-export-components': 'off' }

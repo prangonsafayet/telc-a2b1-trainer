@@ -4,12 +4,13 @@ import { CloudOff } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import { ErrorBoundary, Logo, ThemeToggle } from '@/shared/components';
-import { Badge } from '@/shared/components/ui/badge.tsx';
 import { stopSpeech } from '@/shared/lib/speech.ts';
+import { Badge } from '@/shared/ui';
 
 import { AccountMenu, SyncContext, useCloudSync } from '@/features/auth';
 import { useProgress } from '@/features/progress';
 
+import { AppFooter } from './AppFooter.tsx';
 import { ExamCountdownBadge } from './ExamCountdownBadge.tsx';
 import { MainNav } from './MainNav.tsx';
 import { useHeaderHeight } from './useHeaderHeight.ts';
@@ -72,6 +73,8 @@ export function AppLayout() {
             </div>
           </ErrorBoundary>
         </main>
+
+        <AppFooter />
       </div>
     </SyncContext.Provider>
   );

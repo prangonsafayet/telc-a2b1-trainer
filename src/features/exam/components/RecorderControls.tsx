@@ -1,6 +1,6 @@
 import { Circle, Mic, Square } from 'lucide-react';
 
-import { Button } from '@/shared/components/ui/button.tsx';
+import { Button } from '@/shared/ui';
 
 import { type SpeakingPart } from '../hooks/useExamRun.ts';
 import { useRecorder } from '../hooks/useRecorder.ts';

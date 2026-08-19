@@ -3,17 +3,21 @@ import { type ReactNode } from 'react';
 import { Trash2, Volume2 } from 'lucide-react';
 
 import { PageTitle } from '@/shared/components';
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
-import { Label } from '@/shared/components/ui/label.tsx';
 import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/shared/components/ui/select.tsx';
-import { Separator } from '@/shared/components/ui/separator.tsx';
+  SelectValue,
+  Separator
+} from '@/shared/ui';
 
 import { SyncPanel } from '@/features/auth';
 

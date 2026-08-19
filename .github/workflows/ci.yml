@@ -1,3 +1,5 @@
+# Verification only. Runs on every pull request and on every push to main.
+# It never deploys and never releases — Netlify deploys, release.yml versions.
 name: CI
 
 on:
@@ -10,9 +12,12 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
-  verify:
-    name: Typecheck, lint, unit
+  static:
+    name: Static analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,11 +29,22 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run format:check
+
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
       - run: npm run validate
       - run: npm run test:unit
 
   e2e:
-    name: Playwright
+    name: End-to-end tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +72,6 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      # No secrets in CI: the build must succeed with cloud sync disabled, which is also
-      # what a fork or a first-time contributor gets.
+      # Deliberately no secrets: this is what a fork or a first-time contributor gets,
+      # and it catches anything that silently depends on a local .env.
       - run: npm run build

@@ -1,10 +1,5 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger
-} from '@/shared/components/ui/accordion.tsx';
 import { type AudioScript } from '@/shared/types';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui';
 
 interface TranscriptProps {
   readonly audio: AudioScript;

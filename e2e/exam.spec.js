@@ -13,7 +13,8 @@ test('an exam survives a mid-module reload with its clock and answers', async ({
   await page.getByRole('button', { name: /^Start Lesen/ }).click();
   await expect(page.getByText('Teil 1 — Anzeigen zuordnen')).toBeVisible();
 
-  const timer = page.locator('span.font-mono');
+  /* By role, not by class — the footer's version badge is also monospaced. */
+  const timer = page.getByRole('timer');
   await expect(timer).toHaveText(/4[45]:\d\d/);
 
   /* Answer a richtig/falsch item. */

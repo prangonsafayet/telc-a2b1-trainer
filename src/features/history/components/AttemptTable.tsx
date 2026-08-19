@@ -1,16 +1,7 @@
 import { Link } from 'react-router-dom';
 
-import { Badge } from '@/shared/components/ui/badge.tsx';
-import { Button } from '@/shared/components/ui/button.tsx';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/shared/components/ui/table.tsx';
 import { gradeTone } from '@/shared/lib/examBadges.ts';
+import { Badge, Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui';
 
 import { ATTEMPT_COLUMNS, type AttemptRow } from '../lib/attemptRows.ts';
 

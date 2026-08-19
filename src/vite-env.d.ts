@@ -12,3 +12,8 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/** Injected by Vite at build time from package.json — see `define` in vite.config.ts. */
+declare const __APP_VERSION__: string;
+/** Short commit SHA of the deployed build; empty in local development. */
+declare const __APP_COMMIT__: string;

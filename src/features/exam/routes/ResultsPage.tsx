@@ -2,13 +2,12 @@ import { Home, ListChecks, RotateCcw } from 'lucide-react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
 import { Meter } from '@/shared/components';
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Card, CardContent, CardDescription, CardHeader } from '@/shared/components/ui/card.tsx';
 import { MODULE_META, moduleMinutes } from '@/shared/config/exam.ts';
 import { useCountUp } from '@/shared/hooks/useCountUp.ts';
 import { cn } from '@/shared/lib/cn.ts';
 import { fmtClock } from '@/shared/lib/format.ts';
 import { type ExamModule } from '@/shared/types';
+import { Button, Card, CardContent, CardDescription, CardHeader } from '@/shared/ui';
 
 import { useProgress } from '@/features/progress';
 

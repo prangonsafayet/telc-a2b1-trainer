@@ -1,14 +1,8 @@
 import { Fragment } from 'react';
 
 import { MultipleChoice, QuestionItem, QuestionText, Teil } from '@/shared/components';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/shared/components/ui/select.tsx';
 import { LETTERS } from '@/shared/lib/format.ts';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui';
 
 import { itemKey, numberAnswer } from '../lib/answers.ts';
 import { splitGapText } from '../lib/gapText.ts';

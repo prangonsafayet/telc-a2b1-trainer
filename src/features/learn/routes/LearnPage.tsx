@@ -5,10 +5,11 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger
-} from '@/shared/components/ui/accordion.tsx';
-import { Card, CardContent } from '@/shared/components/ui/card.tsx';
-import { Progress } from '@/shared/components/ui/progress.tsx';
+  AccordionTrigger,
+  Card,
+  CardContent,
+  Progress
+} from '@/shared/ui';
 
 import { LearnDayCard } from '../components/LearnDayCard.tsx';
 import { useLearnPlan } from '../hooks/useLearnPlan.ts';

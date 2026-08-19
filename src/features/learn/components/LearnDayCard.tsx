@@ -1,11 +1,8 @@
 import { Sparkles } from 'lucide-react';
 
-import { Badge } from '@/shared/components/ui/badge.tsx';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
-import { Checkbox } from '@/shared/components/ui/checkbox.tsx';
-import { Label } from '@/shared/components/ui/label.tsx';
 import { cn } from '@/shared/lib/cn.ts';
 import { type Cheatsheet, type LearnDay } from '@/shared/types';
+import { Badge, Card, CardContent, CardHeader, CardTitle, Checkbox, Label } from '@/shared/ui';
 
 import { learnTaskKey } from '../lib/planProgress.ts';
 

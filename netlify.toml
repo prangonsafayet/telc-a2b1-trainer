@@ -4,7 +4,14 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "24"
+
+# Deploy previews for every pull request, so a reviewer can click the change.
+[context.deploy-preview]
+  command = "npm run build"
+
+[context.branch-deploy]
+  command = "npm run build"
 
 # Every deep link (e.g. /review/1723) must fall back to the SPA shell,
 # otherwise a page refresh returns 404.

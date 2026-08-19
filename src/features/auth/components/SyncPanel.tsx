@@ -1,8 +1,6 @@
 import { Check, Cloud, CloudOff, Loader2, LockKeyhole, LogOut, RefreshCw, X } from 'lucide-react';
 
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
-import { Separator } from '@/shared/components/ui/separator.tsx';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Separator } from '@/shared/ui';
 
 import { useSync } from '../hooks/useSync.ts';
 import { providerLabel } from '../lib/oauthProviders.ts';
