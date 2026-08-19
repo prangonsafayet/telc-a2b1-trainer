@@ -152,8 +152,8 @@ turns "why is sync off?" into a five-second answer.
   reading and writing subtests rather than forming its own 60-point skill.
 - `npm run validate` checks the ten data files. [`CLAUDE.md`](CLAUDE.md) documents
   the architecture and conventions, [`CONTRIBUTING.md`](CONTRIBUTING.md) the
-  issue → branch → PR → release workflow, and [`SECURITY.md`](SECURITY.md) how auth
-  and data are protected.
+  issue → branch → PR → release workflow, [`SECURITY.md`](SECURITY.md) how auth and data
+  are protected, and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) how to behave here.
 
 ---
 

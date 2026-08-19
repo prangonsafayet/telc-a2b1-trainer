@@ -1,6 +1,8 @@
 # Development workflow
 
-The loop for any change, from idea to released code.
+The loop for any change, from idea to released code. Participation is covered by the
+[Code of Conduct](CODE_OF_CONDUCT.md), and security issues go through
+[SECURITY.md](SECURITY.md) rather than a public issue.
 
 ## 1. Start from an issue
 
