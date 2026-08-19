@@ -1,4 +1,4 @@
-/** The 14-day study plan authored in `src/content/learn.ts`. */
+/** The 28-day study plan authored in `src/content/learn.ts`. */
 
 export interface LearnAiPrompt {
   /** Short title, e.g. "Error debrief". */
@@ -9,6 +9,12 @@ export interface LearnAiPrompt {
 
 export interface LearnDay {
   readonly day: number;
+  /**
+   * 'core' days (1–14) carry the essential curriculum and are always scheduled,
+   * compressed if necessary. 'extension' days (15–28) deepen to full B1 and are
+   * only scheduled when the plan has room for them.
+   */
+  readonly tier: 'core' | 'extension';
   readonly title: string;
   readonly focus: string;
   readonly tasks: readonly string[];

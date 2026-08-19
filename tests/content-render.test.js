@@ -28,6 +28,52 @@ check('learn intro bolding survived as real markup', !!container.querySelector('
 await unmount();
 
 check('LEARN.intro still contains the HTML this relies on', /<b>/.test(LEARN.intro));
+
+/* The curriculum is 28 authored days in two tiers, and the schedule engine trusts both
+   the numbering and the tier split. Content drift here silently reshapes every plan. */
+check('LEARN has 28 days', LEARN.days.length === 28, `${LEARN.days.length} days`);
+check(
+  'day numbers run 1–28 with no gaps',
+  LEARN.days.every((day, index) => day.day === index + 1)
+);
+const tiers = LEARN.days.reduce((acc, day) => ({ ...acc, [day.tier]: (acc[day.tier] ?? 0) + 1 }), {});
+check(
+  'the tiers are 14 core + 14 extension',
+  tiers.core === 14 && tiers.extension === 14,
+  JSON.stringify(tiers)
+);
+check(
+  'core days come first',
+  LEARN.days.every(day => (day.day <= 14 ? day.tier === 'core' : day.tier === 'extension'))
+);
+check(
+  'every day has at least 3 tasks',
+  LEARN.days.every(day => day.tasks.length >= 3)
+);
+check(
+  'every day has at least one AI prompt',
+  LEARN.days.every(day => day.ai.length >= 1)
+);
+check(
+  'every AI prompt has a title and a body',
+  LEARN.days.every(day => day.ai.every(prompt => prompt.t.length > 0 && prompt.p.length > 40))
+);
+const unknownCheats = [
+  ...new Set(LEARN.days.flatMap(day => day.cheats).filter(key => !(key in LEARN.cheatsheets)))
+];
+check('every cheats key exists as a cheatsheet', unknownCheats.length === 0, unknownCheats.join());
+check(
+  'the four B1 cheatsheets were added',
+  ['nebensaetze', 'passivkii', 'verbpraep', 'formal'].every(key => key in LEARN.cheatsheets)
+);
+check(
+  'every cheatsheet has a title and HTML',
+  Object.values(LEARN.cheatsheets).every(sheet => sheet.title.length > 0 && /<\w/.test(sheet.html))
+);
+const orphans = Object.keys(LEARN.cheatsheets).filter(
+  key => !LEARN.days.some(day => day.cheats.includes(key))
+);
+check('no cheatsheet is unreachable from the plan', orphans.length === 0, orphans.join());
 check('GUIDE_HTML is non-empty HTML', GUIDE_HTML.length > 1000 && /<h1>/.test(GUIDE_HTML));
 
 const failed = checks.filter(c => !c).length;
