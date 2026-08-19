@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(npm run dev:*)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:fix)",
+      "Bash(npm run format)",
+      "Bash(npm run format:check)",
+      "Bash(npm run validate)",
+      "Bash(npm test)",
+      "Bash(npm run test:unit)",
+      "Bash(npm run test:routes)",
+      "Bash(npm run test:content)",
+      "Bash(npm run test:auth)",
+      "Bash(npm run test:date)",
+      "Bash(npm run test:flow)",
+      "Bash(npm run test:e2e)",
+      "Bash(npm run test:all)",
+      "Bash(npm run images)",
+      "Bash(npx tsc:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx prettier:*)",
+      "Bash(npx vite build)",
+      "Bash(npx playwright test:*)",
+      "Bash(node validate.cjs:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git check-ignore:*)"
+    ]
+  }
+}
