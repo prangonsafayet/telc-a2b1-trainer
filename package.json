@@ -1,9 +1,9 @@
 {
   "name": "telc-a2b1-trainer",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
-  "description": "telc Deutsch A2\u00b7B1 mock exam trainer \u2014 15 full model tests and an adaptive study plan",
+  "description": "telc Deutsch A2·B1 mock exam trainer — 15 full model tests and an adaptive study plan",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
