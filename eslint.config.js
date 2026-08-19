@@ -277,10 +277,17 @@ export default tseslint.config(
     rules: { 'react-refresh/only-export-components': 'off' }
   },
 
-  /* Tooling, tests and E2E specs run in Node and are not part of the app tsconfig. */
+  /* Tooling, tests and E2E specs run in Node and are not part of the app tsconfig.
+     Extensions are listed explicitly: a directory pattern that names no extension counts
+     as universal and opts none in, so the .ts suites under tests/unit went unlinted. */
   {
     name: 'node-tooling',
-    files: ['*.{js,cjs,mjs,ts}', 'scripts/**/*', 'tests/**/*', 'e2e/**/*'],
+    files: [
+      '*.{js,cjs,mjs,ts}',
+      'scripts/**/*.{js,cjs,mjs,ts}',
+      'tests/**/*.{js,cjs,mjs,ts}',
+      'e2e/**/*.{js,cjs,mjs,ts}'
+    ],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',

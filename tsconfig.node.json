@@ -8,6 +8,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
+    /* vitest.config.ts imports the alias map from vite.config.ts by its real filename,
+       the way the app source does. Safe here: nothing in this project is emitted. */
+    "allowImportingTsExtensions": true,
 
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
@@ -24,5 +27,5 @@
     "noUnusedParameters": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "playwright.config.ts", "eslint.config.js"]
+  "include": ["vite.config.ts", "vitest.config.ts", "playwright.config.ts", "eslint.config.js"]
 }

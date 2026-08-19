@@ -86,6 +86,21 @@ function supabaseEnvCheck(env: Record<string, string>): Plugin {
   };
 }
 
+/**
+ * One alias per layer, so an import statement shows which layer it crosses. There is
+ * deliberately no catch-all '@': two spellings of the same path would let a boundary
+ * violation slip past the no-restricted-imports patterns in eslint.config.js.
+ *
+ * Exported because vitest.config.ts resolves the same layers, and two copies of this map
+ * would drift.
+ */
+export const LAYER_ALIASES = {
+  '@app': path.resolve(import.meta.dirname, './src/app'),
+  '@features': path.resolve(import.meta.dirname, './src/features'),
+  '@shared': path.resolve(import.meta.dirname, './src/shared'),
+  '@content': path.resolve(import.meta.dirname, './src/content')
+};
+
 /** Single source of truth for the version: package.json, bumped by the release workflow. */
 const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
   version: string;
@@ -100,17 +115,7 @@ export default defineConfig(({ mode }) => {
       /* Netlify exposes the deployed commit; empty locally. */
       __APP_COMMIT__: JSON.stringify((env.COMMIT_REF ?? '').slice(0, 7))
     },
-    resolve: {
-      /* One alias per layer, so an import statement shows which layer it crosses. There is
-         deliberately no catch-all '@': two spellings of the same path would let a boundary
-         violation slip past the no-restricted-imports patterns in eslint.config.js. */
-      alias: {
-        '@app': path.resolve(import.meta.dirname, './src/app'),
-        '@features': path.resolve(import.meta.dirname, './src/features'),
-        '@shared': path.resolve(import.meta.dirname, './src/shared'),
-        '@content': path.resolve(import.meta.dirname, './src/content')
-      }
-    },
+    resolve: { alias: LAYER_ALIASES },
     build: {
       outDir: 'dist',
       rollupOptions: {
