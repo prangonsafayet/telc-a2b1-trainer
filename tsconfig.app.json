@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
@@ -30,7 +32,15 @@
     "forceConsistentCasingInFileNames": true,
 
     "paths": { "@/*": ["./src/*"] },
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+
+    /* The test suites are plain JS that imports typed source. Including them here means
+       every file in the repo belongs to a project — so the editor resolves the `@/`
+       alias inside them — while checkJs keeps them out of the type-check itself. A
+       composite project must list every file it touches, which is why they cannot live
+       in a separate project that imports src. */
+    "allowJs": true,
+    "checkJs": false
   },
-  "include": ["src"]
+  "include": ["src", "tests", "e2e"]
 }

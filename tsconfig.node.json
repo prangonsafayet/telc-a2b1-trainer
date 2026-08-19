@@ -1,18 +1,28 @@
 {
+  "//": "Build tooling that runs in Node: Vite, Playwright and ESLint config.",
   "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2023",
     "lib": ["ES2023"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
+
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
+
+    /* eslint.config.js is JS, so it needs allowJs to belong to a project at all —
+       without it the editor treats the file as orphaned. It is not type-checked. */
+    "allowJs": true,
+    "checkJs": false,
+
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "playwright.config.ts", "eslint.config.js", "scripts/**/*.ts"]
+  "include": ["vite.config.ts", "playwright.config.ts", "eslint.config.js"]
 }
