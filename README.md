@@ -60,6 +60,12 @@ grading rule — **B1 = ≥42/60 in three skills plus ≥24/60 in the fourth**.
 
 <table>
   <tr>
+    <td colspan="2"><img src="docs/screenshots/learn-plan.png" alt="The study plan, grouped into dated days from today"></td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>The plan</strong> — the curriculum laid out as dated days from today, re-paced whenever the exam date changes. Finished days drop out; days that no longer fit become optional extra material.</td>
+  </tr>
+  <tr>
     <td width="50%"><img src="docs/screenshots/runner.png" alt="Exam runner with a sticky countdown"></td>
     <td width="50%"><img src="docs/screenshots/results.png" alt="Results screen with the official grade"></td>
   </tr>
