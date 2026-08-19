@@ -1,6 +1,6 @@
 ---
 name: exam-author
-description: Use when authoring, editing or reviewing the German exam content in src/content — a new Modelltest, a replacement Teil, the guide HTML, or the 14-day plan. Knows the required shape of every module and the difficulty ladder. Do NOT use for application code.
+description: Use when authoring, editing or reviewing the German exam content in src/content — a new Modelltest, a replacement Teil, the guide HTML, or the 28-day plan. Knows the required shape of every module and the difficulty ladder. Do NOT use for application code.
 tools: Read, Write, Edit, Bash, Grep, Glob
 model: inherit
 ---
@@ -29,7 +29,7 @@ every edit. The required shape:
 
 ## Rules that matter
 
-- **Difficulty ladder.** Tests 1–3 are early A2, 4–7 solid A2/A2+, 8–10 B1. Match
+- **Difficulty ladder.** Tests 1–3 are early A2, 4–7 solid A2/A2+, 8–15 B1. Match
   the vocabulary and sentence complexity of the file's neighbours; read one before
   writing.
 - **Distractors must be plausible.** In Lesen Teil 1 and 3 the extra ads and

@@ -6,7 +6,7 @@
 
 <!-- Tick what you actually ran. `npm test` is the minimum. -->
 
-- [ ] `npm test` (typecheck, lint, format, exam data, jsdom suites)
+- [ ] `npm test` (typecheck, lint, exam data, Vitest logic + render)
 - [ ] `npm run test:e2e` — required for anything visual or navigational
 - [ ] Clicked through the affected screen in `npm run dev`
 - [ ] Added a regression test for the bug being fixed

@@ -42,7 +42,7 @@ silenced. Library prop friction should use `optional()`, not a looser tsconfig.
 animation must sit behind `prefers-reduced-motion`.
 
 **Tests.** Every bug fix needs a regression case. Appearance claims need a
-Playwright test, not a jsdom one.
+Playwright test, not a unit one.
 
 ## Output
 

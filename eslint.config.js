@@ -292,7 +292,7 @@ export default tseslint.config(
       ecmaVersion: 2023,
       sourceType: 'module',
       parser: tseslint.parser,
-      /* The jsdom-based suites define browser globals themselves, so both sets apply. */
+      /* The render suites run in happy-dom, the rest in Node, so both sets apply. */
       globals: { ...globals.node, ...globals.browser }
     },
     rules: {

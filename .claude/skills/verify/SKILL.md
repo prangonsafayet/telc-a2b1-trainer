@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Run this project's full verification pipeline (typecheck, lint, format check, exam-data validation, jsdom suites, Playwright) and report what failed. Use before committing, after a refactor, or when asked whether the app still works.
+description: Run this project's full verification pipeline (typecheck, lint, format check, exam-data validation, vitest, Playwright) and report what failed. Use before committing, after a refactor, or when asked whether the app still works.
 ---
 
 # Verify
@@ -12,8 +12,8 @@ if typecheck is broken.
 npm run typecheck        # tsc -b --noEmit
 npm run lint             # ESLint, zero tolerance
 npm run format:check     # Prettier
-npm run validate         # the 10 exam data files
-npm run test:unit        # jsdom suites
+npm run validate         # the 15 exam data files
+npm run test:unit        # vitest: logic + render projects
 npm run test:e2e         # Playwright, Chromium + mobile
 ```
 
@@ -28,11 +28,11 @@ npm run test:e2e         # Playwright, Chromium + mobile
 - **Lint** — most import-order and formatting issues are `--fix`able. Boundary
   violations (`no-restricted-imports`) are design problems: move the shared thing
   into `src/shared`, or route the import through the feature's `index.ts`.
-- **A jsdom route rendering ~8 characters** means the Suspense fallback never
-  cleared — usually an import cycle, not a slow chunk. `tests/setup.js` waits for
+- **A rendered route with ~8 characters of text** means the Suspense fallback never
+  cleared — usually an import cycle, not a slow chunk. `tests/render/harness.ts` waits for
   `aria-busy` to clear, so a genuine hang shows here.
-- **Playwright only** failing, with jsdom green, points at layout, CSS, animation
-  or real navigation — exactly what jsdom cannot see. Read the trace.
+- **Playwright only** failing, with vitest green, points at layout, CSS, animation
+  or real navigation — exactly what happy-dom cannot see. Read the trace.
 
 ## Reporting
 
