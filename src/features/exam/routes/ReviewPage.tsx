@@ -1,9 +1,9 @@
 import { Home, RotateCcw } from 'lucide-react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
-import { Multiline, PageTitle, SectionTitle, Transcript } from '@/shared/components';
-import { fmtDate } from '@/shared/lib/format.ts';
-import { Button, Card, CardContent } from '@/shared/ui';
+import { Multiline, PageTitle, SectionTitle, Transcript } from '@shared/components';
+import { fmtDate } from '@shared/lib/format.ts';
+import { Button, Card, CardContent } from '@shared/ui';
 
 import { ReviewEntryCard } from '../components/ReviewEntryCard.tsx';
 import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';

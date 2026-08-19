@@ -1,4 +1,4 @@
-import { type Attempt, type ExamGrade } from '@/shared/types';
+import { type Attempt, type ExamGrade } from '@shared/types';
 
 export const CHART_HEIGHT = 160;
 const MAX_POINTS = 240;

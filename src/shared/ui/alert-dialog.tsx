@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from 're
 
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 import { buttonVariants } from './button.tsx';
 

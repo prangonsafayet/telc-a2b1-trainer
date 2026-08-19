@@ -24,7 +24,7 @@ npm run test:e2e         # Playwright, Chromium + mobile
 
 - **Typecheck** — fix the types. Do not reach for `any`, a non-null assertion or a
   looser tsconfig. For third-party props that lack `| undefined`, use `optional()`
-  from `@/shared/lib/optional-props.ts`.
+  from `@shared/lib/optional-props.ts`.
 - **Lint** — most import-order and formatting issues are `--fix`able. Boundary
   violations (`no-restricted-imports`) are design problems: move the shared thing
   into `src/shared`, or route the import through the feature's `index.ts`.

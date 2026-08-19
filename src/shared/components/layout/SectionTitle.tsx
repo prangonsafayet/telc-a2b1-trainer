@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 interface SectionTitleProps {
   readonly children: ReactNode;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { audioForKey, isSpeaking, rateForExam, speakScript, stopSpeech } from '@/shared/lib/speech.ts';
-import { type Exam, type Settings } from '@/shared/types';
+import { audioForKey, isSpeaking, rateForExam, speakScript, stopSpeech } from '@shared/lib/speech.ts';
+import { type Exam, type Settings } from '@shared/types';
 
 interface AudioPlaybackOptions {
   readonly exam: Exam;

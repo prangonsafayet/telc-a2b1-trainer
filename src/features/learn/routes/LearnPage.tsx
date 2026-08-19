@@ -1,6 +1,6 @@
-import { LEARN } from '@/content/learn.ts';
+import { LEARN } from '@content/learn.ts';
 
-import { PageTitle, SectionTitle } from '@/shared/components';
+import { PageTitle, SectionTitle } from '@shared/components';
 import {
   Accordion,
   AccordionContent,
@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Progress
-} from '@/shared/ui';
+} from '@shared/ui';
 
 import { LearnDayCard } from '../components/LearnDayCard.tsx';
 import { useLearnPlan } from '../hooks/useLearnPlan.ts';

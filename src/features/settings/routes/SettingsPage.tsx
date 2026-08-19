@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 
 import { Trash2, Volume2 } from 'lucide-react';
 
-import { PageTitle } from '@/shared/components';
+import { PageTitle } from '@shared/components';
 import {
   Button,
   Card,
@@ -17,9 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
   Separator
-} from '@/shared/ui';
+} from '@shared/ui';
 
-import { SyncPanel } from '@/features/auth';
+import { SyncPanel } from '@features/auth';
 
 import { ExamDatePicker } from '../components/ExamDatePicker.tsx';
 import { useExamSettings } from '../hooks/useExamSettings.ts';

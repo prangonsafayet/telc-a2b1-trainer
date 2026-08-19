@@ -1,6 +1,6 @@
-import { LEARN } from '@/content/learn.ts';
+import { LEARN } from '@content/learn.ts';
 
-import { type LearnDoneMap } from '@/shared/types';
+import { type LearnDoneMap } from '@shared/types';
 
 /** Checkbox key. Stable across versions — it is persisted and synced. */
 export function learnTaskKey(day: number, taskIndex: number): string {

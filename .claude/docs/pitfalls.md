@@ -6,7 +6,7 @@ Every entry here cost real debugging time in this repo. They are not hypothetica
 
 `new Date('2026-09-12')` parses as **UTC midnight**, which is the previous day anywhere
 west of Greenwich. Always use `parseIsoDate` / `toIsoDate` / `daysUntil` from
-`@/shared/lib/format.ts`.
+`@shared/lib/format.ts`.
 
 The header countdown and the Settings hint once disagreed by a day because one rounded
 from 09:00 and the other from midnight. They now share the same helper.

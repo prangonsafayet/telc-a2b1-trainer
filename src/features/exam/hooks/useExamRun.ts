@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@/shared/config/exam.ts';
-import { stopSpeech } from '@/shared/lib/speech.ts';
+import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
+import { stopSpeech } from '@shared/lib/speech.ts';
 import {
   type AnswerValue,
   type Attempt,
@@ -13,9 +13,9 @@ import {
   type ExamModule,
   type SkillScores,
   type SprachbausteineScore
-} from '@/shared/types';
+} from '@shared/types';
 
-import { useProgress } from '@/features/progress';
+import { useProgress } from '@features/progress';
 
 import {
   clearRun,

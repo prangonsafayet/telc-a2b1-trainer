@@ -1,7 +1,7 @@
 import { Play, Square } from 'lucide-react';
 
-import { type Exam, type Settings } from '@/shared/types';
-import { Badge, Button } from '@/shared/ui';
+import { type Exam, type Settings } from '@shared/types';
+import { Badge, Button } from '@shared/ui';
 
 import { useAudioPlayback } from '../hooks/useAudioPlayback.ts';
 

@@ -12,19 +12,26 @@ src/content    inert data — the ten exams, the guide HTML, the 14-day plan.
 ## The dependency rules are ESLint rules, not conventions
 
 - A feature must not import another feature's internals. Go through
-  `@/features/<name>` (its `index.ts`).
-- A feature must not import `@/app/**` — that inverts the dependency direction.
+  `@features/<name>` (its `index.ts`).
+- A feature must not import `@app/**` — that inverts the dependency direction.
 - `src/shared` must not import features or the app.
 - `src/content` must not import application code at all.
-- Primitives are imported from `@/shared/ui`, never from a file inside it.
+- Primitives are imported from `@shared/ui`, never from a file inside it.
 
 Violations fail `npm run lint`. They are not style preferences; two of them were added
 after real import cycles.
 
+All five are `no-restricted-imports` patterns. That rule is _configured_, not
+accumulated: when two flat-config entries set it for the same file, the later one
+replaces the earlier one's options instead of merging them. So each layer's entry in
+`eslint.config.js` restates every pattern that applies to its files. Dropping one is
+silent — the rule keeps passing and stops checking. After editing those entries,
+re-prove each rule by introducing a violation and confirming lint rejects it.
+
 ## Two consequences worth remembering
 
 **Route components are not exported from feature barrels.** The router deep-imports them
-(`@/features/exam/routes/RunnerPage.tsx`) so importing the exam domain does not drag three
+(`@features/exam/routes/RunnerPage.tsx`) so importing the exam domain does not drag three
 screens and their dependencies along. An earlier version did export them and produced an
 import cycle that hung the settings route with a permanent loading skeleton.
 

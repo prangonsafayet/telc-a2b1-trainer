@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 import {
   Avatar,
   AvatarFallback,
@@ -23,7 +23,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/shared/ui';
+} from '@shared/ui';
 
 import { useAccountIdentity } from '../hooks/useAccountIdentity.ts';
 import { useSync } from '../hooks/useSync.ts';

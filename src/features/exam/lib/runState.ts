@@ -1,11 +1,11 @@
-import { readLocalJson, removeLocal, writeLocal } from '@/shared/lib/storage.ts';
+import { readLocalJson, removeLocal, writeLocal } from '@shared/lib/storage.ts';
 import {
   type AnswerMap,
   type AttemptMode,
   type ExamModule,
   type ModuleTimes,
   type PlayBudget
-} from '@/shared/types';
+} from '@shared/types';
 
 /** Which screen of the run is showing. */
 export type RunPhase = 'brief' | 'module' | 'rating';

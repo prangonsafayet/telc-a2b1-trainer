@@ -1,6 +1,6 @@
 import { Check, Cloud, CloudOff, Loader2, LockKeyhole, LogOut, RefreshCw, X } from 'lucide-react';
 
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Separator } from '@/shared/ui';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Separator } from '@shared/ui';
 
 import { useSync } from '../hooks/useSync.ts';
 import { providerLabel } from '../lib/oauthProviders.ts';

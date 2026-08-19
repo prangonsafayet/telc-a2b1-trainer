@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 
 import { toast } from 'sonner';
 
-import { DEFAULT_SETTINGS } from '@/shared/config/exam.ts';
-import { useGermanVoices } from '@/shared/hooks/useGermanVoices.ts';
-import { speakScript } from '@/shared/lib/speech.ts';
-import { useConfirm } from '@/shared/providers/useConfirm.ts';
-import { type Settings } from '@/shared/types';
+import { DEFAULT_SETTINGS } from '@shared/config/exam.ts';
+import { useGermanVoices } from '@shared/hooks/useGermanVoices.ts';
+import { speakScript } from '@shared/lib/speech.ts';
+import { useConfirm } from '@shared/providers/useConfirm.ts';
+import { type Settings } from '@shared/types';
 
-import { stamp, useProgress } from '@/features/progress';
+import { stamp, useProgress } from '@features/progress';
 
 const VOICE_TEST_SCRIPT = 'Guten Tag! Willkommen zur Prüfung telc Deutsch A2 B1. Viel Erfolg!';
 

@@ -1,8 +1,8 @@
 import { CalendarDays } from 'lucide-react';
 
-import { cn } from '@/shared/lib/cn.ts';
-import { optional } from '@/shared/lib/optionalProps.ts';
-import { Button, Calendar, Popover, PopoverContent, PopoverTrigger } from '@/shared/ui';
+import { cn } from '@shared/lib/cn.ts';
+import { optional } from '@shared/lib/optionalProps.ts';
+import { Button, Calendar, Popover, PopoverContent, PopoverTrigger } from '@shared/ui';
 
 import { useExamDate } from '../hooks/useExamDate.ts';
 

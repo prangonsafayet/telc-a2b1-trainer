@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState, type ReactNode } from 'react';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,7 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   buttonVariants
-} from '@/shared/ui';
+} from '@shared/ui';
 
 import { ConfirmContext, type ConfirmOptions } from './confirmContext.ts';
 

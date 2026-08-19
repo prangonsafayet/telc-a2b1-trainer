@@ -1,8 +1,8 @@
 import { Timer } from 'lucide-react';
 
-import { MODULE_BRIEFING, MODULE_META } from '@/shared/config/exam.ts';
-import { type Exam, type ExamModule } from '@/shared/types';
-import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui';
+import { MODULE_BRIEFING, MODULE_META } from '@shared/config/exam.ts';
+import { type Exam, type ExamModule } from '@shared/types';
+import { Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui';
 
 interface ModuleBriefingProps {
   readonly exam: Exam;

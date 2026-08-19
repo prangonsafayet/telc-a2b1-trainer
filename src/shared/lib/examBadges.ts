@@ -1,4 +1,4 @@
-import { type ExamDifficulty, type ExamGrade } from '@/shared/types';
+import { type ExamDifficulty, type ExamGrade } from '@shared/types';
 
 type BadgeTone = 'success' | 'warning' | 'destructive' | 'info';
 

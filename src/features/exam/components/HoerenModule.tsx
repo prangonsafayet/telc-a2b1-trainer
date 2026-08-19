@@ -8,8 +8,8 @@ import {
   ReadingText,
   RichtigFalsch,
   Teil
-} from '@/shared/components';
-import { Input } from '@/shared/ui';
+} from '@shared/components';
+import { Input } from '@shared/ui';
 
 import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '../lib/answers.ts';
 

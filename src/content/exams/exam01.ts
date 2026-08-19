@@ -1,4 +1,4 @@
-import { type Exam } from '@/shared/types';
+import { type Exam } from '@shared/types';
 
 const exam = {
   id: 1,

@@ -35,7 +35,7 @@ npm run build        # production build into dist/
 ## Non-negotiables
 
 1. **Components are visual only.** Logic goes in a `use*.ts` hook or a pure `lib/` util.
-2. **Primitives come from `@/shared/ui`**, never from a file inside it, and never as raw
+2. **Primitives come from `@shared/ui`**, never from a file inside it, and never as raw
    `<button>` / `<input>` / `<form>` / `<table>` / `<label>`.
 3. **No `any`, no non-null assertions.** Narrow instead.
 4. **A bug fix ships with a regression test.**

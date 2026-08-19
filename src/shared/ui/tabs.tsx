@@ -2,7 +2,7 @@ import { forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from 're
 
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 export const Tabs = forwardRef<
   ComponentRef<typeof TabsPrimitive.Root>,

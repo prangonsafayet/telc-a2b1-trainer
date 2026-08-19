@@ -3,7 +3,7 @@ import { forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from 're
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from 'lucide-react';
 
-import { cn } from '@/shared/lib/cn.ts';
+import { cn } from '@shared/lib/cn.ts';
 
 export const Accordion = AccordionPrimitive.Root;
 

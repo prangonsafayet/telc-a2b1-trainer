@@ -1,6 +1,6 @@
-import { DEFAULT_SETTINGS } from '@/shared/config/exam.ts';
-import { readLocalJson, writeLocal } from '@/shared/lib/storage.ts';
-import { type ProgressDatabase } from '@/shared/types';
+import { DEFAULT_SETTINGS } from '@shared/config/exam.ts';
+import { readLocalJson, writeLocal } from '@shared/lib/storage.ts';
+import { type ProgressDatabase } from '@shared/types';
 
 /** localStorage key. Stable since v1 — do not rename without a migration. */
 export const PROGRESS_STORAGE_KEY = 'telcTrainerV1';

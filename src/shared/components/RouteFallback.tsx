@@ -1,4 +1,4 @@
-import { Skeleton } from '@/shared/ui';
+import { Skeleton } from '@shared/ui';
 
 /**
  * Shown while a lazily-loaded route chunk is in flight. It mirrors the rough shape of a

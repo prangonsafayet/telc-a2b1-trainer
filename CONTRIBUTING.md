@@ -39,11 +39,11 @@ Read [`CLAUDE.md`](CLAUDE.md) first if you have not — it is short and points a
 under [`.claude/docs/`](.claude/docs/). The rules that matter most:
 
 - Components are visual; logic goes in a `use-*.ts` hook or a pure `lib/` util.
-- Use a shadcn primitive from `@/shared/components/ui` — no raw `<button>`,
+- Use a shadcn primitive from `@shared/ui` — no raw `<button>`,
   `<input>`, `<select>`, `<textarea>`, `<table>` or `<label>` in feature code.
 - Features do not import each other's internals or the app shell. If two features
   need the same thing, it belongs in `src/shared`.
-- Primitives come from `@/shared/ui`, never from a file inside it.
+- Primitives come from `@shared/ui`, never from a file inside it.
 - No `any`, no non-null assertions.
 
 The traps this codebase invites are catalogued in
@@ -122,7 +122,7 @@ most easily:
 - Answer-map access without the `features/exam/lib/answers.ts` accessors.
 - Anything touching passwords client-side.
 - Authored HTML rendered as text, or content text injected as HTML.
-- Primitives imported from `@/shared/ui/<file>` instead of `@/shared/ui`.
+- Primitives imported from `@shared/ui/<file>` instead of `@shared/ui`.
 
 Every pull request also gets a **Netlify deploy preview**, so a visual change can be
 clicked rather than imagined.

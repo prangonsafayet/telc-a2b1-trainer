@@ -1,4 +1,4 @@
-import { type ExamModule, type Settings } from '@/shared/types';
+import { type ExamModule, type Settings } from '@shared/types';
 
 /** Module order of a full exam, matching the real sitting. */
 export const EXAM_MODULES: readonly ExamModule[] = [

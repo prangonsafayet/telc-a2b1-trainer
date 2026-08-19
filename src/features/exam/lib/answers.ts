@@ -1,4 +1,4 @@
-import { type AnswerMap } from '@/shared/types';
+import { type AnswerMap } from '@shared/types';
 
 /**
  * The answer map is deliberately stringly-keyed and loosely typed because it is persisted

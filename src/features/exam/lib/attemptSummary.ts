@@ -1,4 +1,4 @@
-import { type Attempt, type ExamModule } from '@/shared/types';
+import { type Attempt, type ExamModule } from '@shared/types';
 
 export interface SkillBar {
   readonly label: string;

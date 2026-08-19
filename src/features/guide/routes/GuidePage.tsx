@@ -1,4 +1,4 @@
-import { GUIDE_HTML } from '@/content/guide.ts';
+import { GUIDE_HTML } from '@content/guide.ts';
 
 import { useHashScroll } from '../hooks/useHashScroll.ts';
 

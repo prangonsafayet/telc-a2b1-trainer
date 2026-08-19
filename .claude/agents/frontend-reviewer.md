@@ -11,7 +11,7 @@ of truth for the rules below.
 ## Review checklist
 
 **Layer boundaries.** No feature importing another feature's internals, no
-feature importing `@/app/**`, nothing in `src/shared` importing features, nothing
+feature importing `@app/**`, nothing in `src/shared` importing features, nothing
 in `src/content` importing application code. Route components must not be
 exported from feature barrels — that has already caused an import cycle here.
 

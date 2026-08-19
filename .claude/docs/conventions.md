@@ -10,7 +10,7 @@ Reference implementations: `useExamRun` (the attempt state machine), `buildRevie
 
 ## Use the design system
 
-Import primitives from `@/shared/ui`. No raw `<button>`, `<input>`, `<select>`,
+Import primitives from `@shared/ui`. No raw `<button>`, `<input>`, `<select>`,
 `<textarea>`, `<table>` or `<label>` in feature code. If a primitive is missing, add it to
 `src/shared/ui` in the same style and export it from the barrel — do not reach for raw HTML.
 
@@ -39,9 +39,11 @@ non-null assertions — narrow instead. Domain types live in `src/shared/types`;
 files are checked against them with `satisfies`, so a malformed Modelltest fails the build.
 
 When a third-party prop type lacks `| undefined`, use `optional()` from
-`@/shared/lib/optionalProps.ts` rather than loosening tsconfig.
+`@shared/lib/optionalProps.ts` rather than loosening tsconfig.
 
 ## Imports
 
-The `@/` alias with explicit `.ts`/`.tsx` extensions. `import-x/order` enforces grouping
-and alphabetisation; `--fix` handles it.
+One alias per layer — `@app/*`, `@features/*`, `@shared/*`, `@content/*` — with explicit
+`.ts`/`.tsx` extensions. There is no catch-all `@/`: the alias names the layer an import
+crosses, which is exactly what the boundary rules match on. `import-x/order` enforces
+grouping and alphabetisation; `--fix` handles it.

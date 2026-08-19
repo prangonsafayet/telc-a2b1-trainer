@@ -2,14 +2,14 @@ import { useCallback, type ComponentType } from 'react';
 
 import { Navigate, useParams } from 'react-router-dom';
 
-import { findExamById } from '@/content/exams';
+import { findExamById } from '@content/exams';
 
-import { EXAM_MODULES, MODULE_META } from '@/shared/config/exam.ts';
-import { useConfirm } from '@/shared/providers/useConfirm.ts';
-import { type AttemptMode, type Exam } from '@/shared/types';
-import { Button } from '@/shared/ui';
+import { EXAM_MODULES, MODULE_META } from '@shared/config/exam.ts';
+import { useConfirm } from '@shared/providers/useConfirm.ts';
+import { type AttemptMode, type Exam } from '@shared/types';
+import { Button } from '@shared/ui';
 
-import { useProgress } from '@/features/progress';
+import { useProgress } from '@features/progress';
 
 import { HoerenModule } from '../components/HoerenModule.tsx';
 import { LesenModule } from '../components/LesenModule.tsx';
