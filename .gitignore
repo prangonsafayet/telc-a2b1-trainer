@@ -18,3 +18,9 @@ blob-report/
 
 # Operational notes kept locally, deliberately not published on the portfolio repo.
 docs/*.local.md
+
+# Incremental TypeScript build caches — the build writes these to node_modules/.tmp.
+*.tsbuildinfo
+
+# Playwright MCP scratch output (page snapshots, console logs).
+.playwright-mcp/
