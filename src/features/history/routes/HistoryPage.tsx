@@ -1,31 +1,31 @@
 import { Download, Upload } from 'lucide-react';
 
-import { PageTitle } from '@shared/components';
-import ScoreHistoryChart from '@shared/components/data-display/ScoreHistoryChart.tsx';
+import { PageTitle, ScoreHistoryChart } from '@shared/components';
+import { type TrainerId } from '@shared/types';
 import { Button, Card, CardContent } from '@shared/ui';
 
-import { useProgress } from '@features/progress';
-
 import AttemptTable from '../components/AttemptTable.tsx';
+import { useAttemptHistory } from '../hooks/useAttemptHistory.ts';
 import { useProgressBackup } from '../hooks/useProgressBackup.ts';
-import { buildAttemptRows } from '../lib/attemptRows.ts';
 
-const HistoryPage = () => {
-  const { db } = useProgress();
+interface HistoryPageProps {
+  readonly trainer: TrainerId;
+}
+
+/** Every stored attempt of one trainer, newest first, plus the backup controls. */
+const HistoryPage = ({ trainer }: HistoryPageProps) => {
+  const history = useAttemptHistory(trainer);
   const backup = useProgressBackup();
-  const rows = buildAttemptRows(db.attempts);
 
   return (
     <>
-      <PageTitle lead="Every attempt, full exam or single module, with the time you actually used.">
-        History
-      </PageTitle>
+      <PageTitle lead={history.lead}>{history.heading}</PageTitle>
 
-      <ScoreHistoryChart attempts={db.attempts} />
+      <ScoreHistoryChart model={history.chart} />
 
       <Card className="mt-6 animate-fade-up" style={{ animationDelay: '80ms' }}>
-        <CardContent>
-          <AttemptTable rows={rows} />
+        <CardContent className="overflow-x-auto">
+          <AttemptTable model={history.table} />
         </CardContent>
       </Card>
 
@@ -37,6 +37,10 @@ const HistoryPage = () => {
           <Upload /> Import progress
         </Button>
       </div>
+
+      <p className="mt-2 text-xs text-muted-foreground">
+        The backup file holds every trainer&apos;s progress, not just this one.
+      </p>
     </>
   );
 };

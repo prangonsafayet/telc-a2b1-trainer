@@ -2,7 +2,13 @@ import { useMemo } from 'react';
 
 import { DUAL_LEVEL_EXAMS } from '@content/trainers/index.ts';
 
-import { type DualLevelAttempt, type DualLevelExam, type SkillKey } from '@shared/types';
+import { buildScoreChart } from '@shared/lib/scoreChart.ts';
+import {
+  type DualLevelAttempt,
+  type DualLevelExam,
+  type ScoreChartModel,
+  type SkillKey
+} from '@shared/types';
 
 import { useProgress } from '@features/progress';
 
@@ -24,6 +30,7 @@ export interface DashboardStats {
   readonly bestTotalCaption: string;
   readonly lastAttempt: DualLevelAttempt | null;
   readonly bestPerSkill: Readonly<Record<SkillKey, number | null>>;
+  readonly chart: ScoreChartModel;
   readonly examCards: readonly ExamCardStats[];
 }
 
@@ -70,6 +77,7 @@ export const useDashboardStats = (): DashboardStats => {
       bestTotalCaption: captionForBest(bestTotal),
       lastAttempt: attempts.at(-1) ?? null,
       bestPerSkill,
+      chart: buildScoreChart({ format: 'dual-level', attempts }),
       examCards
     };
   }, [db.attempts]);

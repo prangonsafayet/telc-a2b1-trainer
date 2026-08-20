@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 
 import { SINGLE_LEVEL_EXAMS, TRAINER_CONTENT } from '@content/trainers/index.ts';
 
-import { type SingleLevelTrainerId } from '@shared/types';
+import { buildScoreChart } from '@shared/lib/scoreChart.ts';
+import { type ScoreChartModel, type SingleLevelTrainerId } from '@shared/types';
 
 import { useToday } from '@features/plan';
 import { useTrainerSlice, type TrainerSlice } from '@features/progress';
@@ -22,6 +23,7 @@ export interface LevelTrainerView {
   readonly today: string;
   readonly stats: LevelDashboardStats;
   readonly weakAreas: readonly WeakArea[];
+  readonly chart: ScoreChartModel;
 }
 
 const CATEGORY_LABELS = Object.fromEntries(
@@ -49,8 +51,10 @@ export const useLevelStats = (level: SingleLevelTrainerId): LevelTrainerView => 
   const stats = useMemo(() => buildLevelStats(input, content, today), [input, content, today]);
   const weakAreas = useMemo(() => buildWeakAreas(input, content, CATEGORY_LABELS), [input, content]);
 
+  const chart = useMemo(() => buildScoreChart(slice), [slice]);
+
   return useMemo(
-    () => ({ content, slice, today, stats, weakAreas }),
-    [content, slice, today, stats, weakAreas]
+    () => ({ content, slice, today, stats, weakAreas, chart }),
+    [content, slice, today, stats, weakAreas, chart]
   );
 };

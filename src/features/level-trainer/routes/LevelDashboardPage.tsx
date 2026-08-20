@@ -1,7 +1,7 @@
 import { CalendarClock, Flame, Layers, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { PageTitle, SectionTitle } from '@shared/components';
+import { PageTitle, ScoreHistoryChart, SectionTitle } from '@shared/components';
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { fmtDate } from '@shared/lib/format.ts';
 import { type SingleLevelTrainerId } from '@shared/types';
@@ -12,7 +12,6 @@ import { describeClamp, examSlotLabel, useTrainerSchedule } from '@features/plan
 
 import SingleLevelExamCard from '../components/exams/SingleLevelExamCard.tsx';
 import LevelStatTile from '../components/stats/LevelStatTile.tsx';
-import SingleLevelScoreChart from '../components/stats/SingleLevelScoreChart.tsx';
 import WeakAreasCard from '../components/stats/WeakAreasCard.tsx';
 import { useLevelStats } from '../hooks/useLevelStats.ts';
 import { CATEGORY_META, STUDY_CATEGORIES } from '../lib/studyItems.ts';
@@ -22,7 +21,7 @@ interface LevelDashboardPageProps {
 }
 
 const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
-  const { slice, stats, weakAreas } = useLevelStats(level);
+  const { slice, stats, weakAreas, chart } = useLevelStats(level);
   const schedule = useTrainerSchedule(level);
   const start = useStartAttempt(level);
   const trainer = TRAINERS[level];
@@ -134,7 +133,7 @@ const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
       </Card>
 
       <div className="mt-6">
-        <SingleLevelScoreChart attempts={stats.attempts} />
+        <ScoreHistoryChart model={chart} />
       </div>
 
       <SectionTitle>Mock exams</SectionTitle>

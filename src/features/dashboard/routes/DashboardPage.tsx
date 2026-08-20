@@ -108,7 +108,7 @@ const DashboardPage = () => {
       </Card>
 
       <div className="mt-6">
-        <ScoreHistoryChart attempts={stats.attempts} />
+        <ScoreHistoryChart model={stats.chart} />
       </div>
 
       <SectionTitle>Mock exams</SectionTitle>

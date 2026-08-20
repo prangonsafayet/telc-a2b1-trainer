@@ -24,7 +24,6 @@ const SettingsPage = lazy(() => import('@features/settings/routes/SettingsPage.t
 const LevelDashboardPage = lazy(() => import('@features/level-trainer/routes/LevelDashboardPage.tsx'));
 const LevelLearnPage = lazy(() => import('@features/level-trainer/routes/LevelLearnPage.tsx'));
 const LevelPracticePage = lazy(() => import('@features/level-trainer/routes/LevelPracticePage.tsx'));
-const LevelHistoryPage = lazy(() => import('@features/level-trainer/routes/LevelHistoryPage.tsx'));
 
 /* One exam feature serves every trainer; the screens take the trainer as a prop. */
 const RunnerPage = lazy(() => import('@features/exam/routes/RunnerPage.tsx'));
@@ -50,7 +49,7 @@ export const AppRouter = () => (
           <Route index element={<DashboardPage />} />
           <Route path="learn" element={<LearnPage />} />
           <Route path="guide" element={<GuidePage />} />
-          <Route path="history" element={<HistoryPage />} />
+          <Route path="history" element={<HistoryPage trainer={ROOT_TRAINER} />} />
           <Route path="settings" element={<SettingsPage />} />
           {examRoutes(ROOT_TRAINER)}
         </Route>
@@ -60,7 +59,7 @@ export const AppRouter = () => (
             <Route index element={<LevelDashboardPage level={level} />} />
             <Route path="learn" element={<LevelLearnPage level={level} />} />
             <Route path="practice" element={<LevelPracticePage level={level} />} />
-            <Route path="history" element={<LevelHistoryPage level={level} />} />
+            <Route path="history" element={<HistoryPage trainer={level} />} />
             {examRoutes(level)}
           </Route>
         ))}
