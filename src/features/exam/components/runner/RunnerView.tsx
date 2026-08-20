@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 
+import { Navigate } from 'react-router-dom';
+
 import { ExamModuleToolbar, ModuleBriefingCard } from '@shared/components';
-import { TRAINERS } from '@shared/config/trainers.ts';
-import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
+import { TRAINERS, trainerHome } from '@shared/config/trainers.ts';
 import { useConfirm } from '@shared/providers/useConfirm.ts';
 import { type AttemptMode, type ExamPaper, type TrainerId } from '@shared/types';
 import { Button } from '@shared/ui';
@@ -91,7 +92,6 @@ const RunnerView = <TExam extends ExamPaper, TSettings extends RunSettings, TAtt
         module={run.module}
         exam={exam}
         answers={run.run.answers}
-        writtenText={textAnswer(run.run.answers, WRITING_ANSWER_KEY)}
         recordings={run.recordings}
         onConfirm={run.confirmRating}
       />
@@ -99,6 +99,13 @@ const RunnerView = <TExam extends ExamPaper, TSettings extends RunSettings, TAtt
   }
 
   const ModuleComponent = format.moduleComponents[run.module];
+  /* Defence in depth, and knowingly unreachable: `parseRun` now refuses a stored queue
+     naming a module that does not exist, and a descriptor's `moduleComponents` is a total
+     record by type — which is why the rule is silenced rather than the check dropped. The
+     module ultimately comes out of localStorage, this is the one runner every trainer uses,
+     and rendering `undefined` as a component is a blank screen with a stack trace. */
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- see above
+  if (!ModuleComponent) return <Navigate to={trainerHome(trainer)} replace />;
 
   return (
     <>

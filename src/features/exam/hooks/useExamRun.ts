@@ -15,7 +15,12 @@ import {
   type TrainerId
 } from '@shared/types';
 
-import { HEARTBEAT_MS, SECONDS_PER_MINUTE, UNTIMED_MODULES } from '@features/exam/config/run.ts';
+import {
+  HEARTBEAT_MS,
+  MS_PER_SECOND,
+  SECONDS_PER_MINUTE,
+  UNTIMED_MODULES
+} from '@features/exam/config/run.ts';
 import { createRun, currentModule, queueForMode, secondsLeft } from '@features/exam/lib/runStore.ts';
 import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
 import { type ExamRun, type RatedModule } from '@features/exam/types/run.ts';
@@ -178,7 +183,7 @@ export const useExamRun = <
     stopSpeech();
     const times = {
       ...current.times,
-      [finishedModule]: Math.round((Date.now() - (current.moduleStart ?? Date.now())) / 1000)
+      [finishedModule]: Math.round((Date.now() - (current.moduleStart ?? Date.now())) / MS_PER_SECOND)
     };
 
     if (isRated(finishedModule)) {
@@ -228,7 +233,7 @@ export const useExamRun = <
       ...current,
       phase: 'module',
       moduleStart: Date.now(),
-      deadline: Date.now() + minutes * SECONDS_PER_MINUTE * 1000
+      deadline: Date.now() + minutes * SECONDS_PER_MINUTE * MS_PER_SECOND
     }));
     window.scrollTo(0, 0);
   }, [patch, minutes]);

@@ -35,16 +35,34 @@ export const bumpActivity = (
   touches = 1
 ): Partial<Record<string, number>> => ({ ...activity, [today]: (activity[today] ?? 0) + touches });
 
+/**
+ * Fills in missing defaults — but returns the caller's own object when nothing is missing.
+ *
+ * `normalizeDatabase` runs on every write, not just on load, so rebuilding these objects
+ * unconditionally handed every consumer a brand-new `settings` on a write that only touched
+ * a curriculum checkbox. Everything downstream memoises on those references.
+ */
+const withDefaults = <T extends object>(defaults: T, input: unknown): T => {
+  if (typeof input !== 'object' || input === null) return defaults;
+  const candidate = input as T;
+  return Object.keys(defaults).every(key => key in candidate) ? candidate : { ...defaults, ...candidate };
+};
+
+/** True when normalising changed no field, so the caller's object can be kept as it is. */
+const unchanged = <T extends object>(before: Partial<T>, after: T): boolean =>
+  Object.keys(after).every(key => before[key as keyof T] === after[key as keyof T]);
+
 /** Coerces anything that claims to be a trainer document, defaulting every field. */
 const normalizeTrainerDoc = (raw: unknown): LevelTrainerDoc => {
   const input = (typeof raw === 'object' && raw !== null ? raw : {}) as Partial<LevelTrainerDoc>;
-  return {
+  const normalized: LevelTrainerDoc = {
     attempts: Array.isArray(input.attempts) ? input.attempts : [],
     learnDone: typeof input.learnDone === 'object' ? input.learnDone : {},
     srs: typeof input.srs === 'object' ? input.srs : {},
     activity: typeof input.activity === 'object' ? input.activity : {},
-    settings: { ...defaultLevelSettings(), ...(input.settings ?? {}) }
+    settings: withDefaults(defaultLevelSettings(), input.settings)
   };
+  return unchanged(input, normalized) ? (input as LevelTrainerDoc) : normalized;
 };
 
 /**
@@ -57,7 +75,7 @@ export const normalizeDatabase = (raw: unknown): ProgressDatabase => {
   return {
     attempts: Array.isArray(input.attempts) ? input.attempts : [],
     learnDone: typeof input.learnDone === 'object' ? input.learnDone : {},
-    settings: { ...DEFAULT_SETTINGS, ...(input.settings ?? {}) },
+    settings: withDefaults(DEFAULT_SETTINGS, input.settings),
     srs: typeof input.srs === 'object' ? input.srs : {},
     activity: typeof input.activity === 'object' ? input.activity : {},
     b1: normalizeTrainerDoc(input.b1),

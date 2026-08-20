@@ -39,5 +39,9 @@ export const useExamBinding = (trainer: TrainerId): ExamBinding => {
       papers: content.exams as readonly DualLevelExam[],
       store: { settings: slice.settings, attempts: slice.attempts, saveAttempt: slice.saveAttempt }
     };
-  }, [trainer, slice, content]);
+    /* Narrow deliberately: `slice` and `content` are new objects on every progress write,
+       so depending on them rebuilt `store` — and re-rendered the runner — whenever an
+       unrelated field of the document changed. These five references do not move unless
+       the thing they name actually changed. */
+  }, [trainer, slice.format, slice.settings, slice.attempts, slice.saveAttempt, content.exams]);
 };

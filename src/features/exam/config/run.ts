@@ -19,3 +19,6 @@ export const MAX_CRITERION_SCORE = 5;
 
 /** Seconds in a minute — the clock stores milliseconds, the descriptors minutes. */
 export const SECONDS_PER_MINUTE = 60;
+
+/** The other half of that conversion. Both are named, so neither reads as a magic number. */
+export const MS_PER_SECOND = 1000;

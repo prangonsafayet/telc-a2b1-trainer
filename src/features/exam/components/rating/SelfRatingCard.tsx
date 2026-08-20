@@ -1,4 +1,5 @@
 import { CriteriaRatingPanel, Multiline } from '@shared/components';
+import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { type AnswerMap, type ExamPaper, type RecordingMap } from '@shared/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
@@ -16,7 +17,6 @@ interface SelfRatingCardProps<
   readonly module: RatedModule;
   readonly exam: TExam;
   readonly answers: AnswerMap;
-  readonly writtenText: string;
   readonly recordings: RecordingMap;
   readonly onConfirm: (score: number) => void;
 }
@@ -31,12 +31,12 @@ const SelfRatingCard = <
   module,
   exam,
   answers,
-  writtenText,
   recordings,
   onConfirm
 }: SelfRatingCardProps<TExam, TSettings, TAttempt>) => {
   const { criteria, values, total, max, setValue } = useSelfRating(format.rating[module]);
   const sample = format.scoring.writingSample(exam, answers);
+  const writtenText = textAnswer(answers, WRITING_ANSWER_KEY);
   const isWriting = module === 'schreiben';
 
   return (

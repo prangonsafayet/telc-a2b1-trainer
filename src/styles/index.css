@@ -63,7 +63,10 @@
   --accent-foreground: oklch(0.85 0.08 253);
 
   --destructive: oklch(0.65 0.18 24.6);
-  --destructive-foreground: oklch(0.98 0 0);
+  /* Dark ink on the lighter fill, exactly as `--primary-foreground` above: white on this
+     red measures 3.32:1, this measures 5.45:1. `--destructive` itself must stay light —
+     it is also the `text-destructive` ink on a dark background. */
+  --destructive-foreground: oklch(0.17 0.02 25);
 
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 18%);

@@ -4,10 +4,12 @@
  * and a half-finished B1 attempt never see each other.
  */
 
+import { MODULE_META } from '@shared/config/exam.ts';
 import { ROOT_TRAINER, TRAINER_ORDER } from '@shared/config/trainers.ts';
 import { readLocalJson, removeLocal, writeLocal } from '@shared/lib/storage.ts';
 import { type AttemptMode, type ExamModule, type TrainerId } from '@shared/types';
 
+import { MS_PER_SECOND } from '@features/exam/config/run.ts';
 import { type ExamRun, type ExamRunStore } from '@features/exam/types/run.ts';
 
 /**
@@ -30,6 +32,28 @@ const unwrapLegacyEnvelope = (value: object): unknown => {
   return state.run;
 };
 
+/** What a stored run might actually hold: the fields below are validated, not trusted. */
+type StoredRun = Omit<Partial<ExamRun>, 'queue'> & {
+  readonly queue?: unknown;
+  readonly level?: unknown;
+};
+
+/* `MODULE_META` is a `Record` over the whole `ExamModule` union, so its keys are the
+   complete set by construction — a new module cannot be forgotten here. */
+const isExamModule = (value: unknown): value is ExamModule =>
+  typeof value === 'string' && Object.hasOwn(MODULE_META, value);
+
+/** The module queue of a stored run, or null if any entry does not name a real module. */
+const readQueue = (value: unknown): readonly ExamModule[] | null => {
+  if (!Array.isArray(value) || value.length === 0) return null;
+  const modules: ExamModule[] = [];
+  for (const entry of value as readonly unknown[]) {
+    if (!isExamModule(entry)) return null;
+    modules.push(entry);
+  }
+  return modules;
+};
+
 /**
  * Exported for its unit tests: everything it has to survive — two storage envelopes, a
  * missing `trainer`, and whatever a hand-edited or truncated localStorage entry holds — is
@@ -39,9 +63,23 @@ export const parseRun = (value: unknown): ExamRun | null => {
   if (typeof value !== 'object' || value === null) return null;
   const stored = unwrapLegacyEnvelope(value);
   if (typeof stored !== 'object' || stored === null || Array.isArray(stored)) return null;
-  const candidate = stored as Partial<ExamRun> & { readonly level?: unknown };
-  if (typeof candidate.examId !== 'number' || !Array.isArray(candidate.queue)) return null;
-  return { ...(candidate as ExamRun), trainer: readTrainer(candidate.trainer ?? candidate.level) };
+  const candidate = stored as StoredRun;
+  if (typeof candidate.examId !== 'number') return null;
+
+  /* Every entry has to name a real module. `queue[index]` decides which renderer the runner
+     mounts, so a hand-edited entry naming something else would render `undefined` as a
+     component — a blank screen, not a rejected run. */
+  const queue = readQueue(candidate.queue);
+  if (queue === null) return null;
+
+  /* `level` is read for the trainer and then dropped: it is the old field name and has no
+     place on an `ExamRun`, which never declared it. */
+  const { level: _legacyLevel, ...rest } = candidate;
+  return {
+    ...(rest as ExamRun),
+    queue,
+    trainer: readTrainer(candidate.trainer ?? candidate.level)
+  };
 };
 
 export const createRunStore = (storageKey: string): ExamRunStore => ({
@@ -84,7 +122,7 @@ export const queueForMode = (modules: readonly ExamModule[], mode: AttemptMode):
 /** Whole seconds left on the current module, never negative. */
 export const secondsLeft = (run: ExamRun | null): number => {
   if (!run?.deadline) return 0;
-  return Math.max(0, Math.round((run.deadline - Date.now()) / 1000));
+  return Math.max(0, Math.round((run.deadline - Date.now()) / MS_PER_SECOND));
 };
 
 /** The module currently being worked on, if any. */

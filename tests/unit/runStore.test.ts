@@ -142,4 +142,40 @@ describe('the module queue', () => {
     expect(store.load()?.queue).toEqual(queue);
     expect(store.load()?.index).toBe(2);
   });
+
+  /* `queue[index]` picks the renderer the runner mounts. An entry that names no real module
+     used to pass straight through, and the runner then rendered `undefined` as a component —
+     a blank screen with a stack trace, from a value the app does not control. */
+  it('refuses a queue naming a module that does not exist', () => {
+    writeLocal(KEY, JSON.stringify({ ...run(), queue: ['lesen', 'schreiben-teil-2'] }));
+    expect(store.load()).toBeNull();
+
+    writeLocal(KEY, JSON.stringify({ ...run(), queue: ['Lesen'] }));
+    expect(store.load()).toBeNull();
+  });
+
+  it('refuses a queue holding anything that is not a module name', () => {
+    for (const queue of [[0], [null], [{ module: 'lesen' }], [['lesen']]]) {
+      writeLocal(KEY, JSON.stringify({ ...run(), queue }));
+      expect(store.load()).toBeNull();
+    }
+  });
+
+  it('refuses an empty queue, which has no module to open', () => {
+    writeLocal(KEY, JSON.stringify({ ...run(), queue: [] }));
+    expect(store.load()).toBeNull();
+  });
+});
+
+describe('the legacy trainer field', () => {
+  it('is read for the trainer and then dropped, not carried onto the run', () => {
+    writeLocal(KEY, legacyEnvelope('b2'));
+    const loaded = store.load();
+
+    expect(loaded?.trainer).toBe('b2');
+    /* `ExamRun` never declared `level`; leaving it on the object means it gets written back
+       out on the next save and outlives the migration it belonged to. */
+    expect(loaded).not.toBeNull();
+    expect(Object.keys(loaded ?? {})).not.toContain('level');
+  });
 });

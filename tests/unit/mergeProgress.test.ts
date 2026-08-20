@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { mergeProgress } from '@features/auth/lib/mergeProgress.ts';
+import { normalizeDatabase } from '@features/progress/lib/progressDb.ts';
 import { DEFAULT_SETTINGS } from '@shared/config/exam.ts';
 import { type DualLevelAttempt, type LevelTrainerDoc, type ProgressDatabase } from '@shared/types';
 
@@ -164,5 +165,37 @@ describe('the B1 and B2 documents', () => {
     const merged = mergeProgress(local, db({ _updatedAt: '2026-01-01' }));
     expect(merged.b1?.settings.examDate).toBe('2026-11-01');
     expect(merged.b2?.settings.examDate).toBe('2027-02-01');
+  });
+});
+
+/* `normalizeDatabase` runs on every write, not only on load. Rebuilding its sub-objects
+   unconditionally handed every memo a new `settings` and two new trainer documents each time
+   a curriculum checkbox was ticked, which is why the exam binding churned. */
+describe('normalizeDatabase', () => {
+  it('keeps the objects it was handed when nothing needs defaulting', () => {
+    const first = normalizeDatabase({});
+    const second = normalizeDatabase({ ...first, learnDone: { d1t0: true } });
+
+    expect(second.settings).toBe(first.settings);
+    expect(second.attempts).toBe(first.attempts);
+    expect(second.b1).toBe(first.b1);
+    expect(second.b2).toBe(first.b2);
+    expect(second.learnDone).toEqual({ d1t0: true });
+  });
+
+  it('still defaults a field that is genuinely missing', () => {
+    const partial = normalizeDatabase({ settings: { examDate: '2026-11-01' } });
+
+    expect(partial.settings.examDate).toBe('2026-11-01');
+    expect(partial.settings.writingMinutes).toBe(DEFAULT_SETTINGS.writingMinutes);
+    expect(partial.b1?.settings.playsAllowed).toBeDefined();
+    expect(partial.attempts).toEqual([]);
+  });
+
+  it('replaces a trainer document that is not one', () => {
+    const fixed = normalizeDatabase({ b1: 'nonsense' });
+
+    expect(fixed.b1?.attempts).toEqual([]);
+    expect(fixed.b1?.settings.writingMinutes).toBeDefined();
   });
 });
