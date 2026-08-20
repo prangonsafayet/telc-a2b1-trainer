@@ -6,6 +6,4 @@
  */
 export { useStartAttempt } from './hooks/useStartAttempt.ts';
 export { runFormatFor } from './lib/formats/runFormats.ts';
-export { createRun, currentModule, queueForMode, secondsLeft } from './lib/runStore.ts';
-export type { ExamRunFormat } from './types/examFormat.ts';
-export type { ExamRun, ExamRunStore, RunPhase } from './types/run.ts';
+export type { ExamRun } from './types/run.ts';

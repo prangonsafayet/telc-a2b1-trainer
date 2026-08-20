@@ -32,7 +32,6 @@ export const SKILL_MAX = 60;
 
 export const FULL_EXAM_MAX = 240;
 
-/** Shown on the briefing screen before each module starts. */
 /** Self-assessment criteria: 4 × 0–5, multiplied by 3 for a 60-point module score. */
 export const RATING_CRITERIA: Readonly<
   Record<'schreiben' | 'sprechen', readonly (readonly [string, string])[]>

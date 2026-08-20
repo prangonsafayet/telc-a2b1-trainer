@@ -45,7 +45,6 @@ let nextAttemptId = 1;
 /* A stand-in paper. The machine is generic over the format, so the smallest descriptor
    that satisfies the contract exercises it without dragging a Modelltest along. */
 const FORMAT: ExamFormat<ExamPaper, RunSettings, StoredAttempt> = {
-  id: 'dual-level',
   modules: ['lesen'],
   runStore,
   examLabel: exam => exam.title,

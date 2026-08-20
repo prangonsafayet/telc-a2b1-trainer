@@ -89,6 +89,12 @@ describe.each(SINGLE_LEVEL_TRAINERS)('a single-module practice run — %s', trai
     /* The in-progress run must be gone, or the dashboard offers to resume a finished exam. */
     expect(runStore.load()).toBeNull();
 
+    /* The score bars mark this paper's own pass line. The bar primitive used to default it
+       to the A2·B1 paper's 70% B1 line, so a single-level sitting was judged against the
+       wrong number and said so on screen. */
+    expect(document.querySelector('[title="Pass line (60%)"]')).not.toBeNull();
+    expect(document.querySelector('[title="B1 threshold (70%)"]')).toBeNull();
+
     const attempts = storedAttempts();
     expect(attempts).toHaveLength(1);
     expect(typeof attempts[0]?.scores.lesen).toBe('number');

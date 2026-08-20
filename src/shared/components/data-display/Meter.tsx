@@ -3,29 +3,20 @@ import { useEffect, useState } from 'react';
 import { cn } from '@shared/lib/cn.ts';
 import { Progress } from '@shared/ui';
 
-/** 42 of 60 points is the A2·B1 paper's per-skill B1 line, which is where this defaults. */
-const DEFAULT_THRESHOLD = 70;
-
 interface MeterProps {
   readonly label: string;
   readonly value: number | null | undefined;
-  readonly of?: number;
+  /** Points a perfect score on this bar is worth — a paper fact, so never defaulted. */
+  readonly of: number;
   /** Tint the bar amber/red below the B1/A2 thresholds instead of always using primary. */
   readonly colorByScore?: boolean;
   /** Where the pass line of this paper sits, as a percentage of `of`. */
-  readonly thresholdPercent?: number;
-  readonly thresholdLabel?: string;
+  readonly thresholdPercent: number;
+  readonly thresholdLabel: string;
 }
 
 /** A labelled progress bar with its paper's pass line marked. */
-const Meter = ({
-  label,
-  value,
-  of = 60,
-  colorByScore = false,
-  thresholdPercent = DEFAULT_THRESHOLD,
-  thresholdLabel = 'B1 threshold (70%)'
-}: MeterProps) => {
+const Meter = ({ label, value, of, colorByScore = false, thresholdPercent, thresholdLabel }: MeterProps) => {
   const pct = value == null ? 0 : Math.round((value / of) * 100);
   const tone =
     !colorByScore || pct >= thresholdPercent

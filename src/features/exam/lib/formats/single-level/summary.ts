@@ -1,3 +1,4 @@
+import { PASS_PERCENT, passLineLabel } from '@shared/config/examConditions.ts';
 import {
   SINGLE_LEVEL_ORAL_MAX,
   SINGLE_LEVEL_ORAL_PASS,
@@ -58,7 +59,6 @@ export const summarizeAttempt = (attempt: SingleLevelAttempt): AttemptSummary =>
   const firstBar = bars[0];
 
   return {
-    isFull,
     totalSeconds,
     accentColor: !isFull
       ? 'var(--primary)'
@@ -66,6 +66,8 @@ export const summarizeAttempt = (attempt: SingleLevelAttempt): AttemptSummary =>
         ? 'var(--success)'
         : 'var(--destructive)',
     bars,
+    thresholdPercent: PASS_PERCENT['single-level'],
+    thresholdLabel: passLineLabel('single-level'),
     moduleTimes,
     grade: gradeFor(attempt),
     headlineScore: firstBar ? String(firstBar.value) : '–',

@@ -90,7 +90,15 @@ const AttemptResults = <
       <Card className="mt-6 animate-fade-up" style={{ animationDelay: BARS_ANIMATION_DELAY }}>
         <CardContent className="grid gap-5 sm:grid-cols-2">
           {summary.bars.map(bar => (
-            <Meter key={bar.label} label={bar.label} value={bar.value} of={bar.of} colorByScore />
+            <Meter
+              key={bar.label}
+              label={bar.label}
+              value={bar.value}
+              of={bar.of}
+              colorByScore
+              thresholdPercent={summary.thresholdPercent}
+              thresholdLabel={summary.thresholdLabel}
+            />
           ))}
         </CardContent>
       </Card>

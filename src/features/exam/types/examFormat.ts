@@ -15,7 +15,6 @@ import {
   type AnswerMap,
   type AttemptMode,
   type AudioScript,
-  type ExamFormatId,
   type ExamModule,
   type ExamModuleProps,
   type ExamPaper,
@@ -103,10 +102,12 @@ export interface AttemptGrade {
 
 /** Everything the results screen renders, already resolved. */
 export interface AttemptSummary {
-  readonly isFull: boolean;
   readonly totalSeconds: number;
   readonly accentColor: string;
   readonly bars: readonly ScoreBar[];
+  /** Where this paper's pass line sits on every bar, as a percentage of the bar's `of`. */
+  readonly thresholdPercent: number;
+  readonly thresholdLabel: string;
   readonly moduleTimes: readonly ModuleTimeEntry[];
   readonly grade: AttemptGrade | null;
   /** For a single-module practice run: the one number worth showing large. */
@@ -150,7 +151,6 @@ export interface ExamScoring<TExam extends ExamPaper, TAttempt extends StoredAtt
  * resume or discard a run without knowing which Modelltest it is.
  */
 export interface ExamRunFormat {
-  readonly id: ExamFormatId;
   /** Module order of a full sitting. */
   readonly modules: readonly ExamModule[];
   /** Short module name, e.g. `Hören` — enough to describe a run without loading the paper. */

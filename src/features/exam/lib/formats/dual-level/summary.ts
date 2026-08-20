@@ -1,4 +1,5 @@
 import { FULL_EXAM_MAX, SKILL_MAX } from '@shared/config/exam.ts';
+import { PASS_PERCENT, passLineLabel } from '@shared/config/examConditions.ts';
 import { type DualLevelAttempt, type ExamModule } from '@shared/types';
 
 import {
@@ -55,10 +56,11 @@ export const summarizeAttempt = (attempt: DualLevelAttempt): AttemptSummary => {
         : 'var(--destructive)';
 
   return {
-    isFull,
     totalSeconds,
     accentColor,
     bars,
+    thresholdPercent: PASS_PERCENT['dual-level'],
+    thresholdLabel: passLineLabel('dual-level'),
     moduleTimes,
     grade: gradeFor(attempt),
     headlineScore,
