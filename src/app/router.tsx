@@ -3,7 +3,7 @@ import { lazy, Suspense, type ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { RouteFallback } from '@shared/components';
-import { TELC_LEVELS, TRAINERS } from '@shared/config/trainers.ts';
+import { SINGLE_LEVEL_TRAINERS, TRAINERS } from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
 
 import DashboardPage from '@features/dashboard/routes/DashboardPage.tsx';
@@ -55,7 +55,7 @@ export const AppRouter = () => (
           {examRoutes('a2b1')}
         </Route>
 
-        {TELC_LEVELS.map(level => (
+        {SINGLE_LEVEL_TRAINERS.map(level => (
           <Route key={level} path={TRAINERS[level].basePath}>
             <Route index element={<LevelDashboardPage level={level} />} />
             <Route path="learn" element={<LevelLearnPage level={level} />} />

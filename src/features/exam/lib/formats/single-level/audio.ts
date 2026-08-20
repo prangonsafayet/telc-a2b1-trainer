@@ -1,7 +1,7 @@
-import { type AudioScript, type TelcExam, type TelcLevel } from '@shared/types';
+import { type AudioScript, type SingleLevelExam, type SingleLevelTrainerId } from '@shared/types';
 
 /** Resolves the audio script for a listening item key such as `h1.3` or `h2`. */
-export const telcAudioForKey = (exam: TelcExam, key: string): AudioScript => {
+export const singleLevelAudioForKey = (exam: SingleLevelExam, key: string): AudioScript => {
   if (key === 'h2') return exam.hoeren.teil2.audio;
   const [part, itemIndex] = key.split('.');
   const index = Number(itemIndex);
@@ -11,5 +11,5 @@ export const telcAudioForKey = (exam: TelcExam, key: string): AudioScript => {
 };
 
 /** B1 audio is read slightly slower than B2, then scaled by the user's speed setting. */
-export const telcRate = (level: TelcLevel, ttsRate: number): number =>
+export const singleLevelRate = (level: SingleLevelTrainerId, ttsRate: number): number =>
   (level === 'b1' ? 0.97 : 1.03) * ttsRate;

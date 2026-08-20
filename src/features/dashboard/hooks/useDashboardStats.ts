@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { EXAMS } from '@content/exams';
 
-import { type Attempt, type Exam, type SkillKey } from '@shared/types';
+import { type DualLevelAttempt, type DualLevelExam, type SkillKey } from '@shared/types';
 
 import { useProgress } from '@features/progress';
 
@@ -11,18 +11,18 @@ const B1_TOTAL = 168;
 const A2_TOTAL = 96;
 
 export interface ExamCardStats {
-  readonly exam: Exam;
-  readonly best: Attempt | null;
+  readonly exam: DualLevelExam;
+  readonly best: DualLevelAttempt | null;
   readonly attemptCount: number;
 }
 
 export interface DashboardStats {
-  readonly attempts: readonly Attempt[];
-  readonly fullAttempts: readonly Attempt[];
+  readonly attempts: readonly DualLevelAttempt[];
+  readonly fullAttempts: readonly DualLevelAttempt[];
   readonly practiceCount: number;
   readonly bestTotal: number | null;
   readonly bestTotalCaption: string;
-  readonly lastAttempt: Attempt | null;
+  readonly lastAttempt: DualLevelAttempt | null;
   readonly bestPerSkill: Readonly<Record<SkillKey, number | null>>;
   readonly examCards: readonly ExamCardStats[];
 }

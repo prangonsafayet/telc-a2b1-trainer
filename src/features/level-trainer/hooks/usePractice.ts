@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { LEVEL_CONTENT } from '@content/trainers/index.ts';
 
 import { isDue, pickDueIds, reviewItem } from '@shared/lib/srs.ts';
-import { type LevelContent, type TelcLevel } from '@shared/types';
+import { type LevelContent, type SingleLevelTrainerId } from '@shared/types';
 
 import { useToday } from '@features/plan';
 import { touchActivity, useTrainerDoc, type TrainerDocHandle } from '@features/progress';
@@ -58,7 +58,7 @@ const pickSessionCards = (
 };
 
 /** One practice hub session: the store drives the screen, every answer lands in SRS. */
-export const usePractice = (level: TelcLevel): PracticeController => {
+export const usePractice = (level: SingleLevelTrainerId): PracticeController => {
   const { doc, updateDoc } = useTrainerDoc(level);
   const today = useToday();
   const content = LEVEL_CONTENT[level];

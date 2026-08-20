@@ -4,19 +4,26 @@ import { Callout, QuestionItem, QuestionText, RichtigFalsch, Teil } from '@share
 import AudioPlayButton from '@shared/components/exam-ui/AudioPlayButton.tsx';
 import { booleanAnswer, itemKey } from '@shared/lib/answers.ts';
 
-import { telcAudioForKey, telcRate } from '@features/exam/lib/formats/telc/audio.ts';
-import { type TelcModuleProps } from '@features/exam/types/moduleProps.ts';
+import { singleLevelAudioForKey, singleLevelRate } from '@features/exam/lib/formats/single-level/audio.ts';
+import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts';
 import { useSettings } from '@features/progress';
 
-const HoerenModule = ({ exam, answers, setAnswer, settings, plays, onConsumePlay }: TelcModuleProps) => {
+const HoerenModule = ({
+  exam,
+  answers,
+  setAnswer,
+  settings,
+  plays,
+  onConsumePlay
+}: SingleLevelModuleProps) => {
   const { hoeren } = exam;
   /* Voice and speed are the global speech settings, shared across all three trainers. */
   const { ttsRate, voiceName } = useSettings();
 
   const playButton = (key: string) => (
     <AudioPlayButton
-      script={telcAudioForKey(exam, key)}
-      rate={telcRate(exam.level, ttsRate)}
+      script={singleLevelAudioForKey(exam, key)}
+      rate={singleLevelRate(exam.level, ttsRate)}
       voiceName={voiceName}
       itemKey={key}
       playsLeft={plays[key] ?? settings.playsAllowed}

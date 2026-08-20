@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { LEVEL_CONTENT } from '@content/trainers/index.ts';
 
-import { type LevelContent, type TelcLevel } from '@shared/types';
+import { type LevelContent, type SingleLevelTrainerId } from '@shared/types';
 
 import { useToday } from '@features/plan';
 import { useTrainerDoc, type TrainerDocHandle } from '@features/progress';
@@ -29,7 +29,7 @@ const CATEGORY_LABELS = Object.fromEntries(
 ) as Record<keyof typeof CATEGORY_META, string>;
 
 /** Everything a level trainer screen needs: content, document, derived stats. */
-export const useLevelStats = (level: TelcLevel): LevelTrainerView => {
+export const useLevelStats = (level: SingleLevelTrainerId): LevelTrainerView => {
   const { doc, updateDoc } = useTrainerDoc(level);
   const today = useToday();
   const content = LEVEL_CONTENT[level];

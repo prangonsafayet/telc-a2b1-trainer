@@ -1,4 +1,4 @@
-import { type TelcExam } from '@shared/types';
+import { type SingleLevelExam } from '@shared/types';
 
 import exam01 from './exam01.ts';
 import exam02 from './exam02.ts';
@@ -12,7 +12,7 @@ import exam09 from './exam09.ts';
 import exam10 from './exam10.ts';
 
 /** All B2 Modelltests, ordered by id. */
-export const B2_EXAMS: readonly TelcExam[] = [
+export const B2_EXAMS: readonly SingleLevelExam[] = [
   exam01,
   exam02,
   exam03,

@@ -1,4 +1,4 @@
-import { type TelcExam } from '@shared/types';
+import { type SingleLevelExam } from '@shared/types';
 
 const exam = {
   id: 6,
@@ -486,6 +486,6 @@ Daniel Okafor`
       ]
     }
   }
-} as const satisfies TelcExam;
+} as const satisfies SingleLevelExam;
 
 export default exam;

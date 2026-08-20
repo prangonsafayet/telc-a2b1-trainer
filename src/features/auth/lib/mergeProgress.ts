@@ -1,14 +1,14 @@
 import {
-  type Attempt,
+  type DualLevelAttempt,
   type LearnDoneMap,
   type LevelTrainerDoc,
   type ProgressDatabase,
-  type SrsMap,
-  type TelcAttempt
+  type SingleLevelAttempt,
+  type SrsMap
 } from '@shared/types';
 
 /** Attempts are immutable once written, so a union by id is always right. */
-const unionAttempts = <T extends Attempt | TelcAttempt>(
+const unionAttempts = <T extends DualLevelAttempt | SingleLevelAttempt>(
   remote: readonly T[],
   local: readonly T[]
 ): readonly T[] => {

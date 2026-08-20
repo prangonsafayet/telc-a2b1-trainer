@@ -1,6 +1,6 @@
 import { LEVEL_CONTENT } from '@content/trainers/index.ts';
 
-import { type TelcLevel } from '@shared/types';
+import { type SingleLevelTrainerId } from '@shared/types';
 
 import { sprintAnchors, type ScheduleSource } from './buildSchedule.ts';
 
@@ -8,7 +8,7 @@ import { sprintAnchors, type ScheduleSource } from './buildSchedule.ts';
 const CRASH_DAYS: readonly number[] = [1, 13];
 
 /** What one level trainer feeds the schedule engine. */
-export const trainerScheduleSource = (level: TelcLevel): ScheduleSource => {
+export const trainerScheduleSource = (level: SingleLevelTrainerId): ScheduleSource => {
   const content = LEVEL_CONTENT[level];
   const examIds = content.exams.map(exam => exam.id);
   return {

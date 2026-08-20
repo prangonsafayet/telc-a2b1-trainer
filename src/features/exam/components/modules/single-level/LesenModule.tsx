@@ -10,9 +10,9 @@ import {
 } from '@shared/components';
 import { itemKey, numberAnswer } from '@shared/lib/answers.ts';
 
-import { type TelcModuleProps } from '@features/exam/types/moduleProps.ts';
+import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts';
 
-const LesenModule = ({ exam, answers, setAnswer }: TelcModuleProps) => {
+const LesenModule = ({ exam, answers, setAnswer }: SingleLevelModuleProps) => {
   const { lesen } = exam;
 
   return (

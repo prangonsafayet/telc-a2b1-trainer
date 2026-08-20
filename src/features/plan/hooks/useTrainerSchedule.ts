@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { type Schedule, type TelcLevel } from '@shared/types';
+import { type Schedule, type SingleLevelTrainerId } from '@shared/types';
 
 import { useTrainerDoc } from '@features/progress';
 
@@ -13,7 +13,7 @@ import { useToday } from './useToday.ts';
  * The adaptive study plan of one level trainer, or null when its stored exam date is
  * unusable. Derived on render, never persisted — like the A2·B1 plan.
  */
-export const useTrainerSchedule = (level: TelcLevel): Schedule | null => {
+export const useTrainerSchedule = (level: SingleLevelTrainerId): Schedule | null => {
   const { doc } = useTrainerDoc(level);
   const today = useToday();
 

@@ -1,7 +1,7 @@
 import {
   type AnswerMap,
   type AnswerValue,
-  type Exam,
+  type DualLevelExam,
   type ExamGrade,
   type ExamModule,
   type NoteGap,
@@ -45,7 +45,7 @@ export const isGapCorrect = (gap: NoteGap, value: AnswerValue | undefined): bool
   return expectedDigits !== '' && digitsOnly(given) === expectedDigits;
 };
 
-export const scoreLesen = (exam: Exam, answers: AnswerMap): ModuleScore => {
+export const scoreLesen = (exam: DualLevelExam, answers: AnswerMap): ModuleScore => {
   let correct = 0;
   exam.lesen.teil1.answers.forEach((expected, i) => {
     if (answers[`l1.${String(i)}`] === expected) correct++;
@@ -62,7 +62,7 @@ export const scoreLesen = (exam: Exam, answers: AnswerMap): ModuleScore => {
   return { correct, of: 20, points: correct * POINTS_PER_ITEM };
 };
 
-export const scoreHoeren = (exam: Exam, answers: AnswerMap): ModuleScore => {
+export const scoreHoeren = (exam: DualLevelExam, answers: AnswerMap): ModuleScore => {
   let correct = 0;
   exam.hoeren.teil1.items.forEach((item, i) => {
     if (answers[`h1.${String(i)}`] === item.answer) correct++;
@@ -82,7 +82,7 @@ export const scoreHoeren = (exam: Exam, answers: AnswerMap): ModuleScore => {
   return { correct, of: 20, points: correct * POINTS_PER_ITEM };
 };
 
-export const scoreSprachbausteine = (exam: Exam, answers: AnswerMap): SprachbausteineScore => {
+export const scoreSprachbausteine = (exam: DualLevelExam, answers: AnswerMap): SprachbausteineScore => {
   let correct = 0;
   exam.sprachbausteine.teil1.gaps.forEach((gap, i) => {
     if (answers[`s1.${String(i)}`] === gap.answer) correct++;
@@ -115,7 +115,7 @@ export const gradeFullExam = (scores: SkillScores): FullExamGrade => {
 };
 
 /** How many items of a module are still blank — drives the submit warning. */
-export const countUnanswered = (exam: Exam, module: ExamModule, answers: AnswerMap): number => {
+export const countUnanswered = (exam: DualLevelExam, module: ExamModule, answers: AnswerMap): number => {
   const missing = (keys: readonly string[]): number =>
     keys.filter(key => {
       const value = answers[key];

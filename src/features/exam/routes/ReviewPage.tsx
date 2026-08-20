@@ -1,7 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom';
 
 import { findExamById } from '@content/exams';
-import { findTelcExam } from '@content/trainers/index.ts';
+import { findSingleLevelExam } from '@content/trainers/index.ts';
 
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
@@ -22,9 +22,9 @@ const ReviewPage = ({ trainer }: ReviewPageProps) => {
   const retry = useStartAttempt(trainer);
   const history = `${TRAINERS[trainer].basePath}/history`;
 
-  if (binding.kind === 'telc') {
+  if (binding.kind === 'single-level') {
     const attempt = findAttempt(binding.store.attempts, attemptId);
-    const exam = attempt ? findTelcExam(binding.level, attempt.examId) : undefined;
+    const exam = attempt ? findSingleLevelExam(binding.level, attempt.examId) : undefined;
     if (!attempt || !exam) return <Navigate to={history} replace />;
     return <AttemptReview format={binding.format} exam={exam} attempt={attempt} onRetry={retry} />;
   }

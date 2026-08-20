@@ -14,7 +14,7 @@ export interface SelfRatingState {
 /**
  * The candidate's own marks for a productive module. Each criterion scores 0–5 and the sum
  * is multiplied by the format's scale — 4 × 5 × 3 = 60 at A2·B1, 3 × 5 × 3 = 45 for the
- * telc writing task and 5 × 5 × 3 = 75 for its oral exam.
+ * single-level writing task and 5 × 5 × 3 = 75 for its oral exam.
  */
 export const useSelfRating = (spec: RatingSpec): SelfRatingState => {
   const { criteria, scale, max } = spec;

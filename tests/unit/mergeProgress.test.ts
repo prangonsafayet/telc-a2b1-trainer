@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 
 import { mergeProgress } from '@features/auth/lib/mergeProgress.ts';
 import { DEFAULT_SETTINGS } from '@shared/config/exam.ts';
-import { type Attempt, type LevelTrainerDoc, type ProgressDatabase } from '@shared/types';
+import { type DualLevelAttempt, type LevelTrainerDoc, type ProgressDatabase } from '@shared/types';
 
 /* Sync is the one place where two real documents meet, and anything it forgets to copy is
    gone for good. It rebuilds the document field by field, so every field needs a test —
    the B1/B2 trainer documents were dropped entirely when the trainers were first added,
    which silently wiped vocabulary progress on every sign-in. */
 
-const attempt = (id: number, examId = 1): Attempt => ({
+const attempt = (id: number, examId = 1): DualLevelAttempt => ({
   id,
   examId,
   mode: 'full',

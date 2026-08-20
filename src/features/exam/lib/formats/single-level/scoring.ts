@@ -4,13 +4,17 @@
  * does not compensate.
  */
 
-import { TELC_ORAL_PASS, TELC_POINTS, TELC_WRITTEN_PASS } from '@shared/config/telcExam.ts';
+import {
+  SINGLE_LEVEL_ORAL_PASS,
+  SINGLE_LEVEL_POINTS,
+  SINGLE_LEVEL_WRITTEN_PASS
+} from '@shared/config/singleLevelExam.ts';
 import {
   type AnswerMap,
   type ExamModule,
-  type TelcExam,
-  type TelcResult,
-  type TelcSectionScores
+  type SingleLevelExam,
+  type SingleLevelResult,
+  type SingleLevelSectionScores
 } from '@shared/types';
 
 export interface ModuleScore {
@@ -26,7 +30,7 @@ const countCorrect = (length: number, isCorrect: (index: number) => boolean): nu
 };
 
 /** Lesen: Teil 1 and 2 score 5 points per item, Teil 3 scores 2.5. Max 75. */
-export const scoreLesen = (exam: TelcExam, answers: AnswerMap): ModuleScore => {
+export const scoreLesen = (exam: SingleLevelExam, answers: AnswerMap): ModuleScore => {
   const { teil1, teil2, teil3 } = exam.lesen;
   const c1 = countCorrect(teil1.answers.length, i => answers[`l1.${String(i)}`] === teil1.answers[i]);
   const c2 = countCorrect(
@@ -37,24 +41,27 @@ export const scoreLesen = (exam: TelcExam, answers: AnswerMap): ModuleScore => {
   return {
     correct: c1 + c2 + c3,
     of: teil1.answers.length + teil2.questions.length + teil3.answers.length,
-    points: c1 * TELC_POINTS.lesenTeil1 + c2 * TELC_POINTS.lesenTeil2 + c3 * TELC_POINTS.lesenTeil3
+    points:
+      c1 * SINGLE_LEVEL_POINTS.lesenTeil1 +
+      c2 * SINGLE_LEVEL_POINTS.lesenTeil2 +
+      c3 * SINGLE_LEVEL_POINTS.lesenTeil3
   };
 };
 
 /** Sprachbausteine: 1.5 points per item. Max 30. */
-export const scoreSprachbausteine = (exam: TelcExam, answers: AnswerMap): ModuleScore => {
+export const scoreSprachbausteine = (exam: SingleLevelExam, answers: AnswerMap): ModuleScore => {
   const { teil1, teil2 } = exam.sprachbausteine;
   const c1 = countCorrect(teil1.gaps.length, i => answers[`s1.${String(i)}`] === teil1.gaps[i]?.answer);
   const c2 = countCorrect(teil2.answers.length, i => answers[`s2.${String(i)}`] === teil2.answers[i]);
   return {
     correct: c1 + c2,
     of: teil1.gaps.length + teil2.answers.length,
-    points: (c1 + c2) * TELC_POINTS.sprachbausteine
+    points: (c1 + c2) * SINGLE_LEVEL_POINTS.sprachbausteine
   };
 };
 
 /** Hören: Teil 1 and 3 score 5 points per item, Teil 2 scores 2.5. Max 75. */
-export const scoreHoeren = (exam: TelcExam, answers: AnswerMap): ModuleScore => {
+export const scoreHoeren = (exam: SingleLevelExam, answers: AnswerMap): ModuleScore => {
   const { teil1, teil2, teil3 } = exam.hoeren;
   const c1 = countCorrect(teil1.items.length, i => answers[`h1.${String(i)}`] === teil1.items[i]?.answer);
   const c2 = countCorrect(
@@ -65,7 +72,10 @@ export const scoreHoeren = (exam: TelcExam, answers: AnswerMap): ModuleScore => 
   return {
     correct: c1 + c2 + c3,
     of: teil1.items.length + teil2.statements.length + teil3.items.length,
-    points: c1 * TELC_POINTS.hoerenTeil1 + c2 * TELC_POINTS.hoerenTeil2 + c3 * TELC_POINTS.hoerenTeil3
+    points:
+      c1 * SINGLE_LEVEL_POINTS.hoerenTeil1 +
+      c2 * SINGLE_LEVEL_POINTS.hoerenTeil2 +
+      c3 * SINGLE_LEVEL_POINTS.hoerenTeil3
   };
 };
 
@@ -73,20 +83,20 @@ export interface FullExamGrade {
   readonly written: number;
   readonly oral: number;
   readonly total: number;
-  readonly result: TelcResult;
+  readonly result: SingleLevelResult;
 }
 
 /** The official rule: ≥135/225 written AND ≥45/75 oral — no compensation between them. */
-export const gradeFullExam = (scores: TelcSectionScores): FullExamGrade => {
+export const gradeFullExam = (scores: SingleLevelSectionScores): FullExamGrade => {
   const written =
     (scores.lesen ?? 0) + (scores.sprachbausteine ?? 0) + (scores.hoeren ?? 0) + (scores.schreiben ?? 0);
   const oral = scores.sprechen ?? 0;
-  const passed = written >= TELC_WRITTEN_PASS && oral >= TELC_ORAL_PASS;
+  const passed = written >= SINGLE_LEVEL_WRITTEN_PASS && oral >= SINGLE_LEVEL_ORAL_PASS;
   return { written, oral, total: written + oral, result: passed ? 'Bestanden' : 'Nicht bestanden' };
 };
 
 /** How many items of a module are still blank — drives the submit warning. */
-export const countUnanswered = (exam: TelcExam, module: ExamModule, answers: AnswerMap): number => {
+export const countUnanswered = (exam: SingleLevelExam, module: ExamModule, answers: AnswerMap): number => {
   const missing = (length: number, prefix: string): number => {
     let blanks = 0;
     for (let index = 0; index < length; index += 1) {

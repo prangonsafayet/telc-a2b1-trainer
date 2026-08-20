@@ -2,11 +2,11 @@ import { Mic } from 'lucide-react';
 
 import { Callout } from '@shared/components';
 
-import { type TelcModuleProps } from '@features/exam/types/moduleProps.ts';
+import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts';
 
 import SprechenTeilCard from './SprechenTeilCard.tsx';
 
-const SprechenModule = ({ exam, recordings, onRecorded }: TelcModuleProps) => {
+const SprechenModule = ({ exam, recordings, onRecorded }: SingleLevelModuleProps) => {
   const { sprechen } = exam;
   const isB1 = exam.level === 'b1';
   const chips: readonly string[] = isB1

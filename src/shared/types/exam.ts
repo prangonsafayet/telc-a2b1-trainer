@@ -157,7 +157,7 @@ export interface SprechenSection {
   };
 }
 
-export interface Exam {
+export interface DualLevelExam {
   readonly id: number;
   readonly title: string;
   readonly difficulty: ExamDifficulty;

@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { EXAMS } from '@content/exams';
 import { LEARN } from '@content/learn.ts';
 
-import { type Exam, type LearnDay, type Schedule } from '@shared/types';
+import { type DualLevelExam, type LearnDay, type Schedule } from '@shared/types';
 
 import { describeClamp, slotHeading, slotKindLabel, useSchedule } from '@features/plan';
 
@@ -12,7 +12,7 @@ export interface TodayPlan {
   readonly heading: string;
   readonly kindLabel: string;
   readonly lessons: readonly LearnDay[];
-  readonly exams: readonly Exam[];
+  readonly exams: readonly DualLevelExam[];
   /** A day the plan deliberately leaves free of new material. */
   readonly isRest: boolean;
 }

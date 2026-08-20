@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { type Attempt } from '@shared/types';
+import { type DualLevelAttempt } from '@shared/types';
 import { A2B1_RUN_FORMAT } from '@features/exam';
 import { PROGRESS_STORAGE_KEY } from '@features/progress';
 
@@ -11,9 +11,9 @@ import { captureErrors, click, findByText, mount, seedProgress, waitFor } from '
 
 const runStore = A2B1_RUN_FORMAT.runStore;
 
-const storedAttempts = (): readonly Attempt[] => {
+const storedAttempts = (): readonly DualLevelAttempt[] => {
   const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
-  return raw ? ((JSON.parse(raw) as { attempts?: Attempt[] }).attempts ?? []) : [];
+  return raw ? ((JSON.parse(raw) as { attempts?: DualLevelAttempt[] }).attempts ?? []) : [];
 };
 
 let errors: ReturnType<typeof captureErrors>;

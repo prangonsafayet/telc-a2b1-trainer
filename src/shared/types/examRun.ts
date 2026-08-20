@@ -1,8 +1,9 @@
 /**
  * The contract every exam format shares while it is being sat.
  *
- * The A2·B1 paper and the telc B1/B2 papers differ in their Teile, their item shapes and
- * their scoring, but not in what running an exam means: a queue of modules, answers keyed
+ * The dual-level (A2·B1) paper and the single-level (telc B1/B2) papers differ in their
+ * Teile, their item shapes and their scoring, but not in what running an exam means: a
+ * queue of modules, answers keyed
  * by item, a play budget for listening and a recording per oral part. These types are that
  * common ground, so the runner, the audio button and the self-rating card exist once.
  */

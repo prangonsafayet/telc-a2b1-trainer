@@ -1,5 +1,5 @@
 import { DEFAULT_SETTINGS } from '@shared/config/exam.ts';
-import { defaultLevelSettings } from '@shared/config/telcExam.ts';
+import { defaultLevelSettings } from '@shared/config/singleLevelExam.ts';
 import { readLocalJson, writeLocal } from '@shared/lib/storage.ts';
 import { type LevelTrainerDoc, type ProgressDatabase } from '@shared/types';
 

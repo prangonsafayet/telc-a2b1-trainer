@@ -40,7 +40,7 @@ for (const file of files) {
       .readFileSync(abs, 'utf8')
       .replace(/^import[^\n]*\n/gm, '')
       .replace(/^\s*const exam =\s*/m, '')
-      .replace(/\bas const satisfies Exam;?/, '')
+      .replace(/\bas const satisfies DualLevelExam;?/, '')
       .replace(/export default exam;?\s*$/m, '')
       .trim()
       .replace(/;\s*$/, '');
@@ -254,7 +254,7 @@ for (const { level, file } of telcFiles) {
       .readFileSync(abs, 'utf8')
       .replace(/^import[^\n]*\n/gm, '')
       .replace(/^\s*const exam =\s*/m, '')
-      .replace(/\bas const satisfies TelcExam;?/, '')
+      .replace(/\bas const satisfies SingleLevelExam;?/, '')
       .replace(/export default exam;?\s*$/m, '')
       .trim()
       .replace(/;\s*$/, '');

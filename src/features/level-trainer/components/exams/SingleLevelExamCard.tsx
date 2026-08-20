@@ -1,7 +1,11 @@
 import { CalendarClock, PlayCircle, RotateCcw, Trophy } from 'lucide-react';
 
-import { TELC_MODULE_META, TELC_MODULES, telcModuleMinutes } from '@shared/config/telcExam.ts';
-import { type AttemptMode, type LevelTrainerSettings, type TelcLevel } from '@shared/types';
+import {
+  SINGLE_LEVEL_MODULE_META,
+  SINGLE_LEVEL_MODULES,
+  singleLevelModuleMinutes
+} from '@shared/config/singleLevelExam.ts';
+import { type AttemptMode, type LevelTrainerSettings, type SingleLevelTrainerId } from '@shared/types';
 import {
   Badge,
   type BadgeVariant,
@@ -20,8 +24,8 @@ import {
 
 import { type LevelExamCardStats } from '@features/level-trainer/lib/levelStats.ts';
 
-interface TelcExamCardProps {
-  readonly level: TelcLevel;
+interface SingleLevelExamCardProps {
+  readonly level: SingleLevelTrainerId;
   readonly stats: LevelExamCardStats;
   readonly settings: LevelTrainerSettings;
   /** Where the plan puts this exam: `today`, `planned Do, 28. Aug`, `optional`, or nothing. */
@@ -36,7 +40,13 @@ const scheduleTone = (label: string): BadgeVariant => {
   return label === 'optional' ? 'outline' : 'secondary';
 };
 
-const TelcExamCard = ({ level, stats, settings, scheduleLabel, onStart }: TelcExamCardProps) => {
+const SingleLevelExamCard = ({
+  level,
+  stats,
+  settings,
+  scheduleLabel,
+  onStart
+}: SingleLevelExamCardProps) => {
   const { exam, bestTotal, attemptCount, lastResult } = stats;
   const attempted = attemptCount > 0;
 
@@ -99,9 +109,10 @@ const TelcExamCard = ({ level, stats, settings, scheduleLabel, onStart }: TelcEx
               <SelectValue placeholder="Practice one module…" />
             </SelectTrigger>
             <SelectContent>
-              {TELC_MODULES.map(module => (
+              {SINGLE_LEVEL_MODULES.map(module => (
                 <SelectItem key={module} value={module}>
-                  {TELC_MODULE_META[module].short} ({telcModuleMinutes(module, level, settings)} min)
+                  {SINGLE_LEVEL_MODULE_META[module].short} (
+                  {singleLevelModuleMinutes(module, level, settings)} min)
                 </SelectItem>
               ))}
             </SelectContent>
@@ -112,4 +123,4 @@ const TelcExamCard = ({ level, stats, settings, scheduleLabel, onStart }: TelcEx
   );
 };
 
-export default TelcExamCard;
+export default SingleLevelExamCard;

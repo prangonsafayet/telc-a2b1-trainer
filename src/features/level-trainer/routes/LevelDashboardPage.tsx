@@ -4,21 +4,21 @@ import { Link } from 'react-router-dom';
 import { PageTitle, SectionTitle } from '@shared/components';
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { fmtDate } from '@shared/lib/format.ts';
-import { type TelcLevel } from '@shared/types';
+import { type SingleLevelTrainerId } from '@shared/types';
 import { Alert, AlertDescription, Button, Card, CardContent, Progress } from '@shared/ui';
 
 import { useStartAttempt } from '@features/exam';
 import { describeClamp, examSlotLabel, useTrainerSchedule } from '@features/plan';
 
-import TelcExamCard from '../components/exams/TelcExamCard.tsx';
+import SingleLevelExamCard from '../components/exams/SingleLevelExamCard.tsx';
 import LevelStatTile from '../components/stats/LevelStatTile.tsx';
-import TelcScoreChart from '../components/stats/TelcScoreChart.tsx';
+import SingleLevelScoreChart from '../components/stats/SingleLevelScoreChart.tsx';
 import WeakAreasCard from '../components/stats/WeakAreasCard.tsx';
 import { useLevelStats } from '../hooks/useLevelStats.ts';
 import { CATEGORY_META, STUDY_CATEGORIES } from '../lib/studyItems.ts';
 
 interface LevelDashboardPageProps {
-  readonly level: TelcLevel;
+  readonly level: SingleLevelTrainerId;
 }
 
 const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
@@ -134,13 +134,13 @@ const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
       </Card>
 
       <div className="mt-6">
-        <TelcScoreChart attempts={stats.attempts} />
+        <SingleLevelScoreChart attempts={stats.attempts} />
       </div>
 
       <SectionTitle>Mock exams</SectionTitle>
       <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.examCards.map(card => (
-          <TelcExamCard
+          <SingleLevelExamCard
             key={card.exam.id}
             level={level}
             stats={card}

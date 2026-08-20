@@ -24,7 +24,7 @@ import {
 import { type ExamRunStore, type RatedModule, type RatingMap } from './run.ts';
 
 /** Which paper a descriptor describes. */
-export type ExamFormatId = 'a2b1' | 'telc';
+export type ExamFormatId = 'dual-level' | 'single-level';
 
 /** What every paper has, whatever its Teile look like. */
 export interface ExamPaper {

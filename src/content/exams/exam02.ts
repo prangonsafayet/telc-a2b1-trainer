@@ -1,4 +1,4 @@
-import { type Exam } from '@shared/types';
+import { type DualLevelExam } from '@shared/types';
 
 const exam = {
   id: 2,
@@ -305,6 +305,6 @@ const exam = {
       ]
     }
   }
-} as const satisfies Exam;
+} as const satisfies DualLevelExam;
 
 export default exam;

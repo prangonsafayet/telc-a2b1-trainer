@@ -1,4 +1,4 @@
-import { type TelcExam } from '@shared/types';
+import { type SingleLevelExam } from '@shared/types';
 
 const exam = {
   id: 3,
@@ -485,6 +485,6 @@ Johanna Reuter
       ]
     }
   }
-} as const satisfies TelcExam;
+} as const satisfies SingleLevelExam;
 
 export default exam;

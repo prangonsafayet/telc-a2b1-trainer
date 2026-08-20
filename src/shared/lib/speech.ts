@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 
-import { type AudioScript, type Exam, type Settings } from '@shared/types';
+import { type AudioScript, type DualLevelExam, type Settings } from '@shared/types';
 
 type VoiceListener = () => void;
 
@@ -48,7 +48,7 @@ const pickVoice = (preferredName: string): SpeechSynthesisVoice | null =>
   germanVoices.find(voice => voice.name === preferredName) ?? germanVoices[0] ?? null;
 
 /** Easier exams are read more slowly, then scaled by the user's speed setting. */
-export const rateForExam = (exam: Exam, settings: Settings): number => {
+export const rateForExam = (exam: DualLevelExam, settings: Settings): number => {
   const base = exam.difficulty === 'easy' ? 0.88 : exam.difficulty === 'medium' ? 0.94 : 1;
   return base * settings.ttsRate;
 };
@@ -120,7 +120,7 @@ export const speakScript = (
 };
 
 /** Resolves the audio script for a listening item key such as `h2.3`, `h4` or `h5`. */
-export const audioForKey = (exam: Exam, key: string): AudioScript => {
+export const audioForKey = (exam: DualLevelExam, key: string): AudioScript => {
   const { hoeren } = exam;
   if (key === 'h4') return hoeren.teil4.audio;
   if (key === 'h5') return hoeren.teil5.audio;

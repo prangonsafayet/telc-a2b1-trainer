@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { LEVEL_CONTENT } from '@content/trainers/index.ts';
 
 import { isLearnDayComplete } from '@shared/lib/learnProgress.ts';
-import { type LearnDay, type TelcLevel } from '@shared/types';
+import { type LearnDay, type SingleLevelTrainerId } from '@shared/types';
 
 import {
   describeClamp,
@@ -37,7 +37,7 @@ export interface ScheduledLevelLearn {
 }
 
 /** Turns one level trainer's plan into the sections its Learn page renders. */
-export const useScheduledLevelLearn = (level: TelcLevel): ScheduledLevelLearn => {
+export const useScheduledLevelLearn = (level: SingleLevelTrainerId): ScheduledLevelLearn => {
   const { doc } = useTrainerDoc(level);
   const schedule = useTrainerSchedule(level);
   const curriculum = LEVEL_CONTENT[level].curriculum;

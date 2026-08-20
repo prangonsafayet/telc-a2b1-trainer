@@ -3,10 +3,15 @@
  * and section types as the A2·B1 builder next door; the Teile they walk are different.
  */
 
-import { TELC_MODULE_META, TELC_SECTION_MAX } from '@shared/config/telcExam.ts';
+import { SINGLE_LEVEL_MODULE_META, SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
 import { booleanAnswer, itemKey, numberAnswer } from '@shared/lib/answers.ts';
 import { LETTERS } from '@shared/lib/format.ts';
-import { type AnswerMap, type ExamModule, type TelcAttempt, type TelcExam } from '@shared/types';
+import {
+  type AnswerMap,
+  type ExamModule,
+  type SingleLevelAttempt,
+  type SingleLevelExam
+} from '@shared/types';
 
 import { attemptIncludes } from '@features/exam/lib/attemptMode.ts';
 import { type ReviewRow, type ReviewSection } from '@features/exam/types/examFormat.ts';
@@ -19,7 +24,7 @@ const boolLabel = (value: boolean | undefined): string | null =>
 
 const teilLabel = (teil: number, index: number): string => `Teil ${String(teil)} · ${String(index + 1)}`;
 
-const lesenRows = (exam: TelcExam, answers: AnswerMap): readonly ReviewRow[] => {
+const lesenRows = (exam: SingleLevelExam, answers: AnswerMap): readonly ReviewRow[] => {
   const { teil1, teil2, teil3 } = exam.lesen;
   return [
     ...teil1.answers.map<ReviewRow>((expected, index) => {
@@ -58,7 +63,7 @@ const lesenRows = (exam: TelcExam, answers: AnswerMap): readonly ReviewRow[] => 
   ];
 };
 
-const sprachbausteineRows = (exam: TelcExam, answers: AnswerMap): readonly ReviewRow[] => {
+const sprachbausteineRows = (exam: SingleLevelExam, answers: AnswerMap): readonly ReviewRow[] => {
   const { teil1, teil2 } = exam.sprachbausteine;
   return [
     ...teil1.gaps.map<ReviewRow>((gap, index) => {
@@ -86,7 +91,7 @@ const sprachbausteineRows = (exam: TelcExam, answers: AnswerMap): readonly Revie
   ];
 };
 
-const hoerenRows = (exam: TelcExam, answers: AnswerMap): readonly ReviewRow[] => {
+const hoerenRows = (exam: SingleLevelExam, answers: AnswerMap): readonly ReviewRow[] => {
   const { teil1, teil2, teil3 } = exam.hoeren;
   return [
     ...teil1.items.map<ReviewRow>((item, index) => {
@@ -129,11 +134,14 @@ const hoerenRows = (exam: TelcExam, answers: AnswerMap): readonly ReviewRow[] =>
   ];
 };
 
-const heading = (module: ExamModule, attempt: TelcAttempt): string =>
-  `${TELC_MODULE_META[module].name} — ${String(attempt.scores[module] ?? 0)}/${String(TELC_SECTION_MAX[module])}`;
+const heading = (module: ExamModule, attempt: SingleLevelAttempt): string =>
+  `${SINGLE_LEVEL_MODULE_META[module].name} — ${String(attempt.scores[module] ?? 0)}/${String(SINGLE_LEVEL_SECTION_MAX[module])}`;
 
 /** Every objectively-marked item of an attempt, grouped by module, in exam order. */
-export const buildReviewSections = (exam: TelcExam, attempt: TelcAttempt): readonly ReviewSection[] => {
+export const buildReviewSections = (
+  exam: SingleLevelExam,
+  attempt: SingleLevelAttempt
+): readonly ReviewSection[] => {
   const sections: ReviewSection[] = [];
   const { answers } = attempt;
 

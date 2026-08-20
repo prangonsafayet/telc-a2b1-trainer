@@ -1,7 +1,7 @@
 import { FULL_EXAM_MAX, MODULE_META } from '@shared/config/exam.ts';
 import {
-  type Attempt,
-  type Exam,
+  type DualLevelAttempt,
+  type DualLevelExam,
   type ExamModule,
   type SkillScores,
   type SprachbausteineScore
@@ -16,7 +16,14 @@ import {
 import { gradeFullExam, scoreHoeren, scoreLesen, scoreSprachbausteine } from './scoring.ts';
 
 /** Marks a finished run and returns the attempt to store. */
-export const buildAttempt = ({ exam, mode, queue, answers, ratings, times }: FinishedRun<Exam>): Attempt => {
+export const buildAttempt = ({
+  exam,
+  mode,
+  queue,
+  answers,
+  ratings,
+  times
+}: FinishedRun<DualLevelExam>): DualLevelAttempt => {
   const includes = (candidate: ExamModule): boolean => queue.includes(candidate);
   const scores: SkillScores = {};
   let sb: SprachbausteineScore | null = null;
@@ -43,7 +50,7 @@ export const buildAttempt = ({ exam, mode, queue, answers, ratings, times }: Fin
   };
 };
 
-export const completionToast = (exam: Exam, attempt: Attempt): CompletionToast => {
+export const completionToast = (exam: DualLevelExam, attempt: DualLevelAttempt): CompletionToast => {
   if (attempt.result != null && attempt.total != null) {
     const passed = attempt.result !== 'Nicht bestanden';
     return {
@@ -61,7 +68,7 @@ export const completionToast = (exam: Exam, attempt: Attempt): CompletionToast =
 };
 
 /** The Musterlösung for the one writing task an A2·B1 paper has. */
-export const writingSample = (exam: Exam): WritingSample => ({
+export const writingSample = (exam: DualLevelExam): WritingSample => ({
   musterloesung: exam.schreiben.musterloesung,
   tipps: `${exam.schreiben.tipps} — Check: did you cover all three points?`,
   points: exam.schreiben.points

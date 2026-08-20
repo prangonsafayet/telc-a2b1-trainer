@@ -1,10 +1,10 @@
-import { TELC_TOTAL_MAX } from '@shared/config/telcExam.ts';
+import { SINGLE_LEVEL_TOTAL_MAX } from '@shared/config/singleLevelExam.ts';
 import { fmtDate } from '@shared/lib/format.ts';
-import { type TelcAttempt } from '@shared/types';
+import { type SingleLevelAttempt } from '@shared/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui';
 
-interface TelcScoreChartProps {
-  readonly attempts: readonly TelcAttempt[];
+interface SingleLevelScoreChartProps {
+  readonly attempts: readonly SingleLevelAttempt[];
 }
 
 const CHART_HEIGHT = 160;
@@ -12,7 +12,7 @@ const CHART_HEIGHT = 160;
 const PASS_LINE = 180;
 
 /** Total points per full exam, most recent attempts last. */
-const TelcScoreChart = ({ attempts }: TelcScoreChartProps) => {
+const SingleLevelScoreChart = ({ attempts }: SingleLevelScoreChartProps) => {
   const bars = attempts
     .filter(attempt => attempt.mode === 'full' && typeof attempt.total === 'number')
     .map(attempt => ({
@@ -43,7 +43,7 @@ const TelcScoreChart = ({ attempts }: TelcScoreChartProps) => {
             <div className="relative min-w-fit pl-14" style={{ height: CHART_HEIGHT + 28 }}>
               <div
                 className="absolute inset-x-0 left-14 border-t border-dashed border-border"
-                style={{ bottom: (PASS_LINE / TELC_TOTAL_MAX) * CHART_HEIGHT + 28 }}
+                style={{ bottom: (PASS_LINE / SINGLE_LEVEL_TOTAL_MAX) * CHART_HEIGHT + 28 }}
               >
                 <span className="absolute -left-14 -top-2 w-12 text-right text-[11px] tabular-nums text-muted-foreground">
                   180
@@ -62,7 +62,7 @@ const TelcScoreChart = ({ attempts }: TelcScoreChartProps) => {
                     <div
                       className="w-full origin-bottom rounded-t transition-[filter] duration-200 group-hover:brightness-110"
                       style={{
-                        height: Math.max(4, (bar.total / TELC_TOTAL_MAX) * CHART_HEIGHT),
+                        height: Math.max(4, (bar.total / SINGLE_LEVEL_TOTAL_MAX) * CHART_HEIGHT),
                         background: `linear-gradient(to top, ${bar.color}, color-mix(in oklab, ${bar.color} 60%, white))`,
                         animation: `grow-up 0.6s cubic-bezier(0.22,1,0.36,1) ${String(index * 60)}ms both`
                       }}
@@ -81,4 +81,4 @@ const TelcScoreChart = ({ attempts }: TelcScoreChartProps) => {
   );
 };
 
-export default TelcScoreChart;
+export default SingleLevelScoreChart;

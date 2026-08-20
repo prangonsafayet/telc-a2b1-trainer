@@ -2,10 +2,10 @@ import { ListChecks } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { PageTitle, SectionTitle } from '@shared/components';
-import { TELC_MODULE_META } from '@shared/config/telcExam.ts';
+import { SINGLE_LEVEL_MODULE_META } from '@shared/config/singleLevelExam.ts';
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { fmtDate } from '@shared/lib/format.ts';
-import { type TelcLevel } from '@shared/types';
+import { type SingleLevelTrainerId } from '@shared/types';
 import {
   Badge,
   Button,
@@ -19,11 +19,11 @@ import {
   TableRow
 } from '@shared/ui';
 
-import TelcScoreChart from '../components/stats/TelcScoreChart.tsx';
+import SingleLevelScoreChart from '../components/stats/SingleLevelScoreChart.tsx';
 import { useLevelStats } from '../hooks/useLevelStats.ts';
 
 interface LevelHistoryPageProps {
-  readonly level: TelcLevel;
+  readonly level: SingleLevelTrainerId;
 }
 
 /** Every stored attempt of one level trainer, newest first. */
@@ -46,7 +46,7 @@ const LevelHistoryPage = ({ level }: LevelHistoryPageProps) => {
         History · {TRAINERS[level].short}
       </PageTitle>
 
-      <TelcScoreChart attempts={stats.attempts} />
+      <SingleLevelScoreChart attempts={stats.attempts} />
 
       <SectionTitle>Attempts</SectionTitle>
       <Card>
@@ -75,7 +75,7 @@ const LevelHistoryPage = ({ level }: LevelHistoryPageProps) => {
                     <TableCell className="whitespace-nowrap">{fmtDate(attempt.date)}</TableCell>
                     <TableCell>Test {attempt.examId}</TableCell>
                     <TableCell>
-                      {attempt.mode === 'full' ? 'Full exam' : TELC_MODULE_META[attempt.mode].short}
+                      {attempt.mode === 'full' ? 'Full exam' : SINGLE_LEVEL_MODULE_META[attempt.mode].short}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {attempt.written != null ? `${String(attempt.written)}/225` : '—'}

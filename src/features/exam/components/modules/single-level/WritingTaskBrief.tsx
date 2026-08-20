@@ -1,8 +1,8 @@
 import { Multiline } from '@shared/components';
-import { type TelcWritingTask } from '@shared/types';
+import { type SingleLevelWritingTask } from '@shared/types';
 
 interface WritingTaskBriefProps {
-  readonly task: TelcWritingTask;
+  readonly task: SingleLevelWritingTask;
 }
 
 /** The situation, incoming letter and Leitpunkte of one writing task. */

@@ -6,7 +6,7 @@
 import { SKILL_MAX } from '@shared/config/exam.ts';
 import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '@shared/lib/answers.ts';
 import { LETTERS } from '@shared/lib/format.ts';
-import { type Attempt, type Exam, type ExamModule } from '@shared/types';
+import { type DualLevelAttempt, type DualLevelExam, type ExamModule } from '@shared/types';
 
 import { attemptIncludes } from '@features/exam/lib/attemptMode.ts';
 import { type ReviewRow, type ReviewSection } from '@features/exam/types/examFormat.ts';
@@ -29,7 +29,7 @@ const optionLabel = (options: readonly string[], index: number | undefined): str
 
 const teilLabel = (teil: number, index: number): string => `Teil ${String(teil)} · ${String(index + 1)}`;
 
-const buildLesen = (exam: Exam, attempt: Attempt): ReviewSection => {
+const buildLesen = (exam: DualLevelExam, attempt: DualLevelAttempt): ReviewSection => {
   const { lesen } = exam;
   const { answers } = attempt;
   const rows: ReviewRow[] = [];
@@ -89,7 +89,7 @@ const buildLesen = (exam: Exam, attempt: Attempt): ReviewSection => {
   };
 };
 
-const buildSprachbausteine = (exam: Exam, attempt: Attempt): ReviewSection | null => {
+const buildSprachbausteine = (exam: DualLevelExam, attempt: DualLevelAttempt): ReviewSection | null => {
   if (!attempt.sb) return null;
   const { sprachbausteine } = exam;
   const { answers } = attempt;
@@ -138,7 +138,7 @@ const buildSprachbausteine = (exam: Exam, attempt: Attempt): ReviewSection | nul
   };
 };
 
-const buildHoeren = (exam: Exam, attempt: Attempt): ReviewSection => {
+const buildHoeren = (exam: DualLevelExam, attempt: DualLevelAttempt): ReviewSection => {
   const { hoeren } = exam;
   const { answers } = attempt;
   const rows: ReviewRow[] = [];
@@ -215,7 +215,10 @@ const buildHoeren = (exam: Exam, attempt: Attempt): ReviewSection => {
 };
 
 /** Every auto-marked section of an attempt, ready to render. */
-export const buildReviewSections = (exam: Exam, attempt: Attempt): readonly ReviewSection[] => {
+export const buildReviewSections = (
+  exam: DualLevelExam,
+  attempt: DualLevelAttempt
+): readonly ReviewSection[] => {
   const includes = (module: ExamModule): boolean => attemptIncludes(attempt.mode, module);
   const sections: ReviewSection[] = [];
 

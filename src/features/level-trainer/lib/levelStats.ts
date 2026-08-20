@@ -1,18 +1,18 @@
-import { TELC_SECTION_MAX } from '@shared/config/telcExam.ts';
+import { SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
 import { countMastery, streakLength, type MasteryCounts } from '@shared/lib/srs.ts';
 import {
   type ExamModule,
   type LevelContent,
   type LevelTrainerDoc,
   type StudyCategory,
-  type TelcAttempt,
-  type TelcExam
+  type SingleLevelAttempt,
+  type SingleLevelExam
 } from '@shared/types';
 
 import { idsFor, STUDY_CATEGORIES } from './studyItems.ts';
 
 export interface LevelExamCardStats {
-  readonly exam: TelcExam;
+  readonly exam: SingleLevelExam;
   readonly attemptCount: number;
   readonly bestTotal: number | null;
   readonly lastResult: string | null;
@@ -22,11 +22,11 @@ export interface LevelDashboardStats {
   readonly streak: number;
   readonly mastery: MasteryCounts;
   readonly categoryMastery: Readonly<Record<StudyCategory, MasteryCounts>>;
-  readonly attempts: readonly TelcAttempt[];
-  readonly fullAttempts: readonly TelcAttempt[];
+  readonly attempts: readonly SingleLevelAttempt[];
+  readonly fullAttempts: readonly SingleLevelAttempt[];
   readonly practiceCount: number;
   readonly bestTotal: number | null;
-  readonly lastAttempt: TelcAttempt | null;
+  readonly lastAttempt: SingleLevelAttempt | null;
   readonly examCards: readonly LevelExamCardStats[];
 }
 
@@ -129,7 +129,7 @@ export const buildWeakAreas = (
       .filter((score): score is number => typeof score === 'number');
     if (scores.length === 0) continue;
     const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-    const percent = average / TELC_SECTION_MAX[section];
+    const percent = average / SINGLE_LEVEL_SECTION_MAX[section];
     if (percent >= 0.6) continue; // At or above pass level is not a weak area.
     areas.push({
       key: `exam.${section}`,

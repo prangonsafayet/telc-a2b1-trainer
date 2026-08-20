@@ -1,6 +1,6 @@
 /** The three trainers the app hosts and how the UI addresses them. */
 
-import { type TelcLevel, type TrainerId } from '@shared/types';
+import { type SingleLevelTrainerId, type TrainerId } from '@shared/types';
 
 /** User-facing app name. UI-level only — repo, package and storage keys keep theirs. */
 export const APP_NAME = 'telc Deutsch Trainer';
@@ -21,7 +21,7 @@ export interface TrainerInfo {
 export const TRAINER_ORDER: readonly TrainerId[] = ['a2b1', 'b1', 'b2'];
 
 /** The two single-level trainers, in the order they are offered. */
-export const TELC_LEVELS: readonly TelcLevel[] = ['b1', 'b2'];
+export const SINGLE_LEVEL_TRAINERS: readonly SingleLevelTrainerId[] = ['b1', 'b2'];
 
 export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
   a2b1: {
@@ -50,7 +50,8 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
   }
 };
 
-export const isTelcLevel = (trainer: TrainerId): trainer is TelcLevel => trainer !== 'a2b1';
+export const isSingleLevelTrainer = (trainer: TrainerId): trainer is SingleLevelTrainerId =>
+  trainer !== 'a2b1';
 
 /** Which trainer a pathname belongs to. The original trainer owns everything else. */
 export const trainerFromPath = (pathname: string): TrainerId => {

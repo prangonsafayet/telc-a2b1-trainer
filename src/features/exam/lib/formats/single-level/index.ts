@@ -5,47 +5,47 @@
  */
 
 import {
-  TELC_MODULE_META,
-  TELC_RATING_CRITERIA,
-  TELC_RATING_SCALE,
-  telcModuleBriefing,
-  telcModuleMinutes
-} from '@shared/config/telcExam.ts';
+  SINGLE_LEVEL_MODULE_META,
+  SINGLE_LEVEL_RATING_CRITERIA,
+  SINGLE_LEVEL_RATING_SCALE,
+  singleLevelModuleBriefing,
+  singleLevelModuleMinutes
+} from '@shared/config/singleLevelExam.ts';
 import { type ExamModule } from '@shared/types';
 
-import HoerenModule from '@features/exam/components/modules/telc/HoerenModule.tsx';
-import LesenModule from '@features/exam/components/modules/telc/LesenModule.tsx';
-import SchreibenModule from '@features/exam/components/modules/telc/SchreibenModule.tsx';
-import SprachbausteineModule from '@features/exam/components/modules/telc/SprachbausteineModule.tsx';
-import SprechenModule from '@features/exam/components/modules/telc/SprechenModule.tsx';
+import HoerenModule from '@features/exam/components/modules/single-level/HoerenModule.tsx';
+import LesenModule from '@features/exam/components/modules/single-level/LesenModule.tsx';
+import SchreibenModule from '@features/exam/components/modules/single-level/SchreibenModule.tsx';
+import SprachbausteineModule from '@features/exam/components/modules/single-level/SprachbausteineModule.tsx';
+import SprechenModule from '@features/exam/components/modules/single-level/SprechenModule.tsx';
 import { MAX_CRITERION_SCORE } from '@features/exam/config/run.ts';
-import { type TelcFormat } from '@features/exam/types/examBinding.ts';
+import { type SingleLevelFormat } from '@features/exam/types/examBinding.ts';
 import { type RatingSpec } from '@features/exam/types/examFormat.ts';
 import { type RatedModule } from '@features/exam/types/run.ts';
 
 import { buildAttempt, completionToast, writingSample } from './attempt.ts';
 import { buildReviewSections } from './review.ts';
-import { TELC_RUN_FORMAT } from './runFormat.ts';
+import { SINGLE_LEVEL_RUN_FORMAT } from './runFormat.ts';
 import { countUnanswered } from './scoring.ts';
 import { summarizeAttempt } from './summary.ts';
 
 const ratingSpec = (module: RatedModule): RatingSpec => {
-  const criteria = TELC_RATING_CRITERIA[module];
+  const criteria = SINGLE_LEVEL_RATING_CRITERIA[module];
   return {
     criteria,
-    scale: TELC_RATING_SCALE,
-    max: criteria.length * MAX_CRITERION_SCORE * TELC_RATING_SCALE
+    scale: SINGLE_LEVEL_RATING_SCALE,
+    max: criteria.length * MAX_CRITERION_SCORE * SINGLE_LEVEL_RATING_SCALE
   };
 };
 
-export const TELC_FORMAT: TelcFormat = {
-  ...TELC_RUN_FORMAT,
+export const SINGLE_LEVEL_FORMAT: SingleLevelFormat = {
+  ...SINGLE_LEVEL_RUN_FORMAT,
   trainer: exam => exam.level,
   examLabel: exam => `${exam.title} · telc Deutsch ${exam.level.toUpperCase()}`,
-  moduleName: (module: ExamModule) => TELC_MODULE_META[module].name,
-  moduleShort: (module: ExamModule) => TELC_MODULE_META[module].short,
-  minutes: (module, exam, settings) => telcModuleMinutes(module, exam.level, settings),
-  briefing: (module, exam) => telcModuleBriefing(module, exam.level),
+  moduleName: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].name,
+  moduleShort: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].short,
+  minutes: (module, exam, settings) => singleLevelModuleMinutes(module, exam.level, settings),
+  briefing: (module, exam) => singleLevelModuleBriefing(module, exam.level),
   rating: { schreiben: ratingSpec('schreiben'), sprechen: ratingSpec('sprechen') },
   speakingHint:
     'Rate against the Redemittel: did you present clearly, react to your partner, and reach a result in Teil 3?',

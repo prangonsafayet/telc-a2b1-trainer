@@ -1,4 +1,4 @@
-import { type Exam } from '@shared/types';
+import { type DualLevelExam } from '@shared/types';
 
 import exam01 from './exam01.ts';
 import exam02 from './exam02.ts';
@@ -17,7 +17,7 @@ import exam14 from './exam14.ts';
 import exam15 from './exam15.ts';
 
 /** All Modelltests, ordered easiest first. */
-export const EXAMS: readonly Exam[] = [
+export const EXAMS: readonly DualLevelExam[] = [
   exam01,
   exam02,
   exam03,
@@ -36,7 +36,7 @@ export const EXAMS: readonly Exam[] = [
 ].toSorted((a, b) => a.id - b.id);
 
 /** Looks up an exam by id; accepts the string form that arrives from route params. */
-export const findExamById = (id: string | number | undefined): Exam | undefined => {
+export const findExamById = (id: string | number | undefined): DualLevelExam | undefined => {
   const numeric = Number(id);
   return Number.isFinite(numeric) ? EXAMS.find(exam => exam.id === numeric) : undefined;
 };

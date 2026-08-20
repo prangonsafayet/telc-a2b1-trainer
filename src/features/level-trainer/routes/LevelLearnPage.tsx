@@ -3,7 +3,7 @@ import { Info } from 'lucide-react';
 import { LEVEL_CONTENT } from '@content/trainers/index.ts';
 
 import { PageTitle, SectionTitle } from '@shared/components';
-import { type TelcLevel } from '@shared/types';
+import { type SingleLevelTrainerId } from '@shared/types';
 import {
   Accordion,
   AccordionContent,
@@ -22,7 +22,7 @@ import { useLevelPlan } from '../hooks/useLevelPlan.ts';
 import { useScheduledLevelLearn } from '../hooks/useScheduledLevelLearn.ts';
 
 interface LevelLearnPageProps {
-  readonly level: TelcLevel;
+  readonly level: SingleLevelTrainerId;
 }
 
 /** The level trainer's curriculum, re-paced around its exam date. */

@@ -1,10 +1,10 @@
 import { fmtDate } from '@shared/lib/format.ts';
 import { buildScoreHistory, CHART_HEIGHT, GRIDLINES } from '@shared/lib/scoreHistory.ts';
-import { type Attempt } from '@shared/types';
+import { type DualLevelAttempt } from '@shared/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui';
 
 interface ScoreHistoryChartProps {
-  readonly attempts: readonly Attempt[];
+  readonly attempts: readonly DualLevelAttempt[];
 }
 
 /** Total points per full exam, most recent attempts last. */

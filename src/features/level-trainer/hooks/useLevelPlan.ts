@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { LEVEL_CONTENT } from '@content/trainers/index.ts';
 
 import { learnTaskKey } from '@shared/lib/learnProgress.ts';
-import { type TelcLevel } from '@shared/types';
+import { type SingleLevelTrainerId } from '@shared/types';
 
 import { useToday } from '@features/plan';
 import { touchActivity, useTrainerDoc } from '@features/progress';
@@ -22,7 +22,7 @@ export interface LevelPlanState {
 }
 
 /** Curriculum checkbox state of one level trainer, stored on its document. */
-export const useLevelPlan = (level: TelcLevel): LevelPlanState => {
+export const useLevelPlan = (level: SingleLevelTrainerId): LevelPlanState => {
   const { doc, updateDoc } = useTrainerDoc(level);
   const today = useToday();
   const curriculum = LEVEL_CONTENT[level].curriculum;

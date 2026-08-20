@@ -1,4 +1,4 @@
-import { type Attempt, type ExamGrade } from '@shared/types';
+import { type DualLevelAttempt, type ExamGrade } from '@shared/types';
 
 export const CHART_HEIGHT = 160;
 const MAX_POINTS = 240;
@@ -27,7 +27,7 @@ const colorForGrade = (result: ExamGrade): string => {
 };
 
 /** The last dozen full attempts, as bar geometry. */
-export const buildScoreHistory = (attempts: readonly Attempt[]): readonly ScoreBar[] =>
+export const buildScoreHistory = (attempts: readonly DualLevelAttempt[]): readonly ScoreBar[] =>
   attempts
     .filter(attempt => attempt.mode === 'full')
     .slice(-MAX_BARS)

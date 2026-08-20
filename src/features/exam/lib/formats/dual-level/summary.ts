@@ -1,5 +1,5 @@
 import { FULL_EXAM_MAX, SKILL_MAX } from '@shared/config/exam.ts';
-import { type Attempt, type ExamModule } from '@shared/types';
+import { type DualLevelAttempt, type ExamModule } from '@shared/types';
 
 import {
   type AttemptGrade,
@@ -12,7 +12,7 @@ import {
 const PASS_RULE =
   'B1 rule: ≥42/60 in three skills + ≥24/60 in the fourth. A2 rule: ≥24/60 in three + ≥6/60 in the fourth.';
 
-const gradeFor = (attempt: Attempt): AttemptGrade | null => {
+const gradeFor = (attempt: DualLevelAttempt): AttemptGrade | null => {
   if (attempt.mode !== 'full' || attempt.total == null || attempt.result == null) return null;
   return {
     label: attempt.result,
@@ -24,7 +24,7 @@ const gradeFor = (attempt: Attempt): AttemptGrade | null => {
 };
 
 /** Turns a stored attempt into the numbers and labels the results screen renders. */
-export const summarizeAttempt = (attempt: Attempt): AttemptSummary => {
+export const summarizeAttempt = (attempt: DualLevelAttempt): AttemptSummary => {
   const isFull = attempt.mode === 'full';
   const { scores, sb } = attempt;
 

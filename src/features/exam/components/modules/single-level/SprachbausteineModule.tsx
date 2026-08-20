@@ -2,9 +2,9 @@ import { GapFillText, InlineGapSelect, Teil } from '@shared/components';
 import { itemKey, numberAnswer } from '@shared/lib/answers.ts';
 import { LETTERS } from '@shared/lib/format.ts';
 
-import { type TelcModuleProps } from '@features/exam/types/moduleProps.ts';
+import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts';
 
-const SprachbausteineModule = ({ exam, answers, setAnswer }: TelcModuleProps) => {
+const SprachbausteineModule = ({ exam, answers, setAnswer }: SingleLevelModuleProps) => {
   const { sprachbausteine } = exam;
 
   return (

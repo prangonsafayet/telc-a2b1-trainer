@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { PageTitle } from '@shared/components';
 import { TRAINERS } from '@shared/config/trainers.ts';
-import { type StudyCategory, type TelcLevel } from '@shared/types';
+import { type StudyCategory, type SingleLevelTrainerId } from '@shared/types';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui';
 
 import CategoryPicker from '../components/practice/CategoryPicker.tsx';
@@ -17,7 +17,7 @@ import { usePractice } from '../hooks/usePractice.ts';
 import { STUDY_CATEGORIES } from '../lib/studyItems.ts';
 
 interface LevelPracticePageProps {
-  readonly level: TelcLevel;
+  readonly level: SingleLevelTrainerId;
 }
 
 const isCategory = (value: string | null): value is StudyCategory =>

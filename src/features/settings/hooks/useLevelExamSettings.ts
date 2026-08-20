@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { type LevelTrainerSettings, type TelcLevel } from '@shared/types';
+import { type LevelTrainerSettings, type SingleLevelTrainerId } from '@shared/types';
 
 import { useTrainerDoc } from '@features/progress';
 
@@ -13,7 +13,7 @@ export interface LevelExamSettings {
 }
 
 /** Read/write handle on one level trainer's settings (exam date, timing, plays). */
-export const useLevelExamSettings = (level: TelcLevel): LevelExamSettings => {
+export const useLevelExamSettings = (level: SingleLevelTrainerId): LevelExamSettings => {
   const { doc, updateDoc } = useTrainerDoc(level);
 
   const setLevelSetting = useCallback(

@@ -1,7 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom';
 
 import { findExamById } from '@content/exams';
-import { findTelcExam } from '@content/trainers/index.ts';
+import { findSingleLevelExam } from '@content/trainers/index.ts';
 
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
@@ -21,8 +21,8 @@ const RunnerPage = ({ trainer }: RunnerPageProps) => {
   const home = TRAINERS[trainer].basePath || '/';
 
   /* An unknown exam or mode is a bad URL, not a state worth rendering. */
-  if (binding.kind === 'telc') {
-    const exam = findTelcExam(binding.level, examId);
+  if (binding.kind === 'single-level') {
+    const exam = findSingleLevelExam(binding.level, examId);
     if (!exam || !isAttemptMode(binding.format, mode)) return <Navigate to={home} replace />;
     return <RunnerView format={binding.format} exam={exam} mode={mode} store={binding.store} />;
   }

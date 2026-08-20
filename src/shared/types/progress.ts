@@ -30,7 +30,7 @@ export interface SprachbausteineScore {
 }
 
 /** One completed attempt, as stored. */
-export interface Attempt {
+export interface DualLevelAttempt {
   /** `Date.now()` at completion; also the route parameter. */
   readonly id: number;
   readonly examId: number;
@@ -63,7 +63,7 @@ export type LearnDoneMap = Partial<Record<string, boolean>>;
 
 /** The whole persisted document — what localStorage holds and what cloud sync merges. */
 export interface ProgressDatabase {
-  readonly attempts: readonly Attempt[];
+  readonly attempts: readonly DualLevelAttempt[];
   readonly learnDone: LearnDoneMap;
   readonly settings: Settings;
   /**

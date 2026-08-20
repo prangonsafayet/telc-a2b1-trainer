@@ -11,11 +11,11 @@ import { cn } from '@shared/lib/cn.ts';
 import { describeWordCount } from '@shared/lib/writingFeedback.ts';
 import { Label, RadioGroup, RadioGroupItem, Textarea } from '@shared/ui';
 
-import { type TelcModuleProps } from '@features/exam/types/moduleProps.ts';
+import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts';
 
 import WritingTaskBrief from './WritingTaskBrief.tsx';
 
-const SchreibenModule = ({ exam, answers, setAnswer }: TelcModuleProps) => {
+const SchreibenModule = ({ exam, answers, setAnswer }: SingleLevelModuleProps) => {
   const { schreiben } = exam;
   const hasChoice = schreiben.tasks.length > 1;
   const chosen = numberAnswer(answers, WRITING_TASK_KEY) ?? 0;

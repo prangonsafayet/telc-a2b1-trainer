@@ -12,7 +12,7 @@ import { type ExamRunFormat } from '@features/exam/types/examFormat.ts';
 const RUN_STORAGE_KEY = 'telcTrainerRunV1';
 
 export const A2B1_RUN_FORMAT: ExamRunFormat = {
-  id: 'a2b1',
+  id: 'dual-level',
   modules: EXAM_MODULES,
   runStore: createRunStore(RUN_STORAGE_KEY)
 };

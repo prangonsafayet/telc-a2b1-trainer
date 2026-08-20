@@ -5,13 +5,13 @@
  */
 
 import {
-  type Attempt,
-  type Exam,
+  type DualLevelAttempt,
+  type DualLevelExam,
   type LevelTrainerSettings,
   type Settings,
-  type TelcAttempt,
-  type TelcExam,
-  type TelcLevel
+  type SingleLevelAttempt,
+  type SingleLevelExam,
+  type SingleLevelTrainerId
 } from '@shared/types';
 
 import { type ExamFormat } from './examFormat.ts';
@@ -23,8 +23,8 @@ export interface ExamStore<TSettings, TAttempt> {
   readonly saveAttempt: (attempt: TAttempt) => void;
 }
 
-export type A2b1Format = ExamFormat<Exam, Settings, Attempt>;
-export type TelcFormat = ExamFormat<TelcExam, LevelTrainerSettings, TelcAttempt>;
+export type A2b1Format = ExamFormat<DualLevelExam, Settings, DualLevelAttempt>;
+export type SingleLevelFormat = ExamFormat<SingleLevelExam, LevelTrainerSettings, SingleLevelAttempt>;
 
 /**
  * A trainer resolved to its paper and its stored data. Discriminated so a screen narrows
@@ -32,13 +32,13 @@ export type TelcFormat = ExamFormat<TelcExam, LevelTrainerSettings, TelcAttempt>
  */
 export type ExamBinding =
   | {
-      readonly kind: 'a2b1';
+      readonly kind: 'dual-level';
       readonly format: A2b1Format;
-      readonly store: ExamStore<Settings, Attempt>;
+      readonly store: ExamStore<Settings, DualLevelAttempt>;
     }
   | {
-      readonly kind: 'telc';
-      readonly level: TelcLevel;
-      readonly format: TelcFormat;
-      readonly store: ExamStore<LevelTrainerSettings, TelcAttempt>;
+      readonly kind: 'single-level';
+      readonly level: SingleLevelTrainerId;
+      readonly format: SingleLevelFormat;
+      readonly store: ExamStore<LevelTrainerSettings, SingleLevelAttempt>;
     };

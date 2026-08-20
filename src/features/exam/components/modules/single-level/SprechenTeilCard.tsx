@@ -1,8 +1,8 @@
 import { PunkteGrid, RecorderControls, RedemittelList, Teil } from '@shared/components';
-import { type TelcSprechenTeil, type SpeakingPart } from '@shared/types';
+import { type SingleLevelSprechenTeil, type SpeakingPart } from '@shared/types';
 
 interface SprechenTeilProps {
-  readonly teil: TelcSprechenTeil;
+  readonly teil: SingleLevelSprechenTeil;
   readonly part: SpeakingPart;
   readonly chip: string;
   readonly recordingUrl: string | undefined;

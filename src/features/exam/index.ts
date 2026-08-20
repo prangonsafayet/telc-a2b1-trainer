@@ -5,8 +5,8 @@
  * the exam domain never drags three screens along with it.
  */
 export { useStartAttempt } from './hooks/useStartAttempt.ts';
-export { A2B1_RUN_FORMAT } from './lib/formats/a2b1/runFormat.ts';
-export { TELC_RUN_FORMAT } from './lib/formats/telc/runFormat.ts';
+export { A2B1_RUN_FORMAT } from './lib/formats/dual-level/runFormat.ts';
+export { SINGLE_LEVEL_RUN_FORMAT } from './lib/formats/single-level/runFormat.ts';
 export { runFormatFor } from './lib/formats/runFormats.ts';
 export { createRun, currentModule, queueForMode, secondsLeft } from './lib/runStore.ts';
 export type { ExamRunFormat } from './types/examFormat.ts';

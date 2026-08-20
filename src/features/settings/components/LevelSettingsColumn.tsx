@@ -1,5 +1,5 @@
 import { TRAINERS } from '@shared/config/trainers.ts';
-import { type TelcLevel } from '@shared/types';
+import { type SingleLevelTrainerId } from '@shared/types';
 import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui';
 
 import { useLevelExamSettings } from '../hooks/useLevelExamSettings.ts';
@@ -7,7 +7,7 @@ import { useLevelExamSettings } from '../hooks/useLevelExamSettings.ts';
 import ExamDateControls from './ExamDateControls.tsx';
 
 interface LevelSettingsColumnProps {
-  readonly level: TelcLevel;
+  readonly level: SingleLevelTrainerId;
 }
 
 /** One level trainer's settings: exam date, writing time and audio plays. */

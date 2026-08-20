@@ -5,12 +5,12 @@
  */
 
 import { addDays, toIsoDate } from '@shared/lib/format.ts';
-import { type ExamModule, type LevelTrainerSettings, type TelcLevel } from '@shared/types';
+import { type ExamModule, type LevelTrainerSettings, type SingleLevelTrainerId } from '@shared/types';
 
 import { DEFAULT_PREP_DAYS } from './exam.ts';
 
 /** Module order of a full B1/B2 sitting. Same keys as the A2·B1 trainer. */
-export const TELC_MODULES: readonly ExamModule[] = [
+export const SINGLE_LEVEL_MODULES: readonly ExamModule[] = [
   'lesen',
   'sprachbausteine',
   'hoeren',
@@ -19,7 +19,7 @@ export const TELC_MODULES: readonly ExamModule[] = [
 ] as const;
 
 /** Maximum points per section. Written = 225, oral = 75. */
-export const TELC_SECTION_MAX: Readonly<Record<ExamModule, number>> = {
+export const SINGLE_LEVEL_SECTION_MAX: Readonly<Record<ExamModule, number>> = {
   lesen: 75,
   sprachbausteine: 30,
   hoeren: 75,
@@ -27,16 +27,16 @@ export const TELC_SECTION_MAX: Readonly<Record<ExamModule, number>> = {
   sprechen: 75
 };
 
-export const TELC_WRITTEN_MAX = 225;
-export const TELC_ORAL_MAX = 75;
-export const TELC_TOTAL_MAX = TELC_WRITTEN_MAX + TELC_ORAL_MAX;
+export const SINGLE_LEVEL_WRITTEN_MAX = 225;
+export const SINGLE_LEVEL_ORAL_MAX = 75;
+export const SINGLE_LEVEL_TOTAL_MAX = SINGLE_LEVEL_WRITTEN_MAX + SINGLE_LEVEL_ORAL_MAX;
 
 /** The official rule: 60% in the written and the oral part, independently. */
-export const TELC_WRITTEN_PASS = 135;
-export const TELC_ORAL_PASS = 45;
+export const SINGLE_LEVEL_WRITTEN_PASS = 135;
+export const SINGLE_LEVEL_ORAL_PASS = 45;
 
 /** Points per correct item, by Teil. */
-export const TELC_POINTS = {
+export const SINGLE_LEVEL_POINTS = {
   lesenTeil1: 5,
   lesenTeil2: 5,
   lesenTeil3: 2.5,
@@ -46,19 +46,19 @@ export const TELC_POINTS = {
   hoerenTeil3: 5
 } as const;
 
-interface TelcModuleMeta {
+interface SingleLevelModuleMeta {
   readonly name: string;
   readonly short: string;
   /** Whether the module contributes to the written score (Sprechen is the oral part). */
   readonly written: boolean;
-  readonly minutes: (level: TelcLevel, settings: LevelTrainerSettings) => number;
+  readonly minutes: (level: SingleLevelTrainerId, settings: LevelTrainerSettings) => number;
 }
 
 /**
  * Official timing: Lesen + Sprachbausteine share 90 minutes (the app splits them 65/25),
  * Hören runs ≈30 minutes at B1 and ≈20 at B2, Schreiben 30 minutes.
  */
-export const TELC_MODULE_META: Readonly<Record<ExamModule, TelcModuleMeta>> = {
+export const SINGLE_LEVEL_MODULE_META: Readonly<Record<ExamModule, SingleLevelModuleMeta>> = {
   lesen: { name: 'Leseverstehen', short: 'Lesen', written: true, minutes: () => 65 },
   sprachbausteine: {
     name: 'Sprachbausteine',
@@ -81,14 +81,14 @@ export const TELC_MODULE_META: Readonly<Record<ExamModule, TelcModuleMeta>> = {
   sprechen: { name: 'Mündliche Prüfung', short: 'Sprechen', written: false, minutes: () => 15 }
 };
 
-export const telcModuleMinutes = (
+export const singleLevelModuleMinutes = (
   module: ExamModule,
-  level: TelcLevel,
+  level: SingleLevelTrainerId,
   settings: LevelTrainerSettings
-): number => TELC_MODULE_META[module].minutes(level, settings);
+): number => SINGLE_LEVEL_MODULE_META[module].minutes(level, settings);
 
 /** Shown on the briefing screen before each module starts. */
-export const telcModuleBriefing = (module: ExamModule, level: TelcLevel): string => {
+export const singleLevelModuleBriefing = (module: ExamModule, level: SingleLevelTrainerId): string => {
   switch (module) {
     case 'lesen':
       return '3 parts, 20 items, 75 points. Teil 1: match 5 texts to 10 headlines (5 pts each). Teil 2: read one article, answer 5 a/b/c questions (5 pts each). Teil 3: match 10 situations to 12 ads — some situations may have no perfect-looking ad, pick the best fit (2.5 pts each). Budget ≈ 20 minutes per part and never leave a blank!';
@@ -113,7 +113,7 @@ export const telcModuleBriefing = (module: ExamModule, level: TelcLevel): string
  * Self-assessment criteria. Schreiben: 3 × 0–5, ×3 → 45 points. Sprechen: 5 × 0–5,
  * ×3 → 75 points. Mirrors the official criteria (task, communication, correctness).
  */
-export const TELC_RATING_CRITERIA: Readonly<
+export const SINGLE_LEVEL_RATING_CRITERIA: Readonly<
   Record<'schreiben' | 'sprechen', readonly (readonly [string, string])[]>
 > = {
   schreiben: [
@@ -131,7 +131,7 @@ export const TELC_RATING_CRITERIA: Readonly<
 };
 
 /** Multiplier from a 0–5 criteria rating to points. */
-export const TELC_RATING_SCALE = 3;
+export const SINGLE_LEVEL_RATING_SCALE = 3;
 
 /** A fresh trainer document needs a date the schedule can work with. */
 export const defaultLevelSettings = (): LevelTrainerSettings => ({

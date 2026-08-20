@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { type LevelTrainerDoc, type TelcLevel } from '@shared/types';
+import { type LevelTrainerDoc, type SingleLevelTrainerId } from '@shared/types';
 
 import { emptyTrainerDoc } from '../lib/progressDb.ts';
 
@@ -16,7 +16,7 @@ export interface TrainerDocHandle {
 }
 
 /** The persisted document of one B1/B2 trainer, plus its write handle. */
-export const useTrainerDoc = (level: TelcLevel): TrainerDocHandle => {
+export const useTrainerDoc = (level: SingleLevelTrainerId): TrainerDocHandle => {
   const { db, update } = useProgress();
   const stored = db[level];
   const doc = useMemo(() => stored ?? emptyTrainerDoc(), [stored]);

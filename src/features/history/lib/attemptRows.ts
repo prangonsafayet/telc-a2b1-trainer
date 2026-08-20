@@ -1,6 +1,6 @@
 import { MODULE_META } from '@shared/config/exam.ts';
 import { fmtClock, fmtDate } from '@shared/lib/format.ts';
-import { type Attempt, type ExamGrade } from '@shared/types';
+import { type DualLevelAttempt, type ExamGrade } from '@shared/types';
 
 /** One table row, pre-formatted so the table component stays presentational. */
 export interface AttemptRow {
@@ -23,7 +23,7 @@ const DASH = '–';
 const score = (value: number | undefined): string => (value == null ? DASH : String(value));
 
 /** Newest first — the most recent attempt is the one you want to see. */
-export const buildAttemptRows = (attempts: readonly Attempt[]): readonly AttemptRow[] =>
+export const buildAttemptRows = (attempts: readonly DualLevelAttempt[]): readonly AttemptRow[] =>
   attempts.toReversed().map<AttemptRow>(attempt => {
     const seconds = Object.values(attempt.times).reduce<number>((sum, value) => sum + value, 0);
     return {

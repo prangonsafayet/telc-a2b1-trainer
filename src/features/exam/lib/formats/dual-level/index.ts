@@ -6,11 +6,11 @@
 import { MODULE_BRIEFING, MODULE_META, moduleMinutes, RATING_CRITERIA } from '@shared/config/exam.ts';
 import { type ExamModule } from '@shared/types';
 
-import HoerenModule from '@features/exam/components/modules/a2b1/HoerenModule.tsx';
-import LesenModule from '@features/exam/components/modules/a2b1/LesenModule.tsx';
-import SchreibenModule from '@features/exam/components/modules/a2b1/SchreibenModule.tsx';
-import SprachbausteineModule from '@features/exam/components/modules/a2b1/SprachbausteineModule.tsx';
-import SprechenModule from '@features/exam/components/modules/a2b1/SprechenModule.tsx';
+import HoerenModule from '@features/exam/components/modules/dual-level/HoerenModule.tsx';
+import LesenModule from '@features/exam/components/modules/dual-level/LesenModule.tsx';
+import SchreibenModule from '@features/exam/components/modules/dual-level/SchreibenModule.tsx';
+import SprachbausteineModule from '@features/exam/components/modules/dual-level/SprachbausteineModule.tsx';
+import SprechenModule from '@features/exam/components/modules/dual-level/SprechenModule.tsx';
 import { MAX_CRITERION_SCORE } from '@features/exam/config/run.ts';
 import { type A2b1Format } from '@features/exam/types/examBinding.ts';
 import { type RatingSpec } from '@features/exam/types/examFormat.ts';
