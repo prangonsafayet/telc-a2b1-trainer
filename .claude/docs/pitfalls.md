@@ -42,7 +42,7 @@ through refs and depend only on `phase` and `index`.
 
 The answer map is flat and stringly-keyed (`l1.0`, `h5.2`, `w.text`) because it is
 persisted and must stay readable by older and newer builds. **Do not change the key
-format.** Read values through the accessors in `features/exam/lib/answers.ts`, which
+format.** Read values through the accessors in `shared/lib/answers.ts`, which
 narrow a stored value to what a given input expects.
 
 ## Auth

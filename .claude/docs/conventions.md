@@ -25,13 +25,13 @@ Components are grouped in folders/subfolders by area: `features/<f>/components/<
 
 ## Shared exam machinery
 
-Everything both exam features render lives in `shared/components/exam-ui/` — inputs
+Everything both exam formats render lives in `shared/components/exam-ui/` — inputs
 (`RichtigFalsch`, `MultipleChoice`, `LetterSelect`), layout (`Teil`, `QuestionItem`,
 `QuestionText`, `ReadingText`, `Callout`), gaps (`InlineGapSelect`, `GapFillText`),
 `OptionCards`, `PunkteGrid`, `RedemittelList`, `ModuleBriefingCard`, `ExamModuleToolbar`,
-`CriteriaRatingPanel`, `CountdownRing`, `RecorderControls`, `Transcript`. Both
-`features/exam` and `features/telc-exam` consume it via `@shared/components`; neither
-defines its own copy.
+`CriteriaRatingPanel`, `CountdownRing`, `RecorderControls`, `Transcript`. The A2·B1 and
+telc module renderers under `features/exam/components/modules/` consume it via
+`@shared/components`; neither keeps a copy of its own.
 
 ## Use the design system
 

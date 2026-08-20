@@ -9,12 +9,22 @@ src/shared     feature-agnostic building blocks — ui/ primitives, components, 
 src/content    inert data — the exams, the guide HTML, the study plans.
 ```
 
-Three trainers ship as three features: `features/exam` (the original A2·B1 mock exams),
-`features/telc-exam` (the shared-format B1/B2 exams, mounted once per level) and
-`features/level-trainer` (B1/B2 flashcards, quizzes and reference). Everything both exam
-features render — inputs, Teil layout, gap fills, briefing card, toolbar, rating panel,
+Three trainers ship as two features. `features/exam` runs every mock exam of every
+trainer: one run-state machine, one runner shell, one results screen and one review screen,
+driven by a **format descriptor** in `features/exam/lib/formats/`. There are two of those —
+`A2B1_FORMAT` and `TELC_FORMAT` — and they own everything a paper decides for itself: its
+module list and timing, its briefing copy, its marking rules, its self-rating scale and its
+five module renderers (`components/modules/a2b1/`, `components/modules/telc/`).
+`features/level-trainer` adds the B1/B2 flashcards, quizzes and reference.
+
+A trainer is bound to its paper and its stored attempts by `useExamBinding`, so the three
+screens narrow once and then render the same generic views for either format. Everything
+both papers render — inputs, Teil layout, gap fills, briefing card, toolbar, rating panel,
 recorder — lives in `shared/components/exam-ui/` and is consumed through
-`@shared/components`; neither feature keeps a private copy.
+`@shared/components`; the feature keeps no private copy.
+
+Anything named after one paper is named after that paper (`TELC_FORMAT`, `telc/scoring.ts`).
+Anything generic is not: a `Telc` prefix on a generic name is the bug this structure fixed.
 
 ## The dependency rules are ESLint rules, not conventions
 
@@ -54,7 +64,7 @@ score-history chart live there.
 | ------------------------- | ------------------------------------------ | ------------------------------ |
 | Screen                    | `features/<f>/routes/`                     | `DashboardPage.tsx`            |
 | Feature-private component | `features/<f>/components/`                 | `ExamCard.tsx`                 |
-| Feature logic             | `features/<f>/hooks/`, `features/<f>/lib/` | `useExamRun.ts`, `runState.ts` |
+| Feature logic             | `features/<f>/hooks/`, `features/<f>/lib/` | `useExamRun.ts`, `runStore.ts` |
 
 ## The `plan` feature
 
