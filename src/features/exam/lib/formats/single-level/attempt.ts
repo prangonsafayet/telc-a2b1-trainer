@@ -72,7 +72,7 @@ export const completionToast = (exam: SingleLevelExam, attempt: SingleLevelAttem
   };
 };
 
-/** The Musterlösung of whichever writing task was chosen — B2 offers two. */
+/** The Musterlösung of the writing task, or of whichever one was chosen if a paper ever offers more than one. */
 export const writingSample = (exam: SingleLevelExam, answers: AnswerMap): WritingSample | null => {
   const chosen = numberAnswer(answers, WRITING_TASK_KEY) ?? 0;
   const task = exam.schreiben.tasks[chosen] ?? exam.schreiben.tasks[0];

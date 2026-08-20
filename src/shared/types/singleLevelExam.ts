@@ -2,8 +2,9 @@
  * The shape of one telc Deutsch B1 / B2 Modelltest — the single-level paper, as authored in
  * `src/content/trainers/<level>/exams`. Both levels share one skeleton (researched from
  * the official telc handbooks): Lesen 5+5+10 items, Sprachbausteine 10+10, Hören 5+10+5,
- * one 45-point letter, a three-part oral. They differ in the writing task (B1 replies to
- * a letter, B2 chooses one of two formal tasks) and the oral part weights.
+ * one 45-point e-mail, a three-part oral. They differ in the writing task (B1 replies to
+ * an incoming e-mail; B2 writes a halbformelle E-Mail directly from a prompt, no incoming
+ * message) and in the oral part names, weights and task types.
  */
 
 import { type AttemptMode, type AudioScript, type ExamModule, type MultipleChoiceQuestion } from './exam.ts';
@@ -95,20 +96,20 @@ export interface SingleLevelHoerenSection {
 export interface SingleLevelWritingTask {
   readonly titel: string;
   readonly situation: string;
-  /** B1 only: the half-formal letter/email this task replies to. */
+  /** B1 only: the half-formal e-mail this task replies to. */
   readonly incoming?: {
     readonly von: string;
     readonly betreff: string;
     readonly text: string;
   };
-  /** 4 Leitpunkte. B1 asks for at least 3 of them; B2 for 2 plus an own point. */
+  /** 4 Leitpunkte. The official instruction at both levels: address all four, fully. */
   readonly leitpunkte: readonly string[];
   readonly musterloesung: string;
 }
 
 export interface SingleLevelSchreibenSection {
   readonly anweisung: string;
-  /** B1: exactly one task. B2: two tasks — the candidate works on one. */
+  /** Exactly one task at both levels — neither offers a choice between two. */
   readonly tasks: readonly SingleLevelWritingTask[];
   readonly tipps: string;
 }
@@ -159,7 +160,11 @@ export interface SingleLevelAttempt {
   readonly answers: AnswerMap;
   /** Self-assessed scores for schreiben (/45) and sprechen (/75). */
   readonly ratings: Partial<Record<'schreiben' | 'sprechen', number>>;
-  /** B2 only: which of the two writing tasks was chosen. */
+  /**
+   * Which of `schreiben.tasks` was chosen. Both levels currently author exactly one task,
+   * so the writing module never sets this; kept for older stored attempts and in case a
+   * future paper offers a real choice.
+   */
   readonly writingTask?: number;
   /** Full attempts only. Written /225, oral /75, total /300. */
   readonly written?: number;

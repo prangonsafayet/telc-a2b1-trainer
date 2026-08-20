@@ -32,7 +32,13 @@ export const SINGLE_LEVEL_WRITTEN_MAX = 225;
 export const SINGLE_LEVEL_ORAL_MAX = 75;
 export const SINGLE_LEVEL_TOTAL_MAX = SINGLE_LEVEL_WRITTEN_MAX + SINGLE_LEVEL_ORAL_MAX;
 
-/** The official rule: 60% in the written and the oral part, independently. */
+/**
+ * 60% of each part, independently — the threshold this trainer scores against. NOT
+ * confirmed from an official telc source: the two Übungstest PDFs publish only the
+ * weighting table (see `SINGLE_LEVEL_SECTION_MAX`), never a per-part pass percentage. The
+ * B1 and B2 guides deliberately print no threshold for this reason; treat this constant as
+ * this app's working assumption, not an asserted fact.
+ */
 export const SINGLE_LEVEL_WRITTEN_PASS = 135;
 export const SINGLE_LEVEL_ORAL_PASS = 45;
 

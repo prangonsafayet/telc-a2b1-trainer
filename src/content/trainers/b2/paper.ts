@@ -16,16 +16,16 @@ export const B2_PAPER: TrainerPaper = {
     hoeren:
       '3 parts, 20 items, 75 points, ≈20 minutes. Teil 1: 5 radio clips → richtig/falsch (5 pts). Teil 2: one long interview → 10 richtig/falsch statements (2.5 pts). Teil 3: 5 announcements → richtig/falsch (5 pts). Each audio plays a limited number of times, like the real exam. Read the statements BEFORE you press play!',
     schreiben:
-      'Choose ONE of the two tasks, 45 points. Write a formal letter of 150–200 words covering at least two Leitpunkte plus one point of your own, with Betreff, formal greeting and sign-off. Keep 5 minutes to check structure and endings. You will score yourself against the sample answer afterwards.',
+      'Write one halbformelle E-Mail of 150–220 words, 45 points. Answer everything the task raises — all four Leitpunkte, fully — with a fitting greeting and sign-off; not a formal Behördenbrief. Keep 5 minutes to check structure and endings. You will score yourself against the sample answer afterwards.',
     sprechen:
-      '3 parts, 75 points, with 20 minutes preparation in the real exam. Teil 1: Präsentation of a topic (25 pts). Teil 2: Diskussion about a short text (25 pts). Teil 3: gemeinsam etwas planen (25 pts). Record yourself if you allow microphone access, then listen back and rate yourself honestly.'
+      '3 parts, 75 points, with 20 minutes preparation in the real exam. Teil 1: Über Erfahrungen sprechen — talk about your own experience (25 pts). Teil 2: Diskussion about a short text (25 pts). Teil 3: Gemeinsam etwas planen (25 pts). Record yourself if you allow microphone access, then listen back and rate yourself honestly.'
   },
 
   listeningRate: 1.03,
 
   writingTarget: { min: 150, max: 220 },
   writingTitle: 'Schriftlicher Ausdruck',
-  writingPlaceholder: 'Sehr geehrte Damen und Herren, …',
+  writingPlaceholder: 'Liebe Frau …, / Sehr geehrter Herr …,',
 
   sprechenChips: ['25 Punkte · ~5 Min.', '25 Punkte · ~5 Min.', '25 Punkte · ~5 Min.'],
   prepNote: {
