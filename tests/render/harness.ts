@@ -86,6 +86,18 @@ export const click = async (element: Element | undefined): Promise<void> => {
 };
 
 /**
+ * Radix's `Tabs.Trigger` switches on `mousedown`, not `click` (so keyboard and pointer
+ * activation share one path) — a plain `click()` never fires it.
+ */
+export const selectTab = async (element: Element | undefined): Promise<void> => {
+  if (!element) throw new Error('selectTab() got nothing to select');
+  await act(async () => {
+    element.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, button: 0 }));
+  });
+  await settle(40);
+};
+
+/**
  * Types into a controlled input. React tracks the previous value on the DOM node, so the
  * value has to go through the native setter or the change event is swallowed as a no-op.
  */

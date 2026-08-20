@@ -1,0 +1,135 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+
+import { SINGLE_LEVEL_TRAINERS, TRAINERS } from '@shared/config/trainers.ts';
+import { type SrsMap } from '@shared/types';
+import { usePracticeStore } from '@features/practice/lib/practiceStore.ts';
+import { PROGRESS_STORAGE_KEY } from '@features/progress';
+
+import { bySelector, captureErrors, click, findByText, mount, selectTab } from './harness.ts';
+
+/*
+ * The practice hub — flashcards, quiz drills and the reference tables — had no coverage at
+ * all. This covers the one behaviour that matters most: grading a flashcard or answering a
+ * quiz question has to write a real SRS transition into that trainer's own document slice,
+ * not just move the session along in memory. Parameterised over SINGLE_LEVEL_TRAINERS, the
+ * registry's list of trainers that keep a vocabulary bank worth drilling.
+ */
+
+describe.each(SINGLE_LEVEL_TRAINERS)('the practice hub — %s', trainer => {
+  const info = TRAINERS[trainer];
+  const docKey = info.docKey;
+  if (docKey === null) throw new Error(`${trainer} is single-level but has no docKey`);
+
+  const storedSrs = (): SrsMap => {
+    const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    if (!raw) return {};
+    const db = JSON.parse(raw) as Partial<Record<string, { srs?: SrsMap }>>;
+    return db[docKey]?.srs ?? {};
+  };
+
+  let errors: ReturnType<typeof captureErrors>;
+
+  beforeEach(() => {
+    localStorage.clear();
+    usePracticeStore.getState().end();
+    errors = captureErrors();
+  });
+
+  afterEach(() => {
+    errors.restore();
+  });
+
+  it('grades a flashcard and persists its SRS entry', async () => {
+    const view = await mount(`${info.basePath}/practice`);
+    expect(view.text()).toMatch(/Practice/);
+
+    await click(findByText(/Flashcards/));
+
+    const session = usePracticeStore.getState().session;
+    if (session?.kind !== 'flashcards') throw new Error('expected a flashcard session to start');
+    const cardId = session.cards[0]?.id;
+    if (!cardId) throw new Error('the flashcard session started with no cards');
+
+    /* Nothing recorded for this item yet. */
+    expect(storedSrs()[cardId]).toBeUndefined();
+
+    await click(findByText(/Flip card/));
+    await click(findByText(/Knew it/));
+
+    const entry = storedSrs()[cardId];
+    expect(entry?.box).toBe(1);
+    expect(entry?.seen).toBe(1);
+    expect(entry?.correct).toBe(1);
+    expect(entry?.wrong).toBe(0);
+    /* A local YYYY-MM-DD, not an ISO timestamp. */
+    expect(entry?.due).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+
+    expect(errors.real()).toEqual([]);
+    await view.unmount();
+  });
+
+  it('grading "Didn\'t know" resets the box to 1 and counts a wrong answer', async () => {
+    const view = await mount(`${info.basePath}/practice`);
+    await click(findByText(/Flashcards/));
+
+    const session = usePracticeStore.getState().session;
+    if (session?.kind !== 'flashcards') throw new Error('expected a flashcard session to start');
+    const cardId = session.cards[0]?.id;
+    if (!cardId) throw new Error('the flashcard session started with no cards');
+
+    await click(findByText(/Flip card/));
+    await click(findByText(/Didn't know/));
+
+    const entry = storedSrs()[cardId];
+    expect(entry?.box).toBe(1);
+    expect(entry?.correct).toBe(0);
+    expect(entry?.wrong).toBe(1);
+
+    await view.unmount();
+  });
+
+  it('answering a quiz question persists an SRS entry matching whether it was right', async () => {
+    const view = await mount(`${info.basePath}/practice`);
+    await click(findByText(/Quiz/));
+
+    const session = usePracticeStore.getState().session;
+    if (session?.kind !== 'quiz') throw new Error('expected a quiz session to start');
+    const question = session.questions[0];
+    if (!question) throw new Error('the quiz session started with no questions');
+
+    const correctText = question.options[question.answer];
+    if (!correctText) throw new Error('the first question has no correct option text');
+
+    const optionButtons = bySelector('button');
+    const correctButton = optionButtons.find(button => button.textContent?.includes(correctText));
+    expect(correctButton).toBeDefined();
+    await click(correctButton);
+
+    /* The explanation appears and a "Next" button replaces the disabled options — proof the
+       answer was actually registered, not just clicked. */
+    expect(document.body.textContent ?? '').toMatch(/Next/);
+
+    const entry = storedSrs()[question.id];
+    expect(entry?.box).toBe(1);
+    expect(entry?.seen).toBe(1);
+    expect(entry?.correct).toBe(1);
+    expect(entry?.wrong).toBe(0);
+
+    expect(errors.real()).toEqual([]);
+    await view.unmount();
+  });
+
+  it('renders the reference tables with real bank content', async () => {
+    const view = await mount(`${info.basePath}/practice`);
+
+    await selectTab(findByText(/Reference tables/));
+
+    /* The Verben sub-tab is the default and needs no further click. */
+    expect(view.text()).toMatch(/Infinitiv/);
+    expect(view.text()).toMatch(/Präteritum/);
+    expect(view.text()).toMatch(/Perfekt/);
+
+    expect(errors.real()).toEqual([]);
+    await view.unmount();
+  });
+});
