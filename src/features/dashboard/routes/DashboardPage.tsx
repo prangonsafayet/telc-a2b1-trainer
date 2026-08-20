@@ -3,7 +3,6 @@ import { type TrainerId } from '@shared/types';
 import { Card, CardContent } from '@shared/ui';
 
 import { useAccountIdentity } from '@features/auth';
-import { useProgress } from '@features/progress';
 
 import ExamCard from '../components/ExamCard.tsx';
 import LocalOnlyNotice from '../components/LocalOnlyNotice.tsx';
@@ -27,7 +26,6 @@ interface DashboardPageProps {
  * weak areas once there is enough signal — so there is one Dashboard, not one per trainer.
  */
 const DashboardPage = ({ trainer }: DashboardPageProps) => {
-  const { db } = useProgress();
   const stats = useDashboardStats(trainer);
   const identity = useAccountIdentity();
   const resumable = useResumableRun(trainer);
@@ -46,7 +44,11 @@ const DashboardPage = ({ trainer }: DashboardPageProps) => {
       </PageTitle>
 
       {identity.signedIn ? null : (
-        <LocalOnlyNotice attemptCount={db.attempts.length} syncAvailable={identity.configured} />
+        <LocalOnlyNotice
+          attemptCount={stats.attemptCount}
+          syncAvailable={identity.configured}
+          historyTo={stats.historyTo}
+        />
       )}
 
       {resumable.run ? (

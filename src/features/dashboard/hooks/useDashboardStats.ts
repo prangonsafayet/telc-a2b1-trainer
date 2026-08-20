@@ -29,6 +29,8 @@ export interface DashboardStats {
   readonly lead: string;
   readonly passRule: string;
   readonly attemptCount: number;
+  /** This trainer's own history page. */
+  readonly historyTo: string;
   readonly tiles: readonly StatTileModel[];
   /** Best score per scored part of the paper. */
   readonly meters: readonly MeterModel[];
@@ -60,6 +62,7 @@ export const useDashboardStats = (trainer: TrainerId): DashboardStats => {
         : `${info.name}: ${String(examCount(trainer))} Modelltests, easiest first. Take them in order under real timing.`,
       passRule: passRuleFor(info),
       attemptCount: slice.attempts.length,
+      historyTo: `${info.basePath}/history`,
       tiles: buildTiles(slice, counts, today),
       meters: buildMeters(slice),
       mastery,
