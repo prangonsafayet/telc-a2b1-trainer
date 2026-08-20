@@ -22,7 +22,10 @@ const ExamDateControls = ({ trainer, value, onChange }: ExamDateControlsProps) =
   const name = TRAINERS[trainer].name;
 
   return (
-    <div className="space-y-2">
+    /* Grouped and named, because the page carries one of these per trainer: the two
+       controls and the three hints below them all describe the same date, and without the
+       group their hints are three unattributed sentences that read alike. */
+    <div className="space-y-2" role="group" aria-label={`${name} exam date`}>
       <ExamDatePicker picker={picker} name={name} />
       <DaysUntilInput picker={picker} name={name} inputId={`days-until-exam-${trainer}`} />
 
