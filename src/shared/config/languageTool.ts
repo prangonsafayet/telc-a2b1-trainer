@@ -1,18 +1,18 @@
 /**
  * Where LanguageTool lives and how hard we are willing to lean on it.
  *
- * The `erikvl87/languagetool` Docker image has no CORS setting, so the browser cannot
- * call it directly in production: it calls our own origin instead, at the relative path
- * `/api/lt`, which a Netlify Function (added separately, alongside the hosting work)
- * forwards to the real server-side address. `VITE_LANGUAGETOOL_URL` overrides that default
- * for local development, pointing straight at a directly-reachable instance such as
- * `http://localhost:8010` — exempt from mixed-content blocking, and needs no proxy.
+ * The public instance at `https://api.languagetool.org` answers `POST /v2/check` with
+ * `access-control-allow-origin: *`, so the browser may call it directly: no proxy, no
+ * hosting, no key. Its 20-requests-per-minute limit then applies per learner rather than
+ * pooled across everyone, which is the right trade for a study app. `VITE_LANGUAGETOOL_URL`
+ * overrides that default, pointing at a self-hosted instance — local Docker
+ * (`http://localhost:8010`, exempt from mixed-content blocking) or a hosted one with richer
+ * n-gram data that catches materially more than the public API does.
  *
- * Because the relative default always resolves to *something*, "is LanguageTool
- * configured" cannot be "is a base URL non-empty" — that would always be true and the
- * `not-configured` result would never fire, even in a build with no server behind
- * `/api/lt`. It is instead an explicit build-time switch, `VITE_DYNAMIC_FEEDBACK`, so a
- * build with the flag off behaves exactly like today's app regardless of what the base
+ * Because the default always resolves to *something*, "is LanguageTool configured" cannot
+ * be "is a base URL non-empty" — that would always be true and the `not-configured` result
+ * would never fire. It is instead an explicit build-time switch, `VITE_DYNAMIC_FEEDBACK`, so
+ * a build with the flag off behaves exactly like today's app regardless of what the base
  * resolves to.
  */
 
@@ -27,13 +27,13 @@ export const isDynamicFeedbackEnabled = (): boolean => {
 };
 
 /**
- * Base URL to POST a check to. `VITE_LANGUAGETOOL_URL` overrides it for local dev; the
- * same-origin proxy path is the production default. A function, not a constant, for the
- * same reason as `isDynamicFeedbackEnabled`: it must see a later `vi.stubEnv`.
+ * Base URL to POST a check to. `VITE_LANGUAGETOOL_URL` overrides it for a self-hosted or
+ * local instance; the public API is the default otherwise. A function, not a constant, for
+ * the same reason as `isDynamicFeedbackEnabled`: it must see a later `vi.stubEnv`.
  */
 export const getLanguageToolBase = (): string => {
   const override = readEnv('VITE_LANGUAGETOOL_URL').replace(/\/+$/, '');
-  return override.length > 0 ? override : '/api/lt';
+  return override.length > 0 ? override : 'https://api.languagetool.org';
 };
 
 /** German as the exam is set. */

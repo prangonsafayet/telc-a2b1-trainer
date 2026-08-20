@@ -87,10 +87,11 @@ const supabaseEnvCheck = (env: Record<string, string>): Plugin => ({
 /*
  * Dynamic feedback (LanguageTool) is off unless VITE_DYNAMIC_FEEDBACK is explicitly set,
  * regardless of VITE_LANGUAGETOOL_URL — see src/shared/config/languageTool.ts for why the
- * two are independent. The base the client calls defaults to the same-origin proxy path
- * `/api/lt` (a Netlify Function forwards it to the real server; added with the hosting
- * work), so VITE_LANGUAGETOOL_URL only matters as a local-dev override pointing straight
- * at an instance such as http://localhost:8010.
+ * two are independent. The base the client calls defaults to the public API at
+ * https://api.languagetool.org, which answers with access-control-allow-origin: * so the
+ * browser can call it directly — no proxy, no hosting, no key. VITE_LANGUAGETOOL_URL only
+ * matters as an override pointing at a self-hosted instance, local (http://localhost:8010)
+ * or otherwise.
  */
 const languageToolCheck = (env: Record<string, string>): Plugin => ({
   name: 'languagetool-check',
@@ -106,13 +107,15 @@ const languageToolCheck = (env: Record<string, string>): Plugin => ({
     }
     const override = (env.VITE_LANGUAGETOOL_URL || '').trim();
     if (!override) {
-      this.info('Dynamic feedback will call LanguageTool through the same-origin proxy at /api/lt.');
+      this.info(
+        'Dynamic feedback will call the public LanguageTool API directly at https://api.languagetool.org.'
+      );
       return;
     }
-    this.info(`Dynamic feedback will call LanguageTool directly at ${override} (local-dev override).`);
+    this.info(`Dynamic feedback will call LanguageTool directly at ${override} (self-hosted override).`);
     if (override.startsWith('http://') && !/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(override)) {
       this.error(
-        'VITE_LANGUAGETOOL_URL is http:// and not localhost. The site is served over HTTPS, so the browser will block the call as mixed content. Use the same-origin proxy instead (leave VITE_LANGUAGETOOL_URL unset) or put the server behind HTTPS.'
+        'VITE_LANGUAGETOOL_URL is http:// and not localhost. The site is served over HTTPS, so the browser will block the call as mixed content. Use the public API instead (leave VITE_LANGUAGETOOL_URL unset) or put the self-hosted server behind HTTPS.'
       );
     }
   }

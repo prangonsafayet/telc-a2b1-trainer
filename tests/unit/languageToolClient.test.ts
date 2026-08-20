@@ -83,12 +83,12 @@ describe('checkText', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('calls the same-origin proxy path when no local override is set', async () => {
+  it('calls the public API directly when no self-hosted override is set', async () => {
     vi.stubEnv('VITE_DYNAMIC_FEEDBACK', 'true');
     vi.stubEnv('VITE_LANGUAGETOOL_URL', '');
     const spy = vi.fn(() => Promise.resolve(new Response(JSON.stringify({ matches: [] }), { status: 200 })));
     vi.stubGlobal('fetch', spy);
     await checkText('Ein anderer Satz zur Kontrolle.');
-    expect(spy).toHaveBeenCalledWith('/api/lt/v2/check', expect.anything());
+    expect(spy).toHaveBeenCalledWith('https://api.languagetool.org/v2/check', expect.anything());
   });
 });
