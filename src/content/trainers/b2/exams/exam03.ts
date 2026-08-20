@@ -366,7 +366,7 @@ Tomasz Kowalski`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Anfrage: Förderprogramm für Balkon-Solaranlagen',
@@ -394,56 +394,30 @@ Vielen Dank im Voraus für Ihre Mühe.
 
 Mit freundlichen Grüßen
 Tomasz Kowalski`
-      },
-      {
-        titel: 'Antrag: Gemeinschaftsgarten auf der Brachfläche',
-        situation:
-          'Ihr Nachbarschaftsverein möchte auf einer ungenutzten städtischen Fläche in Ihrem Viertel einen Gemeinschaftsgarten anlegen. Schreiben Sie im Namen des Vereins an das Bezirksamt und beantragen Sie die Nutzung der Fläche.',
-        leitpunkte: [
-          'Stellen Sie den Verein und die Idee des Gemeinschaftsgartens kurz vor.',
-          'Erklären Sie, welchen Nutzen das Projekt für das Viertel hätte.',
-          'Nennen Sie, was Sie vom Bezirksamt benötigen (Fläche, Wasseranschluss, Vertrag).',
-          'Bitten Sie um einen Gesprächstermin und eine baldige Entscheidung.'
-        ],
-        musterloesung: `Betreff: Antrag auf Nutzung der Brachfläche an der Feldstraße als Gemeinschaftsgarten
-
-Sehr geehrte Damen und Herren,
-
-im Namen des Nachbarschaftsvereins Feldviertel e. V., der rund achtzig Mitglieder zählt, wende ich mich heute mit einem Antrag an Sie: Wir möchten die seit Jahren ungenutzte städtische Fläche an der Feldstraße in einen Gemeinschaftsgarten verwandeln.
-
-Geplant sind Hochbeete für Gemüse und Kräuter, eine Wildblumenwiese für Insekten sowie regelmäßige Gartennachmittage, an denen sich alle Anwohnerinnen und Anwohner beteiligen können. Von dem Projekt würde das gesamte Viertel profitieren: Eine verwahrloste Fläche würde gepflegt, Nachbarn unterschiedlicher Herkunft und Generationen kämen miteinander in Kontakt, und Kinder könnten erleben, wie Lebensmittel wachsen.
-
-Vom Bezirksamt benötigen wir die Erlaubnis zur Nutzung der Fläche — idealerweise durch einen Vertrag über mindestens fünf Jahre — sowie einen Zugang zu Wasser. Die laufende Pflege und die Kosten für Beete und Geräte übernimmt der Verein.
-
-Gern stellen wir Ihnen unser Konzept persönlich vor. Über einen Gesprächstermin und eine baldige Entscheidung würden wir uns sehr freuen.
-
-Mit freundlichen Grüßen
-Johanna Reuter
-(Vorsitzende, Nachbarschaftsverein Feldviertel e. V.)`
       }
     ],
     tipps:
-      'Bei Anfrage und Antrag gilt: höflich, aber konkret. Formulieren Sie präzise Fragen (Konjunktiv II: „Ich würde gern wissen, ob …“) und nennen Sie klar, was Sie benötigen. Gliedern Sie in Absätze und prüfen Sie am Ende: Betreff, Anrede, Grußformel, 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Eine halbformelle Anfrage bleibt höflich und konkret: Formulieren Sie präzise Fragen (Konjunktiv II: „Ich würde gern wissen, ob …“) und nennen Sie klar, was Sie benötigen. Gliedern Sie in Absätze und gehen Sie auf alle vier Leitpunkte ein. Prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Ein Umweltproblem, das mich beschäftigt“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Umweltproblem, das mich beschäftigt“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
-        'Beschreiben Sie das Umweltproblem und seine Ursachen.',
-        'Erklären Sie, warum gerade dieses Thema Sie beschäftigt.',
-        'Berichten Sie, wie mit dem Problem in Ihrem Heimatland umgegangen wird.',
-        'Nennen Sie mögliche Lösungen und ziehen Sie ein kurzes Fazit.'
+        'Beschreiben Sie eine konkrete Situation, in der Ihnen das Problem bewusst wurde.',
+        'Erzählen Sie, was genau passiert ist.',
+        'Sagen Sie, wie Sie sich dabei gefühlt haben.',
+        'Berichten Sie, wie mit dem Problem in Ihrem Heimatland umgegangen wird.'
       ],
       redemittel: [
-        'Ich habe das Thema … gewählt, weil …',
-        'Die Hauptursache dafür liegt meiner Meinung nach in …',
-        'In meinem Heimatland ist die Situation folgendermaßen: …',
-        'Eine mögliche Lösung bestünde darin, …',
-        'Zusammenfassend lässt sich sagen, dass …',
-        'Was möchten Sie dazu noch wissen?'
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
+        'Besonders bewusst wurde mir das, als …',
+        'Das kann ich gut nachvollziehen, weil …',
+        'Kennt ihr/Kennen Sie das auch aus eurem/Ihrem Alltag?'
       ]
     },
     teil2: {

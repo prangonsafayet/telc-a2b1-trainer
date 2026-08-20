@@ -366,35 +366,8 @@ Tomasz Kowalski`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
-      {
-        titel: 'Widerspruch: Fehlerhafte Mobilfunkrechnung',
-        situation:
-          'Ihr Mobilfunkanbieter hat Ihnen für den letzten Monat 94 Euro berechnet, obwohl Ihr Tarif nur 29 Euro kostet. Auf der Rechnung stehen Leistungen, die Sie nie bestellt haben. Schreiben Sie an den Kundenservice.',
-        leitpunkte: [
-          'Erklären Sie, was auf der Rechnung falsch ist.',
-          'Machen Sie deutlich, dass Sie die Zusatzleistungen nie bestellt haben.',
-          'Fordern Sie eine korrigierte Rechnung mit Frist.',
-          'Kündigen Sie an, was Sie andernfalls unternehmen werden.'
-        ],
-        musterloesung: `Betreff: Widerspruch gegen die Rechnung vom 3. April, Kundennummer 738 291
-
-Sehr geehrte Damen und Herren,
-
-Ihrer aktuellen Rechnung entnehme ich einen Gesamtbetrag von 94 Euro. Vereinbart ist mit mir jedoch der Tarif „Smart 29“ zu monatlich 29 Euro. Gegen diese Rechnung lege ich hiermit Widerspruch ein.
-
-Berechnet wurden mir ein „Premium-Videopaket“ für 45 Euro sowie ein „Sicherheitspaket“ für 20 Euro. Beide Leistungen habe ich zu keinem Zeitpunkt bestellt — weder telefonisch noch über das Kundenportal. Ich vermute, dass die Buchung durch eine irreführende Werbeanzeige in Ihrer App ausgelöst wurde.
-
-Ich fordere Sie auf, mir bis zum 25. April eine korrigierte Rechnung über 29 Euro zuzusenden und die angeblichen Zusatzpakete mit sofortiger Wirkung zu entfernen. Den zu viel abgebuchten Betrag von 65 Euro erwarte ich innerhalb derselben Frist auf meinem Konto zurück.
-
-Sollte die Korrektur nicht erfolgen, werde ich die Lastschrift widerrufen, die Bundesnetzagentur informieren und die Verbraucherzentrale einschalten.
-
-Bitte bestätigen Sie mir den Eingang dieses Schreibens.
-
-Mit freundlichen Grüßen
-Tomasz Kowalski`
-      },
       {
         titel: 'Leserbrief: Werbeverbot für ungesunde Lebensmittel',
         situation:
@@ -415,7 +388,7 @@ Kritiker nennen das Verbot Bevormundung, doch das überzeugt mich nicht: Kinder 
 
 Meine Erfahrung bestätigt das täglich: Nach jedem Fernsehnachmittag wünschen sich meine Söhne exakt die Produkte aus den Werbespots, und im Supermarkt sind Süßigkeiten gezielt in Augenhöhe der Kinder platziert. Gegen diese Strategien haben Eltern kaum eine Chance.
 
-Ein Werbeverbot allein reicht allerdings nicht. Ich fordere daher, gleichzeitig die Ernährungsbildung in Schulen zu stärken und gesunde Schulessen verbindlich zu machen. Erst dann hätte das Gesetz eine echte Wirkung.
+Ein Werbeverbot allein reicht allerdings nicht. Ich fordere daher, gleichzeitig die Ernährungsbildung in Schulen zu stärken und gesunde Schulessen verbindlich zu machen. Erst dann hätte das Gesetz eine echte Wirkung, statt nur Symbolpolitik zu bleiben.
 
 Ich würde mich freuen, wenn Ihre Zeitung dem Thema weiter so viel Raum geben würde.
 
@@ -424,27 +397,27 @@ Daniel Okafor`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Beim Widerspruch gehören Kundennummer, Datum und konkrete Beträge in den Brief; beim Leserbrief nennen Sie Artikel und Datum. Nutzen Sie Konnektoren (jedoch, daher, allerdings) und den Konjunktiv II für höfliche Formulierungen. Am Ende zählen: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Beim Leserbrief gehören der Bezug auf den Artikel und das Datum dazu. Nutzen Sie Konnektoren (jedoch, daher, allerdings) und stützen Sie Ihre Meinung mit einer eigenen Erfahrung. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Einkaufen früher und heute in meinem Heimatland“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Einkaufen früher und heute in meinem Heimatland“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
-        'Beschreiben Sie, wie in Ihrem Heimatland früher eingekauft wurde.',
-        'Erklären Sie, was sich in den letzten Jahren verändert hat.',
-        'Nennen Sie Vor- und Nachteile dieser Entwicklung.',
+        'Beschreiben Sie eine konkrete Einkaufssituation von früher.',
+        'Erzählen Sie, was sich seitdem für Sie verändert hat.',
+        'Sagen Sie, was Ihnen daran gefällt oder was Ihnen fehlt.',
         'Ziehen Sie ein kurzes Fazit: Wie kaufen Sie selbst am liebsten ein?'
       ],
       redemittel: [
-        'In meinem Heimatland war es früher üblich, dass …',
-        'Inzwischen hat sich vieles verändert: …',
-        'Ein klarer Vorteil/Nachteil ist, dass …',
-        'Im Vergleich zu Deutschland fällt mir auf, dass …',
-        'Abschließend möchte ich sagen, dass …',
-        'Gern beantworte ich eure/Ihre Fragen.'
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
+        'Inzwischen hat sich für mich vieles verändert: …',
+        'Das kann ich gut nachvollziehen, weil …',
+        'Wie ist das eigentlich bei dir/Ihnen?'
       ]
     },
     teil2: {

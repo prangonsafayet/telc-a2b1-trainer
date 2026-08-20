@@ -376,7 +376,7 @@ Marta Nowak`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Anfrage: Wohnung bei einer Genossenschaft',
@@ -398,61 +398,34 @@ Ich bin 34 Jahre alt, arbeite als Erzieherin und lebe mit meinem Mann und unsere
 
 Ihrer Internetseite habe ich entnommen, dass Wohnungen nur an Mitglieder vergeben werden. Könnten Sie mir mitteilen, wie hoch die Genossenschaftsanteile sind, welche Unterlagen Sie für die Aufnahme benötigen und mit welcher Wartezeit wir rechnen müssten? Außerdem wüsste ich gern, ob junge Familien bei der Vergabe besonders berücksichtigt werden.
 
-Über die Zusendung der Unterlagen oder einen persönlichen Beratungstermin würde ich mich sehr freuen.
+Über die Zusendung der Unterlagen oder einen persönlichen Beratungstermin würde ich mich sehr freuen und stehe für Rückfragen jederzeit zur Verfügung.
 
 Mit freundlichen Grüßen
 Marta Nowak`
-      },
-      {
-        titel: 'Antrag: Genehmigung eines Nachbarschaftsfests',
-        situation:
-          'Sie möchten mit Ihren Nachbarinnen und Nachbarn ein Straßenfest organisieren, damit sich die Menschen im Viertel besser kennenlernen. Dafür muss die Straße einen Tag lang gesperrt werden. Schreiben Sie an das Bezirksamt.',
-        leitpunkte: [
-          'Beschreiben Sie, was Sie planen (Anlass, Datum, Ort, Programm).',
-          'Beantragen Sie die Sperrung der Straße für diesen Tag.',
-          'Erklären Sie, wie Sie für Sicherheit, Lärmschutz und Sauberkeit sorgen.',
-          'Bitten Sie um Informationen zu Auflagen und Gebühren.'
-        ],
-        musterloesung: `Betreff: Antrag auf Genehmigung eines Nachbarschaftsfests am 6. September
-
-Sehr geehrte Damen und Herren,
-
-im Namen der Nachbarschaftsinitiative Holunderweg beantrage ich die Genehmigung für ein Straßenfest am Samstag, dem 6. September, von 14 bis 22 Uhr.
-
-Viele Bewohnerinnen und Bewohner unserer Straße kennen einander kaum. Mit einem gemeinsamen Fest — geplant sind ein Kuchenbuffet, Spiele für Kinder und Musik einer Schülerband — möchten wir das ändern. Erwartet werden etwa 120 Gäste.
-
-Hierfür beantragen wir, den Holunderweg zwischen Hausnummer 2 und 28 an diesem Tag von 10 bis 24 Uhr für den Verkehr zu sperren. Die Anwohner wurden bereits informiert und unterstützen das Vorhaben mit großer Mehrheit.
-
-Selbstverständlich übernehmen wir die Verantwortung vor Ort: Zwei Ordner begleiten die Veranstaltung, die Musik endet um 21 Uhr, und die Straße wird noch am Abend vollständig gereinigt.
-
-Bitte teilen Sie uns mit, welche Auflagen wir beachten müssen und welche Gebühren anfallen. Für Rückfragen stehe ich jederzeit gern zur Verfügung.
-
-Mit freundlichen Grüßen
-Jonas Keller`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Bei Anfrage und Antrag gilt: erst der Anlass, dann das konkrete Anliegen, zum Schluss die höfliche Bitte um Antwort. Nutzen Sie den Konjunktiv II (könnten, würde, wüsste gern) und Konnektoren (da, außerdem, hierfür). Am Ende zählen: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Bei einer Anfrage gilt: erst der Anlass, dann das konkrete Anliegen, zum Schluss die höfliche Bitte um Antwort. Nutzen Sie den Konjunktiv II (könnten, würde, wüsste gern) und Konnektoren (da, außerdem, hierfür). Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Ein Ort, an dem ich gern gelebt habe“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Ort, an dem ich gern gelebt habe“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
         'Beschreiben Sie den Ort und Ihre damalige Wohnsituation.',
-        'Erklären Sie, was das Leben dort besonders gemacht hat.',
-        'Vergleichen Sie das Wohnen dort mit Ihrem heutigen Wohnort.',
-        'Ziehen Sie ein kurzes Fazit: Wie möchten Sie in Zukunft wohnen?'
+        'Erzählen Sie, was das Leben dort besonders gemacht hat.',
+        'Sagen Sie, was Ihnen dort gefehlt hat.',
+        'Vergleichen Sie kurz mit Ihrem heutigen Wohnort.'
       ],
       redemittel: [
-        'Ich möchte euch/Ihnen von … erzählen, wo ich … gelebt habe.',
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
         'Das Besondere an diesem Ort war, dass …',
-        'Verglichen mit meinem heutigen Wohnort …',
-        'Was mir dort gefehlt hat, war allerdings …',
-        'Alles in allem wünsche ich mir für die Zukunft, dass …',
-        'Möchten Sie noch etwas genauer wissen?'
+        'Das kann ich gut nachvollziehen, weil …',
+        'Wie ist das bei dir/Ihnen — hast du/haben Sie so etwas auch erlebt?'
       ]
     },
     teil2: {

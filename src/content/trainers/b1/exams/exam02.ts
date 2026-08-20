@@ -351,7 +351,7 @@ Murat Özdemir`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Antworten Sie auf den Brief. Schreiben Sie zu mindestens drei der vier Leitpunkte — zu jedem Punkt ein bis zwei Sätze. Vergessen Sie Anrede und Gruß nicht.',
+      'Sie haben 30 Minuten Zeit. Antworten Sie auf die E-Mail. Schreiben Sie zu allen vier Leitpunkten — zu jedem Punkt ein bis zwei Sätze. Vergessen Sie Anrede und Gruß nicht.',
     tasks: [
       {
         titel: 'Antwort an das Busreiseunternehmen',
@@ -394,12 +394,12 @@ Sofia Martinez`
       }
     ],
     tipps:
-      'Kontrollieren Sie am Ende: Anrede und Gruß vorhanden? Mindestens drei Leitpunkte behandelt? Passt der Ton zu einer offiziellen E-Mail? Sie/Ihnen großgeschrieben?'
+      'Kontrollieren Sie am Ende: Anrede und Gruß vorhanden? Alle vier Leitpunkte behandelt? Passt der Ton zu einer offiziellen E-Mail? Sie/Ihnen großgeschrieben?'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Kontaktaufnahme',
+      titel: 'Teil 1 — Einander kennenlernen',
       anweisung:
         'Sprechen Sie mit Ihrer Partnerin / Ihrem Partner. Lernen Sie sich kennen. Die folgenden Punkte helfen Ihnen.',
       punkte: ['Name', 'Wohnort und Wohnung', 'Familie', 'Beruf oder Ausbildung', 'Sprachen', 'Freizeit'],

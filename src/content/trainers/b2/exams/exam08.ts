@@ -353,7 +353,7 @@ Carola Schmitt`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Leserbrief: Künstliche Intelligenz in der Schule',
@@ -379,55 +379,30 @@ Ich würde mich freuen, wenn Ihre Zeitung auch diese kritische Perspektive stär
 
 Mit freundlichen Grüßen
 Daniela Petzold`
-      },
-      {
-        titel: 'Anfrage: IT-Schulung für das Team',
-        situation:
-          'Sie arbeiten in einem kleinen Unternehmen. Ihr Team soll im Umgang mit einem neuen Tabellenkalkulations- und Datenbankprogramm geschult werden. Schreiben Sie eine Anfrage an die IT-Akademie „Digitalwerk“.',
-        leitpunkte: [
-          'Beschreiben Sie, wer geschult werden soll und welche Vorkenntnisse es gibt.',
-          'Erklären Sie, welche Inhalte die Schulung haben soll.',
-          'Fragen Sie nach Terminen, Dauer und Kosten.',
-          'Bitten Sie um ein schriftliches Angebot.'
-        ],
-        musterloesung: `Betreff: Anfrage: Inhouse-Schulung für acht Mitarbeitende
-
-Sehr geehrte Damen und Herren,
-
-unser Unternehmen, die Bürotechnik Sander GmbH, stellt zum Jahreswechsel auf ein neues Tabellenkalkulations- und Datenbankprogramm um. Auf Ihrer Internetseite habe ich gesehen, dass Sie Schulungen auch direkt in den Betrieben anbieten. Daher wende ich mich heute mit einer Anfrage an Sie.
-
-Geschult werden sollen acht Mitarbeitende aus Verwaltung und Vertrieb. Alle arbeiten sicher mit den üblichen Büroprogrammen, haben jedoch keine Erfahrung mit Datenbanken. Inhaltlich wünschen wir uns neben einer Einführung vor allem praktische Übungen mit Beispielen aus unserem Arbeitsalltag, etwa zur Auswertung von Kundendaten.
-
-Könnten Sie uns mitteilen, welche Termine im Januar oder Februar möglich wären, wie viele Schulungstage Sie empfehlen und mit welchen Kosten wir rechnen müssen? Wichtig wäre uns außerdem, dass die Teilnehmenden nach dem Kurs eine Ansprechperson für Rückfragen haben.
-
-Über ein schriftliches Angebot bis zum 15. Dezember würden wir uns sehr freuen.
-
-Mit freundlichen Grüßen
-Tobias Sander, Geschäftsführer`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Nutzen Sie Konnektoren (daher, jedoch, sodass) und den Konjunktiv II für höfliche Bitten. Am Ende zählen: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Beim Leserbrief gehören der Bezug auf den Artikel, eine klare Position und ein eigenes Argument dazu. Nutzen Sie Konnektoren (aber, deshalb, statt … zu). Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Eine technische Entwicklung, die meinen Alltag verändert hat“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Eine technische Entwicklung, die meinen Alltag verändert hat“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
-        'Beschreiben Sie die technische Entwicklung und wie Sie sie nutzen.',
-        'Erklären Sie, was sich dadurch in Ihrem Alltag verändert hat.',
-        'Nennen Sie auch eine Schattenseite oder ein Risiko.',
-        'Ziehen Sie ein kurzes Fazit: Möchten Sie darauf wieder verzichten?'
+        'Beschreiben Sie, wie Sie diese technische Entwicklung zum ersten Mal genutzt haben.',
+        'Erzählen Sie, was sich dadurch in Ihrem Alltag konkret verändert hat.',
+        'Berichten Sie von einer Schattenseite oder einem Risiko, das Sie dabei erlebt haben.',
+        'Sagen Sie, ob Sie darauf wieder verzichten möchten.'
       ],
       redemittel: [
-        'Ich möchte euch/Ihnen heute … vorstellen.',
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
         'Früher musste ich …, heute dagegen …',
-        'Ein klarer Vorteil ist, dass …',
-        'Allerdings darf man nicht unterschätzen, dass …',
-        'Alles in allem würde ich sagen, dass …',
-        'Gibt es dazu noch Fragen?'
+        'Das kann ich gut nachvollziehen, weil …',
+        'Habt ihr/Haben Sie das auch schon einmal erlebt?'
       ]
     },
     teil2: {

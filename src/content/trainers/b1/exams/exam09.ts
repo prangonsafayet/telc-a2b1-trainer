@@ -349,7 +349,7 @@ Olena Kovalenko`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Antworten Sie auf den Brief. Schreiben Sie zu mindestens drei der vier Leitpunkte — zu jedem Punkt ein bis zwei Sätze. Vergessen Sie Anrede und Gruß nicht.',
+      'Sie haben 30 Minuten Zeit. Antworten Sie auf die E-Mail. Schreiben Sie zu allen vier Leitpunkten — zu jedem Punkt ein bis zwei Sätze. Vergessen Sie Anrede und Gruß nicht.',
     tasks: [
       {
         titel: 'Antwort an die Hausverwaltung',
@@ -393,12 +393,12 @@ Amira Haddad`
       }
     ],
     tipps:
-      'Alle Leitpunkte kurz abhaken, bevor Sie abgeben: Anrede und Gruß? Mindestens drei Punkte behandelt? Verben an der richtigen Position? Sie/Ihnen großgeschrieben?'
+      'Alle Leitpunkte kurz abhaken, bevor Sie abgeben: Anrede und Gruß? Alle vier Punkte behandelt? Verben an der richtigen Position? Sie/Ihnen großgeschrieben?'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Kontaktaufnahme',
+      titel: 'Teil 1 — Einander kennenlernen',
       anweisung:
         'Sprechen Sie mit Ihrer Partnerin / Ihrem Partner. Lernen Sie sich kennen. Die folgenden Punkte helfen Ihnen.',
       punkte: [

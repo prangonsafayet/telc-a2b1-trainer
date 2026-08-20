@@ -351,33 +351,8 @@ Helga Winterberg`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
-      {
-        titel: 'Beschwerde: Verpatzte Pauschalreise',
-        situation:
-          'Sie haben bei einem Reiseveranstalter eine einwöchige Städtereise gebucht. Vor Ort gab es erhebliche Mängel (Hotel, Programm, Reiseleitung). Schreiben Sie an den Veranstalter.',
-        leitpunkte: [
-          'Beschreiben Sie, was Sie gebucht hatten und was Sie vorfanden.',
-          'Erklären Sie, wie Sie vor Ort reagiert haben und mit welchem Ergebnis.',
-          'Fordern Sie eine konkrete Entschädigung mit Frist.',
-          'Kündigen Sie an, was Sie tun werden, falls keine Reaktion erfolgt.'
-        ],
-        musterloesung: `Betreff: Reklamation der Städtereise Prag, Buchungsnummer PR-7742
-
-Sehr geehrte Damen und Herren,
-
-vom 2. bis 9. Mai nahm ich an der von Ihnen veranstalteten Städtereise nach Prag teil. Leider entsprach die Leistung in mehreren Punkten nicht der Beschreibung: Statt des gebuchten Vier-Sterne-Hotels in Zentrumsnähe wurden wir in einer einfachen Pension am Stadtrand untergebracht, und zwei der drei zugesagten Führungen fielen ersatzlos aus.
-
-Bereits am zweiten Tag habe ich mich an die Reiseleitung gewandt. Diese verwies mich lediglich an die Zentrale und ließ sich die Mängel immerhin schriftlich bestätigen — die Bestätigung lege ich bei.
-
-Aufgrund der genannten Mängel fordere ich eine Minderung des Reisepreises um dreißig Prozent, das entspricht 285 Euro. Bitte überweisen Sie den Betrag bis zum 15. Oktober auf mein bekanntes Konto.
-
-Sollte ich bis dahin keine Rückmeldung erhalten, werde ich die Angelegenheit meiner Rechtsschutzversicherung übergeben. Ich hoffe jedoch auf eine einvernehmliche Lösung.
-
-Mit freundlichen Grüßen
-Robert Steinbach`
-      },
       {
         titel: 'Leserbrief: Braucht unsere Stadt mehr Tourismus?',
         situation:
@@ -394,9 +369,9 @@ Sehr geehrte Damen und Herren,
 
 mit Interesse habe ich Ihren Artikel gelesen, in dem für eine massive Tourismuswerbung geworben wird. Dieser Einschätzung kann ich nur teilweise zustimmen.
 
-Zweifellos profitieren Gastronomie, Hotels und Einzelhandel von zusätzlichen Gästen, und manches Kulturangebot gäbe es ohne Touristen längst nicht mehr. Verschwiegen wird jedoch, welche Folgen ein ungebremster Zustrom hat: steigende Mieten, überfüllte Innenstädte und Lärm bis tief in die Nacht. Wer einmal im August versucht hat, samstags über unseren Marktplatz zu gehen, weiß, wovon ich spreche.
+Zweifellos profitieren Gastronomie, Hotels und Einzelhandel von zusätzlichen Gästen, und manches Kulturangebot gäbe es ohne Touristen längst nicht mehr. Verschwiegen wird jedoch, welche Folgen ein ungebremster Zustrom hat: steigende Mieten, überfüllte Innenstädte und Lärm bis tief in die Nacht. Wer einmal im August versucht hat, samstags über unseren Marktplatz zu gehen, weiß, wovon ich spreche — als Anwohnerin komme ich seit Jahren kaum noch an mein eigenes Haus heran.
 
-Statt pauschal um „mehr“ zu werben, sollte die Stadt gezielt steuern: Werbung außerhalb der Hauptsaison, bessere Bus- und Bahnanbindung statt neuer Parkplätze und eine Übernachtungsabgabe, deren Einnahmen sichtbar allen Bewohnern zugutekommen.
+Statt pauschal um „mehr“ zu werben, sollte die Stadt gezielt steuern: Werbung außerhalb der Hauptsaison, bessere Bus- und Bahnanbindung statt neuer Parkplätze und eine Übernachtungsabgabe, deren Einnahmen sichtbar allen Bewohnern zugutekommen, etwa in Form günstigerer Nahverkehrstickets.
 
 Tourismus ist kein Selbstzweck — er muss der Stadt dienen, nicht umgekehrt.
 
@@ -405,27 +380,27 @@ Helga Winterberg`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Verwenden Sie Konnektoren (jedoch, zweifellos, statt … zu) und den Konjunktiv II für höfliche Forderungen. Am Ende prüfen: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt, Anrede und Grußformel vorhanden.'
+      'Beim Leserbrief gehören der Bezug auf den Artikel, eine klare Position und ein eigenes Beispiel dazu. Verwenden Sie Konnektoren (jedoch, zweifellos, statt … zu). Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, Anrede und Grußformel vorhanden.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Präsentieren Sie Ihrer Partnerin / Ihrem Partner das Thema (ca. 2,5 Minuten): „Eine Reise, die mich verändert hat“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Eine Reise, die mich verändert hat“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
         'Beschreiben Sie die Reise (Ziel, Anlass, Ablauf).',
-        'Erklären Sie, was Sie dabei über sich oder andere gelernt haben.',
-        'Vergleichen Sie: Wie reist man in Ihrem Heimatland typischerweise?',
-        'Ziehen Sie ein kurzes Fazit: Was würden Sie heute anders machen?'
+        'Erzählen Sie, was dabei passiert ist und was Sie über sich oder andere gelernt haben.',
+        'Sagen Sie, was Sie heute anders machen würden.',
+        'Sagen Sie, wie man in Ihrem Heimatland typischerweise reist.'
       ],
       redemittel: [
-        'Ich möchte Ihnen von einer Reise erzählen, die …',
+        'Ich möchte euch/Ihnen von einer Reise erzählen, die …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
         'Rückblickend hat mich vor allem … geprägt.',
-        'Im Unterschied dazu ist es bei uns üblich, dass …',
-        'Zusammenfassend würde ich sagen, dass …',
-        'Haben Sie noch Fragen dazu?',
-        'Das ist eine interessante Frage — dazu fällt mir ein, dass …'
+        'Das kann ich gut nachvollziehen, weil …',
+        'Habt ihr/Haben Sie schon einmal etwas Ähnliches erlebt?'
       ]
     },
     teil2: {

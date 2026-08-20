@@ -369,35 +369,8 @@ Ana Ribeiro`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
-      {
-        titel: 'Beschwerde: Mangelhafter Online-Sprachkurs',
-        situation:
-          'Sie haben bei einem privaten Anbieter einen sechsmonatigen Online-Spanischkurs gebucht. Der Kurs entspricht nicht der Beschreibung: Der versprochene Live-Unterricht findet kaum statt, und Ihre Fragen bleiben unbeantwortet. Schreiben Sie an die Kursleitung.',
-        leitpunkte: [
-          'Beschreiben Sie, was Ihnen beim Kauf versprochen wurde.',
-          'Erklären Sie, was tatsächlich nicht funktioniert.',
-          'Fordern Sie eine konkrete Lösung mit Frist.',
-          'Kündigen Sie an, was Sie andernfalls unternehmen werden.'
-        ],
-        musterloesung: `Betreff: Beschwerde über den Online-Kurs „Spanisch Intensiv“, Kundennummer 20471
-
-Sehr geehrte Damen und Herren,
-
-am 1. Oktober habe ich bei Ihnen den sechsmonatigen Kurs „Spanisch Intensiv“ für 490 Euro gebucht. Laut Ihrer Kursbeschreibung waren zwei Live-Stunden pro Woche mit einer Lehrkraft sowie eine persönliche Betreuung zugesagt.
-
-Die Wirklichkeit sieht leider anders aus: In sieben Wochen haben nur zwei Live-Stunden stattgefunden, alle übrigen Termine wurden kurzfristig abgesagt. Auf meine Fragen im Lernportal habe ich bis heute keine einzige Antwort erhalten. Damit erbringt Ihr Unternehmen die bezahlte Leistung nur zu einem geringen Teil.
-
-Ich fordere Sie daher auf, bis zum 15. Dezember den regulären Unterricht sicherzustellen oder mir die Gebühr anteilig zu erstatten. Außerdem bitte ich um einen Ansprechpartner, der für meine Anliegen erreichbar ist.
-
-Sollte ich bis zu diesem Datum keine zufriedenstellende Antwort erhalten, werde ich vom Vertrag zurücktreten, die Verbraucherzentrale informieren und rechtliche Schritte prüfen.
-
-Ich hoffe dennoch auf eine schnelle und faire Lösung.
-
-Mit freundlichen Grüßen
-Ana Ribeiro`
-      },
       {
         titel: 'Bewerbung: Weiterbildungsstipendium',
         situation:
@@ -418,7 +391,7 @@ Ich bin 29 Jahre alt und arbeite seit fünf Jahren als Pflegehelfer in einem Sen
 
 Deshalb möchte ich ab September die berufsbegleitende Ausbildung zur Pflegefachkraft an der Akademie Sankt Marien absolvieren. Der Lehrgang dauert drei Jahre und kostet insgesamt 5.400 Euro. Da ich alleinerziehend bin und meine Miete allein trage, kann ich diese Summe trotz sorgfältiger Planung nicht selbst aufbringen; mein Arbeitgeber unterstützt mich zwar mit Freistellungen, aber nicht finanziell.
 
-Mit dem Abschluss könnte ich endlich eigenverantwortlich pflegen und später Auszubildende anleiten — gerade in Zeiten des Personalmangels möchte ich in diesem Beruf Verantwortung übernehmen.
+Mit dem Abschluss könnte ich endlich eigenverantwortlich pflegen und später Auszubildende anleiten — gerade in Zeiten des Personalmangels möchte ich in diesem Beruf Verantwortung übernehmen und mein Wissen an neue Kolleginnen und Kollegen weitergeben.
 
 Über die Möglichkeit, mich persönlich vorzustellen, würde ich mich sehr freuen.
 
@@ -427,27 +400,27 @@ Daniel Okafor`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Gliedern Sie in Absätze: Anlass, Sachverhalt, Forderung bzw. Bitte, Schluss. Nutzen Sie Konnektoren (daher, jedoch, sodass) und den Konjunktiv II für höfliche Bitten. Am Ende zählen: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Gliedern Sie in Absätze: Anlass, Sachverhalt, Begründung, Schluss. Nutzen Sie Konnektoren (daher, jedoch, sodass) und den Konjunktiv II für höfliche Bitten. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Eine Lernerfahrung, die mich geprägt hat“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Eine Lernerfahrung, die mich geprägt hat“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
         'Beschreiben Sie, was Sie gelernt haben und in welcher Situation.',
-        'Erklären Sie, welche Schwierigkeiten es gab und wie Sie sie überwunden haben.',
-        'Vergleichen Sie: Welche Rolle spielt lebenslanges Lernen in Ihrem Heimatland?',
+        'Erzählen Sie, welche Schwierigkeiten es gab und wie Sie sie überwunden haben.',
+        'Sagen Sie, wie Sie sich dabei gefühlt haben.',
         'Ziehen Sie ein kurzes Fazit: Was hat Ihnen die Erfahrung gebracht?'
       ],
       redemittel: [
-        'Ich möchte euch/Ihnen heute von … berichten.',
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
         'Am Anfang fiel es mir schwer, weil …',
-        'Rückblickend war entscheidend, dass …',
-        'In meinem Heimatland ist es üblich, dass …',
-        'Zusammenfassend kann ich sagen, dass …',
-        'Haben Sie dazu noch Fragen?'
+        'Das kann ich gut nachvollziehen, weil …',
+        'Habt ihr/Haben Sie so etwas auch schon erlebt?'
       ]
     },
     teil2: {

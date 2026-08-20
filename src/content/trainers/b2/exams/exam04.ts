@@ -378,7 +378,7 @@ Sabine Dörner
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Bewerbung: Mitarbeit im Gesundheitszentrum',
@@ -398,7 +398,7 @@ mit großem Interesse habe ich Ihre Anzeige im Stadtanzeiger vom 8. März gelese
 
 Nach meiner Ausbildung zur Kauffrau für Büromanagement habe ich fünf Jahre im Sekretariat einer Sprachschule gearbeitet. Dort war ich für die Kursanmeldungen, die Raumplanung und den Kontakt zu den Lehrkräften verantwortlich — Aufgaben, die den in Ihrer Anzeige beschriebenen sehr ähnlich sind. Der Umgang mit Kundinnen und Kunden bereitet mir große Freude, und auch in stressigen Situationen behalte ich den Überblick.
 
-Für Ihr Haus interessiere ich mich besonders, weil mir Gesundheitsthemen auch persönlich am Herzen liegen: Seit Jahren besuche ich selbst Rücken- und Entspannungskurse und weiß daher, worauf es den Teilnehmenden ankommt.
+Für Ihr Haus interessiere ich mich besonders, weil mir Gesundheitsthemen auch persönlich am Herzen liegen: Seit Jahren besuche ich selbst Rücken- und Entspannungskurse und weiß daher, worauf es den Teilnehmenden ankommt. Zudem bin ich es gewohnt, freundlich und geduldig mit unterschiedlichen Anliegen umzugehen.
 
 Die Stelle könnte ich zum 1. Juni antreten. Über die Einladung zu einem persönlichen Gespräch würde ich mich sehr freuen.
 
@@ -406,57 +406,30 @@ Mit freundlichen Grüßen
 Deniz Karaca
 
 Anlagen: Lebenslauf, Zeugnisse`
-      },
-      {
-        titel: 'Beschwerde: Zustände im Fitnessstudio',
-        situation:
-          'Sie sind seit einem Jahr Mitglied in einem Fitnessstudio. Seit einigen Monaten fallen Kurse häufig aus, mehrere Geräte sind defekt und die Duschen werden nur selten gereinigt. Auf Ihre mündlichen Beschwerden hat das Personal nicht reagiert. Schreiben Sie an die Studioleitung.',
-        leitpunkte: [
-          'Beschreiben Sie, welche Mängel es im Studio gibt.',
-          'Erinnern Sie daran, was Ihnen bei Vertragsabschluss versprochen wurde.',
-          'Fordern Sie eine konkrete Verbesserung innerhalb einer Frist.',
-          'Kündigen Sie an, was Sie tun werden, falls sich nichts ändert.'
-        ],
-        musterloesung: `Betreff: Beschwerde über Mängel im Studio, Mitgliedsnummer 10 482
-
-Sehr geehrte Damen und Herren,
-
-seit einem Jahr trainiere ich in Ihrem Studio und war anfangs sehr zufrieden. Seit etwa vier Monaten haben sich die Zustände jedoch deutlich verschlechtert, weshalb ich mich heute schriftlich an Sie wende.
-
-Der Rückenkurs am Dienstag ist allein im letzten Monat dreimal ersatzlos ausgefallen. Außerdem sind zwei Laufbänder und mehrere Kraftgeräte seit Wochen defekt, und die Duschen machen regelmäßig einen ungepflegten Eindruck. Auf meine mündlichen Beschwerden an der Rezeption hat bislang niemand reagiert.
-
-Bei Vertragsabschluss wurde mir ausdrücklich ein verlässliches Kursprogramm und ein gepflegtes Studio zugesichert — dafür bezahle ich schließlich monatlich 49 Euro.
-
-Ich fordere Sie daher auf, die Geräte bis zum 30. April reparieren zu lassen, die Kurse wieder regelmäßig anzubieten und die Reinigung zu verbessern. Sollte sich bis dahin nichts ändern, werde ich von meinem Recht auf außerordentliche Kündigung Gebrauch machen und eine Erstattung für die ausgefallenen Kurse verlangen.
-
-Ich hoffe auf eine schnelle Lösung.
-
-Mit freundlichen Grüßen
-Sabine Dörner`
       }
     ],
     tipps:
-      'Bei der Bewerbung zählen Struktur und positiver Ton: Bezug zur Anzeige, Qualifikationen mit Beispielen, Anfangstermin, Gesprächswunsch. Bei der Beschwerde gilt: sachlich bleiben, Mängel konkret benennen, eine Frist setzen und Konsequenzen ankündigen. In beiden Fällen: Betreff nicht vergessen und am Ende die Wortzahl prüfen (150–200 Wörter).'
+      'Bei der Bewerbung zählen Struktur und positiver Ton: Bezug zur Anzeige, Qualifikationen mit Beispielen, ein konkreter Anfangstermin und der Wunsch nach einem Gespräch. Gehen Sie auf alle vier Leitpunkte ein. Prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Essgewohnheiten in meinem Heimatland“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein besonderes Essen, das mir in Erinnerung geblieben ist“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
-        'Beschreiben Sie typische Gerichte und Essgewohnheiten Ihres Heimatlandes.',
-        'Erklären Sie, welche Rolle gemeinsames Essen dort spielt.',
-        'Vergleichen Sie mit den Essgewohnheiten in Deutschland.',
-        'Bewerten Sie: Was finden Sie gesund, was eher problematisch?'
+        'Beschreiben Sie, wann und mit wem Sie dieses Essen erlebt haben.',
+        'Erzählen Sie, was das Besondere daran war.',
+        'Sagen Sie, welche Rolle gemeinsames Essen in Ihrem Heimatland spielt.',
+        'Vergleichen Sie kurz mit einer Erfahrung, die Sie in Deutschland gemacht haben.'
       ],
       redemittel: [
-        'In meiner Präsentation möchte ich Ihnen … vorstellen.',
-        'Typisch für mein Heimatland ist, dass …',
-        'Im Unterschied zu Deutschland …',
-        'Kritisch sehe ich allerdings, dass …',
-        'Abschließend lässt sich festhalten, dass …',
-        'Gern beantworte ich jetzt Ihre Fragen.'
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
+        'Besonders war daran, dass …',
+        'Das kann ich gut nachvollziehen, weil …',
+        'Habt ihr/Haben Sie so etwas Ähnliches schon erlebt?'
       ]
     },
     teil2: {

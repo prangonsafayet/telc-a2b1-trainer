@@ -351,33 +351,8 @@ Martin Krause`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
-      {
-        titel: 'Beschwerde: Online bestellte Ware',
-        situation:
-          'Sie haben vor sechs Wochen bei einem Online-Händler einen Laptop gekauft. Das Gerät funktioniert nicht richtig, und der Kundendienst reagiert nicht auf Ihre E-Mails. Schreiben Sie an die Geschäftsleitung.',
-        leitpunkte: [
-          'Beschreiben Sie, was Sie gekauft haben und was nicht funktioniert.',
-          'Erklären Sie, wie der Kundendienst bisher reagiert hat.',
-          'Sagen Sie, was Sie jetzt vom Unternehmen erwarten (Frist!).',
-          'Kündigen Sie an, was Sie tun werden, falls nichts geschieht.'
-        ],
-        musterloesung: `Betreff: Beschwerde über Laptop „ProBook X“, Bestellnummer 48213
-
-Sehr geehrte Damen und Herren,
-
-am 5. Juli habe ich in Ihrem Online-Shop einen Laptop des Modells „ProBook X“ bestellt, der bereits nach zwei Wochen erhebliche Mängel zeigte: Das Gerät schaltet sich mehrmals täglich ohne Grund aus, und der Akku hält kaum eine Stunde.
-
-Besonders enttäuscht bin ich vom Kundendienst. Auf drei E-Mails habe ich bis heute keine Antwort erhalten, und in der telefonischen Warteschleife wurde ich zweimal nach über zwanzig Minuten getrennt. Ein solches Verhalten hätte ich von einem Unternehmen Ihrer Größe nicht erwartet.
-
-Ich fordere Sie daher auf, mir innerhalb von vierzehn Tagen ein einwandfreies Ersatzgerät zu liefern oder den Kaufpreis von 799 Euro zu erstatten. Sollte ich bis zum 15. September nichts von Ihnen hören, werde ich die Verbraucherzentrale einschalten und rechtliche Schritte prüfen.
-
-Ich hoffe dennoch auf eine schnelle, kundenfreundliche Lösung.
-
-Mit freundlichen Grüßen
-Martin Krause`
-      },
       {
         titel: 'Anfrage: Betriebliche Weiterbildung',
         situation:
@@ -388,46 +363,46 @@ Martin Krause`
           'Fragen Sie nach der Höhe der finanziellen Unterstützung.',
           'Bitten Sie um ein persönliches Gespräch.'
         ],
-        musterloesung: `Betreff: Antrag auf Unterstützung einer berufsbegleitenden Weiterbildung
+        musterloesung: `Betreff: Unterstützung einer berufsbegleitenden Weiterbildung
 
 Sehr geehrte Frau Winter,
 
-wie ich dem Intranet entnommen habe, unterstützt unser Unternehmen berufsbegleitende Weiterbildungen. Deshalb wende ich mich heute mit einem konkreten Anliegen an Sie.
+wie ich dem Intranet entnommen habe, unterstützt unser Unternehmen berufsbegleitende Weiterbildungen von Mitarbeitenden finanziell. Deshalb wende ich mich heute mit einem konkreten Anliegen an Sie.
 
 Ich arbeite seit vier Jahren im Kundenservice und möchte ab Januar den IHK-Lehrgang „Projektmanagement“ besuchen, der samstags stattfindet und sechs Monate dauert. In unserer Abteilung werden Projekte immer wichtiger, jedoch fehlt es bisher an entsprechend geschulten Mitarbeiterinnen und Mitarbeitern.
 
-Von der Weiterbildung würde also nicht nur ich profitieren: Ich könnte künftig kleinere Projekte selbstständig leiten und Kollegen einarbeiten, wodurch externe Berater eingespart werden könnten.
+Von der Weiterbildung würde also nicht nur ich profitieren: Ich könnte künftig kleinere Projekte selbstständig leiten und Kollegen einarbeiten, wodurch externe Berater eingespart werden könnten. Außerdem würde ich mein neues Wissen in einer kurzen internen Schulung an mein Team weitergeben.
 
-Daher möchte ich fragen, in welcher Höhe sich die Firma an den Kursgebühren von 1.800 Euro beteiligen würde und ob dafür Sonderurlaub vorgesehen ist. Über ein persönliches Gespräch, gern auch kurzfristig, würde ich mich sehr freuen.
+Daher möchte ich fragen, in welcher Höhe sich die Firma an den Kursgebühren von 1.800 Euro beteiligen würde und ob dafür auch Sonderurlaub vorgesehen ist. Über ein persönliches Gespräch, gern auch kurzfristig, würde ich mich sehr freuen.
 
-Vielen Dank im Voraus für Ihre Mühe.
+Vielen Dank im Voraus für Ihre Mühe und Ihre Rückmeldung.
 
 Mit freundlichen Grüßen
 Selin Aydin`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Nutzen Sie Konnektoren (daher, jedoch, sodass) und den Konjunktiv II für höfliche Forderungen. Am Ende zählen: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Eine halbformelle Anfrage bleibt höflich und konkret: Nutzen Sie den Konjunktiv II für Fragen und Bitten („Ich würde gern wissen, ob …“, „Könnten Sie mir sagen, …?“). Gehen Sie auf alle vier Leitpunkte ein und schließen Sie mit einer klaren Bitte. Prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Ein Beruf, der mich beeindruckt“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Beruf, der mich beeindruckt hat“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
-        'Beschreiben Sie den Beruf und die Aufgaben.',
-        'Erklären Sie, warum dieser Beruf Sie beeindruckt.',
-        'Vergleichen Sie: Wie wird der Beruf in Ihrem Heimatland gesehen?',
-        'Ziehen Sie ein kurzes Fazit.'
+        'Beschreiben Sie, wie und wo Sie diesen Beruf kennengelernt haben.',
+        'Erzählen Sie, was genau passiert ist und was Sie daran beeindruckt hat.',
+        'Sagen Sie, wie Sie sich dabei gefühlt haben.',
+        'Vergleichen Sie kurz: Wie wird dieser Beruf in Ihrem Heimatland gesehen?'
       ],
       redemittel: [
-        'Ich möchte euch/Ihnen heute … vorstellen.',
-        'Besonders beeindruckt mich, dass …',
-        'Im Vergleich dazu ist es in meinem Heimatland so, dass …',
-        'Zusammenfassend lässt sich sagen, dass …',
-        'Gibt es dazu Fragen?',
-        'Das ist eine gute Frage — ich denke, …'
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung kann ich sagen, dass …',
+        'Besonders beeindruckt hat mich, dass …',
+        'Das kann ich gut nachvollziehen, weil …',
+        'Habt ihr/Haben Sie so etwas auch schon erlebt?'
       ]
     },
     teil2: {

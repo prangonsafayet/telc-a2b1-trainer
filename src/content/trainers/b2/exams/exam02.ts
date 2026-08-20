@@ -375,33 +375,8 @@ Peter Albrecht`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
-      {
-        titel: 'Beschwerde: Langsamer Internetanschluss',
-        situation:
-          'Sie bezahlen bei Ihrem Internetanbieter für einen schnellen Anschluss, doch seit drei Monaten ist die Verbindung sehr langsam und bricht abends häufig ab. Die Telefonhotline hat Ihnen mehrfach Besserung versprochen — passiert ist nichts. Schreiben Sie an den Kundenservice.',
-        leitpunkte: [
-          'Beschreiben Sie, welchen Tarif Sie haben und was nicht funktioniert.',
-          'Erklären Sie, welche Folgen die Störung für Sie hat (z. B. Homeoffice).',
-          'Schildern Sie Ihre bisherigen Kontakte mit der Hotline.',
-          'Fordern Sie eine Lösung und eine Preisminderung (Frist!).'
-        ],
-        musterloesung: `Betreff: Beschwerde über Dauerstörung, Kundennummer 274 519
-
-Sehr geehrte Damen und Herren,
-
-seit drei Jahren nutze ich Ihren Tarif „Komfort 100“, für den ich monatlich 44,99 Euro bezahle. Seit Anfang Juni erreicht mein Anschluss jedoch statt der zugesagten 100 nur noch etwa 8 Megabit pro Sekunde; zudem bricht die Verbindung fast jeden Abend vollständig ab.
-
-Da ich an drei Tagen pro Woche im Homeoffice arbeite, hat die Störung für mich ernste Folgen: Videokonferenzen sind kaum möglich, und mehrfach konnte ich Unterlagen nicht rechtzeitig verschicken.
-
-Ihre Hotline habe ich seit Juni fünfmal kontaktiert. Jedes Mal wurde mir versprochen, ein Techniker werde sich melden — geschehen ist bis heute nichts.
-
-Ich fordere Sie daher auf, die Störung bis zum 15. Oktober zu beheben. Außerdem erwarte ich für die vergangenen drei Monate eine angemessene Minderung der Grundgebühr. Sollte ich bis zu diesem Termin nichts von Ihnen hören, werde ich von meinem Sonderkündigungsrecht Gebrauch machen und die Bundesnetzagentur informieren.
-
-Mit freundlichen Grüßen
-Katja Lorenz`
-      },
       {
         titel: 'Leserbrief: Handyverbot an Schulen',
         situation:
@@ -420,7 +395,7 @@ mit großem Interesse habe ich Ihren Artikel über das geforderte Handyverbot an
 
 Meiner Ansicht nach verschwinden die Probleme dadurch nicht — sie verlagern sich lediglich auf den Nachmittag. Als Mutter zweier Schulkinder beobachte ich außerdem, dass gerade die Schule der richtige Ort wäre, um den vernünftigen Umgang mit dem Gerät zu üben. Wer den Kindern das Handy einfach wegnimmt, bringt ihnen nichts bei.
 
-Sinnvoller erscheint mir eine klare Regelung: handyfreie Pausen und Klassenzimmer, gleichzeitig aber Unterrichtsstunden, in denen die Geräte gezielt eingesetzt werden — etwa um Informationen zu prüfen oder gemeinsam Präsentationen zu erstellen. An der Schule meines Sohnes funktioniert dieses Modell seit zwei Jahren erstaunlich gut.
+Sinnvoller erscheint mir eine klare Regelung: handyfreie Pausen und Klassenzimmer, gleichzeitig aber Unterrichtsstunden, in denen die Geräte gezielt eingesetzt werden — etwa um Informationen zu prüfen oder gemeinsam Präsentationen zu erstellen. An der Schule meines Sohnes funktioniert dieses Modell seit zwei Jahren erstaunlich gut, und auch die Lehrkräfte ziehen eine positive Bilanz.
 
 Ich würde mich freuen, wenn Ihre Zeitung auch solche positiven Beispiele vorstellen würde, statt nur über Verbote zu diskutieren.
 
@@ -429,27 +404,27 @@ Elena Petrova`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Beim Leserbrief gehören der Bezug auf den Artikel und eine klar begründete Meinung dazu; bei der Beschwerde eine deutliche Forderung mit Frist. Nutzen Sie Konnektoren (dennoch, außerdem, daher) und prüfen Sie am Ende: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Beim Leserbrief gehören der Bezug auf den Artikel und eine klar begründete Meinung dazu. Nutzen Sie Konnektoren (dennoch, außerdem, daher), um Ihre Argumentation zu verbinden. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Ein Medium, das mein Leben verändert hat“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Medium, das mein Leben verändert hat“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
-        'Beschreiben Sie das Medium und wie Sie es nutzen.',
-        'Erklären Sie, was sich dadurch in Ihrem Alltag verändert hat.',
-        'Nennen Sie auch eine negative Seite dieser Entwicklung.',
-        'Vergleichen Sie: Wie wird dieses Medium in Ihrem Heimatland genutzt?'
+        'Beschreiben Sie, wie es dazu kam, dass Sie dieses Medium zu nutzen begannen.',
+        'Erzählen Sie, was sich dadurch in Ihrem Alltag konkret verändert hat.',
+        'Berichten Sie von einer negativen Erfahrung, die Sie damit gemacht haben.',
+        'Sagen Sie, wie dieses Medium in Ihrem Heimatland genutzt wird.'
       ],
       redemittel: [
-        'In meiner Präsentation geht es um …',
-        'Früher habe ich …, heute dagegen …',
-        'Ein Nachteil, den man nicht verschweigen darf, ist …',
-        'In meinem Heimatland ist es üblich, dass …',
-        'Abschließend möchte ich festhalten, dass …',
-        'Haben Sie noch Fragen dazu?'
+        'Ich erzähle euch/Ihnen von einer Erfahrung mit …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
+        'Negativ war für mich vor allem, dass …',
+        'Das kann ich gut nachvollziehen, weil …',
+        'Wie ist das eigentlich bei dir/Ihnen?'
       ]
     },
     teil2: {

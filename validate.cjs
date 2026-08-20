@@ -362,10 +362,11 @@ for (const { trainer: level, file } of telcFiles) {
     err(f, 'hoeren.teil3 invalid');
   else if (!mixedBool(h3.items, 'answer')) err(f, 'hoeren.teil3 all same truth value');
 
-  // Schreiben: B1 replies to a letter (1 task, incoming); B2 chooses 1 of 2 formal tasks
+  // Schreiben: one task at both levels — B1 replies to an incoming e-mail, B2 writes a
+  // halbformelle E-Mail from a prompt. Neither level offers a choice of two tasks.
   const W = ex.schreiben || {};
   if (!isStr(W.anweisung) || !isStr(W.tipps)) err(f, 'schreiben missing fields');
-  const wantTasks = level === 'b1' ? 1 : 2;
+  const wantTasks = 1;
   if (!W.tasks || W.tasks.length !== wantTasks) err(f, `schreiben needs ${wantTasks} task(s)`);
   else
     W.tasks.forEach((t, i) => {

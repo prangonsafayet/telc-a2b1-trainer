@@ -354,7 +354,7 @@ Hannelore Brandt`,
 
   schreiben: {
     anweisung:
-      'Wählen Sie EINE der beiden Aufgaben. Sie haben 30 Minuten Zeit. Schreiben Sie einen formellen Brief (150–200 Wörter). Behandeln Sie mindestens zwei der vier Leitpunkte sowie einen eigenen Punkt. Achten Sie auf Betreff, Anrede und Grußformel.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Bewerbung: Ehrenamtliche Mitarbeit',
@@ -382,57 +382,30 @@ Zuvor hätte ich noch einige Fragen: Bieten Sie eine Einführung oder Schulung a
 
 Mit freundlichen Grüßen
 Werner Kluge`
-      },
-      {
-        titel: 'Antrag: Zuschuss für ein Nachbarschaftsfest',
-        situation:
-          'Sie organisieren mit anderen Bewohnerinnen und Bewohnern ein Fest, das die Nachbarschaft in Ihrem Viertel stärken soll. Die Stadt fördert solche Projekte auf Antrag. Schreiben Sie an das Amt für soziale Angelegenheiten.',
-        leitpunkte: [
-          'Beschreiben Sie, was Sie planen (Ort, Zeit, Programm).',
-          'Erklären Sie, warum das Fest für den Stadtteil wichtig ist.',
-          'Nennen Sie die erwarteten Kosten und die beantragte Summe.',
-          'Fragen Sie, welche Unterlagen Sie einreichen müssen.'
-        ],
-        musterloesung: `Betreff: Antrag auf einen Zuschuss für das Nachbarschaftsfest am 6. September
-
-Sehr geehrte Damen und Herren,
-
-wie ich Ihrer Internetseite entnommen habe, fördert die Stadt Projekte, die das Zusammenleben in den Stadtteilen stärken. Für ein solches Projekt beantrage ich hiermit einen Zuschuss.
-
-Gemeinsam mit zwölf weiteren Bewohnerinnen und Bewohnern organisiere ich am 6. September ein Nachbarschaftsfest auf dem Spielplatz an der Birkenstraße. Geplant sind ein internationales Buffet, Spiele für Kinder, Musik von Gruppen aus dem Viertel sowie ein Informationsstand der Nachbarschaftshilfe.
-
-In unserem Viertel leben Menschen aus über zwanzig Nationen, doch viele kennen nicht einmal ihre direkten Nachbarn. Das Fest soll Begegnungen ermöglichen und neue Freiwillige für die Nachbarschaftshilfe gewinnen.
-
-Die Gesamtkosten betragen nach unserer Kalkulation 900 Euro, vor allem für Bühne, Technik und Versicherung. Da wir 300 Euro durch Spenden aufbringen, beantragen wir einen Zuschuss von 600 Euro.
-
-Bitte teilen Sie mir mit, welche Unterlagen Sie darüber hinaus benötigen und bis wann eine Entscheidung möglich ist.
-
-Mit freundlichen Grüßen
-Aylin Demir`
       }
     ],
     tipps:
-      'Formell heißt: Betreff, Sie-Form, keine Umgangssprache. Nutzen Sie Konnektoren (daher, jedoch, sodass) und den Konjunktiv II für höfliche Bitten. Am Ende zählen: 150–200 Wörter, mindestens zwei Leitpunkte plus ein eigener Punkt.'
+      'Bei der Bewerbung zählen Struktur und ein positiver Ton: Bezug zur Anzeige, passende Erfahrungen mit Beispielen, zeitliche Verfügbarkeit und offene Fragen zum Ablauf. Gehen Sie auf alle vier Leitpunkte ein. Prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
     teil1: {
-      titel: 'Teil 1 — Präsentation',
+      titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Wählen Sie ein Thema und präsentieren Sie es Ihrer Partnerin / Ihrem Partner (ca. 2,5 Minuten): „Ein Engagement oder eine Organisation, die ich bewundere“. Gehen Sie auf die Punkte ein und beantworten Sie danach Fragen.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Engagement oder eine Organisation, die ich bewundere“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
-        'Stellen Sie die Person, Gruppe oder Organisation und ihre Arbeit vor.',
-        'Erklären Sie, warum Sie dieses Engagement bewundern.',
-        'Vergleichen Sie: Welche Rolle spielt Ehrenamt in Ihrem Heimatland?',
-        'Ziehen Sie ein kurzes Fazit: Könnten Sie sich selbst dort engagieren?'
+        'Beschreiben Sie, wie Sie diese Person, Gruppe oder Organisation kennengelernt haben.',
+        'Erzählen Sie, was Sie an diesem Engagement beeindruckt hat.',
+        'Sagen Sie, ob Sie sich selbst schon einmal ehrenamtlich engagiert haben oder das gern täten.',
+        'Sagen Sie, welche Rolle Ehrenamt in Ihrem Heimatland spielt.'
       ],
       redemittel: [
-        'Ich möchte euch/Ihnen heute … vorstellen.',
-        'Besonders beeindruckt mich, dass …',
-        'Im Vergleich dazu ist es in meinem Heimatland so, dass …',
-        'Für mich persönlich käme infrage, dass …',
-        'Zusammenfassend lässt sich sagen, dass …',
-        'Gibt es dazu Fragen?'
+        'Ich möchte euch/Ihnen von einer Erfahrung erzählen, bei der …',
+        'Bei mir war das so: …',
+        'Aus meiner Erfahrung …',
+        'Besonders beeindruckt hat mich, dass …',
+        'Das kann ich gut nachvollziehen, weil …',
+        'Wärt ihr/Wären Sie auch bereit, euch/sich dort zu engagieren?'
       ]
     },
     teil2: {
