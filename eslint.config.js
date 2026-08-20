@@ -100,6 +100,38 @@ const FEATURE_SELF_ALIAS = fs.readdirSync('src/features').map(name => ({
   )
 }));
 
+/* The ten module renderers come in twin pairs with identical basenames
+   (`modules/dual-level/LesenModule.tsx` and `modules/single-level/LesenModule.tsx`), told
+   apart only by their format folder. Only a format's own descriptor may import them —
+   everything else (a screen, another format, another feature) goes through the format
+   object instead, which is exactly what stops the twins being mixed up. */
+const MODULE_RENDERERS = {
+  group: ['@features/exam/components/modules/**', '**/exam/components/modules/**'],
+  message:
+    "Import a module renderer only from its own format's lib/formats/<format>/index.ts. Reaching into components/modules/ anywhere else bypasses the format descriptor and risks mixing up the dual-level and single-level twins."
+};
+
+/* Restated because this entry's files overlap feature-self-alias-exam above; the later
+   entry replaces rather than merges, so every pattern that still applies here — the
+   cross-feature guard, the app-shell guard, the UI barrel and the one-level relative cap —
+   is repeated alongside the new module-renderer restriction. */
+const EXAM_MODULES_THROUGH_FORMAT = {
+  name: 'exam-modules-through-format',
+  files: ['src/features/exam/**/*.{ts,tsx}'],
+  ignores: ['src/features/exam/lib/formats/*/index.ts'],
+  rules: restrict(
+    {
+      group: ['@features/*/*/**', '!@features/exam/**'],
+      message:
+        "Import another feature only through its public surface: '@features/<name>'. Reaching into its folders couples you to its internals."
+    },
+    APP_SHELL,
+    UI_BY_FILE,
+    DEEP_RELATIVE,
+    MODULE_RENDERERS
+  )
+};
+
 const SHARED_STAYS_GENERIC = {
   name: 'shared-stays-generic',
   files: ['src/shared/**/*.{ts,tsx}'],
@@ -298,6 +330,7 @@ export default tseslint.config(
   UI_THROUGH_BARREL,
   NO_CROSS_FEATURE_INTERNALS,
   ...FEATURE_SELF_ALIAS,
+  EXAM_MODULES_THROUGH_FORMAT,
   SHARED_STAYS_GENERIC,
   SHARED_UI_STAYS_GENERIC,
   CONTENT_IS_DATA_ONLY,
