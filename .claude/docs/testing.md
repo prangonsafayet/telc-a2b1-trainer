@@ -25,11 +25,13 @@ npm run test:watch   # vitest in watch mode
 | `unit/format`             | date maths, including DST and leap days                       |
 | `unit/signUpOutcome`      | every shape Supabase's sign-up response can take              |
 | `unit/content`            | curriculum and exam-list shape the engine trusts              |
+| `unit/runStore`           | the run in progress, in both storage shapes it has had        |
 | `render/routes`           | every route mounts with no React warning                      |
 | `render/contentInjection` | authored HTML is injected, never shown as text                |
 | `render/authVisibility`   | the signed-out warnings appear everywhere                     |
 | `render/examDate`         | the date window is enforced, not merely suggested             |
 | `render/examFlow`         | a full attempt, including a mid-module reload                 |
+| `render/examFinish`       | the finish path acts on submit, not inside a state updater    |
 | `render/schedulePlan`     | the pages re-shape with the exam date, all fallbacks included |
 
 **No jsdom.** happy-dom provides `matchMedia`, both observers, `scrollIntoView` and

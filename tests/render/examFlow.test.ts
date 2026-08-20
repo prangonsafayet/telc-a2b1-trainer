@@ -79,8 +79,10 @@ describe('a single-module practice run', () => {
     expect(attempts).toHaveLength(1);
     expect(typeof attempts[0]?.scores.lesen).toBe('number');
 
-    /* The finish path writes an attempt, clears the run and navigates. None of that may
-       produce a React error — storing from inside a state updater used to. */
+    /* Nothing on the way through a whole attempt may log a React error. A broad guard, not
+       a targeted one: React only warns about a state update during render when an update is
+       already queued, so the defect that motivated it — storing the attempt from inside a
+       `setRun` updater — is covered by `examFinish.test.ts` instead. */
     expect(errors.real()).toEqual([]);
 
     await view.unmount();

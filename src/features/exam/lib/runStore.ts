@@ -11,15 +11,36 @@ import { type ExamRun, type ExamRunStore } from '@features/exam/types/run.ts';
 
 /**
  * Runs written before the `trainer` field existed belong to the A2·B1 trainer, the only
- * one that had them, so an in-flight attempt survives the upgrade.
+ * one that had them, so an in-flight attempt survives the upgrade. A B1/B2 run written by
+ * the old zustand store named the same thing `level`.
  */
 const readTrainer = (value: unknown): TrainerId => (value === 'b1' || value === 'b2' ? value : 'a2b1');
 
-const parseRun = (value: unknown): ExamRun | null => {
+/**
+ * The B1/B2 run used to be persisted by zustand's `persist` middleware, which wraps the
+ * payload as `{ state: { run }, version }`. The key is unchanged, so an attempt that was
+ * in progress when the app upgraded is still sitting there in the old envelope — unwrap it
+ * rather than throwing the candidate's half-finished exam away.
+ */
+const unwrapLegacyEnvelope = (value: object): unknown => {
+  if (!('state' in value)) return value;
+  const state: unknown = value.state;
+  if (typeof state !== 'object' || state === null || !('run' in state)) return null;
+  return state.run;
+};
+
+/**
+ * Exported for its unit tests: everything it has to survive — two storage envelopes, a
+ * missing `trainer`, and whatever a hand-edited or truncated localStorage entry holds — is
+ * data it cannot control, and getting it wrong silently discards an attempt in progress.
+ */
+export const parseRun = (value: unknown): ExamRun | null => {
   if (typeof value !== 'object' || value === null) return null;
-  const candidate = value as Partial<ExamRun>;
+  const stored = unwrapLegacyEnvelope(value);
+  if (typeof stored !== 'object' || stored === null || Array.isArray(stored)) return null;
+  const candidate = stored as Partial<ExamRun> & { readonly level?: unknown };
   if (typeof candidate.examId !== 'number' || !Array.isArray(candidate.queue)) return null;
-  return { ...(candidate as ExamRun), trainer: readTrainer(candidate.trainer) };
+  return { ...(candidate as ExamRun), trainer: readTrainer(candidate.trainer ?? candidate.level) };
 };
 
 export const createRunStore = (storageKey: string): ExamRunStore => ({
