@@ -24,3 +24,7 @@ docs/*.local.md
 
 # Playwright MCP scratch output (page snapshots, console logs).
 .playwright-mcp/
+
+# Bridge-sync leftovers the sandboxed cloud session cannot delete; safe to remove.
+_to_delete/
+*.tgz

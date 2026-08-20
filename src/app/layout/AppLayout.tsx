@@ -4,6 +4,7 @@ import { CloudOff } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import { ErrorBoundary, Logo, ThemeToggle } from '@shared/components';
+import { APP_NAME, TRAINERS, trainerFromPath } from '@shared/config/trainers.ts';
 import { stopSpeech } from '@shared/lib/speech.ts';
 import { Badge } from '@shared/ui';
 
@@ -13,6 +14,7 @@ import { useProgress } from '@features/progress';
 import { AppFooter } from './AppFooter.tsx';
 import { ExamCountdownBadge } from './ExamCountdownBadge.tsx';
 import { MainNav } from './MainNav.tsx';
+import { TrainerSwitcher } from './TrainerSwitcher.tsx';
 import { useHeaderHeight } from './useHeaderHeight.ts';
 
 export const AppLayout = () => {
@@ -20,6 +22,11 @@ export const AppLayout = () => {
   const sync = useCloudSync({ dbRef, replaceLocal, updatedAt: db._updatedAt });
   const { pathname } = useLocation();
   const headerRef = useHeaderHeight<HTMLElement>();
+
+  /* The header follows the active trainer: name, countdown and nav all switch with it. */
+  const trainer = TRAINERS[trainerFromPath(pathname)];
+  const examDate =
+    trainer.id === 'a2b1' ? db.settings.examDate : (db[trainer.id]?.settings.examDate ?? '');
 
   /* Every navigation starts at the top and with the speaker silent. */
   useEffect(() => {
@@ -38,20 +45,24 @@ export const AppLayout = () => {
         >
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:px-6">
             <NavLink
-              to="/"
-              className="group mr-auto flex items-center gap-2.5 leading-tight"
-              aria-label="telc A2·B1 Trainer — dashboard"
+              to={trainer.basePath || '/'}
+              className="group flex items-center gap-2.5 leading-tight"
+              aria-label={`${APP_NAME} — dashboard`}
             >
               <Logo className="size-9 shrink-0 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105" />
               <span>
-                <span className="block text-base font-bold tracking-tight">telc Deutsch A2·B1 Trainer</span>
+                <span className="block text-base font-bold tracking-tight">{APP_NAME}</span>
                 <span className="hidden text-xs text-muted-foreground sm:block">
-                  15 Modelltests · Lesen · Sprachbausteine · Hören · Schreiben · Sprechen
+                  {trainer.name} · {trainer.tagline}
                 </span>
               </span>
             </NavLink>
 
-            <ExamCountdownBadge examDate={db.settings.examDate} />
+            <div className="mr-auto">
+              <TrainerSwitcher />
+            </div>
+
+            <ExamCountdownBadge examDate={examDate} />
 
             {offline ? (
               <Badge variant="warning" className="gap-1.5 py-1" title={sync.chip?.title}>

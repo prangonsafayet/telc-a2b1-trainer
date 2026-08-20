@@ -22,6 +22,7 @@ import {
 import { SyncPanel } from '@features/auth';
 
 import { ExamDateControls } from '../components/ExamDateControls.tsx';
+import { LevelTrainerSettingsCard } from '../components/LevelTrainerSettingsCard.tsx';
 import { useExamSettings } from '../hooks/useExamSettings.ts';
 
 interface FieldProps {
@@ -172,6 +173,8 @@ export const SettingsPage = () => {
           </div>
         </CardContent>
       </Card>
+
+      <LevelTrainerSettingsCard />
 
       <div className="mt-6">
         <SyncPanel />
