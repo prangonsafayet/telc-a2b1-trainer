@@ -23,15 +23,14 @@ export const buildErrorReport = (text: string, matches: readonly LtMatch[]): rea
     /* Two rules firing on one span is one mistake to the learner. First wins. */
     const span = `${String(match.offset)}:${String(match.length)}`;
     if (bySpan.has(span)) continue;
-    /* A `??` here would keep an all-whitespace shortMessage; the learner needs the real
-       message, not a blank line. */
+    /* An all-whitespace shortMessage trims to '' — falsy but not nullish, so the check is
+       spelled out rather than reached for `??`, which would keep the blank line. */
     const shortMessage = match.shortMessage?.trim();
     bySpan.set(span, {
       offset: match.offset,
       length: match.length,
       excerpt: text.slice(match.offset, match.offset + match.length),
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- deliberately falsy, not nullish: an all-whitespace shortMessage trims to '' and must still fall back
-      message: shortMessage ? shortMessage : match.message,
+      message: shortMessage !== undefined && shortMessage.length > 0 ? shortMessage : match.message,
       category: classify(match.rule),
       suggestion: match.replacements[0]?.value ?? null,
       ruleId: match.rule.id

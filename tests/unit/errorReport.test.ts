@@ -46,6 +46,20 @@ describe('buildErrorReport', () => {
     expect(report.map(entry => entry.category)).toEqual(['spelling', 'spelling']);
   });
 
+  it('prefers a non-empty shortMessage over the full message, trimmed', () => {
+    const [entry] = buildErrorReport('ein Hund', [
+      match({ message: 'Die längere Erklärung.', shortMessage: '  Kurzform  ' })
+    ]);
+    expect(entry?.message).toBe('Kurzform');
+  });
+
+  it('falls back to the full message when shortMessage is all whitespace', () => {
+    const [entry] = buildErrorReport('ein Hund', [
+      match({ message: 'Die längere Erklärung.', shortMessage: '   ' })
+    ]);
+    expect(entry?.message).toBe('Die längere Erklärung.');
+  });
+
   it('keeps the first suggestion and drops the rest', () => {
     const [entry] = buildErrorReport('ein Hund', [
       match({ replacements: [{ value: 'einen' }, { value: 'eines' }, { value: 'einem' }] })

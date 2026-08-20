@@ -165,7 +165,14 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
          and its preposition one at once. */
       cases: ['genitiv'],
       verbForms: ['passiv', 'kii'],
-      connectors: ['nominal'],
+      /* No B2 cheatsheet is primarily a word-order reference the way A2·B1's
+         'connectors'/'nebensaetze' or B1's 'konnektoren' ('Konnektoren & Wortstellung')
+         are. 'nominal' ('Nominalisierung & Konnektoren (Argumentation)') bundles a
+         Konnektoren-by-function table in with its main subject, Verbalstil→Nominalstil
+         transformation — a learner sent there for a word-order weakness would land on a
+         page framed around nominalisation, not clause structure. An empty array is more
+         honest than that link. */
+      connectors: [],
       prepositions: ['genitiv'],
       vocabulary: [],
       writing: ['brief']

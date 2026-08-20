@@ -65,6 +65,12 @@ describe('checkText', () => {
     expect(await checkText('x')).toEqual({ kind: 'unavailable', reason: 'too-long' });
   });
 
+  it('maps any other non-2xx status to error rather than throwing', async () => {
+    enableDynamicFeedback();
+    respond({}, 500);
+    expect(await checkText('x')).toEqual({ kind: 'unavailable', reason: 'error' });
+  });
+
   it('reports offline rather than rejecting when fetch throws', async () => {
     enableDynamicFeedback();
     vi.stubGlobal(
