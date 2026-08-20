@@ -84,6 +84,42 @@ const supabaseEnvCheck = (env: Record<string, string>): Plugin => ({
   }
 });
 
+/*
+ * Dynamic feedback (LanguageTool) is off unless VITE_DYNAMIC_FEEDBACK is explicitly set,
+ * regardless of VITE_LANGUAGETOOL_URL — see src/shared/config/languageTool.ts for why the
+ * two are independent. The base the client calls defaults to the same-origin proxy path
+ * `/api/lt` (a Netlify Function forwards it to the real server; added with the hosting
+ * work), so VITE_LANGUAGETOOL_URL only matters as a local-dev override pointing straight
+ * at an instance such as http://localhost:8010.
+ */
+function languageToolCheck(env: Record<string, string>): Plugin {
+  return {
+    name: 'languagetool-check',
+    apply: 'build',
+    buildStart() {
+      const flag = (env.VITE_DYNAMIC_FEEDBACK || '').trim().toLowerCase();
+      const enabled = flag === 'true' || flag === '1';
+      if (!enabled) {
+        this.warn(
+          'Building WITHOUT VITE_DYNAMIC_FEEDBACK — generated practice items and writing feedback will be off in this build.'
+        );
+        return;
+      }
+      const override = (env.VITE_LANGUAGETOOL_URL || '').trim();
+      if (!override) {
+        this.info('Dynamic feedback will call LanguageTool through the same-origin proxy at /api/lt.');
+        return;
+      }
+      this.info(`Dynamic feedback will call LanguageTool directly at ${override} (local-dev override).`);
+      if (override.startsWith('http://') && !/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(override)) {
+        this.error(
+          'VITE_LANGUAGETOOL_URL is http:// and not localhost. The site is served over HTTPS, so the browser will block the call as mixed content. Use the same-origin proxy instead (leave VITE_LANGUAGETOOL_URL unset) or put the server behind HTTPS.'
+        );
+      }
+    }
+  };
+}
+
 /**
  * One alias per layer, so an import statement shows which layer it crosses. There is
  * deliberately no catch-all '@': two spellings of the same path would let a boundary
@@ -118,7 +154,7 @@ export const appDefines = (commitRef: string): Record<string, string> => ({
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    plugins: [react(), tailwindcss(), supabaseEnvCheck(env), siteUrlHtml(env)],
+    plugins: [react(), tailwindcss(), supabaseEnvCheck(env), languageToolCheck(env), siteUrlHtml(env)],
     define: appDefines(env.COMMIT_REF ?? ''),
     resolve: { alias: LAYER_ALIASES },
     build: {
