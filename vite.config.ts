@@ -92,33 +92,31 @@ const supabaseEnvCheck = (env: Record<string, string>): Plugin => ({
  * work), so VITE_LANGUAGETOOL_URL only matters as a local-dev override pointing straight
  * at an instance such as http://localhost:8010.
  */
-function languageToolCheck(env: Record<string, string>): Plugin {
-  return {
-    name: 'languagetool-check',
-    apply: 'build',
-    buildStart() {
-      const flag = (env.VITE_DYNAMIC_FEEDBACK || '').trim().toLowerCase();
-      const enabled = flag === 'true' || flag === '1';
-      if (!enabled) {
-        this.warn(
-          'Building WITHOUT VITE_DYNAMIC_FEEDBACK — generated practice items and writing feedback will be off in this build.'
-        );
-        return;
-      }
-      const override = (env.VITE_LANGUAGETOOL_URL || '').trim();
-      if (!override) {
-        this.info('Dynamic feedback will call LanguageTool through the same-origin proxy at /api/lt.');
-        return;
-      }
-      this.info(`Dynamic feedback will call LanguageTool directly at ${override} (local-dev override).`);
-      if (override.startsWith('http://') && !/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(override)) {
-        this.error(
-          'VITE_LANGUAGETOOL_URL is http:// and not localhost. The site is served over HTTPS, so the browser will block the call as mixed content. Use the same-origin proxy instead (leave VITE_LANGUAGETOOL_URL unset) or put the server behind HTTPS.'
-        );
-      }
+const languageToolCheck = (env: Record<string, string>): Plugin => ({
+  name: 'languagetool-check',
+  apply: 'build',
+  buildStart() {
+    const flag = (env.VITE_DYNAMIC_FEEDBACK || '').trim().toLowerCase();
+    const enabled = flag === 'true' || flag === '1';
+    if (!enabled) {
+      this.warn(
+        'Building WITHOUT VITE_DYNAMIC_FEEDBACK — generated practice items and writing feedback will be off in this build.'
+      );
+      return;
     }
-  };
-}
+    const override = (env.VITE_LANGUAGETOOL_URL || '').trim();
+    if (!override) {
+      this.info('Dynamic feedback will call LanguageTool through the same-origin proxy at /api/lt.');
+      return;
+    }
+    this.info(`Dynamic feedback will call LanguageTool directly at ${override} (local-dev override).`);
+    if (override.startsWith('http://') && !/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(override)) {
+      this.error(
+        'VITE_LANGUAGETOOL_URL is http:// and not localhost. The site is served over HTTPS, so the browser will block the call as mixed content. Use the same-origin proxy instead (leave VITE_LANGUAGETOOL_URL unset) or put the server behind HTTPS.'
+      );
+    }
+  }
+});
 
 /**
  * One alias per layer, so an import statement shows which layer it crosses. There is
