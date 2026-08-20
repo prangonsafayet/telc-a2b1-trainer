@@ -396,7 +396,7 @@ Karim Said`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitung gelesen: „Viele Menschen verbringen ihre Freizeit fast nur noch vor dem Bildschirm.“ Berichten Sie: Wie verbringen Sie und die Menschen in Ihrem Land die Freizeit? Sagen Sie Ihre Meinung: Welche Vorteile und Nachteile haben Fernsehen, Internet und Computerspiele in der Freizeit?',
       punkte: [

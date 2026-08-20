@@ -429,7 +429,7 @@ Ana Marić`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitschrift gelesen: „Immer mehr Menschen kaufen gebrauchte Sachen statt neuer Produkte.“ Berichten Sie: Kaufen Sie manchmal gebrauchte Dinge? Sagen Sie Ihre Meinung: Was spricht dafür, was dagegen?',
       punkte: [

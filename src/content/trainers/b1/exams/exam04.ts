@@ -429,7 +429,7 @@ Elena Petrova`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitung gelesen: „In vielen großen Städten kennen die Menschen ihre Nachbarn kaum noch.“ Berichten Sie: Wie ist Ihr Kontakt zu Ihren Nachbarn? Sagen Sie Ihre Meinung: Wie wichtig ist eine gute Nachbarschaft?',
       punkte: [

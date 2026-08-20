@@ -400,7 +400,7 @@ Amir Hassan`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitschrift gelesen: „Immer mehr Menschen arbeiten von zu Hause aus.“ Berichten Sie: Wie ist das in Ihrem Land oder in Ihrem Beruf? Sagen Sie Ihre Meinung: Welche Vorteile und Nachteile hat das Arbeiten zu Hause?',
       punkte: [

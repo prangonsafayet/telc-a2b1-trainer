@@ -419,7 +419,7 @@ Amira Haddad`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitschrift gelesen: „In Deutschland lebt fast jeder Fünfte allein.“ Berichten Sie: Wie wohnen die Menschen in Ihrem Land — allein, als Paar oder mit der großen Familie? Sagen Sie Ihre Meinung: Welche Vorteile und Nachteile hat das Leben allein oder mit der Familie?',
       punkte: [

@@ -413,7 +413,7 @@ Sofia Martinez`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitung gelesen: „Immer mehr junge Leute in den Städten verzichten auf ein eigenes Auto.“ Berichten Sie: Wie sind Sie selbst meistens unterwegs? Sagen Sie Ihre Meinung: Braucht man heute noch ein eigenes Auto?',
       punkte: [

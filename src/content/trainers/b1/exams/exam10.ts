@@ -415,7 +415,7 @@ Samir Alou`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitschrift gelesen: „In vielen Familien werden traditionelle Feste immer seltener gefeiert.“ Berichten Sie: Welche Feste feiert man in Ihrem Land, und wie feiern Sie selbst? Sagen Sie Ihre Meinung: Wie wichtig sind Feste und Traditionen?',
       punkte: [

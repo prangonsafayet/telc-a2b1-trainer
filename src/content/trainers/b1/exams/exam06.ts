@@ -405,7 +405,7 @@ Tomasz Kowalski`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitung gelesen: „Ein Beruf fürs ganze Leben — das gibt es heute kaum noch.“ Berichten Sie: Wie ist das in Ihrem Land oder in Ihrer Familie? Sagen Sie Ihre Meinung: Sollte man als Erwachsener noch einmal etwas ganz Neues lernen?',
       punkte: [

@@ -46,7 +46,7 @@ export const B1_CURRICULUM: LearnPlan = {
     },
     schreiben: {
       title: 'The 45-point letter (halbformell)',
-      html: `<p><b>The task:</b> 30 minutes, one half-formal letter or email, <b>4 Leitpunkte</b>. You must address <b>at least 3</b> of them — aim for all 4, in a sensible order, 1–2 sentences each. Scored 3 × 15 points: Leitpunkte covered, communicative design (Anrede, Gruß, connectors, register), correctness.</p>
+      html: `<p><b>The task:</b> 30 minutes, one half-formal letter or email, <b>4 Leitpunkte</b>. You must address <b>all 4</b> of them, in a sensible order, 1–2 sentences each. Scored 3 × 15 points: Leitpunkte covered, communicative design (Anrede, Gruß, connectors, register), correctness.</p>
 <p><b>Fixed skeleton — memorize it:</b></p>
 <p>1. <b>Anrede:</b> Sehr geehrte Frau Weber, / Sehr geehrter Herr Braun, (formal) · Liebe Frau Weber, (half-formal, e.g. course teacher, nice landlady) — then lowercase!<br>
 2. <b>Einstieg (1 sentence):</b> vielen Dank für Ihre E-Mail. · ich schreibe Ihnen, weil … · ich habe Ihre Anzeige gelesen und interessiere mich für …<br>
@@ -62,8 +62,8 @@ export const B1_CURRICULUM: LearnPlan = {
     },
     sprechen: {
       title: 'Sprechen: Redemittel for all three parts',
-      html: `<p><b>Teil 1 — Kontaktaufnahme (get to know your partner):</b> talk about Name, Wohnort, Familie, Beruf/Ausbildung, Sprachen, Freizeit — and ASK back. Ich heiße … und wohne seit … in … · Ich arbeite als … / Ich mache eine Ausbildung zur … · Und woher kommen Sie? · Was machen Sie beruflich? · Haben Sie Kinder? — <i>Drill this until it runs on autopilot; it is the easy 15 points.</i></p>
-<p><b>Teil 2 — Gespräch über ein Thema:</b> each of you gets a short text, you report and discuss. <b>Report:</b> In meinem Text geht es um … · Ich habe gelesen, dass … · Der Text sagt, dass … <b>Opinion:</b> Meiner Meinung nach … · Ich finde es wichtig/problematisch, dass … · Ich habe die Erfahrung gemacht, dass … · Bei uns in … ist das so: … <b>Interaction (this is graded!):</b> Wie ist das bei dir/Ihnen? · Was hältst du davon? · Da stimme ich dir zu. · Das sehe ich anders, weil …</p>
+      html: `<p><b>Teil 1 — Einander kennenlernen (get to know your partner):</b> talk about Name, Wohnort, Familie, Beruf/Ausbildung, Sprachen, Freizeit — and ASK back. Ich heiße … und wohne seit … in … · Ich arbeite als … / Ich mache eine Ausbildung zur … · Und woher kommen Sie? · Was machen Sie beruflich? · Haben Sie Kinder? — <i>Drill this until it runs on autopilot; it is the easy 15 points.</i></p>
+<p><b>Teil 2 — Über ein Thema sprechen:</b> each of you gets a short text, you report and discuss. <b>Report:</b> In meinem Text geht es um … · Ich habe gelesen, dass … · Der Text sagt, dass … <b>Opinion:</b> Meiner Meinung nach … · Ich finde es wichtig/problematisch, dass … · Ich habe die Erfahrung gemacht, dass … · Bei uns in … ist das so: … <b>Interaction (this is graded!):</b> Wie ist das bei dir/Ihnen? · Was hältst du davon? · Da stimme ich dir zu. · Das sehe ich anders, weil …</p>
 <p><b>Teil 3 — gemeinsam etwas planen:</b> reach a real agreement (Wann? Wo? Was? Wer macht was?). <b>Vorschlagen:</b> Wollen wir …? · Wie wäre es, wenn wir …? · Ich schlage vor, dass … <b>Zustimmen:</b> Gute Idee! · Einverstanden. · Das passt mir gut. <b>Ablehnen + Alternative:</b> Das finde ich nicht so gut, weil … Vielleicht könnten wir stattdessen … <b>Aufgaben verteilen:</b> Ich könnte … übernehmen. · Kümmerst du dich um …? <b>Abschluss:</b> Gut, dann machen wir das so!</p>
 <p><b>Repair phrases (gold on exam day):</b> Wie bitte? · Könnten Sie das bitte wiederholen? · Wie sagt man …? · Einen Moment, ich überlege kurz. · Ich meine …</p>`
     },
@@ -304,7 +304,7 @@ export const B1_CURRICULUM: LearnPlan = {
       day: 13,
       tier: 'core',
       title: 'Sprechen — all three parts',
-      focus: 'Kontaktaufnahme, Thema, gemeinsam planen',
+      focus: 'Einander kennenlernen, Thema, gemeinsam planen',
       tasks: [
         'Learn the Redemittel for all three parts from the cheatsheet — say each set out loud 3 times.',
         'Record yourself: 90 seconds of Teil-1 self-presentation, then listen back and fix one thing.',

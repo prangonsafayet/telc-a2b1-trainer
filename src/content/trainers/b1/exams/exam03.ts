@@ -417,7 +417,7 @@ Pavel Novak`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitschrift gelesen: „Immer mehr Menschen ernähren sich vegetarisch oder essen nur noch selten Fleisch.“ Berichten Sie: Wie ernähren Sie sich, und wie ist das in Ihrem Land? Sagen Sie Ihre Meinung: Welche Vorteile und Nachteile hat eine Ernährung ohne Fleisch?',
       punkte: [

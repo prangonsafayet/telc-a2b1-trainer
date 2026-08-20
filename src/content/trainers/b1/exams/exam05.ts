@@ -442,7 +442,7 @@ Olga Danilova`
       ]
     },
     teil2: {
-      titel: 'Teil 2 — Gespräch über ein Thema',
+      titel: 'Teil 2 — Über ein Thema sprechen',
       anweisung:
         'Sie haben in einer Zeitschrift gelesen: „Viele Menschen schauen mehr als drei Stunden am Tag auf ihr Smartphone.“ Berichten Sie: Welche Rolle spielen Handy und Internet in Ihrem Alltag? Sagen Sie Ihre Meinung: Was ist gut daran, was ist problematisch?',
       punkte: [

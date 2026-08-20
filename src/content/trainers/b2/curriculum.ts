@@ -72,27 +72,27 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
 <p><b>Zweiteilige Konnektoren:</b> je … desto (je mehr, desto besser) · sowohl … als auch · weder … noch · entweder … oder · zwar … aber · einerseits … andererseits · nicht nur … sondern auch.</p>`
     },
     brief: {
-      title: 'Der formale Brief (45 Punkte, 150–200 Wörter)',
-      html: `<p><b>The task:</b> 30 minutes, choose <b>one of two</b> tasks, write 150–200 words covering all Leitpunkte. Pick the task whose vocabulary you own — decide in 60 seconds, never switch later.</p>
+      title: 'Die halbformelle E-Mail (45 Punkte, 150–220 Wörter)',
+      html: `<p><b>The task:</b> 30 minutes, ONE task — no choice between two. Write a <b>halbformelle E-Mail</b> of 150–220 words that answers everything the prompt raises, covering all Leitpunkte fully. Register sits between "Sehr geehrte Damen und Herren" and casual Du: "Lieber Herr Fischer" or "Guten Tag Frau Berger" is usually right — not a formal Behördenbrief.</p>
 <p><b>Fixed skeleton — memorize it:</b><br>
-1. <b>Betreff</b> — one bold line, no "Betreff:" label: <i>Beschwerde über die Lieferung vom 12. Mai</i> / <i>Anfrage zu Ihrem Kursangebot</i> / <i>Bewerbung als …</i><br>
-2. <b>Anrede:</b> Sehr geehrte Damen und Herren, / Sehr geehrte Frau Weber, — after the comma continue <b>lowercase</b>.<br>
+1. <b>Betreff</b> — one bold subject line: <i>Beschwerde über die Lieferung vom 12. Mai</i> / <i>Anfrage zu Ihrem Kursangebot</i> / <i>Bewerbung als …</i><br>
+2. <b>Anrede:</b> Sehr geehrte Damen und Herren, / Sehr geehrte Frau Weber, / Lieber Herr Fischer, — after the comma continue <b>lowercase</b>.<br>
 3. <b>Einstieg — why are you writing?</b> Ich wende mich an Sie, weil … · Mit großem Interesse habe ich Ihre Anzeige gelesen. · Ich beziehe mich auf Ihr Schreiben vom …<br>
 4. <b>Hauptteil</b> — one short paragraph per Leitpunkt, connected with daher, allerdings, außerdem, aus diesem Grund.<br>
 5. <b>Schluss + Erwartung:</b> Ich wäre Ihnen dankbar, wenn Sie … · Über eine baldige Antwort würde ich mich freuen. · Für Rückfragen stehe ich Ihnen gerne zur Verfügung.<br>
-6. <b>Gruß:</b> Mit freundlichen Grüßen + voller Name (kein Komma nach dem Gruß, kein "LG"!).</p>
+6. <b>Gruß:</b> Mit freundlichen Grüßen / Viele Grüße + voller Name (kein Komma nach dem Gruß, kein "LG"!).</p>
 <p><b>Beschwerde moves:</b> Leider musste ich feststellen, dass … · Die Ware weist erhebliche Mängel auf. · Ich bitte Sie, den Schaden bis zum … zu beheben. · Andernfalls sehe ich mich gezwungen, vom Kauf zurückzutreten. · Ich erwarte eine Rückerstattung des Betrags.</p>
 <p><b>Anfrage moves:</b> Könnten Sie mir bitte mitteilen, ob/wann/wie …? · Ich hätte einige Fragen bezüglich … · Wäre es möglich, …? · Ich würde gerne wissen, welche Kosten entstehen.</p>
 <p><b>Bewerbung moves:</b> hiermit bewerbe ich mich um die Stelle als … · Zurzeit arbeite ich als … · Ich verfüge über Erfahrung im Bereich … · Über eine Einladung zu einem Vorstellungsgespräch würde ich mich sehr freuen.</p>
-<p><b>Checklist (3 min):</b> alle Leitpunkte? 150–200 Wörter? Betreff da? durchgehend Sie/Ihnen/Ihr groß? Konjunktiv II für Bitten? mindestens zwei formelle Konnektoren? Nomen groß, Verb an Position 2 bzw. am Ende?</p>`
+<p><b>Checklist (3 min):</b> alle Leitpunkte vollständig beantwortet? 150–220 Wörter? Betreff da? durchgehend Sie/Ihnen/Ihr groß? Konjunktiv II für Bitten? mindestens zwei formelle Konnektoren? Nomen groß, Verb an Position 2 bzw. am Ende?</p>`
     },
     muendlich: {
-      title: 'Redemittel: Präsentation, Diskussion, Konsens',
-      html: `<p><b>Teil 1 — Präsentation (ca. 3 Min., feste Struktur):</b><br>
-· Einstieg: Ich möchte Ihnen heute kurz das Thema … vorstellen. · In meinem Kurzvortrag geht es um …<br>
-· Gliederung: Zuerst spreche ich über …, danach gehe ich auf … ein, abschließend ziehe ich ein Fazit.<br>
-· Beispiele & Heimat: Ein gutes Beispiel dafür ist … · In meinem Heimatland ist es üblich, dass … · Aus eigener Erfahrung kann ich sagen, dass …<br>
-· Fazit: Zusammenfassend lässt sich sagen, dass … · Vielen Dank für Ihre Aufmerksamkeit. Haben Sie noch Fragen?</p>
+      title: 'Redemittel: Über Erfahrungen sprechen, Diskussion, Konsens',
+      html: `<p><b>Teil 1 — Über Erfahrungen sprechen (ca. 3 Min., eine eigene Erfahrung erzählen — KEINE Präsentation):</b><br>
+· Einstieg: Ich möchte Ihnen von einer Erfahrung erzählen, bei der … · Bei mir war das so: …<br>
+· Verlauf: Zuerst …, dann …, am Ende …<br>
+· Gefühl & Bewertung: Aus meiner Erfahrung … · Das kann ich gut nachvollziehen, weil … · Rückblickend würde ich sagen, dass …<br>
+· Vergleich & Abschluss: In meinem Heimatland ist das ähnlich/anders: … · Zusammenfassend würde ich sagen, dass … · Haben Sie das auch schon einmal erlebt?</p>
 <p><b>Teil 2 — Diskussion (Position beziehen & reagieren):</b><br>
 · Meinung: Meiner Ansicht/Meinung nach … · Ich bin fest davon überzeugt, dass … · Ich stehe dem eher kritisch/skeptisch gegenüber.<br>
 · Zustimmen: Da stimme ich Ihnen völlig zu. · Das sehe ich genauso. · Da ist etwas Wahres dran.<br>
@@ -318,26 +318,26 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
     {
       day: 12,
       tier: 'core',
-      title: 'Der formale Brief I — Beschwerde',
+      title: 'Die halbformelle E-Mail I — Beschwerde',
       focus: 'The 45-point letter: skeleton + complaint moves',
       tasks: [
-        'Cheatsheet: Der formale Brief — memorize the skeleton (Betreff, Anrede, Einstieg, Hauptteil, Schluss, Gruß) and the Beschwerde moves.',
-        'Write one formal complaint letter (150–200 words, 30 minutes) and self-check with the cheatsheet checklist.',
+        'Cheatsheet: Die halbformelle E-Mail — memorize the skeleton (Betreff, Anrede, Einstieg, Hauptteil, Schluss, Gruß) and the Beschwerde moves.',
+        'Write one halbformelle E-Mail complaint (150–220 words, 30 minutes) and self-check with the cheatsheet checklist.',
         'Collect your 10 favourite formal phrases on one sheet — these become your standard repertoire.',
         'One flashcard session (20 cards) of nouns.'
       ],
       cheats: ['brief', 'kii'],
       ai: [
         {
-          t: 'Brief-Prüfer',
-          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine realistische Beschwerde-Aufgabe (Situation + 4 Leitpunkte). Ich schreibe einen formellen Brief mit 150–200 Wörtern. Bewerte ihn nach den telc-Kriterien mit maximal 45 Punkten, prüfe streng Register, Betreff, Anrede, Konnektoren und Konjunktiv II bei Bitten, korrigiere alle Fehler und zeige eine Musterlösung. Dann die nächste Aufgabe.'
+          t: 'E-Mail-Prüfer',
+          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine realistische Beschwerde-Aufgabe (Situation + 4 Leitpunkte). Ich schreibe eine halbformelle E-Mail mit 150–220 Wörtern. Bewerte sie nach den telc-Kriterien mit maximal 45 Punkten, prüfe streng Register (halbformell, kein Behördenbrief), Betreff, Anrede, Konnektoren und Konjunktiv II bei Bitten, korrigiere alle Fehler und zeige eine Musterlösung. Dann die nächste Aufgabe.'
         }
       ]
     },
     {
       day: 13,
       tier: 'core',
-      title: 'Modelltest 2 & Brief-Feinschliff',
+      title: 'Modelltest 2 & E-Mail-Feinschliff',
       focus: 'Second mock + rewrite the letter properly',
       tasks: [
         'Take Modelltest 2 under real timing.',
@@ -347,19 +347,19 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       cheats: ['brief'],
       ai: [
         {
-          t: 'Brief-Vergleich',
-          p: 'Du bist telc-Prüfer für Deutsch B2. Ich schicke dir zwei Versionen desselben formellen Briefs (meine Prüfungsversion und meine überarbeitete Version). Vergleiche beide nach den telc-Kriterien, sage mir auf Englisch, welche konkreten Verbesserungen Punkte bringen würden, und diktiere mir die drei Formulierungen, die ich für jeden künftigen Brief auswendig lernen sollte.'
+          t: 'E-Mail-Vergleich',
+          p: 'Du bist telc-Prüfer für Deutsch B2. Ich schicke dir zwei Versionen derselben halbformellen E-Mail (meine Prüfungsversion und meine überarbeitete Version). Vergleiche beide nach den telc-Kriterien, sage mir auf Englisch, welche konkreten Verbesserungen Punkte bringen würden, und diktiere mir die drei Formulierungen, die ich für jede künftige E-Mail auswendig lernen sollte.'
         }
       ]
     },
     {
       day: 14,
       tier: 'core',
-      title: 'Der formale Brief II & Wochenbilanz',
+      title: 'Die halbformelle E-Mail II & Wochenbilanz',
       focus: 'Anfrage & Bewerbung — the other two letter types',
       tasks: [
-        'Cheatsheet: Der formale Brief — learn the Anfrage and Bewerbung moves.',
-        'Write one formal Anfrage letter (150–200 words, timed) and self-check with the checklist.',
+        'Cheatsheet: Die halbformelle E-Mail — learn the Anfrage and Bewerbung moves.',
+        'Write one halbformelle Anfrage e-mail (150–220 words, timed) and self-check with the checklist.',
         'Compare your Modelltest 1 and 2 scores per module; write down your two weakest modules.',
         'Review ALL flashcards from days 8–13. From tomorrow the extension tier deepens speaking and argumentation.'
       ],
@@ -367,7 +367,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       ai: [
         {
           t: 'Anfrage-Prüfer',
-          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine Anfrage-Aufgabe (z. B. an eine Sprachschule oder einen Anbieter, mit 4 Leitpunkten). Ich schreibe 150–200 Wörter. Bewerte mit maximal 45 Punkten, korrigiere alles und zeige eine Musterlösung. Danach eine kurze Bewerbungs-Aufgabe als Bonus.'
+          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine Anfrage-Aufgabe (z. B. an eine Sprachschule oder einen Anbieter, mit 4 Leitpunkten). Ich schreibe 150–220 Wörter. Bewerte mit maximal 45 Punkten, korrigiere alles und zeige eine Musterlösung. Danach eine kurze Bewerbungs-Aufgabe als Bonus.'
         }
       ]
     },
@@ -393,19 +393,19 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
     {
       day: 16,
       tier: 'extension',
-      title: 'Präsentation bauen',
-      focus: 'Mündliche Prüfung Teil 1: the 3-minute Kurzvortrag',
+      title: 'Über Erfahrungen sprechen üben',
+      focus: 'Mündliche Prüfung Teil 1: eine eigene Erfahrung erzählen — keine Präsentation',
       tasks: [
-        'Cheatsheet: Redemittel — memorize the Präsentation skeleton (Einstieg, Gliederung, Beispiel, Heimatland-Vergleich, Fazit).',
-        'Build one full Präsentation on a topic you like and record yourself — 3 minutes, no reading from notes.',
-        'Listen back and count your structure phrases; redo the recording once, fixing the weakest section.',
+        'Cheatsheet: Redemittel — memorize the Über-Erfahrungen-sprechen skeleton (Einstieg, Verlauf, Gefühl/Bewertung, Vergleich, Abschluss).',
+        'Pick a topic you have real experience with and record yourself telling that experience — about 3 minutes, no notes, no rehearsed speech.',
+        'Listen back and count your experience phrases (Bei mir war das so …, Aus meiner Erfahrung …); redo the recording once, fixing the weakest section.',
         'One flashcard session (20 cards) of nouns.'
       ],
       cheats: ['muendlich'],
       ai: [
         {
-          t: 'Präsentations-Coach',
-          p: 'Du bist mein Prüfungscoach für die mündliche telc-B2-Prüfung. Gib mir ein Präsentationsthema mit den üblichen Leitfragen (Situation im Heimatland, Vor- und Nachteile, eigene Meinung). Ich tippe meinen Kurzvortrag als Text. Prüfe die Struktur (Einstieg, Gliederung, Beispiel, Fazit), korrigiere Fehler, ersetze schwache Formulierungen durch B2-Redemittel und stelle mir danach zwei Nachfragen, wie es die Prüfer tun.'
+          t: 'Erfahrungs-Coach',
+          p: 'Du bist mein Prüfungscoach für die mündliche telc-B2-Prüfung. Gib mir ein Thema mit den üblichen Leitfragen für Teil 1 (was ist passiert, wie hast du dich gefühlt, was würdest du heute anders machen, wie ist das in deinem Heimatland). Ich tippe meine eigene Erfahrung dazu als Text — keine Präsentation, telc B2 kennt diese Aufgabe nicht. Prüfe die Struktur (Einstieg, Verlauf, Bewertung, Abschluss), korrigiere Fehler, ersetze schwache Formulierungen durch B2-Redemittel und stelle mir danach zwei Nachfragen, wie es die Prüfer tun.'
         }
       ]
     },
@@ -453,7 +453,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       tasks: [
         'Cheatsheet: Redemittel — drill the Vorschlagen/Abwägen/Kompromiss phrases for Teil 3 aloud.',
         'Plan 2 scenarios out loud, solo, 3 minutes each (a farewell party for a colleague, a weekend trip): Vorschlag, Gegenvorschlag, Einigung.',
-        'Write one formal Bewerbung letter (150–200 words, timed) and self-check with the cheatsheet.',
+        'Write one halbformelle Bewerbung e-mail (150–220 words, timed) and self-check with the cheatsheet.',
         'One flashcard session (20 cards) of verbs.'
       ],
       cheats: ['muendlich', 'brief'],
@@ -471,14 +471,14 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       focus: 'Full written mock + first complete oral run',
       tasks: [
         'Take Modelltest 5 under real timing and review it fully.',
-        'Do one complete oral exam in a single recording: Präsentation, then Diskussion, then Planung — about 15 minutes, no pausing.',
+        'Do one complete oral exam in a single recording: Über Erfahrungen sprechen, then Diskussion, then Planung — about 15 minutes, no pausing.',
         'Listen back and note your 3 most repeated mistakes; write their corrections 3 times.'
       ],
       cheats: ['muendlich'],
       ai: [
         {
           t: 'Mündliche Simulation',
-          p: 'Du bist telc-Prüfer für die mündliche B2-Prüfung. Führe die komplette Prüfung mit mir auf Deutsch durch: Teil 1 — ich präsentiere ein Thema, du stellst zwei Nachfragen. Teil 2 — wir diskutieren über einen kurzen Zeitungstext, den du mir gibst. Teil 3 — wir planen gemeinsam etwas und müssen uns einigen. Bleib bis zum Ende in der Prüferrolle, DANN bewerte mich nach den telc-Kriterien mit ausführlichem Feedback auf Englisch.'
+          p: 'Du bist telc-Prüfer für die mündliche B2-Prüfung. Führe die komplette Prüfung mit mir auf Deutsch durch: Teil 1 — ich erzähle von einer eigenen Erfahrung zu einem Thema, du stellst zwei Nachfragen. Teil 2 — wir diskutieren über einen kurzen Zeitungstext, den du mir gibst. Teil 3 — wir planen gemeinsam etwas und müssen uns einigen. Bleib bis zum Ende in der Prüferrolle, DANN bewerte mich nach den telc-Kriterien mit ausführlichem Feedback auf Englisch.'
         }
       ]
     },
@@ -559,18 +559,18 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
     {
       day: 25,
       tier: 'extension',
-      title: 'Schreiben III — der Brief unter Druck',
+      title: 'Schreiben III — die E-Mail unter Druck',
       focus: 'Routine beats inspiration',
       tasks: [
-        'Write 2 formal letters at 30 minutes each: one Beschwerde, one Anfrage — pick each from two invented tasks to practise the real exam choice.',
+        'Write 2 halbformelle e-mails at 30 minutes each, one Beschwerde and one Anfrage, so both registers are equally automatic (the real exam sets only one task, not a choice).',
         'Score each yourself with the cheatsheet checklist, honestly, then rewrite ONLY the weaker one.',
-        'Drill your 10 standard formal phrases from day 12 — they must flow without thinking.'
+        'Drill your 10 standard halbformell phrases from day 12 — they must flow without thinking.'
       ],
       cheats: ['brief', 'kii'],
       ai: [
         {
           t: 'Doppel-Prüfer',
-          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir ZWEI Briefaufgaben zur Wahl (eine Beschwerde, eine Anfrage), wie in der echten Prüfung. Ich wähle eine und schreibe 150–200 Wörter in 30 Minuten. Bewerte nach den telc-Kriterien mit maximal 45 Punkten, sag mir auf Englisch, ob meine Wahl strategisch klug war, korrigiere alles und zeige eine Musterlösung. Danach das nächste Aufgabenpaar.'
+          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine Beschwerde-Aufgabe UND separat eine Anfrage-Aufgabe zum Üben — nicht als Wahl, im echten Test bekomme ich nur eine E-Mail-Aufgabe. Ich schreibe für jede eine halbformelle E-Mail mit 150–220 Wörtern in 30 Minuten. Bewerte beide nach den telc-Kriterien mit maximal 45 Punkten, korrigiere alles und zeige je eine Musterlösung.'
         }
       ]
     },
@@ -581,7 +581,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       focus: 'Both exam halves in one day',
       tasks: [
         'Take Modelltest 9 under real timing.',
-        'Do the full oral simulation once more in a single recording (Präsentation, Diskussion, Planung) and compare with day 20 — what improved?',
+        'Do the full oral simulation once more in a single recording (Über Erfahrungen sprechen, Diskussion, Planung) and compare with day 20 — what improved?',
         'Cheatsheet: Redemittel — final drill of the repair phrases: Könnten Sie das bitte noch einmal erklären? Was genau meinen Sie mit …?'
       ],
       cheats: ['muendlich'],
@@ -617,14 +617,14 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       focus: 'Peak, don’t cram',
       tasks: [
         'Re-read ALL six cheatsheets once, slowly (45 min) — mark the 5 things you still need on a single sheet of paper.',
-        'Say your Präsentation opening, your Kompromiss phrases and your 5 favourite Konjunktiv-II Bitten aloud — they must be automatic.',
+        'Say your Über-Erfahrungen-sprechen opening, your Kompromiss phrases and your 5 favourite Konjunktiv-II Bitten aloud — they must be automatic.',
         'Check your Modelltest scores on the dashboard against both 60% hurdles, decide which single module gets your last review evening — then close the books and rest.'
       ],
       cheats: ['brief', 'muendlich', 'kii', 'nominal'],
       ai: [
         {
           t: 'Finaler Strategie-Talk',
-          p: 'Du bist mein Prüfungscoach für telc Deutsch B2. Interviewe mich auf Englisch: meine Modelltest-Ergebnisse pro Modul, mein schwächstes Modul, mein Prüfungstermin. Erstelle dann meinen Schlachtplan für die letzten Tage: was ich am Vorabend wiederhole, meine Teil-Reihenfolge im Lesen, meine Brief-Strategie (welche Aufgabe ich wähle) und ein realistisches Punktziel pro Modul für beide 60%-Hürden. Konkret und ermutigend, kein Geschwafel.'
+          p: 'Du bist mein Prüfungscoach für telc Deutsch B2. Interviewe mich auf Englisch: meine Modelltest-Ergebnisse pro Modul, mein schwächstes Modul, mein Prüfungstermin. Erstelle dann meinen Schlachtplan für die letzten Tage: was ich am Vorabend wiederhole, meine Teil-Reihenfolge im Lesen, meine E-Mail-Strategie (Register und Struktur sofort parat haben) und ein realistisches Punktziel pro Modul für beide 60%-Hürden. Konkret und ermutigend, kein Geschwafel.'
         }
       ]
     }
