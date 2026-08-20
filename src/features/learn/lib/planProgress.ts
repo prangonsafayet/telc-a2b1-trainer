@@ -1,10 +1,5 @@
-import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
-
-import { type LearnDoneMap } from '@shared/types';
-
-/** Checkbox key. Stable across versions — it is persisted and synced. */
-export const learnTaskKey = (day: number, taskIndex: number): string =>
-  `d${String(day)}t${String(taskIndex)}`;
+import { learnTaskKey } from '@shared/lib/learnProgress.ts';
+import { type LearnDoneMap, type LearnPlan } from '@shared/types';
 
 export interface PlanSummary {
   readonly totalTasks: number;
@@ -12,8 +7,16 @@ export interface PlanSummary {
   readonly percent: number;
 }
 
-export const summarizePlan = (done: LearnDoneMap): PlanSummary => {
-  const totalTasks = A2B1_CURRICULUM.days.reduce((sum, day) => sum + day.tasks.length, 0);
-  const doneTasks = Object.values(done).filter(Boolean).length;
+/**
+ * How far through one trainer's curriculum its ticked tasks put it. Counted against the
+ * curriculum rather than by counting stored keys, so a task that no longer exists — a
+ * curriculum that shrank, an imported file from another build — cannot report 110%.
+ */
+export const summarizePlan = (curriculum: LearnPlan, done: LearnDoneMap): PlanSummary => {
+  const totalTasks = curriculum.days.reduce((sum, day) => sum + day.tasks.length, 0);
+  const doneTasks = curriculum.days.reduce(
+    (sum, day) => sum + day.tasks.filter((_, index) => done[learnTaskKey(day.day, index)] === true).length,
+    0
+  );
   return { totalTasks, doneTasks, percent: totalTasks === 0 ? 0 : (doneTasks / totalTasks) * 100 };
 };

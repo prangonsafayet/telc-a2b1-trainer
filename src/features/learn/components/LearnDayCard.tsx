@@ -2,19 +2,20 @@ import { Sparkles } from 'lucide-react';
 
 import { CopyTextButton } from '@shared/components';
 import { cn } from '@shared/lib/cn.ts';
+import { learnTaskKey } from '@shared/lib/learnProgress.ts';
 import { type Cheatsheet, type LearnDay } from '@shared/types';
 import { Badge, Card, CardContent, CardHeader, CardTitle, Checkbox, Label } from '@shared/ui';
-
-import { learnTaskKey } from '../lib/planProgress.ts';
 
 interface LearnDayCardProps {
   readonly day: LearnDay;
   readonly complete: boolean;
+  /** The trainer's cheatsheets, for the links this day names. */
   readonly cheatsheets: Readonly<Record<string, Cheatsheet>>;
   readonly isTaskDone: (taskIndex: number) => boolean;
   readonly onToggleTask: (taskIndex: number, done: boolean) => void;
 }
 
+/** One curriculum day: its tasks as checkboxes, its cheatsheets and its AI prompts. */
 const LearnDayCard = ({ day, complete, cheatsheets, isTaskDone, onToggleTask }: LearnDayCardProps) => (
   <Card
     className={cn(
@@ -61,17 +62,19 @@ const LearnDayCard = ({ day, complete, cheatsheets, isTaskDone, onToggleTask }: 
         })}
       </div>
 
-      <div className="text-xs text-muted-foreground">
-        Cheatsheets:{' '}
-        {day.cheats.map((id, index) => (
-          <span key={id}>
-            {index > 0 ? ' · ' : ''}
-            <a className="underline underline-offset-2 hover:text-foreground" href={`#cs-${id}`}>
-              {cheatsheets[id]?.title ?? id}
-            </a>
-          </span>
-        ))}
-      </div>
+      {day.cheats.length > 0 ? (
+        <div className="text-xs text-muted-foreground">
+          Cheatsheets:{' '}
+          {day.cheats.map((id, index) => (
+            <span key={id}>
+              {index > 0 ? ' · ' : ''}
+              <a className="underline underline-offset-2 hover:text-foreground" href={`#cs-${id}`}>
+                {cheatsheets[id]?.title ?? id}
+              </a>
+            </span>
+          ))}
+        </div>
+      ) : null}
 
       {day.ai.map((prompt, index) => (
         <div
@@ -81,7 +84,7 @@ const LearnDayCard = ({ day, complete, cheatsheets, isTaskDone, onToggleTask }: 
           <div className="flex items-center gap-1.5 font-semibold">
             <Sparkles className="size-4" aria-hidden /> AI practice — {prompt.t}
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">{prompt.p}</p>
+          <p className="mt-1 whitespace-pre-line text-sm text-muted-foreground">{prompt.p}</p>
           <CopyTextButton text={prompt.p} />
         </div>
       ))}

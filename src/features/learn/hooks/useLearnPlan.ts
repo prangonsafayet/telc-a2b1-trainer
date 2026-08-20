@@ -2,14 +2,18 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { learnTaskKey } from '@shared/lib/learnProgress.ts';
+import { type Cheatsheet, type TrainerId } from '@shared/types';
 
-import { useProgress } from '@features/progress';
+import { useToday } from '@features/plan';
+import { touchActivity, useTrainerSlice } from '@features/progress';
 
-import { learnTaskKey, summarizePlan, type PlanSummary } from '../lib/planProgress.ts';
+import { summarizePlan, type PlanSummary } from '../lib/planProgress.ts';
 
 export interface LearnPlanState {
   readonly summary: PlanSummary;
+  readonly cheatsheets: Readonly<Record<string, Cheatsheet>>;
   readonly isTaskDone: (day: number, taskIndex: number) => boolean;
   readonly toggleTask: (day: number, taskIndex: number, done: boolean) => void;
   readonly isDayComplete: (day: number) => boolean;
@@ -18,10 +22,15 @@ export interface LearnPlanState {
   readonly setOpenCheatsheets: (ids: string[]) => void;
 }
 
-export const useLearnPlan = (): LearnPlanState => {
-  const { db, update } = useProgress();
+/**
+ * The curriculum checkbox state of one trainer, stored in whichever slice of the progress
+ * document that trainer owns. The key scheme is shared and persisted — never change it.
+ */
+export const useLearnPlan = (trainer: TrainerId): LearnPlanState => {
+  const { learnDone: done, update } = useTrainerSlice(trainer);
+  const today = useToday();
   const { hash } = useLocation();
-  const done = db.learnDone;
+  const curriculum = TRAINERS[trainer].content.curriculum;
 
   /* A "#cs-writing" link from a day card should open that cheatsheet, not just scroll to
      a collapsed header. */
@@ -39,21 +48,30 @@ export const useLearnPlan = (): LearnPlanState => {
         const key = learnTaskKey(day, taskIndex);
         /* Absent rather than `false`, so the map only ever lists completed tasks. */
         const { [key]: _removed, ...rest } = current.learnDone;
-        return { ...current, learnDone: isDone ? { ...rest, [key]: true } : rest };
+        const next = { ...current, learnDone: isDone ? { ...rest, [key]: true } : rest };
+        return isDone ? touchActivity(next, today) : next;
       });
     },
-    [update]
+    [update, today]
   );
 
   const isDayComplete = useCallback(
     (day: number) => {
-      const entry = A2B1_CURRICULUM.days.find(candidate => candidate.day === day);
+      const entry = curriculum.days.find(candidate => candidate.day === day);
       return entry ? entry.tasks.every((_, index) => isTaskDone(day, index)) : false;
     },
-    [isTaskDone]
+    [curriculum.days, isTaskDone]
   );
 
-  const summary = useMemo(() => summarizePlan(done), [done]);
+  const summary = useMemo(() => summarizePlan(curriculum, done), [curriculum, done]);
 
-  return { summary, isTaskDone, toggleTask, isDayComplete, openCheatsheets, setOpenCheatsheets };
+  return {
+    summary,
+    cheatsheets: curriculum.cheatsheets,
+    isTaskDone,
+    toggleTask,
+    isDayComplete,
+    openCheatsheets,
+    setOpenCheatsheets
+  };
 };
