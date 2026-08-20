@@ -5,6 +5,7 @@ import {
   SINGLE_LEVEL_MODULES,
   singleLevelModuleMinutes
 } from '@shared/config/singleLevelExam.ts';
+import { TRAINERS } from '@shared/config/trainers.ts';
 import { type AttemptMode, type LevelTrainerSettings, type SingleLevelTrainerId } from '@shared/types';
 import {
   Badge,
@@ -55,7 +56,7 @@ const SingleLevelExamCard = ({
       <span
         aria-hidden
         className="absolute inset-x-0 top-0 h-1"
-        style={{ background: level === 'b1' ? 'var(--primary)' : 'var(--warning)' }}
+        style={{ background: TRAINERS[level].accent }}
       />
       <CardHeader>
         <div className="flex items-start justify-between gap-2">

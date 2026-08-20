@@ -1,16 +1,43 @@
-// Node validator for exam data files. Usage: node validate.js [src/data/examNN.js ...]
-// With no args, validates every src/data/exam*.js file.
+// Node validator for exam data files.
+// Usage: node validate.cjs [src/content/trainers/<id>/exams/examNN.ts ...]
+// With no args it discovers every trainer under src/content/trainers and validates its
+// papers against the format they are authored in — so a new trainer needs no edit here.
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const files = process.argv.slice(2).length
-  ? process.argv.slice(2)
-  : fs
-      .readdirSync(path.join(__dirname, 'src', 'content', 'exams'))
-      .filter(f => /^exam\d+\.ts$/.test(f))
-      .sort()
-      .map(f => 'src/content/exams/' + f);
+const TRAINERS_DIR = path.join(__dirname, 'src', 'content', 'trainers');
+
+// Which paper a file is: the type it declares itself to satisfy, not its folder name.
+const formatOf = abs =>
+  /satisfies\s+SingleLevelExam/.test(fs.readFileSync(abs, 'utf8')) ? 'single-level' : 'dual-level';
+
+const discover = () => {
+  const found = [];
+  for (const trainer of fs.readdirSync(TRAINERS_DIR).sort()) {
+    const dir = path.join(TRAINERS_DIR, trainer, 'exams');
+    if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) continue;
+    for (const name of fs
+      .readdirSync(dir)
+      .filter(x => /^exam\d+\.ts$/.test(x))
+      .sort()) {
+      const file = `src/content/trainers/${trainer}/exams/${name}`;
+      found.push({ trainer, file, format: formatOf(path.join(dir, name)) });
+    }
+  }
+  return found;
+};
+
+const named = process.argv.slice(2);
+const allExams = named.length
+  ? named.map(file => ({
+      trainer: file.split('/')[3],
+      file,
+      format: formatOf(path.join(__dirname, file))
+    }))
+  : discover();
+
+const files = allExams.filter(entry => entry.format === 'dual-level').map(entry => entry.file);
 
 let failures = 0;
 const err = (f, msg) => {
@@ -229,22 +256,13 @@ for (const file of files) {
 }
 
 // ---------------------------------------------------------------------------
-// telc B1/B2 Modelltests (src/content/trainers/<level>/exams/examNN.ts)
+// Single-level Modelltests (src/content/trainers/<id>/exams/examNN.ts)
 // ---------------------------------------------------------------------------
-const telcFiles = [];
-for (const level of ['b1', 'b2']) {
-  const dir = path.join(__dirname, 'src', 'content', 'trainers', level, 'exams');
-  if (!fs.existsSync(dir)) continue;
-  for (const f of fs
-    .readdirSync(dir)
-    .filter(x => /^exam\d+\.ts$/.test(x))
-    .sort()) {
-    telcFiles.push({ level, file: `src/content/trainers/${level}/exams/${f}` });
-  }
-}
+const telcFiles = allExams.filter(entry => entry.format === 'single-level');
 
-const telcSeen = { b1: new Set(), b2: new Set() };
-for (const { level, file } of telcFiles) {
+const telcSeen = {};
+for (const { trainer: level, file } of telcFiles) {
+  telcSeen[level] = telcSeen[level] || new Set();
   const abs = path.join(__dirname, file);
   const ctx = {};
   vm.createContext(ctx);

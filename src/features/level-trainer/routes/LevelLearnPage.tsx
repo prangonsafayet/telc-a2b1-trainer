@@ -1,6 +1,6 @@
 import { Info } from 'lucide-react';
 
-import { LEVEL_CONTENT } from '@content/trainers/index.ts';
+import { TRAINER_CONTENT } from '@content/trainers/index.ts';
 
 import { PageTitle, SectionTitle } from '@shared/components';
 import { type SingleLevelTrainerId } from '@shared/types';
@@ -29,7 +29,7 @@ interface LevelLearnPageProps {
 const LevelLearnPage = ({ level }: LevelLearnPageProps) => {
   const plan = useLevelPlan(level);
   const scheduled = useScheduledLevelLearn(level);
-  const curriculum = LEVEL_CONTENT[level].curriculum;
+  const curriculum = TRAINER_CONTENT[level].curriculum;
   const cheatsheets = Object.entries(curriculum.cheatsheets);
 
   return (

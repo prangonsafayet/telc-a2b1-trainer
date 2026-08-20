@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react';
 
-import { LEVEL_CONTENT } from '@content/trainers/index.ts';
+import { TRAINER_CONTENT } from '@content/trainers/index.ts';
 
 import { learnTaskKey } from '@shared/lib/learnProgress.ts';
 import { type SingleLevelTrainerId } from '@shared/types';
 
 import { useToday } from '@features/plan';
-import { touchActivity, useTrainerDoc } from '@features/progress';
+import { touchActivity, useTrainerSlice } from '@features/progress';
 
 export interface LevelPlanSummary {
   readonly doneTasks: number;
@@ -23,10 +23,9 @@ export interface LevelPlanState {
 
 /** Curriculum checkbox state of one level trainer, stored on its document. */
 export const useLevelPlan = (level: SingleLevelTrainerId): LevelPlanState => {
-  const { doc, updateDoc } = useTrainerDoc(level);
+  const { learnDone: done, update } = useTrainerSlice(level);
   const today = useToday();
-  const curriculum = LEVEL_CONTENT[level].curriculum;
-  const done = doc.learnDone;
+  const curriculum = TRAINER_CONTENT[level].curriculum;
 
   const isTaskDone = useCallback(
     (day: number, taskIndex: number) => done[learnTaskKey(day, taskIndex)] === true,
@@ -35,7 +34,7 @@ export const useLevelPlan = (level: SingleLevelTrainerId): LevelPlanState => {
 
   const toggleTask = useCallback(
     (day: number, taskIndex: number, isDone: boolean) => {
-      updateDoc(current => {
+      update(current => {
         const key = learnTaskKey(day, taskIndex);
         /* Absent rather than `false`, so the map only ever lists completed tasks. */
         const { [key]: _removed, ...rest } = current.learnDone;
@@ -43,7 +42,7 @@ export const useLevelPlan = (level: SingleLevelTrainerId): LevelPlanState => {
         return isDone ? touchActivity(next, today) : next;
       });
     },
-    [updateDoc, today]
+    [update, today]
   );
 
   const isDayComplete = useCallback(

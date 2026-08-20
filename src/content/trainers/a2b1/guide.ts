@@ -1,7 +1,7 @@
-/* The Exam Guide, authored as HTML and injected into a .prose container. */
+/* The A2·B1 Exam Guide, authored as HTML and injected into a .prose container. */
 
 /** Structure, scoring and per-module tactics. Trusted, repo-authored HTML. */
-export const GUIDE_HTML = `
+export const A2B1_GUIDE = `
 <h1>Exam Guide — telc Deutsch A2·B1</h1>
 <p class="lead">Structure, scoring, and concrete tactics to crack every module. Based on the official telc exam format and first-hand exam-taker reports.</p>
 

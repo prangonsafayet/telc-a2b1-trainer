@@ -1,4 +1,4 @@
-import { LEARN } from '@content/learn.ts';
+import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
 
 import { type LearnDoneMap } from '@shared/types';
 
@@ -13,7 +13,7 @@ export interface PlanSummary {
 }
 
 export const summarizePlan = (done: LearnDoneMap): PlanSummary => {
-  const totalTasks = LEARN.days.reduce((sum, day) => sum + day.tasks.length, 0);
+  const totalTasks = A2B1_CURRICULUM.days.reduce((sum, day) => sum + day.tasks.length, 0);
   const doneTasks = Object.values(done).filter(Boolean).length;
   return { totalTasks, doneTasks, percent: totalTasks === 0 ? 0 : (doneTasks / totalTasks) * 100 };
 };

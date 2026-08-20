@@ -5,10 +5,10 @@
  * arguments always give the same plan and the whole thing is unit-testable. The plan is
  * derived on every render and never persisted; the only stored inputs are the exam date,
  * the learn-plan checkboxes and the attempt list.
+ *
+ * Trainer-agnostic: what to schedule arrives as a `ScheduleSource`, which
+ * `trainerScheduleSource` builds from the registry.
  */
-
-import { EXAMS } from '@content/exams';
-import { LEARN } from '@content/learn.ts';
 
 import {
   EXAMS_PER_REVIEW,
@@ -18,9 +18,7 @@ import {
   MAX_PREP_DAYS,
   MIN_MOCK_SLOTS,
   MIN_PREP_DAYS,
-  MOCK_PHASE_WEIGHT,
-  SPRINT_EXAM_IDS,
-  SPRINT_LEARN_DAYS
+  MOCK_PHASE_WEIGHT
 } from '@shared/config/schedule.ts';
 import { daysBetween, parseIsoDate, toIsoDate } from '@shared/lib/format.ts';
 import { isLearnDayComplete } from '@shared/lib/learnProgress.ts';
@@ -185,14 +183,6 @@ const kindFor = (draft: SlotDraft, isLast: boolean): SlotKind => {
   return 'review';
 };
 
-/** The A2·B1 trainer's inputs — the shape every other trainer mirrors. */
-const A2B1_SOURCE: ScheduleSource = {
-  learnDays: LEARN.days,
-  examIds: EXAMS.map(exam => exam.id),
-  sprintExamIds: SPRINT_EXAM_IDS,
-  sprintLearnDays: SPRINT_LEARN_DAYS
-};
-
 /**
  * The plan for one exam date, or null when the stored date is not a date — callers fall
  * back to the static copy rather than showing a plan built on a guess.
@@ -252,9 +242,6 @@ export const buildScheduleFrom = (input: ScheduleInput, source: ScheduleSource):
     unscheduledLearnDays
   };
 };
-
-/** The original single-trainer surface, unchanged for every existing call site. */
-export const buildSchedule = (input: ScheduleInput): Schedule | null => buildScheduleFrom(input, A2B1_SOURCE);
 
 interface Drafted {
   readonly drafts: readonly SlotDraft[];

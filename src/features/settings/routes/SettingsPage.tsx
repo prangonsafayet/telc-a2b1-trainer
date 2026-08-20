@@ -18,9 +18,8 @@ import {
 
 import { SyncPanel } from '@features/auth';
 
-import ExamDateControls from '../components/ExamDateControls.tsx';
-import LevelTrainerSettingsCard from '../components/LevelTrainerSettingsCard.tsx';
 import SettingsField from '../components/SettingsField.tsx';
+import TrainerConditionsCard from '../components/TrainerConditionsCard.tsx';
 import { useExamSettings } from '../hooks/useExamSettings.ts';
 
 /** "Auto" is stored as an empty voice name; Radix Select needs a non-empty value. */
@@ -35,30 +34,17 @@ const SettingsPage = () => {
         Settings
       </PageTitle>
 
-      <Card>
+      <TrainerConditionsCard />
+
+      <Card className="mt-6">
         <CardHeader>
-          <CardTitle>Exam conditions</CardTitle>
-          <CardDescription>Defaults match the official telc format.</CardDescription>
+          <CardTitle>Listening audio</CardTitle>
+          <CardDescription>
+            The listening modules are read by your browser&apos;s German voice. These apply to every trainer.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-5 sm:grid-cols-2">
-            <SettingsField label="Writing time" htmlFor="setting-writing" hint="Official: 10 minutes.">
-              <Select
-                value={String(settings.writingMinutes)}
-                onValueChange={value => {
-                  setSetting('writingMinutes', Number(value));
-                }}
-              >
-                <SelectTrigger id="setting-writing" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10 minutes (official)</SelectItem>
-                  <SelectItem value="15">15 minutes (relaxed)</SelectItem>
-                </SelectContent>
-              </Select>
-            </SettingsField>
-
             <SettingsField label="Listening speed" htmlFor="setting-rate">
               <Select
                 value={String(settings.ttsRate)}
@@ -73,28 +59,6 @@ const SettingsPage = () => {
                   <SelectItem value="0.85">Slower</SelectItem>
                   <SelectItem value="1">Normal (recommended)</SelectItem>
                   <SelectItem value="1.1">Faster (challenge)</SelectItem>
-                </SelectContent>
-              </Select>
-            </SettingsField>
-
-            <SettingsField
-              label="Audio plays per item"
-              htmlFor="setting-plays"
-              hint="The real exam plays most items twice."
-            >
-              <Select
-                value={String(settings.playsAllowed)}
-                onValueChange={value => {
-                  setSetting('playsAllowed', Number(value));
-                }}
-              >
-                <SelectTrigger id="setting-plays" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1 (hard mode)</SelectItem>
-                  <SelectItem value="2">2 (realistic)</SelectItem>
-                  <SelectItem value="3">3 (training)</SelectItem>
                 </SelectContent>
               </Select>
             </SettingsField>
@@ -119,15 +83,6 @@ const SettingsPage = () => {
                 </SelectContent>
               </Select>
             </SettingsField>
-
-            <SettingsField label="Your exam date">
-              <ExamDateControls
-                value={settings.examDate}
-                onChange={iso => {
-                  setSetting('examDate', iso);
-                }}
-              />
-            </SettingsField>
           </div>
 
           <p className="text-sm text-muted-foreground">
@@ -148,8 +103,6 @@ const SettingsPage = () => {
           </div>
         </CardContent>
       </Card>
-
-      <LevelTrainerSettingsCard />
 
       <div className="mt-6">
         <SyncPanel />

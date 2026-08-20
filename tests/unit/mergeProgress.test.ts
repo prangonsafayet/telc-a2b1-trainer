@@ -34,6 +34,8 @@ const db = (over: Partial<ProgressDatabase> = {}): ProgressDatabase => ({
   attempts: [],
   learnDone: {},
   settings: DEFAULT_SETTINGS,
+  srs: {},
+  activity: {},
   ...over
 });
 
@@ -56,6 +58,42 @@ describe('the A2·B1 document', () => {
     const newer = db({ settings: { ...DEFAULT_SETTINGS, examDate: '2026-12-31' }, _updatedAt: '2026-06-01' });
     expect(mergeProgress(newer, older).settings.examDate).toBe('2026-12-31');
     expect(mergeProgress(older, newer).settings.examDate).toBe('2026-12-31');
+  });
+
+  it('merges the root trainer SRS state per item, keeping the more studied side', () => {
+    const merged = mergeProgress(
+      db({ srs: { 'a2b1.v.001': { box: 1, due: '2026-05-01', seen: 2, correct: 1, wrong: 1 } } }),
+      db({ srs: { 'a2b1.v.001': { box: 4, due: '2026-04-01', seen: 9, correct: 8, wrong: 1 } } })
+    );
+    expect(merged.srs['a2b1.v.001']).toEqual({
+      box: 4,
+      due: '2026-05-01',
+      seen: 9,
+      correct: 8,
+      wrong: 1
+    });
+  });
+
+  it('keeps the larger root activity count per day, so syncing twice cannot inflate a streak', () => {
+    const merged = mergeProgress(
+      db({ activity: { '2026-05-01': 3 } }),
+      db({ activity: { '2026-05-01': 7 } })
+    );
+    expect(merged.activity).toEqual({ '2026-05-01': 7 });
+  });
+
+  /* A document written by a build without the root SRS fields still arrives from the cloud
+     table; reading it must not throw, or every sign-in on an older account fails. */
+  it('survives a remote document written before the root SRS fields existed', () => {
+    /* Parsed rather than constructed: the point is a payload whose fields are simply not
+       there, which the current type cannot express. */
+    const legacy = JSON.parse(
+      JSON.stringify({ attempts: [], learnDone: {}, settings: DEFAULT_SETTINGS })
+    ) as ProgressDatabase;
+    const local = db({ srs: { x: { box: 2, due: '2026-05-01', seen: 1, correct: 1, wrong: 0 } } });
+    const merged = mergeProgress(local, legacy);
+    expect(merged.srs['x']?.box).toBe(2);
+    expect(merged.activity).toEqual({});
   });
 
   it('returns whichever side exists when the other does not', () => {

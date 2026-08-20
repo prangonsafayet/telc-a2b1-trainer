@@ -147,6 +147,33 @@ const SHARED_UI_STAYS_GENERIC = {
   rules: restrict(FEATURES_AND_APP, DEEP_RELATIVE)
 };
 
+/* A trainer's facts live in its registry descriptor, never in a comparison against its id.
+   Writing 'b1' as a value anywhere else is how the three trainers grew special cases in the
+   first place, so it is refused: read the fact from `TRAINERS[trainer]`, or add it there.
+   The two exempt places are the registry itself and the content folders, which are keyed by
+   trainer by definition.
+
+   The selector deliberately excludes `TSLiteralType`, so the union declarations that DEFINE
+   the ids (`type TrainerId = 'a2b1' | 'b1' | 'b2'`) still typecheck — it is trainer ids used
+   as VALUES that are banned. Unlike no-restricted-imports this is a different rule key, so
+   it neither replaces nor is replaced by the layer entries above. */
+const TRAINER_IDS = ['a2b1', 'b1', 'b2'];
+
+const NO_TRAINER_ID_LITERALS = {
+  name: 'no-trainer-id-literals',
+  files: ['src/**/*.{ts,tsx}'],
+  ignores: ['src/shared/config/trainers.ts', 'src/content/**'],
+  rules: {
+    'no-restricted-syntax': [
+      'error',
+      ...TRAINER_IDS.map(id => ({
+        selector: `:not(TSLiteralType) > Literal[value='${id}']`,
+        message: `'${id}' is a trainer id: read the fact you need from TRAINERS[trainer] in @shared/config/trainers.ts instead of testing the id. If the fact does not exist yet, add it to the descriptor — that is what makes a fourth trainer one registry entry.`
+      }))
+    ]
+  }
+};
+
 const CONTENT_IS_DATA_ONLY = {
   name: 'content-is-data-only',
   files: ['src/content/**/*.ts'],
@@ -334,6 +361,7 @@ export default tseslint.config(
   SHARED_STAYS_GENERIC,
   SHARED_UI_STAYS_GENERIC,
   CONTENT_IS_DATA_ONLY,
+  NO_TRAINER_ID_LITERALS,
 
   {
     /* One component per file. The vendored shadcn files ship several per file and are

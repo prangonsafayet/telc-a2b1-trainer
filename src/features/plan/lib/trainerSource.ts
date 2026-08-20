@@ -1,20 +1,20 @@
-import { LEVEL_CONTENT } from '@content/trainers/index.ts';
-
-import { type SingleLevelTrainerId } from '@shared/types';
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { type TrainerId } from '@shared/types';
 
 import { sprintAnchors, type ScheduleSource } from './buildSchedule.ts';
 
-/** Lesson days that carry the crash course when only a sprint is left. */
-const CRASH_DAYS: readonly number[] = [1, 13];
-
-/** What one level trainer feeds the schedule engine. */
-export const trainerScheduleSource = (level: SingleLevelTrainerId): ScheduleSource => {
-  const content = LEVEL_CONTENT[level];
+/**
+ * What one trainer feeds the schedule engine, read entirely from its descriptor: its
+ * curriculum, its papers, and the crash-course days its sprint reaches for. The engine
+ * itself knows about no trainer.
+ */
+export const trainerScheduleSource = (trainer: TrainerId): ScheduleSource => {
+  const { content, sprintLearnDays } = TRAINERS[trainer];
   const examIds = content.exams.map(exam => exam.id);
   return {
     learnDays: content.curriculum.days,
     examIds,
     sprintExamIds: sprintAnchors(examIds),
-    sprintLearnDays: CRASH_DAYS.filter(day => content.curriculum.days.some(item => item.day === day))
+    sprintLearnDays: sprintLearnDays.filter(day => content.curriculum.days.some(item => item.day === day))
   };
 };

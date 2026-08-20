@@ -15,22 +15,14 @@ import {
   type AnswerMap,
   type AttemptMode,
   type AudioScript,
+  type ExamFormatId,
   type ExamModule,
   type ExamModuleProps,
-  type ModuleTimes,
-  type TrainerId
+  type ExamPaper,
+  type ModuleTimes
 } from '@shared/types';
 
 import { type ExamRunStore, type RatedModule, type RatingMap } from './run.ts';
-
-/** Which paper a descriptor describes. */
-export type ExamFormatId = 'dual-level' | 'single-level';
-
-/** What every paper has, whatever its Teile look like. */
-export interface ExamPaper {
-  readonly id: number;
-  readonly title: string;
-}
 
 /** What every trainer's settings offer a run. */
 export interface RunSettings {
@@ -169,8 +161,6 @@ export interface ExamFormat<
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 > extends ExamRunFormat {
-  /** Which trainer owns this paper — it decides the route prefix and the stored document. */
-  readonly trainer: (exam: TExam) => TrainerId;
   /** Identifies the paper on every screen, e.g. `Modelltest 3 · A2 · leicht`. */
   readonly examLabel: (exam: TExam) => string;
   readonly moduleName: (module: ExamModule) => string;

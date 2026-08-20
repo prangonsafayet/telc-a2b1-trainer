@@ -1,31 +1,34 @@
 import { TRAINERS } from '@shared/config/trainers.ts';
-import { type SingleLevelTrainerId } from '@shared/types';
+import { type TrainerId } from '@shared/types';
 import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui';
 
-import { useLevelExamSettings } from '../hooks/useLevelExamSettings.ts';
+import { useTrainerConditions } from '../hooks/useTrainerConditions.ts';
 
 import ExamDateControls from './ExamDateControls.tsx';
 
-interface LevelSettingsColumnProps {
-  readonly level: SingleLevelTrainerId;
+interface TrainerConditionsColumnProps {
+  readonly trainer: TrainerId;
 }
 
-/** One level trainer's settings: exam date, writing time and audio plays. */
-const LevelSettingsColumn = ({ level }: LevelSettingsColumnProps) => {
-  const { settings, setLevelSetting } = useLevelExamSettings(level);
-  const writingId = `setting-${level}-writing`;
-  const playsId = `setting-${level}-plays`;
+/** One trainer's exam conditions: exam date, writing time and audio plays. */
+const TrainerConditionsColumn = ({ trainer }: TrainerConditionsColumnProps) => {
+  const { name, settings, writingChoices, playsChoices, setSetting } = useTrainerConditions(trainer);
+  const writingId = `setting-${trainer}-writing`;
+  const playsId = `setting-${trainer}-plays`;
 
   return (
     <div className="space-y-5">
-      <h3 className="font-semibold">{TRAINERS[level].name}</h3>
+      <h3 className="font-semibold" style={{ color: TRAINERS[trainer].accent }}>
+        {name}
+      </h3>
 
       <div className="space-y-1.5">
         <span className="text-sm font-medium leading-none">Exam date</span>
         <ExamDateControls
+          trainer={trainer}
           value={settings.examDate}
           onChange={iso => {
-            setLevelSetting('examDate', iso);
+            setSetting('examDate', iso);
           }}
         />
       </div>
@@ -35,15 +38,18 @@ const LevelSettingsColumn = ({ level }: LevelSettingsColumnProps) => {
         <Select
           value={String(settings.writingMinutes)}
           onValueChange={value => {
-            setLevelSetting('writingMinutes', Number(value));
+            setSetting('writingMinutes', Number(value));
           }}
         >
           <SelectTrigger id={writingId} className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="30">30 minutes (official)</SelectItem>
-            <SelectItem value="40">40 minutes (relaxed)</SelectItem>
+            {writingChoices.map(choice => (
+              <SelectItem key={choice.value} value={String(choice.value)}>
+                {choice.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -53,16 +59,18 @@ const LevelSettingsColumn = ({ level }: LevelSettingsColumnProps) => {
         <Select
           value={String(settings.playsAllowed)}
           onValueChange={value => {
-            setLevelSetting('playsAllowed', Number(value));
+            setSetting('playsAllowed', Number(value));
           }}
         >
           <SelectTrigger id={playsId} className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1">1 (official — you hear it once)</SelectItem>
-            <SelectItem value="2">2 (training)</SelectItem>
-            <SelectItem value="3">3 (training)</SelectItem>
+            {playsChoices.map(choice => (
+              <SelectItem key={choice.value} value={String(choice.value)}>
+                {choice.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -70,4 +78,4 @@ const LevelSettingsColumn = ({ level }: LevelSettingsColumnProps) => {
   );
 };
 
-export default LevelSettingsColumn;
+export default TrainerConditionsColumn;

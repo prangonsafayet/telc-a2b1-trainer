@@ -7,16 +7,19 @@ import { type ExamDateState } from '../hooks/useExamDate.ts';
 
 interface ExamDatePickerProps {
   readonly picker: ExamDateState;
+  /** The trainer this date belongs to, so the accessible name says which exam. */
+  readonly name: string;
 }
 
 /** The calendar half of the exam-date controls, limited to the plannable window. */
-const ExamDatePicker = ({ picker }: ExamDatePickerProps) => (
+const ExamDatePicker = ({ picker, name }: ExamDatePickerProps) => (
   <Popover open={picker.open} onOpenChange={picker.setOpen}>
     <PopoverTrigger asChild>
       <Button
-        /* Names the control and its current value in one string: a wrapping
-             <label htmlFor> would replace this with the caption alone. */
-        aria-label={`Your exam date: ${picker.label}`}
+        /* Names the trainer, the control and its current value in one string: a wrapping
+             <label htmlFor> would replace this with the caption alone, and three pickers
+             all called "Your exam date" are indistinguishable to a screen reader. */
+        aria-label={`Your ${name} exam date: ${picker.label}`}
         variant="outline"
         className={cn('w-full justify-start gap-2 font-normal', !picker.selected && 'text-muted-foreground')}
       >

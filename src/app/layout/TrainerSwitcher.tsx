@@ -1,7 +1,13 @@
 import { Check, ChevronsUpDown, GraduationCap } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { TRAINER_ORDER, TRAINERS, trainerFromPath } from '@shared/config/trainers.ts';
+import {
+  TRAINER_ORDER,
+  TRAINERS,
+  trainerFromPath,
+  trainerHome,
+  trainerTagline
+} from '@shared/config/trainers.ts';
 import {
   Button,
   DropdownMenu,
@@ -36,14 +42,14 @@ const TrainerSwitcher = () => {
             <DropdownMenuItem
               key={id}
               onSelect={() => {
-                void navigate(trainer.basePath || '/');
+                void navigate(trainerHome(id));
               }}
               className="items-start gap-2 py-2"
             >
               <Check className={`mt-0.5 size-4 shrink-0 ${id === active ? '' : 'invisible'}`} aria-hidden />
               <span>
                 <span className="block font-medium">{trainer.name}</span>
-                <span className="block text-xs text-muted-foreground">{trainer.tagline}</span>
+                <span className="block text-xs text-muted-foreground">{trainerTagline(id)}</span>
               </span>
             </DropdownMenuItem>
           );

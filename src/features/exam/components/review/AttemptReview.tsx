@@ -5,23 +5,19 @@ import { Multiline, PageTitle, SectionTitle, Transcript } from '@shared/componen
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { fmtDate } from '@shared/lib/format.ts';
-import { type AttemptMode } from '@shared/types';
+import { type AttemptMode, type ExamPaper, type TrainerId } from '@shared/types';
 import { Button, Card, CardContent } from '@shared/ui';
 
 import ReviewRowCard from '@features/exam/components/review/ReviewRowCard.tsx';
 import { attemptIncludes } from '@features/exam/lib/attemptMode.ts';
-import {
-  type ExamFormat,
-  type ExamPaper,
-  type RunSettings,
-  type StoredAttempt
-} from '@features/exam/types/examFormat.ts';
+import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
 
 interface AttemptReviewProps<
   TExam extends ExamPaper,
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 > {
+  readonly trainer: TrainerId;
   readonly format: ExamFormat<TExam, TSettings, TAttempt>;
   readonly exam: TExam;
   readonly attempt: TAttempt;
@@ -34,12 +30,13 @@ const AttemptReview = <
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 >({
+  trainer,
   format,
   exam,
   attempt,
   onRetry
 }: AttemptReviewProps<TExam, TSettings, TAttempt>) => {
-  const base = TRAINERS[format.trainer(exam)].basePath;
+  const base = TRAINERS[trainer].basePath;
   const sections = format.scoring.review(exam, attempt);
   const sample = format.scoring.writingSample(exam, attempt.answers);
   const writtenText = textAnswer(attempt.answers, WRITING_ANSWER_KEY);

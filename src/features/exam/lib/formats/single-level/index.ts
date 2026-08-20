@@ -40,7 +40,6 @@ const ratingSpec = (module: RatedModule): RatingSpec => {
 
 export const SINGLE_LEVEL_FORMAT: SingleLevelFormat = {
   ...SINGLE_LEVEL_RUN_FORMAT,
-  trainer: exam => exam.level,
   examLabel: exam => `${exam.title} · telc Deutsch ${exam.level.toUpperCase()}`,
   moduleName: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].name,
   moduleShort: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].short,

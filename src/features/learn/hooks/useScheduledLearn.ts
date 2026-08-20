@@ -1,11 +1,18 @@
 import { useMemo } from 'react';
 
-import { LEARN } from '@content/learn.ts';
+import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
 
+import { ROOT_TRAINER } from '@shared/config/trainers.ts';
 import { isLearnDayComplete } from '@shared/lib/learnProgress.ts';
 import { type LearnDay } from '@shared/types';
 
-import { describeClamp, describeLearnLead, slotHeading, slotKindLabel, useSchedule } from '@features/plan';
+import {
+  describeClamp,
+  describeLearnLead,
+  slotHeading,
+  slotKindLabel,
+  useTrainerSchedule
+} from '@features/plan';
 import { useProgress } from '@features/progress';
 
 export interface LearnSlotGroup {
@@ -24,7 +31,7 @@ export interface ScheduledLearn {
    */
   readonly scheduled: boolean;
   readonly headline: string;
-  /** Null falls back to the authored `LEARN.intro`. */
+  /** Null falls back to the authored `A2B1_CURRICULUM.intro`. */
   readonly lead: string | null;
   readonly notice: string | null;
   readonly groups: readonly LearnSlotGroup[];
@@ -38,13 +45,13 @@ export interface ScheduledLearn {
 /** Turns the plan into the sections the Learn page renders. */
 export const useScheduledLearn = (): ScheduledLearn => {
   const { db } = useProgress();
-  const schedule = useSchedule();
+  const schedule = useTrainerSchedule(ROOT_TRAINER);
   const done = db.learnDone;
 
   return useMemo(() => {
-    const byDay = new Map(LEARN.days.map(day => [day.day, day]));
-    const complete = LEARN.days.filter(day => isLearnDayComplete(day, done));
-    const pending = LEARN.days.filter(day => !isLearnDayComplete(day, done));
+    const byDay = new Map(A2B1_CURRICULUM.days.map(day => [day.day, day]));
+    const complete = A2B1_CURRICULUM.days.filter(day => isLearnDayComplete(day, done));
+    const pending = A2B1_CURRICULUM.days.filter(day => !isLearnDayComplete(day, done));
     const lookup = (numbers: readonly number[]): readonly LearnDay[] =>
       numbers.flatMap(number => byDay.get(number) ?? []);
 

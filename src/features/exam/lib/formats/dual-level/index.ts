@@ -1,6 +1,7 @@
 /**
- * The telc Deutsch A2·B1 Modelltest, described for the generic runner: five modules, four
- * 60-point skills plus Sprachbausteine, and a grade of B1, A2 or Nicht bestanden.
+ * The dual-level paper — the telc Deutsch A2·B1 Modelltest — described for the generic
+ * runner: five modules, four 60-point skills plus Sprachbausteine, and a grade of B1, A2 or
+ * Nicht bestanden.
  */
 
 import { MODULE_BRIEFING, MODULE_META, moduleMinutes, RATING_CRITERIA } from '@shared/config/exam.ts';
@@ -12,13 +13,13 @@ import SchreibenModule from '@features/exam/components/modules/dual-level/Schrei
 import SprachbausteineModule from '@features/exam/components/modules/dual-level/SprachbausteineModule.tsx';
 import SprechenModule from '@features/exam/components/modules/dual-level/SprechenModule.tsx';
 import { MAX_CRITERION_SCORE } from '@features/exam/config/run.ts';
-import { type A2b1Format } from '@features/exam/types/examBinding.ts';
+import { type DualLevelFormat } from '@features/exam/types/examBinding.ts';
 import { type RatingSpec } from '@features/exam/types/examFormat.ts';
 import { type RatedModule } from '@features/exam/types/run.ts';
 
 import { buildAttempt, completionToast, writingSample } from './attempt.ts';
 import { buildReviewSections } from './review.ts';
-import { A2B1_RUN_FORMAT } from './runFormat.ts';
+import { DUAL_LEVEL_RUN_FORMAT } from './runFormat.ts';
 import { countUnanswered } from './scoring.ts';
 import { summarizeAttempt } from './summary.ts';
 
@@ -34,9 +35,8 @@ const ratingSpec = (module: RatedModule): RatingSpec => {
   };
 };
 
-export const A2B1_FORMAT: A2b1Format = {
-  ...A2B1_RUN_FORMAT,
-  trainer: () => 'a2b1',
+export const DUAL_LEVEL_FORMAT: DualLevelFormat = {
+  ...DUAL_LEVEL_RUN_FORMAT,
   examLabel: exam => `${exam.title} · ${exam.level}`,
   moduleName: (module: ExamModule) => MODULE_META[module].name,
   moduleShort: (module: ExamModule) => MODULE_META[module].short,

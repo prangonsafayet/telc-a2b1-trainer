@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 
-import { EXAMS } from '@content/exams';
-import { LEARN } from '@content/learn.ts';
+import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
+import { DUAL_LEVEL_EXAMS } from '@content/trainers/index.ts';
 
+import { ROOT_TRAINER } from '@shared/config/trainers.ts';
 import { type DualLevelExam, type LearnDay, type Schedule } from '@shared/types';
 
-import { describeClamp, slotHeading, slotKindLabel, useSchedule } from '@features/plan';
+import { describeClamp, slotHeading, slotKindLabel, useTrainerSchedule } from '@features/plan';
 
 export interface TodayPlan {
   /** "Today · Di, 26. Aug" */
@@ -27,7 +28,7 @@ export interface SchedulePlan {
 
 /** What the plan asks for today, and whether the date behind it needs attention. */
 export const useTodayPlan = (): SchedulePlan => {
-  const schedule = useSchedule();
+  const schedule = useTrainerSchedule(ROOT_TRAINER);
 
   return useMemo(() => {
     if (!schedule) {
@@ -45,8 +46,8 @@ export const useTodayPlan = (): SchedulePlan => {
       return { schedule, today: null, notice, needsNewDate: schedule.phase === 'past-due' };
     }
 
-    const lessons = slot.learnDays.flatMap(number => LEARN.days.filter(day => day.day === number));
-    const exams = slot.examIds.flatMap(id => EXAMS.filter(exam => exam.id === id));
+    const lessons = slot.learnDays.flatMap(number => A2B1_CURRICULUM.days.filter(day => day.day === number));
+    const exams = slot.examIds.flatMap(id => DUAL_LEVEL_EXAMS.filter(exam => exam.id === id));
 
     return {
       schedule,

@@ -8,13 +8,11 @@ export const MIN_PREP_DAYS = 5;
 /** Above this, a plan stops being a plan. Longer runways are covered from today. */
 export const MAX_PREP_DAYS = 90;
 
-/** Days 1–14 of `LEARN.days`: the essential curriculum, always scheduled. */
+/** Days 1–14 of a trainer's curriculum: the essential tier, always scheduled. */
 export const CORE_LEARN_DAYS = 14;
 /** Days 15–28: B1 deepening, scheduled only when the pace allows. */
 export const EXTENSION_LEARN_DAYS = 14;
 export const TOTAL_LEARN_DAYS = CORE_LEARN_DAYS + EXTENSION_LEARN_DAYS;
-
-export const MOCK_EXAM_COUNT = 15;
 
 /** A full mock is ~2.5 h, so two is already a hard day and three is fiction. */
 export const MAX_EXAMS_PER_DAY = 2;
@@ -34,7 +32,8 @@ export const LESSONS_PER_REVIEW = 7;
 /** …and after this many consecutive mocks. */
 export const EXAMS_PER_REVIEW = 3;
 
-/** The three difficulty anchors the five-day emergency plan reaches for. */
-export const SPRINT_EXAM_IDS = [1, 8, 15] as const;
-/** Lesson days that carry the crash course when there is only a sprint left. */
-export const SPRINT_LEARN_DAYS = [1, 13] as const;
+/**
+ * Lesson days that carry the crash course when there is only a sprint left. The default
+ * every trainer's descriptor points at; the exam anchors are derived from its paper list.
+ */
+export const SPRINT_LEARN_DAYS: readonly number[] = [1, 13];

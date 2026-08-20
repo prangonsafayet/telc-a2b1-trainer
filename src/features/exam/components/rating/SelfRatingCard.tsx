@@ -1,15 +1,10 @@
 import { CriteriaRatingPanel, Multiline } from '@shared/components';
-import { type AnswerMap, type RecordingMap } from '@shared/types';
+import { type AnswerMap, type ExamPaper, type RecordingMap } from '@shared/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
 import { SPEAKING_PARTS } from '@features/exam/config/run.ts';
 import { useSelfRating } from '@features/exam/hooks/useSelfRating.ts';
-import {
-  type ExamFormat,
-  type ExamPaper,
-  type RunSettings,
-  type StoredAttempt
-} from '@features/exam/types/examFormat.ts';
+import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
 import { type RatedModule } from '@features/exam/types/run.ts';
 
 interface SelfRatingCardProps<

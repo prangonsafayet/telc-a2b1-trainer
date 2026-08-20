@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { EXAMS } from '@content/exams';
-import { GUIDE_HTML } from '@content/guide.ts';
-import { LEARN } from '@content/learn.ts';
+import { DUAL_LEVEL_EXAMS, TRAINER_CONTENT } from '@content/trainers/index.ts';
+
+const LEARN = TRAINER_CONTENT.a2b1.curriculum;
+const EXAMS = DUAL_LEVEL_EXAMS;
+const GUIDE = TRAINER_CONTENT.a2b1.guide ?? '';
 
 /* The schedule engine trusts the curriculum's numbering and tiers, and the exam list's id
    order. Content drift here silently reshapes every plan, so the shape is asserted. */
@@ -86,7 +88,7 @@ describe('the exam list', () => {
 
 describe('the guide', () => {
   it('is substantial authored HTML', () => {
-    expect(GUIDE_HTML.length).toBeGreaterThan(1000);
-    expect(GUIDE_HTML).toMatch(/<h1>/);
+    expect(GUIDE.length).toBeGreaterThan(1000);
+    expect(GUIDE).toMatch(/<h1>/);
   });
 });

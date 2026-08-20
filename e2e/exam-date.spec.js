@@ -19,8 +19,13 @@ const seedExamDate = (page, days) =>
     );
   }, isoInDays(days));
 
+/* Settings shows one exam-date control per trainer, each named after its exam, so the specs
+   address the A2·B1 pair by name rather than by position. */
+const A2B1_DATE = /^Your telc Deutsch A2·B1 exam date/;
+const A2B1_DAYS = '#days-until-exam-a2b1';
+
 const openCalendar = async page => {
-  await page.getByRole('button', { name: /Your exam date/ }).click();
+  await page.getByRole('button', { name: A2B1_DATE }).click();
   const popover = page.locator('[data-slot="popover-content"]');
   await expect(popover).toBeVisible();
   return popover;
@@ -90,7 +95,7 @@ test.describe('the exam-date controls', () => {
 
   test('the days-from-today field accepts the window and rejects the rest', async ({ page }) => {
     await page.goto('/settings');
-    const field = page.getByLabel(/days from today/);
+    const field = page.locator(A2B1_DAYS);
 
     await field.fill('45');
     await expect(page.getByText(/45 days to go/)).toBeVisible();

@@ -22,7 +22,7 @@ interface LevelDashboardPageProps {
 }
 
 const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
-  const { doc, stats, weakAreas } = useLevelStats(level);
+  const { slice, stats, weakAreas } = useLevelStats(level);
   const schedule = useTrainerSchedule(level);
   const start = useStartAttempt(level);
   const trainer = TRAINERS[level];
@@ -144,7 +144,7 @@ const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
             key={card.exam.id}
             level={level}
             stats={card}
-            settings={doc.settings}
+            settings={slice.settings}
             scheduleLabel={examSlotLabel(schedule, card.exam.id)}
             onStart={start}
           />

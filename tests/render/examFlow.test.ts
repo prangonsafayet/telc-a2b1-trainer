@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { type DualLevelAttempt } from '@shared/types';
-import { A2B1_RUN_FORMAT } from '@features/exam';
+import { runFormatFor } from '@features/exam';
 import { PROGRESS_STORAGE_KEY } from '@features/progress';
 
 import { captureErrors, click, findByText, mount, seedProgress, waitFor } from './harness.ts';
@@ -9,7 +9,7 @@ import { captureErrors, click, findByText, mount, seedProgress, waitFor } from '
 /* Drives a real attempt end to end, including a mid-module page refresh — the failure this
    guards against lost a candidate's answers and their remaining time. */
 
-const runStore = A2B1_RUN_FORMAT.runStore;
+const runStore = runFormatFor('a2b1').runStore;
 
 const storedAttempts = (): readonly DualLevelAttempt[] => {
   const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);

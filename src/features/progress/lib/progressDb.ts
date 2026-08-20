@@ -19,9 +19,21 @@ export const EMPTY_DATABASE: ProgressDatabase = {
   attempts: [],
   learnDone: {},
   settings: DEFAULT_SETTINGS,
+  srs: {},
+  activity: {},
   b1: emptyTrainerDoc(),
   b2: emptyTrainerDoc()
 };
+
+/**
+ * Counts practice touches for a day. The streak reads this map, so it is bumped rather
+ * than replaced — one shared helper for every trainer's slice, wherever it is stored.
+ */
+export const bumpActivity = (
+  activity: Partial<Record<string, number>>,
+  today: string,
+  touches = 1
+): Partial<Record<string, number>> => ({ ...activity, [today]: (activity[today] ?? 0) + touches });
 
 /** Coerces anything that claims to be a trainer document, defaulting every field. */
 const normalizeTrainerDoc = (raw: unknown): LevelTrainerDoc => {
@@ -46,6 +58,8 @@ export const normalizeDatabase = (raw: unknown): ProgressDatabase => {
     attempts: Array.isArray(input.attempts) ? input.attempts : [],
     learnDone: typeof input.learnDone === 'object' ? input.learnDone : {},
     settings: { ...DEFAULT_SETTINGS, ...(input.settings ?? {}) },
+    srs: typeof input.srs === 'object' ? input.srs : {},
+    activity: typeof input.activity === 'object' ? input.activity : {},
     b1: normalizeTrainerDoc(input.b1),
     b2: normalizeTrainerDoc(input.b2),
     ...(input._updatedAt ? { _updatedAt: input._updatedAt } : {})

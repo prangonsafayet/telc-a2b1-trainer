@@ -1,6 +1,6 @@
 import { Info, Sparkles } from 'lucide-react';
 
-import { LEARN } from '@content/learn.ts';
+import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
 
 import { PageTitle, SectionTitle } from '@shared/components';
 import {
@@ -27,10 +27,10 @@ const LearnPage = () => {
   return (
     <>
       <PageTitle
-        /* LEARN.intro is authored HTML in content/learn.ts (it bolds a few phrases), so it is
+        /* A2B1_CURRICULUM.intro is authored HTML in content/learn.ts (it bolds a few phrases), so it is
            injected rather than rendered as text — same as the guide and cheatsheets. It is
            the fallback for a date no plan can be built from. */
-        lead={scheduled.lead ?? <span dangerouslySetInnerHTML={{ __html: LEARN.intro }} />}
+        lead={scheduled.lead ?? <span dangerouslySetInnerHTML={{ __html: A2B1_CURRICULUM.intro }} />}
       >
         {scheduled.headline}
       </PageTitle>
@@ -79,7 +79,7 @@ const LearnPage = () => {
                 key={day.day}
                 day={day}
                 complete={false}
-                cheatsheets={LEARN.cheatsheets}
+                cheatsheets={A2B1_CURRICULUM.cheatsheets}
                 isTaskDone={index => plan.isTaskDone(day.day, index)}
                 onToggleTask={(index, done) => {
                   plan.toggleTask(day.day, index, done);
@@ -103,7 +103,7 @@ const LearnPage = () => {
                 key={day.day}
                 day={day}
                 complete={false}
-                cheatsheets={LEARN.cheatsheets}
+                cheatsheets={A2B1_CURRICULUM.cheatsheets}
                 isTaskDone={index => plan.isTaskDone(day.day, index)}
                 onToggleTask={(index, done) => {
                   plan.toggleTask(day.day, index, done);
@@ -131,7 +131,7 @@ const LearnPage = () => {
                           key={day.day}
                           day={day}
                           complete
-                          cheatsheets={LEARN.cheatsheets}
+                          cheatsheets={A2B1_CURRICULUM.cheatsheets}
                           isTaskDone={index => plan.isTaskDone(day.day, index)}
                           onToggleTask={(index, done) => {
                             plan.toggleTask(day.day, index, done);
@@ -159,7 +159,7 @@ const LearnPage = () => {
             value={[...plan.openCheatsheets]}
             onValueChange={plan.setOpenCheatsheets}
           >
-            {Object.entries(LEARN.cheatsheets).map(([id, sheet]) => (
+            {Object.entries(A2B1_CURRICULUM.cheatsheets).map(([id, sheet]) => (
               <AccordionItem key={id} value={id} id={`cs-${id}`} className="scroll-mt-24">
                 <AccordionTrigger className="text-base font-semibold">{sheet.title}</AccordionTrigger>
                 <AccordionContent>

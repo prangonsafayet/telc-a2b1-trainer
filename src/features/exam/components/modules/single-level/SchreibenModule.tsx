@@ -1,4 +1,8 @@
 import { Teil } from '@shared/components';
+import {
+  SINGLE_LEVEL_WRITING_PLACEHOLDER,
+  SINGLE_LEVEL_WRITING_TITLE
+} from '@shared/config/singleLevelExam.ts';
 import { WRITING_TARGETS } from '@shared/config/writing.ts';
 import {
   itemKey,
@@ -26,11 +30,7 @@ const SchreibenModule = ({ exam, answers, setAnswer }: SingleLevelModuleProps) =
   if (!task) return null;
 
   return (
-    <Teil
-      title={exam.level === 'b1' ? 'Schreiben — Brief beantworten' : 'Schriftlicher Ausdruck'}
-      chip="45 Punkte"
-      anweisung={schreiben.anweisung}
-    >
+    <Teil title={SINGLE_LEVEL_WRITING_TITLE[exam.level]} chip="45 Punkte" anweisung={schreiben.anweisung}>
       {hasChoice ? (
         <RadioGroup
           className="mb-4 grid gap-2 sm:grid-cols-2"
@@ -60,9 +60,7 @@ const SchreibenModule = ({ exam, answers, setAnswer }: SingleLevelModuleProps) =
 
       <Textarea
         className="min-h-64 leading-relaxed"
-        placeholder={
-          exam.level === 'b1' ? 'Liebe/r … / Sehr geehrte/r …' : 'Sehr geehrte Damen und Herren, …'
-        }
+        placeholder={SINGLE_LEVEL_WRITING_PLACEHOLDER[exam.level]}
         aria-label="Ihr Brief"
         spellCheck={false}
         value={text}

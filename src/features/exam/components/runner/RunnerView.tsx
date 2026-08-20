@@ -3,25 +3,21 @@ import { useCallback } from 'react';
 import { ExamModuleToolbar, ModuleBriefingCard } from '@shared/components';
 import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { useConfirm } from '@shared/providers/useConfirm.ts';
-import { type AttemptMode } from '@shared/types';
+import { type AttemptMode, type ExamPaper, type TrainerId } from '@shared/types';
 import { Button } from '@shared/ui';
 
 import SelfRatingCard from '@features/exam/components/rating/SelfRatingCard.tsx';
 import { UNTIMED_MODULES } from '@features/exam/config/run.ts';
 import { useExamRun } from '@features/exam/hooks/useExamRun.ts';
 import { type ExamStore } from '@features/exam/types/examBinding.ts';
-import {
-  type ExamFormat,
-  type ExamPaper,
-  type RunSettings,
-  type StoredAttempt
-} from '@features/exam/types/examFormat.ts';
+import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
 
 interface RunnerViewProps<
   TExam extends ExamPaper,
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 > {
+  readonly trainer: TrainerId;
   readonly format: ExamFormat<TExam, TSettings, TAttempt>;
   readonly exam: TExam;
   readonly mode: AttemptMode;
@@ -30,6 +26,7 @@ interface RunnerViewProps<
 
 /** One attempt after the route params are known good: briefing → module → rating. */
 const RunnerView = <TExam extends ExamPaper, TSettings extends RunSettings, TAttempt extends StoredAttempt>({
+  trainer,
   format,
   exam,
   mode,
@@ -37,6 +34,7 @@ const RunnerView = <TExam extends ExamPaper, TSettings extends RunSettings, TAtt
 }: RunnerViewProps<TExam, TSettings, TAttempt>) => {
   const confirm = useConfirm();
   const run = useExamRun({
+    trainer,
     format,
     exam,
     mode,

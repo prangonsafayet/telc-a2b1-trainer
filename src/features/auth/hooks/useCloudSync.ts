@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 
 import { type ProgressDatabase } from '@shared/types';
 
+import { normalizeDatabase } from '@features/progress';
+
 import { mergeProgress } from '../lib/mergeProgress.ts';
 import { enabledProviders, providerLabel, type OAuthProvider } from '../lib/oauthProviders.ts';
 import {
@@ -105,7 +107,9 @@ export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
           .maybeSingle();
         if (error) throw new Error(error.message);
 
-        const remote = (data?.data ?? null) as ProgressDatabase | null;
+        /* The stored row is JSON written by whichever build last synced, so it is coerced
+           into a full document before it is merged rather than trusted field by field. */
+        const remote = data?.data == null ? null : normalizeDatabase(data.data);
         const merged = mergeProgress(dbRef.current, remote);
         replaceLocal(merged);
         await push(merged);

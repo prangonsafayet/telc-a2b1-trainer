@@ -3,9 +3,10 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import { ROOT_TRAINER } from '@shared/config/trainers.ts';
 import { type AttemptMode } from '@shared/types';
 
-import { A2B1_RUN_FORMAT, useStartAttempt, type ExamRun } from '@features/exam';
+import { runFormatFor, useStartAttempt, type ExamRun } from '@features/exam';
 
 export interface ResumableRun {
   readonly run: ExamRun | null;
@@ -17,8 +18,8 @@ export interface ResumableRun {
 
 export const useResumableRun = (): ResumableRun => {
   const navigate = useNavigate();
-  const store = A2B1_RUN_FORMAT.runStore;
-  const start = useStartAttempt('a2b1');
+  const store = runFormatFor(ROOT_TRAINER).runStore;
+  const start = useStartAttempt(ROOT_TRAINER);
   const [run, setRun] = useState<ExamRun | null>(() => store.load());
 
   const discard = useCallback(() => {

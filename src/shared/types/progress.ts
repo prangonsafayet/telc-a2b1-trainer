@@ -1,5 +1,6 @@
 import { type AttemptMode, type ExamGrade, type ExamModule, type SkillKey } from './exam.ts';
-import { type LevelTrainerDoc } from './trainer.ts';
+import { type LevelTrainerDoc, type TrainerExamSettings } from './trainer.ts';
+import { type SrsMap } from './vocab.ts';
 
 /**
  * An answer value. Matching/multiple-choice answers are option indices, richtig/falsch
@@ -48,14 +49,10 @@ export interface DualLevelAttempt {
   readonly result?: ExamGrade;
 }
 
-export interface Settings {
-  readonly writingMinutes: number;
+export interface Settings extends TrainerExamSettings {
   readonly ttsRate: number;
   /** Empty string means "first available German voice". */
   readonly voiceName: string;
-  /** `YYYY-MM-DD`, interpreted in local time. */
-  readonly examDate: string;
-  readonly playsAllowed: number;
 }
 
 /** Learn-plan checkbox state, keyed `d<day>t<index>`. */
@@ -66,6 +63,14 @@ export interface ProgressDatabase {
   readonly attempts: readonly DualLevelAttempt[];
   readonly learnDone: LearnDoneMap;
   readonly settings: Settings;
+  /**
+   * The root trainer's spaced-repetition state, keyed by vocab/grammar item id. The
+   * trainers with their own document keep theirs on it; the root trainer keeps its slice
+   * here, alongside its attempts and its learn plan.
+   */
+  readonly srs: SrsMap;
+  /** The root trainer's practice touches per local ISO date — drives its streak. */
+  readonly activity: Partial<Record<string, number>>;
   /**
    * The B1 and B2 trainer documents. Optional so documents written by older builds
    * stay readable; `normalizeDatabase` fills them in.

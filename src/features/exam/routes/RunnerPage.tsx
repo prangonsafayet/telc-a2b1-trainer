@@ -1,9 +1,8 @@
 import { Navigate, useParams } from 'react-router-dom';
 
-import { findExamById } from '@content/exams';
-import { findSingleLevelExam } from '@content/trainers/index.ts';
+import { findPaper } from '@content/trainers/index.ts';
 
-import { TRAINERS } from '@shared/config/trainers.ts';
+import { trainerHome } from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
 
 import RunnerView from '@features/exam/components/runner/RunnerView.tsx';
@@ -18,18 +17,22 @@ interface RunnerPageProps {
 const RunnerPage = ({ trainer }: RunnerPageProps) => {
   const { examId, mode } = useParams<{ examId: string; mode: string }>();
   const binding = useExamBinding(trainer);
-  const home = TRAINERS[trainer].basePath || '/';
+  const home = trainerHome(trainer);
 
   /* An unknown exam or mode is a bad URL, not a state worth rendering. */
   if (binding.kind === 'single-level') {
-    const exam = findSingleLevelExam(binding.level, examId);
+    const exam = findPaper(binding.papers, examId);
     if (!exam || !isAttemptMode(binding.format, mode)) return <Navigate to={home} replace />;
-    return <RunnerView format={binding.format} exam={exam} mode={mode} store={binding.store} />;
+    return (
+      <RunnerView trainer={trainer} format={binding.format} exam={exam} mode={mode} store={binding.store} />
+    );
   }
 
-  const exam = findExamById(examId);
+  const exam = findPaper(binding.papers, examId);
   if (!exam || !isAttemptMode(binding.format, mode)) return <Navigate to={home} replace />;
-  return <RunnerView format={binding.format} exam={exam} mode={mode} store={binding.store} />;
+  return (
+    <RunnerView trainer={trainer} format={binding.format} exam={exam} mode={mode} store={binding.store} />
+  );
 };
 
 export default RunnerPage;

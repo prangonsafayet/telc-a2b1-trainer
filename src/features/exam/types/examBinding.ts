@@ -1,7 +1,8 @@
 /**
- * Where a trainer's exam data lives. The A2·B1 trainer keeps its attempts and settings at
- * the top of the progress database; the B1 and B2 trainers keep theirs in their own
- * document. The screens do not care which — they read one of these.
+ * A trainer resolved to everything an exam screen needs: the paper it sets, the papers it
+ * ships, and the slice of the progress document its attempts live in. Which of those a
+ * trainer has is read from the registry, so the screens narrow once — on the format — and
+ * then render the same generic views either way.
  */
 
 import {
@@ -11,7 +12,7 @@ import {
   type Settings,
   type SingleLevelAttempt,
   type SingleLevelExam,
-  type SingleLevelTrainerId
+  type TrainerId
 } from '@shared/types';
 
 import { type ExamFormat } from './examFormat.ts';
@@ -23,22 +24,22 @@ export interface ExamStore<TSettings, TAttempt> {
   readonly saveAttempt: (attempt: TAttempt) => void;
 }
 
-export type A2b1Format = ExamFormat<DualLevelExam, Settings, DualLevelAttempt>;
+export type DualLevelFormat = ExamFormat<DualLevelExam, Settings, DualLevelAttempt>;
 export type SingleLevelFormat = ExamFormat<SingleLevelExam, LevelTrainerSettings, SingleLevelAttempt>;
 
-/**
- * A trainer resolved to its paper and its stored data. Discriminated so a screen narrows
- * once and then renders the same generic view either way.
- */
 export type ExamBinding =
   | {
       readonly kind: 'dual-level';
-      readonly format: A2b1Format;
+      readonly trainer: TrainerId;
+      readonly format: DualLevelFormat;
+      /** Its Modelltests, easiest first. */
+      readonly papers: readonly DualLevelExam[];
       readonly store: ExamStore<Settings, DualLevelAttempt>;
     }
   | {
       readonly kind: 'single-level';
-      readonly level: SingleLevelTrainerId;
+      readonly trainer: TrainerId;
       readonly format: SingleLevelFormat;
+      readonly papers: readonly SingleLevelExam[];
       readonly store: ExamStore<LevelTrainerSettings, SingleLevelAttempt>;
     };

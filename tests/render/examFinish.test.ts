@@ -6,12 +6,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { useExamRun, type ExamRunController } from '@features/exam/hooks/useExamRun.ts';
 import { createRunStore } from '@features/exam/lib/runStore.ts';
-import {
-  type ExamFormat,
-  type ExamPaper,
-  type RunSettings,
-  type StoredAttempt
-} from '@features/exam/types/examFormat.ts';
+import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
+import { type ExamPaper } from '@shared/types';
 
 import { captureErrors, settle } from './harness.ts';
 
@@ -52,7 +48,6 @@ const FORMAT: ExamFormat<ExamPaper, RunSettings, StoredAttempt> = {
   id: 'dual-level',
   modules: ['lesen'],
   runStore,
-  trainer: () => 'a2b1',
   examLabel: exam => exam.title,
   moduleName: module => module,
   moduleShort: module => module,
@@ -91,6 +86,7 @@ let controller: ExamRunController | null = null;
 
 const Probe = (): null => {
   controller = useExamRun({
+    trainer: 'a2b1',
     format: FORMAT,
     exam: EXAM,
     mode: 'lesen',

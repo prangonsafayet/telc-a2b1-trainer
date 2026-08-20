@@ -1,6 +1,6 @@
 import { CalendarCheck } from 'lucide-react';
 
-import { LEARN } from '@content/learn.ts';
+import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
 
 import { cn } from '@shared/lib/cn.ts';
 import { type LearnDay } from '@shared/types';
@@ -41,7 +41,7 @@ const LearnSlotSection = ({ heading, kindLabel, isToday, days, plan }: LearnSlot
           key={day.day}
           day={day}
           complete={plan.isDayComplete(day.day)}
-          cheatsheets={LEARN.cheatsheets}
+          cheatsheets={A2B1_CURRICULUM.cheatsheets}
           isTaskDone={index => plan.isTaskDone(day.day, index)}
           onToggleTask={(index, done) => {
             plan.toggleTask(day.day, index, done);

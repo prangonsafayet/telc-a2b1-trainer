@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { LEARN } from '@content/learn.ts';
+import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
 
 import { useProgress } from '@features/progress';
 
@@ -47,7 +47,7 @@ export const useLearnPlan = (): LearnPlanState => {
 
   const isDayComplete = useCallback(
     (day: number) => {
-      const entry = LEARN.days.find(candidate => candidate.day === day);
+      const entry = A2B1_CURRICULUM.days.find(candidate => candidate.day === day);
       return entry ? entry.tasks.every((_, index) => isTaskDone(day, index)) : false;
     },
     [isTaskDone]

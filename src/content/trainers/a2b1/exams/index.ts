@@ -16,8 +16,8 @@ import exam13 from './exam13.ts';
 import exam14 from './exam14.ts';
 import exam15 from './exam15.ts';
 
-/** All Modelltests, ordered easiest first. */
-export const EXAMS: readonly DualLevelExam[] = [
+/** All A2·B1 Modelltests, ordered easiest first. */
+export const A2B1_EXAMS: readonly DualLevelExam[] = [
   exam01,
   exam02,
   exam03,
@@ -34,9 +34,3 @@ export const EXAMS: readonly DualLevelExam[] = [
   exam14,
   exam15
 ].toSorted((a, b) => a.id - b.id);
-
-/** Looks up an exam by id; accepts the string form that arrives from route params. */
-export const findExamById = (id: string | number | undefined): DualLevelExam | undefined => {
-  const numeric = Number(id);
-  return Number.isFinite(numeric) ? EXAMS.find(exam => exam.id === numeric) : undefined;
-};

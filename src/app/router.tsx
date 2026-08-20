@@ -3,7 +3,7 @@ import { lazy, Suspense, type ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { RouteFallback } from '@shared/components';
-import { SINGLE_LEVEL_TRAINERS, TRAINERS } from '@shared/config/trainers.ts';
+import { ROOT_TRAINER, SINGLE_LEVEL_TRAINERS, TRAINERS, trainerHome } from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
 
 import DashboardPage from '@features/dashboard/routes/DashboardPage.tsx';
@@ -45,14 +45,14 @@ export const AppRouter = () => (
   <Suspense fallback={<RouteFallback />}>
     <Routes>
       <Route element={<AppLayout />}>
-        {/* The original A2·B1 trainer owns the root. */}
-        <Route path={TRAINERS.a2b1.basePath || '/'}>
+        {/* The trainer the registry puts at the root owns everything unclaimed. */}
+        <Route path={trainerHome(ROOT_TRAINER)}>
           <Route index element={<DashboardPage />} />
           <Route path="learn" element={<LearnPage />} />
           <Route path="guide" element={<GuidePage />} />
           <Route path="history" element={<HistoryPage />} />
           <Route path="settings" element={<SettingsPage />} />
-          {examRoutes('a2b1')}
+          {examRoutes(ROOT_TRAINER)}
         </Route>
 
         {SINGLE_LEVEL_TRAINERS.map(level => (

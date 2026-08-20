@@ -5,22 +5,18 @@ import { CountedNumber, Meter } from '@shared/components';
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { cn } from '@shared/lib/cn.ts';
 import { fmtClock } from '@shared/lib/format.ts';
-import { type AttemptMode } from '@shared/types';
+import { type AttemptMode, type ExamPaper, type TrainerId } from '@shared/types';
 import { Button, Card, CardContent, CardDescription, CardHeader } from '@shared/ui';
 
 import { BARS_ANIMATION_DELAY, GRADE_TONE_CLASS, SCORE_COUNT_UP_MS } from '@features/exam/config/results.ts';
-import {
-  type ExamFormat,
-  type ExamPaper,
-  type RunSettings,
-  type StoredAttempt
-} from '@features/exam/types/examFormat.ts';
+import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
 
 interface AttemptResultsProps<
   TExam extends ExamPaper,
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 > {
+  readonly trainer: TrainerId;
   readonly format: ExamFormat<TExam, TSettings, TAttempt>;
   readonly exam: TExam;
   readonly attempt: TAttempt;
@@ -34,6 +30,7 @@ const AttemptResults = <
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 >({
+  trainer,
   format,
   exam,
   attempt,
@@ -41,7 +38,7 @@ const AttemptResults = <
   onRetry
 }: AttemptResultsProps<TExam, TSettings, TAttempt>) => {
   const summary = format.scoring.summarize(attempt);
-  const base = TRAINERS[format.trainer(exam)].basePath;
+  const base = TRAINERS[trainer].basePath;
   const { grade } = summary;
 
   return (

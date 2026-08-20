@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { LEARN } from '@content/learn.ts';
+import { TRAINER_CONTENT } from '@content/trainers/index.ts';
 
 import { MAX_PREP_DAYS } from '@shared/config/schedule.ts';
 
@@ -11,7 +11,7 @@ import { mount, seedProgress } from './harness.ts';
    page level, including the three fallbacks. */
 
 const TASKS_PER_DAY = (day: number): number =>
-  LEARN.days.find(candidate => candidate.day === day)?.tasks.length ?? 3;
+  TRAINER_CONTENT.a2b1.curriculum.days.find(candidate => candidate.day === day)?.tasks.length ?? 3;
 
 beforeEach(() => {
   localStorage.clear();

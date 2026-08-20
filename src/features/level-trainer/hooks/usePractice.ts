@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react';
 
-import { LEVEL_CONTENT } from '@content/trainers/index.ts';
+import { TRAINER_CONTENT } from '@content/trainers/index.ts';
 
 import { isDue, pickDueIds, reviewItem } from '@shared/lib/srs.ts';
-import { type LevelContent, type SingleLevelTrainerId } from '@shared/types';
+import { type SingleLevelTrainerId, type VocabBank } from '@shared/types';
 
 import { useToday } from '@features/plan';
-import { touchActivity, useTrainerDoc, type TrainerDocHandle } from '@features/progress';
+import { touchActivity, useTrainerSlice, type TrainerSlice } from '@features/progress';
 
 import {
   isSessionDone,
@@ -21,8 +21,7 @@ const FLASHCARD_SESSION_SIZE = 20;
 const QUIZ_SESSION_SIZE = 15;
 
 export interface PracticeController {
-  readonly content: LevelContent;
-  readonly doc: TrainerDocHandle['doc'];
+  readonly vocab: VocabBank;
   readonly today: string;
   readonly session: PracticeSession | null;
   readonly sessionDone: boolean;
@@ -39,13 +38,13 @@ export interface PracticeController {
 
 /** Due cards first (weakest boxes up front), the rest of the category after. */
 const pickSessionCards = (
-  content: LevelContent,
+  vocab: VocabBank,
   category: PracticeCategory,
-  srs: TrainerDocHandle['doc']['srs'],
+  srs: TrainerSlice['srs'],
   today: string,
   limit: number
 ): readonly StudyCard[] => {
-  const cards = category === 'mixed' ? allCards(content.vocab) : cardsFor(content.vocab, category);
+  const cards = category === 'mixed' ? allCards(vocab) : cardsFor(vocab, category);
   const ids = cards.map(card => card.id);
   const due = pickDueIds(ids, srs, today, limit);
   const dueSet = new Set(due);
@@ -59,9 +58,9 @@ const pickSessionCards = (
 
 /** One practice hub session: the store drives the screen, every answer lands in SRS. */
 export const usePractice = (level: SingleLevelTrainerId): PracticeController => {
-  const { doc, updateDoc } = useTrainerDoc(level);
+  const { srs, update } = useTrainerSlice(level);
   const today = useToday();
-  const content = LEVEL_CONTENT[level];
+  const vocab = TRAINER_CONTENT[level].vocab;
 
   const session = usePracticeStore(state => state.session);
   const storeStartFlashcards = usePracticeStore(state => state.startFlashcards);
@@ -74,36 +73,33 @@ export const usePractice = (level: SingleLevelTrainerId): PracticeController => 
 
   const recordReview = useCallback(
     (itemId: string, correct: boolean) => {
-      updateDoc(current =>
+      update(current =>
         touchActivity(
           { ...current, srs: { ...current.srs, [itemId]: reviewItem(current.srs[itemId], correct, today) } },
           today
         )
       );
     },
-    [updateDoc, today]
+    [update, today]
   );
 
   const startFlashcards = useCallback(
     (category: PracticeCategory) => {
-      storeStartFlashcards(
-        category,
-        pickSessionCards(content, category, doc.srs, today, FLASHCARD_SESSION_SIZE)
-      );
+      storeStartFlashcards(category, pickSessionCards(vocab, category, srs, today, FLASHCARD_SESSION_SIZE));
     },
-    [storeStartFlashcards, content, doc.srs, today]
+    [storeStartFlashcards, vocab, srs, today]
   );
 
   const startQuiz = useCallback(
     (category: PracticeCategory) => {
       const ids =
         category === 'mixed'
-          ? STUDY_CATEGORIES.flatMap(candidate => idsFor(content.vocab, candidate))
-          : idsFor(content.vocab, category);
-      const dueIds = ids.filter(id => isDue(doc.srs[id], today));
-      storeStartQuiz(category, buildQuiz(content.vocab, category, QUIZ_SESSION_SIZE, dueIds));
+          ? STUDY_CATEGORIES.flatMap(candidate => idsFor(vocab, candidate))
+          : idsFor(vocab, category);
+      const dueIds = ids.filter(id => isDue(srs[id], today));
+      storeStartQuiz(category, buildQuiz(vocab, category, QUIZ_SESSION_SIZE, dueIds));
     },
-    [storeStartQuiz, content, doc.srs, today]
+    [storeStartQuiz, vocab, srs, today]
   );
 
   const gradeCard = useCallback(
@@ -130,8 +126,7 @@ export const usePractice = (level: SingleLevelTrainerId): PracticeController => 
 
   return useMemo(
     () => ({
-      content,
-      doc,
+      vocab,
       today,
       session,
       sessionDone: session !== null && isSessionDone(session),
@@ -144,8 +139,7 @@ export const usePractice = (level: SingleLevelTrainerId): PracticeController => 
       endSession
     }),
     [
-      content,
-      doc,
+      vocab,
       today,
       session,
       startFlashcards,

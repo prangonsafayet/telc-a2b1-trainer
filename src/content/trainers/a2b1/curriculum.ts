@@ -1,9 +1,9 @@
-import { type LearnPlan } from '@shared/types/learn.ts';
+import { type LearnPlan } from '@shared/types';
 
-/* The 28-day study plan, its cheatsheets and the copy-paste AI tutor prompts.
+/* The A2·B1 28-day study plan, its cheatsheets and the copy-paste AI tutor prompts.
    `intro` and every `cheatsheets[].html` are authored HTML and are injected; all other
    strings are plain text and are rendered as text. */
-export const LEARN = {
+export const A2B1_CURRICULUM = {
   intro: `The plan below adapts to your exam date — set it in <b>Settings</b> and the days re-pace themselves.
   Each day = focused study + a cheatsheet + an <b>AI practice session</b>: copy the prompt into Claude (or any AI chat) and it becomes your personal tutor, speaking partner or corrector.
   Days 1–14 are the <b>core curriculum</b> and are always scheduled; days 15–28 deepen everything to full B1 when your date leaves room for them.`,

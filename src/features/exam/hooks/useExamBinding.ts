@@ -1,59 +1,39 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { isSingleLevelTrainer } from '@shared/config/trainers.ts';
-import { toIsoDate } from '@shared/lib/format.ts';
-import {
-  type DualLevelAttempt,
-  type SingleLevelAttempt,
-  type SingleLevelTrainerId,
-  type TrainerId
-} from '@shared/types';
+import { DUAL_LEVEL_EXAMS, SINGLE_LEVEL_EXAMS } from '@content/trainers/index.ts';
 
-import { A2B1_FORMAT } from '@features/exam/lib/formats/dual-level/index.ts';
+import { type TrainerId } from '@shared/types';
+
+import { DUAL_LEVEL_FORMAT } from '@features/exam/lib/formats/dual-level/index.ts';
 import { SINGLE_LEVEL_FORMAT } from '@features/exam/lib/formats/single-level/index.ts';
 import { type ExamBinding } from '@features/exam/types/examBinding.ts';
-import { touchActivity, useProgress, useTrainerDoc } from '@features/progress';
+import { useTrainerSlice } from '@features/progress';
 
 /**
- * Resolves a trainer to the paper it sets and the document it stores attempts in, so the
- * three exam screens narrow once and then render the same generic views either way.
+ * Resolves a trainer to the paper it sets, the papers it ships and the document its
+ * attempts live in, so the three exam screens narrow once and then render the same generic
+ * views either way. Which paper that is comes from the trainer's stored slice, which the
+ * registry places — never from the trainer's id.
  */
 export const useExamBinding = (trainer: TrainerId): ExamBinding => {
-  const { db, update } = useProgress();
-  /* The A2·B1 trainer has no level document. Reading B1's is a pure derivation of the
-     same context, and keeps the hook order fixed whichever trainer is active. */
-  const level: SingleLevelTrainerId = isSingleLevelTrainer(trainer) ? trainer : 'b1';
-  const { doc, updateDoc } = useTrainerDoc(level);
-
-  const saveExamAttempt = useCallback(
-    (attempt: DualLevelAttempt) => {
-      update(current => ({ ...current, attempts: [...current.attempts, attempt] }));
-    },
-    [update]
-  );
-
-  const saveLevelAttempt = useCallback(
-    (attempt: SingleLevelAttempt) => {
-      updateDoc(current =>
-        touchActivity({ ...current, attempts: [...current.attempts, attempt] }, toIsoDate(new Date()))
-      );
-    },
-    [updateDoc]
-  );
+  const slice = useTrainerSlice(trainer);
 
   return useMemo(() => {
-    if (isSingleLevelTrainer(trainer)) {
+    if (slice.format === 'single-level') {
       return {
         kind: 'single-level',
-        level: trainer,
+        trainer,
         format: SINGLE_LEVEL_FORMAT,
-        store: { settings: doc.settings, attempts: doc.attempts, saveAttempt: saveLevelAttempt }
+        papers: SINGLE_LEVEL_EXAMS[slice.trainer],
+        store: { settings: slice.settings, attempts: slice.attempts, saveAttempt: slice.saveAttempt }
       };
     }
     return {
       kind: 'dual-level',
-      format: A2B1_FORMAT,
-      store: { settings: db.settings, attempts: db.attempts, saveAttempt: saveExamAttempt }
+      trainer,
+      format: DUAL_LEVEL_FORMAT,
+      papers: DUAL_LEVEL_EXAMS,
+      store: { settings: slice.settings, attempts: slice.attempts, saveAttempt: slice.saveAttempt }
     };
-  }, [trainer, doc, db, saveLevelAttempt, saveExamAttempt]);
+  }, [trainer, slice]);
 };

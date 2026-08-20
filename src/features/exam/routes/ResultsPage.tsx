@@ -1,7 +1,6 @@
 import { Navigate, useParams } from 'react-router-dom';
 
-import { findExamById } from '@content/exams';
-import { findSingleLevelExam } from '@content/trainers/index.ts';
+import { findPaper } from '@content/trainers/index.ts';
 
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
@@ -24,10 +23,11 @@ const ResultsPage = ({ trainer }: ResultsPageProps) => {
 
   if (binding.kind === 'single-level') {
     const attempt = findAttempt(binding.store.attempts, attemptId);
-    const exam = attempt ? findSingleLevelExam(binding.level, attempt.examId) : undefined;
+    const exam = attempt ? findPaper(binding.papers, attempt.examId) : undefined;
     if (!attempt || !exam) return <Navigate to={history} replace />;
     return (
       <AttemptResults
+        trainer={trainer}
         format={binding.format}
         exam={exam}
         attempt={attempt}
@@ -38,10 +38,11 @@ const ResultsPage = ({ trainer }: ResultsPageProps) => {
   }
 
   const attempt = findAttempt(binding.store.attempts, attemptId);
-  const exam = attempt ? findExamById(attempt.examId) : undefined;
+  const exam = attempt ? findPaper(binding.papers, attempt.examId) : undefined;
   if (!attempt || !exam) return <Navigate to={history} replace />;
   return (
     <AttemptResults
+      trainer={trainer}
       format={binding.format}
       exam={exam}
       attempt={attempt}

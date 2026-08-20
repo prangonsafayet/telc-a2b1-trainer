@@ -1,7 +1,7 @@
 /** Public surface of the progress feature. */
 export { ProgressProvider } from './providers/ProgressProvider.tsx';
 export { useProgress, useSettings } from './hooks/useProgress.ts';
-export { touchActivity, useTrainerDoc } from './hooks/useTrainerDoc.ts';
+export { touchActivity, useTrainerSlice } from './hooks/useTrainerSlice.ts';
 export {
   EMPTY_DATABASE,
   emptyTrainerDoc,
@@ -10,4 +10,9 @@ export {
   stamp
 } from './lib/progressDb.ts';
 export type { ProgressContextValue, ProgressRecipe } from './providers/ProgressProvider.tsx';
-export type { TrainerDocHandle, TrainerRecipe } from './hooks/useTrainerDoc.ts';
+export type {
+  ActivityMap,
+  TrainerSlice,
+  TrainerSliceRecipe,
+  TrainerSliceState
+} from './hooks/useTrainerSlice.ts';

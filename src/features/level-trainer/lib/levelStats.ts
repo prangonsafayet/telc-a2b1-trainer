@@ -2,14 +2,27 @@ import { SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
 import { countMastery, streakLength, type MasteryCounts } from '@shared/lib/srs.ts';
 import {
   type ExamModule,
-  type LevelContent,
-  type LevelTrainerDoc,
+  type SrsMap,
   type StudyCategory,
   type SingleLevelAttempt,
-  type SingleLevelExam
+  type SingleLevelExam,
+  type VocabBank
 } from '@shared/types';
 
 import { idsFor, STUDY_CATEGORIES } from './studyItems.ts';
+
+/** The part of a trainer's stored slice these stats are derived from. */
+export interface LevelStatsInput {
+  readonly attempts: readonly SingleLevelAttempt[];
+  readonly srs: SrsMap;
+  readonly activity: Readonly<Partial<Record<string, number>>>;
+}
+
+/** The part of a trainer's content these stats are derived from. */
+export interface LevelStatsContent {
+  readonly vocab: VocabBank;
+  readonly exams: readonly SingleLevelExam[];
+}
 
 export interface LevelExamCardStats {
   readonly exam: SingleLevelExam;
@@ -32,8 +45,8 @@ export interface LevelDashboardStats {
 
 /** Everything the level dashboard shows, derived from the document — never persisted. */
 export const buildLevelStats = (
-  doc: LevelTrainerDoc,
-  content: LevelContent,
+  doc: LevelStatsInput,
+  content: LevelStatsContent,
   today: string
 ): LevelDashboardStats => {
   const categoryMastery = Object.fromEntries(
@@ -94,8 +107,8 @@ const SECTION_LABELS: Readonly<Record<ExamModule, string>> = {
 
 /** The weakest study categories and exam sections, worst first. */
 export const buildWeakAreas = (
-  doc: LevelTrainerDoc,
-  content: LevelContent,
+  doc: LevelStatsInput,
+  content: LevelStatsContent,
   categoryLabels: Readonly<Record<StudyCategory, string>>
 ): readonly WeakArea[] => {
   const areas: WeakArea[] = [];

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { EXAMS } from '@content/exams';
+import { DUAL_LEVEL_EXAMS } from '@content/trainers/index.ts';
 
 import { type DualLevelAttempt, type DualLevelExam, type SkillKey } from '@shared/types';
 
@@ -55,7 +55,7 @@ export const useDashboardStats = (): DashboardStats => {
       })
     ) as Record<SkillKey, number | null>;
 
-    const examCards = EXAMS.map<ExamCardStats>(exam => {
+    const examCards = DUAL_LEVEL_EXAMS.map<ExamCardStats>(exam => {
       const forExam = fullAttempts.filter(attempt => attempt.examId === exam.id);
       const best =
         forExam.length > 0 ? forExam.reduce((a, b) => ((b.total ?? 0) > (a.total ?? 0) ? b : a)) : null;

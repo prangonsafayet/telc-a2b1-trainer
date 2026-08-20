@@ -8,7 +8,7 @@ import { speakScript } from '@shared/lib/speech.ts';
 import { useConfirm } from '@shared/providers/useConfirm.ts';
 import { type Settings } from '@shared/types';
 
-import { stamp, useProgress } from '@features/progress';
+import { EMPTY_DATABASE, stamp, useProgress } from '@features/progress';
 
 const VOICE_TEST_SCRIPT = 'Guten Tag! Willkommen zur Prüfung telc Deutsch A2 B1. Viel Erfolg!';
 
@@ -41,13 +41,13 @@ export const useExamSettings = (): ExamSettingsState => {
     const confirmed = await confirm({
       title: 'Delete all progress?',
       description:
-        'Every attempt, score and learn-plan checkbox will be removed from this browser. This cannot be undone.',
+        'Every attempt, score and learn-plan checkbox of every trainer will be removed from this browser. This cannot be undone.',
       confirmText: 'Delete everything',
       destructive: true
     });
     if (!confirmed) return;
 
-    replaceLocal(stamp({ attempts: [], learnDone: {}, settings: DEFAULT_SETTINGS }));
+    replaceLocal(stamp({ ...EMPTY_DATABASE, settings: DEFAULT_SETTINGS }));
     toast.success('All progress deleted.');
   }, [confirm, replaceLocal]);
 

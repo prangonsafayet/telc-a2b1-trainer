@@ -112,7 +112,7 @@ const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
           />
         </TabsContent>
         <TabsContent value="tables">
-          <ReferenceTables bank={practice.content.vocab} />
+          <ReferenceTables bank={practice.vocab} />
         </TabsContent>
       </Tabs>
     </>

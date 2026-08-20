@@ -9,18 +9,15 @@ import {
   type AnswerValue,
   type AttemptMode,
   type ExamModule,
+  type ExamPaper,
   type RecordingMap,
-  type SpeakingPart
+  type SpeakingPart,
+  type TrainerId
 } from '@shared/types';
 
 import { HEARTBEAT_MS, SECONDS_PER_MINUTE, UNTIMED_MODULES } from '@features/exam/config/run.ts';
 import { createRun, currentModule, queueForMode, secondsLeft } from '@features/exam/lib/runStore.ts';
-import {
-  type ExamFormat,
-  type ExamPaper,
-  type RunSettings,
-  type StoredAttempt
-} from '@features/exam/types/examFormat.ts';
+import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
 import { type ExamRun, type RatedModule } from '@features/exam/types/run.ts';
 
 export interface ExamRunController {
@@ -46,6 +43,8 @@ interface ExamRunOptions<
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 > {
+  /** Whose run this is: it decides the route prefix and which stored run resumes. */
+  readonly trainer: TrainerId;
   readonly format: ExamFormat<TExam, TSettings, TAttempt>;
   readonly exam: TExam;
   readonly mode: AttemptMode;
@@ -69,6 +68,7 @@ export const useExamRun = <
   TSettings extends RunSettings,
   TAttempt extends StoredAttempt
 >({
+  trainer,
   format,
   exam,
   mode,
@@ -77,7 +77,6 @@ export const useExamRun = <
 }: ExamRunOptions<TExam, TSettings, TAttempt>): ExamRunController => {
   const navigate = useNavigate();
   const store = format.runStore;
-  const trainer = format.trainer(exam);
   const basePath = TRAINERS[trainer].basePath;
   const examId = exam.id;
 

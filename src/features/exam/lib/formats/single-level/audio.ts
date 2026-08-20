@@ -1,3 +1,4 @@
+import { SINGLE_LEVEL_TTS_RATE } from '@shared/config/singleLevelExam.ts';
 import { type AudioScript, type SingleLevelExam, type SingleLevelTrainerId } from '@shared/types';
 
 /** Resolves the audio script for a listening item key such as `h1.3` or `h2`. */
@@ -10,6 +11,6 @@ export const singleLevelAudioForKey = (exam: SingleLevelExam, key: string): Audi
   return '';
 };
 
-/** B1 audio is read slightly slower than B2, then scaled by the user's speed setting. */
+/** The level's own reading speed, then scaled by the user's speed setting. */
 export const singleLevelRate = (level: SingleLevelTrainerId, ttsRate: number): number =>
-  (level === 'b1' ? 0.97 : 1.03) * ttsRate;
+  SINGLE_LEVEL_TTS_RATE[level] * ttsRate;

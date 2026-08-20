@@ -7,6 +7,9 @@ import {
   type SrsMap
 } from '@shared/types';
 
+/** Practice touches per local ISO date, as both the root slice and a document hold them. */
+type ActivityMap = LevelTrainerDoc['activity'];
+
 /** Attempts are immutable once written, so a union by id is always right. */
 const unionAttempts = <T extends DualLevelAttempt | SingleLevelAttempt>(
   remote: readonly T[],
@@ -30,9 +33,9 @@ const orLearnDone = (remote: LearnDoneMap, local: LearnDoneMap): LearnDoneMap =>
  * the higher box is the more studied one and its counters come with it; the due date is the
  * later of the two, or an item just answered on one device is asked again today on the other.
  */
-const mergeSrs = (remote: SrsMap, local: SrsMap): SrsMap => {
+const mergeSrs = (remote: SrsMap | undefined, local: SrsMap | undefined): SrsMap => {
   const merged: SrsMap = { ...remote };
-  for (const [id, mine] of Object.entries(local)) {
+  for (const [id, mine] of Object.entries(local ?? {})) {
     if (!mine) continue;
     const theirs = merged[id];
     if (!theirs) {
@@ -49,12 +52,9 @@ const mergeSrs = (remote: SrsMap, local: SrsMap): SrsMap => {
  * Practice touches per day. The larger count wins rather than the sum: syncing twice must
  * not inflate a streak, and both sides then converge on the same number.
  */
-const mergeActivity = (
-  remote: LevelTrainerDoc['activity'],
-  local: LevelTrainerDoc['activity']
-): LevelTrainerDoc['activity'] => {
+const mergeActivity = (remote: ActivityMap | undefined, local: ActivityMap | undefined): ActivityMap => {
   const merged: Record<string, number> = {};
-  for (const [date, count] of [...Object.entries(remote), ...Object.entries(local)]) {
+  for (const [date, count] of [...Object.entries(remote ?? {}), ...Object.entries(local ?? {})]) {
     merged[date] = Math.max(merged[date] ?? 0, count ?? 0);
   }
   return merged;
@@ -82,13 +82,17 @@ const mergeTrainerDoc = (
  * Merges the local and remote documents without losing work from either side.
  *
  * Attempts are a union keyed by id. Completed learn tasks are OR-ed. Settings are
- * last-write-wins, decided by `_updatedAt`. Each level trainer's document is merged the
- * same way, field by field.
+ * last-write-wins, decided by `_updatedAt`. The root trainer's SRS state and streak
+ * activity merge exactly like a trainer document's, and each trainer document is merged
+ * the same way, field by field.
  *
  * This function rebuilds the document rather than spreading it, so anything added to
  * `ProgressDatabase` and not handled here is silently dropped on the next sync — which is
  * exactly how every B1/B2 attempt, curriculum tick, SRS box and streak was lost when the
  * two level trainers were first added. Add a field to the document, add it here.
+ *
+ * The remote side arrives as untrusted JSON from the cloud table and may have been written
+ * by a build with fewer fields, so `useCloudSync` normalizes it before it gets here.
  */
 export const mergeProgress = (
   local: ProgressDatabase | null,
@@ -114,6 +118,9 @@ export const mergeProgress = (
     settings: localIsNewer
       ? { ...remote.settings, ...local.settings }
       : { ...local.settings, ...remote.settings },
+    /* The root trainer's study state, merged exactly like a trainer document's. */
+    srs: mergeSrs(remote.srs, local.srs),
+    activity: mergeActivity(remote.activity, local.activity),
     ...(b1 ? { b1 } : {}),
     ...(b2 ? { b2 } : {}),
     ...(updatedAt ? { _updatedAt: updatedAt } : {})
