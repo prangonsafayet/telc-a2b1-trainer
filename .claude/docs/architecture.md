@@ -6,16 +6,26 @@ src/features   vertical slices, each with components/ hooks/ lib/ routes/ and an
                index.ts naming its public surface.
 src/shared     feature-agnostic building blocks — ui/ primitives, components, hooks,
                lib, config, types, providers.
-src/content    inert data — the exams, the guide HTML, the study plans.
+src/content    inert data, keyed by trainer — `content/trainers/<id>/` holds that
+               trainer's exams, curriculum, vocabulary bank and guide HTML.
 ```
 
-Three trainers ship as two features. `features/exam` runs every mock exam of every
-trainer: one run-state machine, one runner shell, one results screen and one review screen,
-driven by a **format descriptor** in `features/exam/lib/formats/`. There are two of those —
-`A2B1_FORMAT` and `TELC_FORMAT` — and they own everything a paper decides for itself: its
-module list and timing, its briefing copy, its marking rules, its self-rating scale and its
-five module renderers (`components/modules/a2b1/`, `components/modules/telc/`).
-`features/level-trainer` adds the B1/B2 flashcards, quizzes and reference.
+The trainers are peers, described once in the **registry** at
+`shared/config/trainers.ts`: one `TRAINERS` descriptor per trainer names its identity and
+route namespace, which paper it sets, where its slice of the progress document lives, and
+the content it studies from. That is the only place a per-trainer fact may live — a
+`no-restricted-syntax` rule refuses the literals `'a2b1'`, `'b1'` and `'b2'` as values
+anywhere else in `src/`. Adding a trainer is a content folder plus one entry: every screen,
+route and nav item is generated from `TRAINER_ORDER`.
+
+`features/exam` runs every mock exam of every trainer: one run-state machine, one runner
+shell, one results screen and one review screen, driven by a **format descriptor** in
+`features/exam/lib/formats/`. There are two of those — `DUAL_LEVEL_FORMAT` and
+`SINGLE_LEVEL_FORMAT` — and they own everything a paper decides for itself: its module list
+and timing, its briefing copy, its marking rules, its self-rating scale and its five module
+renderers (`components/modules/dual-level/`, `components/modules/single-level/`).
+`features/practice` adds the flashcards, quizzes and reference tables every trainer's
+vocabulary bank is drilled with.
 
 A trainer is bound to its paper and its stored attempts by `useExamBinding`, so the three
 screens narrow once and then render the same generic views for either format. Everything
@@ -23,8 +33,9 @@ both papers render — inputs, Teil layout, gap fills, briefing card, toolbar, r
 recorder — lives in `shared/components/exam-ui/` and is consumed through
 `@shared/components`; the feature keeps no private copy.
 
-Anything named after one paper is named after that paper (`TELC_FORMAT`, `telc/scoring.ts`).
-Anything generic is not: a `Telc` prefix on a generic name is the bug this structure fixed.
+Anything named after one paper is named after that paper (`SINGLE_LEVEL_FORMAT`,
+`single-level/scoring.ts`). Anything generic is not, and nothing is named after a brand: all
+three exams are telc exams, so `Telc` in an identifier distinguishes nothing.
 
 ## The dependency rules are ESLint rules, not conventions
 
@@ -77,8 +88,9 @@ dashboard, learn and settings all import it through `@features/plan`.
 - `lib/distribute.ts` — the bucketing helpers it compresses and spaces slots with.
 - `lib/describeSchedule.ts` — every user-facing string about the plan, so no component
   builds copy of its own.
-- `hooks/useSchedule.ts` / `hooks/useToday.ts` — the React surface; `useToday` re-reads the
-  date at local midnight and on `visibilitychange`, since the tab stays open overnight.
+- `hooks/useTrainerSchedule.ts` / `hooks/useToday.ts` — the React surface. It takes the
+  trainer and reads its inputs from `useTrainerSlice`; `useToday` re-reads the date at local
+  midnight and on `visibilitychange`, since the tab stays open overnight.
 
 The schedule is derived on render and **never persisted**. Its inputs — `settings.examDate`,
 `learnDone`, `attempts` — are the only stored state, so a plan can never disagree with
@@ -88,4 +100,4 @@ progress. Constants live in `@shared/config/schedule.ts` and the types in
 | Design-system primitive | `shared/ui/` (shadcn CLI writes here) | `button.tsx` |
 | Domain type | `shared/types/` | `exam.ts`, `progress.ts` |
 | Shared constant | `shared/config/` | `exam.ts`, `appInfo.ts` |
-| Exam or study content | `content/` | `exams/exam07.ts`, `learn.ts` |
+| Exam or study content | `content/trainers/<id>/` | `a2b1/exams/exam07.ts`, `b1/curriculum.ts` |

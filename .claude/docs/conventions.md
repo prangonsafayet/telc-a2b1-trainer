@@ -29,8 +29,8 @@ Everything both exam formats render lives in `shared/components/exam-ui/` — in
 (`RichtigFalsch`, `MultipleChoice`, `LetterSelect`), layout (`Teil`, `QuestionItem`,
 `QuestionText`, `ReadingText`, `Callout`), gaps (`InlineGapSelect`, `GapFillText`),
 `OptionCards`, `PunkteGrid`, `RedemittelList`, `ModuleBriefingCard`, `ExamModuleToolbar`,
-`CriteriaRatingPanel`, `CountdownRing`, `RecorderControls`, `Transcript`. The A2·B1 and
-telc module renderers under `features/exam/components/modules/` consume it via
+`CriteriaRatingPanel`, `CountdownRing`, `RecorderControls`, `Transcript`. The dual-level and
+single-level module renderers under `features/exam/components/modules/` consume it via
 `@shared/components`; neither keeps a copy of its own.
 
 ## Use the design system
@@ -75,6 +75,6 @@ grouping and alphabetisation; `--fix` handles it.
 
 Relative imports may climb at most one level (`./x`, `../x`); anything `../../` or deeper
 is banned by lint — use an alias. A feature may deep-import its own internals through its
-own alias (`@features/level-trainer/lib/quiz.ts` from inside `features/level-trainer`);
+own alias (`@features/practice/lib/quiz.ts` from inside `features/practice`);
 other features' internals stay off limits. Both are `no-restricted-imports` patterns, so
 the replace-not-merge pitfall applies (see architecture.md).
