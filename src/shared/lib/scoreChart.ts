@@ -1,5 +1,6 @@
 /** Turns stored attempts into the score-history chart's model, per paper. */
 
+import { FULL_EXAM_MAX } from '@shared/config/exam.ts';
 import {
   SINGLE_LEVEL_ORAL_PASS,
   SINGLE_LEVEL_TOTAL_MAX,
@@ -17,10 +18,8 @@ export const CHART_HEIGHT = 160;
 /** Older sittings scroll off: a dozen bars is what fits and what is still comparable. */
 const MAX_BARS = 12;
 
-const DUAL_LEVEL_MAX = 240;
-
 const DUAL_LEVEL_GRIDLINES: readonly ScoreChartGridline[] = [
-  { value: 240, label: '240' },
+  { value: FULL_EXAM_MAX, label: String(FULL_EXAM_MAX) },
   { value: 168, label: '168 · B1' },
   { value: 96, label: '96 · A2' }
 ];
@@ -67,7 +66,7 @@ export const buildScoreChart = (source: ScoredAttempts): ScoreChartModel => {
   }
 
   return {
-    max: DUAL_LEVEL_MAX,
+    max: FULL_EXAM_MAX,
     description: DUAL_LEVEL_DESCRIPTION,
     gridlines: DUAL_LEVEL_GRIDLINES,
     bars: scored(source.attempts).map(attempt => {

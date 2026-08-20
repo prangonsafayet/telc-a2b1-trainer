@@ -1,6 +1,6 @@
 /** What a trainer is: the content it studies from and the document it persists. */
 
-import { type ExamPaper } from './exam.ts';
+import { type ExamModule, type ExamPaper } from './exam.ts';
 import { type LearnPlan } from './learn.ts';
 import { type LearnDoneMap } from './progress.ts';
 import {
@@ -18,6 +18,50 @@ export type TrainerId = 'a2b1' | 'b1' | 'b2';
  * paper the B1 and B2 trainers share — and a trainer names one rather than owning a copy.
  */
 export type ExamFormatId = 'dual-level' | 'single-level';
+
+/** Word-count window for a writing task. */
+export interface WritingTarget {
+  readonly min: number;
+  readonly max: number;
+}
+
+/**
+ * A sentence with one phrase emphasised. Authored copy that needs a bold phrase but is
+ * rendered as text, not injected — only the guide, the curriculum intro and the cheatsheets
+ * are HTML.
+ */
+export interface EmphasisedNote {
+  readonly lead: string;
+  readonly emphasis: string;
+  readonly tail: string;
+}
+
+/**
+ * How one trainer's own sitting runs: its timings, its briefing copy, and the copy its
+ * module renderers need.
+ *
+ * These are per-*trainer* facts, not per-paper ones — two trainers can set the same paper
+ * and still differ here, the way the single-level Hören runs half an hour at B1 and twenty
+ * minutes at B2 — so they live with the trainer that decides them. A record keyed by trainer
+ * id anywhere else would be the same special-casing in a different file.
+ */
+export interface TrainerPaper {
+  /** Minutes per module. Schreiben is the official time; the user's setting overrides it. */
+  readonly minutes: Readonly<Record<ExamModule, number>>;
+  /** Shown on the briefing screen before each module starts. */
+  readonly briefing: Readonly<Record<ExamModule, string>>;
+  /** Speech-rate multiplier for its listening audio, before the user's speed setting. */
+  readonly listeningRate: number;
+  /** Word-count window its writing task is judged against. */
+  readonly writingTarget: WritingTarget;
+  readonly writingTitle: string;
+  /** The register its letter or email opens in, as a textarea placeholder. */
+  readonly writingPlaceholder: string;
+  /** Point weight and rough length of each oral Teil, in order. */
+  readonly sprechenChips: readonly string[];
+  /** What its oral briefing says about preparation time in the real exam. */
+  readonly prepNote: EmphasisedNote;
+}
 
 /** The exam conditions every trainer stores, whichever slice of the document it lives in. */
 export interface TrainerExamSettings {
@@ -45,6 +89,8 @@ export interface TrainerContent<TExam extends ExamPaper = ExamPaper> {
   readonly exams: readonly TExam[];
   /** Authored HTML exam guide, or null while the trainer has none. */
   readonly guide: string | null;
+  /** How its own sitting runs. */
+  readonly paper: TrainerPaper;
 }
 
 /** The single-level content, narrowed to the paper its two trainers set. */

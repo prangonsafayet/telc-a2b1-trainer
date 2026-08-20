@@ -4,13 +4,14 @@
  * which the paper itself carries.
  */
 
+import { SINGLE_LEVEL_PAPERS } from '@content/trainers/index.ts';
+
 import {
   SINGLE_LEVEL_MODULE_META,
   SINGLE_LEVEL_RATING_CRITERIA,
-  SINGLE_LEVEL_RATING_SCALE,
-  singleLevelModuleBriefing,
-  singleLevelModuleMinutes
+  SINGLE_LEVEL_RATING_SCALE
 } from '@shared/config/singleLevelExam.ts';
+import { moduleMinutes } from '@shared/lib/paper.ts';
 import { type ExamModule } from '@shared/types';
 
 import HoerenModule from '@features/exam/components/modules/single-level/HoerenModule.tsx';
@@ -42,8 +43,8 @@ export const SINGLE_LEVEL_FORMAT: SingleLevelFormat = {
   ...SINGLE_LEVEL_RUN_FORMAT,
   examLabel: exam => `${exam.title} · telc Deutsch ${exam.level.toUpperCase()}`,
   moduleName: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].name,
-  minutes: (module, exam, settings) => singleLevelModuleMinutes(module, exam.level, settings),
-  briefing: (module, exam) => singleLevelModuleBriefing(module, exam.level),
+  minutes: (module, exam, settings) => moduleMinutes(SINGLE_LEVEL_PAPERS[exam.level], module, settings),
+  briefing: (module, exam) => SINGLE_LEVEL_PAPERS[exam.level].briefing[module],
   rating: { schreiben: ratingSpec('schreiben'), sprechen: ratingSpec('sprechen') },
   speakingHint:
     'Rate against the Redemittel: did you present clearly, react to your partner, and reach a result in Teil 3?',

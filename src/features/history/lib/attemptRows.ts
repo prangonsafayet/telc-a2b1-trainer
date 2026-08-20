@@ -1,4 +1,4 @@
-import { MODULE_META } from '@shared/config/exam.ts';
+import { FULL_EXAM_MAX, MODULE_META } from '@shared/config/exam.ts';
 import {
   SINGLE_LEVEL_MODULE_META,
   SINGLE_LEVEL_ORAL_MAX,
@@ -12,8 +12,6 @@ import { type ModuleTimes, type ScoredAttempts } from '@shared/types';
 import { type AttemptCell, type AttemptRow, type AttemptTableModel } from '../types/attemptTable.ts';
 
 const DASH = '–';
-
-const FULL_EXAM_MAX = 240;
 
 const text = (value: string): AttemptCell => ({ text: value, badge: null, numeric: false, strong: false });
 

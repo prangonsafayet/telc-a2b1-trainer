@@ -1,21 +1,19 @@
 import { DUAL_LEVEL_EXAMS, SINGLE_LEVEL_EXAMS } from '@content/trainers/index.ts';
 
-import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
+import { EXAM_MODULES, FULL_EXAM_MAX, MODULE_META } from '@shared/config/exam.ts';
 import {
   SINGLE_LEVEL_MODULE_META,
   SINGLE_LEVEL_MODULES,
-  SINGLE_LEVEL_TOTAL_MAX,
-  singleLevelModuleMinutes
+  SINGLE_LEVEL_TOTAL_MAX
 } from '@shared/config/singleLevelExam.ts';
 import { type TrainerInfo } from '@shared/config/trainers.ts';
 import { difficultyTone, gradeTone } from '@shared/lib/examBadges.ts';
-import { type ExamDifficulty, type Settings } from '@shared/types';
+import { moduleMinutes } from '@shared/lib/paper.ts';
+import { type ExamDifficulty } from '@shared/types';
 
 import { type TrainerSlice } from '@features/progress';
 
 import { type ExamCardModel, type ExamModuleChoice } from '../types/dashboard.ts';
-
-const FULL_EXAM_MAX = 240;
 
 /** Difficulty accent, so the ramp from A2 to B1 is visible at a glance. */
 const DIFFICULTY_ACCENTS: Readonly<Record<ExamDifficulty, string>> = {
@@ -42,7 +40,7 @@ export const buildExamCards = (
   if (slice.format === 'single-level') {
     const modules: readonly ExamModuleChoice[] = SINGLE_LEVEL_MODULES.map(module => ({
       mode: module,
-      label: `${SINGLE_LEVEL_MODULE_META[module].short} (${String(singleLevelModuleMinutes(module, slice.trainer, slice.settings))} min)`
+      label: `${SINGLE_LEVEL_MODULE_META[module].short} (${String(moduleMinutes(trainer.content.paper, module, slice.settings))} min)`
     }));
 
     return SINGLE_LEVEL_EXAMS[slice.trainer].map<ExamCardModel>(exam => {
@@ -67,11 +65,9 @@ export const buildExamCards = (
     });
   }
 
-  /* The dual-level settings carry the writing time the module list quotes. */
-  const settings: Settings = slice.settings;
   const modules: readonly ExamModuleChoice[] = EXAM_MODULES.map(module => ({
     mode: module,
-    label: `${MODULE_META[module].short} (${String(moduleMinutes(module, settings))} min)`
+    label: `${MODULE_META[module].short} (${String(moduleMinutes(trainer.content.paper, module, slice.settings))} min)`
   }));
 
   return DUAL_LEVEL_EXAMS.map<ExamCardModel>(exam => {

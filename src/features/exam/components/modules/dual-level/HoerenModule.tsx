@@ -16,13 +16,21 @@ import { Input } from '@shared/ui';
 
 import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 
-const HoerenModule = ({ exam, answers, setAnswer, settings, plays, onConsumePlay }: A2b1ModuleProps) => {
+const HoerenModule = ({
+  exam,
+  paper,
+  answers,
+  setAnswer,
+  settings,
+  plays,
+  onConsumePlay
+}: A2b1ModuleProps) => {
   const { hoeren } = exam;
 
   const playButton = (key: string) => (
     <AudioPlayButton
       script={audioForKey(exam, key)}
-      rate={rateForExam(exam, settings)}
+      rate={rateForExam(paper, exam, settings)}
       voiceName={settings.voiceName}
       itemKey={key}
       playsLeft={plays[key] ?? settings.playsAllowed}

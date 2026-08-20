@@ -6,6 +6,9 @@
 
 import { type ExamFormatId } from '@shared/types';
 
+import { FULL_EXAM_MAX } from './exam.ts';
+import { SINGLE_LEVEL_TOTAL_MAX } from './singleLevelExam.ts';
+
 export interface SettingChoice {
   readonly value: number;
   readonly label: string;
@@ -20,6 +23,29 @@ export const WRITING_MINUTE_CHOICES: Readonly<Record<ExamFormatId, readonly Sett
     { value: 30, label: '30 minutes (official)' },
     { value: 40, label: '40 minutes (relaxed)' }
   ]
+};
+
+/**
+ * The share of a scored section a pass needs, per paper. The A2·B1 paper wants 42 of 60 in
+ * three of its four skills; the single-level paper wants 60% of the written and of the oral
+ * part. Every consumer — the dashboard meters, the weak-area detection and the copy that
+ * names the line — reads this, so the two papers' lines cannot be crossed.
+ */
+export const PASS_PERCENT: Readonly<Record<ExamFormatId, number>> = {
+  'dual-level': 70,
+  'single-level': 60
+};
+
+/** How the pass line reads on screen. */
+export const passLineLabel = (format: ExamFormatId): string =>
+  format === 'dual-level'
+    ? `B1 threshold (${String(PASS_PERCENT[format])}%)`
+    : `Pass line (${String(PASS_PERCENT[format])}%)`;
+
+/** Points a perfect sitting of each paper scores. */
+export const PAPER_TOTAL_MAX: Readonly<Record<ExamFormatId, number>> = {
+  'dual-level': FULL_EXAM_MAX,
+  'single-level': SINGLE_LEVEL_TOTAL_MAX
 };
 
 /** How each paper is passed, in one sentence — the lead under a dashboard title. */

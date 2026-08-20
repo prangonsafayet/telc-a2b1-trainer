@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { ExamModuleToolbar, ModuleBriefingCard } from '@shared/components';
+import { TRAINERS } from '@shared/config/trainers.ts';
 import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { useConfirm } from '@shared/providers/useConfirm.ts';
 import { type AttemptMode, type ExamPaper, type TrainerId } from '@shared/types';
@@ -110,6 +111,7 @@ const RunnerView = <TExam extends ExamPaper, TSettings extends RunSettings, TAtt
 
       <ModuleComponent
         exam={exam}
+        paper={TRAINERS[trainer].content.paper}
         answers={run.run.answers}
         setAnswer={run.setAnswer}
         settings={store.settings}

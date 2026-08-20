@@ -1,6 +1,8 @@
 import { toast } from 'sonner';
 
-import { type AudioScript, type DualLevelExam, type Settings } from '@shared/types';
+import { type AudioScript, type DualLevelExam, type Settings, type TrainerPaper } from '@shared/types';
+
+import { listeningRate } from './paper.ts';
 
 type VoiceListener = () => void;
 
@@ -48,9 +50,9 @@ const pickVoice = (preferredName: string): SpeechSynthesisVoice | null =>
   germanVoices.find(voice => voice.name === preferredName) ?? germanVoices[0] ?? null;
 
 /** Easier exams are read more slowly, then scaled by the user's speed setting. */
-export const rateForExam = (exam: DualLevelExam, settings: Settings): number => {
+export const rateForExam = (paper: TrainerPaper, exam: DualLevelExam, settings: Settings): number => {
   const base = exam.difficulty === 'easy' ? 0.88 : exam.difficulty === 'medium' ? 0.94 : 1;
-  return base * settings.ttsRate;
+  return base * listeningRate(paper, settings.ttsRate);
 };
 
 let speaking = false;

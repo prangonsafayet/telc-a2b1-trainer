@@ -9,6 +9,7 @@
  */
 
 import { type AnswerMap, type AnswerValue, type PlayBudget } from './progress.ts';
+import { type TrainerPaper } from './trainer.ts';
 
 /** The three parts of an oral exam. */
 export type SpeakingPart = 't1' | 't2' | 't3';
@@ -22,6 +23,8 @@ export type RecordingMap = Partial<Record<SpeakingPart, string>>;
  */
 export interface ExamModuleProps<TExam, TSettings> {
   readonly exam: TExam;
+  /** How this trainer's sitting runs: its timings, its copy, its listening speed. */
+  readonly paper: TrainerPaper;
   readonly answers: AnswerMap;
   readonly setAnswer: (key: string, value: AnswerValue) => void;
   readonly settings: TSettings;
@@ -29,12 +32,6 @@ export interface ExamModuleProps<TExam, TSettings> {
   readonly onConsumePlay: (key: string) => void;
   readonly recordings: RecordingMap;
   readonly onRecorded: (part: SpeakingPart, url: string) => void;
-}
-
-/** Word-count window for a writing task. */
-export interface WritingTarget {
-  readonly min: number;
-  readonly max: number;
 }
 
 export interface WordCountFeedback {

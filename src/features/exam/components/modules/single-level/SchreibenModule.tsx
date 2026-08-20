@@ -1,10 +1,5 @@
 import { Teil } from '@shared/components';
 import {
-  SINGLE_LEVEL_WRITING_PLACEHOLDER,
-  SINGLE_LEVEL_WRITING_TITLE
-} from '@shared/config/singleLevelExam.ts';
-import { WRITING_TARGETS } from '@shared/config/writing.ts';
-import {
   itemKey,
   numberAnswer,
   textAnswer,
@@ -19,18 +14,18 @@ import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts
 
 import WritingTaskBrief from './WritingTaskBrief.tsx';
 
-const SchreibenModule = ({ exam, answers, setAnswer }: SingleLevelModuleProps) => {
+const SchreibenModule = ({ exam, paper, answers, setAnswer }: SingleLevelModuleProps) => {
   const { schreiben } = exam;
   const hasChoice = schreiben.tasks.length > 1;
   const chosen = numberAnswer(answers, WRITING_TASK_KEY) ?? 0;
   const task = schreiben.tasks[chosen] ?? schreiben.tasks[0];
   const text = textAnswer(answers, WRITING_ANSWER_KEY);
-  const { count, hint, inRange } = describeWordCount(text, WRITING_TARGETS[exam.level]);
+  const { count, hint, inRange } = describeWordCount(text, paper.writingTarget);
 
   if (!task) return null;
 
   return (
-    <Teil title={SINGLE_LEVEL_WRITING_TITLE[exam.level]} chip="45 Punkte" anweisung={schreiben.anweisung}>
+    <Teil title={paper.writingTitle} chip="45 Punkte" anweisung={schreiben.anweisung}>
       {hasChoice ? (
         <RadioGroup
           className="mb-4 grid gap-2 sm:grid-cols-2"
@@ -60,7 +55,7 @@ const SchreibenModule = ({ exam, answers, setAnswer }: SingleLevelModuleProps) =
 
       <Textarea
         className="min-h-64 leading-relaxed"
-        placeholder={SINGLE_LEVEL_WRITING_PLACEHOLDER[exam.level]}
+        placeholder={paper.writingPlaceholder}
         aria-label="Ihr Brief"
         spellCheck={false}
         value={text}

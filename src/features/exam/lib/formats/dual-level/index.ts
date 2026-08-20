@@ -4,7 +4,10 @@
  * Nicht bestanden.
  */
 
-import { MODULE_BRIEFING, MODULE_META, moduleMinutes, RATING_CRITERIA } from '@shared/config/exam.ts';
+import { DUAL_LEVEL_PAPER } from '@content/trainers/index.ts';
+
+import { MODULE_META, RATING_CRITERIA } from '@shared/config/exam.ts';
+import { moduleMinutes } from '@shared/lib/paper.ts';
 import { type ExamModule } from '@shared/types';
 
 import HoerenModule from '@features/exam/components/modules/dual-level/HoerenModule.tsx';
@@ -39,8 +42,8 @@ export const DUAL_LEVEL_FORMAT: DualLevelFormat = {
   ...DUAL_LEVEL_RUN_FORMAT,
   examLabel: exam => `${exam.title} · ${exam.level}`,
   moduleName: (module: ExamModule) => MODULE_META[module].name,
-  minutes: (module, _exam, settings) => moduleMinutes(module, settings),
-  briefing: (module: ExamModule) => MODULE_BRIEFING[module],
+  minutes: (module, _exam, settings) => moduleMinutes(DUAL_LEVEL_PAPER, module, settings),
+  briefing: (module: ExamModule) => DUAL_LEVEL_PAPER.briefing[module],
   rating: { schreiben: ratingSpec('schreiben'), sprechen: ratingSpec('sprechen') },
   speakingHint:
     'Rate against the Redemittel: did you use suggestion phrases, react, ask back, reach a result in Teil 3?',

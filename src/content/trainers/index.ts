@@ -12,7 +12,8 @@ import {
   type SingleLevelExam,
   type SingleLevelTrainerId,
   type TrainerContent,
-  type TrainerId
+  type TrainerId,
+  type TrainerPaper
 } from '@shared/types';
 
 import { A2B1_CONTENT } from './a2b1/index.ts';
@@ -37,6 +38,17 @@ export const DUAL_LEVEL_EXAMS: readonly DualLevelExam[] = A2B1_CONTENT.exams;
 export const SINGLE_LEVEL_EXAMS: Readonly<Record<SingleLevelTrainerId, readonly SingleLevelExam[]>> = {
   b1: B1_CONTENT.exams,
   b2: B2_CONTENT.exams
+};
+
+/**
+ * How each trainer's sitting runs, reached the same way: the format layer has the paper in
+ * hand (or its level) but not the trainer id, so it looks the sitting up by format.
+ */
+export const DUAL_LEVEL_PAPER: TrainerPaper = A2B1_CONTENT.paper;
+
+export const SINGLE_LEVEL_PAPERS: Readonly<Record<SingleLevelTrainerId, TrainerPaper>> = {
+  b1: B1_CONTENT.paper,
+  b2: B2_CONTENT.paper
 };
 
 /** Looks up a paper by id; accepts the string form that arrives from route params. */

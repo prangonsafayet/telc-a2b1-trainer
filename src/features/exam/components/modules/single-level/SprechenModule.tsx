@@ -1,25 +1,24 @@
 import { Mic } from 'lucide-react';
 
 import { Callout } from '@shared/components';
-import { SINGLE_LEVEL_PREP_TAIL, SINGLE_LEVEL_SPRECHEN_CHIPS } from '@shared/config/singleLevelExam.ts';
 
 import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts';
 
 import SprechenTeilCard from './SprechenTeilCard.tsx';
 
-const SprechenModule = ({ exam, recordings, onRecorded }: SingleLevelModuleProps) => {
+const SprechenModule = ({ exam, paper, recordings, onRecorded }: SingleLevelModuleProps) => {
   const { sprechen } = exam;
-  const chips = SINGLE_LEVEL_SPRECHEN_CHIPS[exam.level];
+  const chips = paper.sprechenChips;
 
   return (
     <>
       <Callout className="flex items-start gap-2">
         <Mic className="mt-0.5 size-4 shrink-0" />
         <span>
-          Speak OUT LOUD — ideally record yourself (allow the microphone) and listen back. In the real exam
-          you get <b>20 minutes preparation</b>
-          {SINGLE_LEVEL_PREP_TAIL[exam.level]} Recordings live only in this session; they are not saved to
-          disk.
+          Speak OUT LOUD — ideally record yourself (allow the microphone) and listen back.{' '}
+          {paper.prepNote.lead}
+          <b>{paper.prepNote.emphasis}</b>
+          {paper.prepNote.tail} Recordings live only in this session; they are not saved to disk.
         </span>
       </Callout>
 

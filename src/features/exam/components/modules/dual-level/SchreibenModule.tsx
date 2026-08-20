@@ -1,5 +1,4 @@
 import { Multiline, Teil } from '@shared/components';
-import { WRITING_TARGETS } from '@shared/config/writing.ts';
 import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { cn } from '@shared/lib/cn.ts';
 import { describeWordCount } from '@shared/lib/writingFeedback.ts';
@@ -7,13 +6,13 @@ import { Textarea } from '@shared/ui';
 
 import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 
-const SchreibenModule = ({ exam, answers, setAnswer }: A2b1ModuleProps) => {
+const SchreibenModule = ({ exam, paper, answers, setAnswer }: A2b1ModuleProps) => {
   const { schreiben } = exam;
   const text = textAnswer(answers, WRITING_ANSWER_KEY);
-  const { count, hint, inRange } = describeWordCount(text, WRITING_TARGETS.a2b1);
+  const { count, hint, inRange } = describeWordCount(text, paper.writingTarget);
 
   return (
-    <Teil title="Schreiben — E-Mail beantworten" chip="60 Punkte" anweisung={schreiben.anweisung}>
+    <Teil title={paper.writingTitle} chip="60 Punkte" anweisung={schreiben.anweisung}>
       <p className="mb-4">{schreiben.situation}</p>
 
       <div className="my-4 overflow-hidden rounded-lg border">
@@ -35,7 +34,7 @@ const SchreibenModule = ({ exam, answers, setAnswer }: A2b1ModuleProps) => {
 
       <Textarea
         className="min-h-64 leading-relaxed"
-        placeholder="Liebe/r …"
+        placeholder={paper.writingPlaceholder}
         aria-label="Ihre E-Mail"
         spellCheck={false}
         value={text}

@@ -1,5 +1,5 @@
-import { FULL_EXAM_MAX, SKILL_MAX } from '@shared/config/exam.ts';
-import { PASS_RULES } from '@shared/config/examConditions.ts';
+import { SKILL_MAX } from '@shared/config/exam.ts';
+import { PAPER_TOTAL_MAX, PASS_PERCENT, PASS_RULES, passLineLabel } from '@shared/config/examConditions.ts';
 import { SINGLE_LEVEL_MODULE_META, SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
 import { CATEGORY_META, STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
 import { hasVocabBank, TRAINERS, type TrainerInfo } from '@shared/config/trainers.ts';
@@ -20,8 +20,6 @@ import {
 /** B1 needs 168/240 overall; A2 territory starts around 96. */
 const B1_TOTAL = 168;
 const A2_TOTAL = 96;
-
-const SINGLE_LEVEL_TOTAL = 300;
 
 const SKILL_LABELS: readonly (readonly [SkillKey, string])[] = [
   ['lesen', 'Lesen'],
@@ -48,29 +46,29 @@ const bestFor = (
   return scores.length > 0 ? Math.max(...scores) : null;
 };
 
-/** The A2·B1 paper wants 42 of 60 in three skills; the single-level paper wants 60%. */
-const DUAL_LEVEL_THRESHOLD = 70;
-const SINGLE_LEVEL_THRESHOLD = 60;
-
 /** The best score of each scored part of the paper, against a perfect one. */
-export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] =>
-  slice.format === 'single-level'
+export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] => {
+  const thresholdPercent = PASS_PERCENT[slice.format];
+  const thresholdLabel = passLineLabel(slice.format);
+
+  return slice.format === 'single-level'
     ? SINGLE_LEVEL_SECTIONS.map(section => ({
         key: section,
         label: SINGLE_LEVEL_MODULE_META[section].short,
         value: bestFor(slice.attempts, section),
         of: SINGLE_LEVEL_SECTION_MAX[section],
-        thresholdPercent: SINGLE_LEVEL_THRESHOLD,
-        thresholdLabel: `Pass line (${String(SINGLE_LEVEL_THRESHOLD)}%)`
+        thresholdPercent,
+        thresholdLabel
       }))
     : SKILL_LABELS.map(([key, label]) => ({
         key,
         label,
         value: bestFor(slice.attempts, key),
         of: SKILL_MAX,
-        thresholdPercent: DUAL_LEVEL_THRESHOLD,
-        thresholdLabel: `B1 threshold (${String(DUAL_LEVEL_THRESHOLD)}%)`
+        thresholdPercent,
+        thresholdLabel
       }));
+};
 
 const dualLevelCaption = (best: number | null): string => {
   if (best == null) return 'no full exam yet';
@@ -91,7 +89,7 @@ export const buildTiles = (
   const full = slice.attempts.filter(attempt => attempt.mode === 'full');
   const totals = full.map(attempt => attempt.total ?? 0);
   const best = totals.length > 0 ? Math.max(...totals) : null;
-  const max = slice.format === 'single-level' ? SINGLE_LEVEL_TOTAL : FULL_EXAM_MAX;
+  const max = PAPER_TOTAL_MAX[slice.format];
   const last = slice.attempts.at(-1) ?? null;
 
   const study: readonly StatTileModel[] =
@@ -186,9 +184,6 @@ export const masteryCounts = (vocab: VocabBank, srs: SrsMap, today: string): Mas
 const MIN_SIGNAL = 5;
 /** Below this error rate a category is not worth flagging. */
 const WEAK_RATE = 0.2;
-/** At or above the pass level a section is not a weak area. */
-const PASS_RATIO = 0.6;
-
 const SECTION_LABELS: Readonly<Record<ExamModule, string>> = {
   lesen: 'Leseverstehen',
   sprachbausteine: 'Sprachbausteine',
@@ -256,16 +251,20 @@ export const buildWeakAreas = (
     });
   }
 
+  /* The pass line is the paper's own — 70% of a skill at A2·B1, 60% of a section on the
+     single-level paper — so a skill at 65% is weak on one paper and fine on the other. */
+  const passPercent = PASS_PERCENT[slice.format];
+
   for (const { section, scores, of } of sectionScores(slice)) {
     if (scores.length === 0) continue;
     const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-    const percent = average / of;
-    if (percent >= PASS_RATIO) continue;
+    const percent = (average / of) * 100;
+    if (percent >= passPercent) continue;
     areas.push({
       key: `exam.${section}`,
       label: SECTION_LABELS[section],
-      detail: `Averaging ${String(Math.round(percent * 100))}% across ${String(scores.length)} attempt${scores.length === 1 ? '' : 's'} — below the 60% pass line.`,
-      severity: 1 - percent,
+      detail: `Averaging ${String(Math.round(percent))}% across ${String(scores.length)} attempt${scores.length === 1 ? '' : 's'} — below the ${String(passPercent)}% pass line.`,
+      severity: 1 - percent / 100,
       to: basePath || '/',
       actionLabel: 'Practise a mock'
     });

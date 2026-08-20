@@ -3,13 +3,15 @@ import { Headphones } from 'lucide-react';
 import { Callout, QuestionItem, QuestionText, RichtigFalsch, Teil } from '@shared/components';
 import AudioPlayButton from '@shared/components/exam-ui/AudioPlayButton.tsx';
 import { booleanAnswer, itemKey } from '@shared/lib/answers.ts';
+import { listeningRate } from '@shared/lib/paper.ts';
 
-import { singleLevelAudioForKey, singleLevelRate } from '@features/exam/lib/formats/single-level/audio.ts';
+import { singleLevelAudioForKey } from '@features/exam/lib/formats/single-level/audio.ts';
 import { type SingleLevelModuleProps } from '@features/exam/types/moduleProps.ts';
 import { useSettings } from '@features/progress';
 
 const HoerenModule = ({
   exam,
+  paper,
   answers,
   setAnswer,
   settings,
@@ -23,7 +25,7 @@ const HoerenModule = ({
   const playButton = (key: string) => (
     <AudioPlayButton
       script={singleLevelAudioForKey(exam, key)}
-      rate={singleLevelRate(exam.level, ttsRate)}
+      rate={listeningRate(paper, ttsRate)}
       voiceName={voiceName}
       itemKey={key}
       playsLeft={plays[key] ?? settings.playsAllowed}
