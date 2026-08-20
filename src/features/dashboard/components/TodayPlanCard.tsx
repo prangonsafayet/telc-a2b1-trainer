@@ -48,7 +48,7 @@ const TodayPlanCard = ({ plan, onStartExam }: TodayPlanCardProps) => (
           {plan.exams.map(exam => (
             <div key={exam.id} className="flex flex-wrap items-center gap-2 text-sm">
               <span className="grow">
-                <b className="font-medium">{exam.title}</b> — {exam.theme}
+                <b className="font-medium">{exam.title}</b>
               </span>
               <Button
                 size="sm"
@@ -66,14 +66,14 @@ const TodayPlanCard = ({ plan, onStartExam }: TodayPlanCardProps) => (
       <div className="flex flex-wrap gap-2">
         {plan.lessons.length > 0 ? (
           <Button asChild size="sm" variant="outline">
-            <Link to="/learn">
+            <Link to={plan.learnTo}>
               <BookOpen /> Open today&apos;s lessons
             </Link>
           </Button>
         ) : null}
         {plan.isRest ? (
           <Button asChild size="sm" variant="outline">
-            <Link to="/learn">
+            <Link to={plan.learnTo}>
               <Coffee /> Review the cheatsheets
             </Link>
           </Button>

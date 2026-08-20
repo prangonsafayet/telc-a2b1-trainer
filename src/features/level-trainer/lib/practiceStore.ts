@@ -8,10 +8,9 @@ import { castDraft } from 'immer';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-import { type StudyCategory } from '@shared/types';
+import { type StudyCategory, type StudyCard } from '@shared/types';
 
 import { type QuizQuestion } from './quiz.ts';
-import { type StudyCard } from './studyItems.ts';
 
 export type PracticeCategory = StudyCategory | 'mixed';
 

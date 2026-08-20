@@ -39,7 +39,6 @@ export const DUAL_LEVEL_FORMAT: DualLevelFormat = {
   ...DUAL_LEVEL_RUN_FORMAT,
   examLabel: exam => `${exam.title} · ${exam.level}`,
   moduleName: (module: ExamModule) => MODULE_META[module].name,
-  moduleShort: (module: ExamModule) => MODULE_META[module].short,
   minutes: (module, _exam, settings) => moduleMinutes(module, settings),
   briefing: (module: ExamModule) => MODULE_BRIEFING[module],
   rating: { schreiben: ratingSpec('schreiben'), sprechen: ratingSpec('sprechen') },

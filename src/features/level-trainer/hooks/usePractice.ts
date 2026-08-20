@@ -2,8 +2,10 @@ import { useCallback, useMemo } from 'react';
 
 import { TRAINER_CONTENT } from '@content/trainers/index.ts';
 
-import { isDue, pickDueIds, reviewItem } from '@shared/lib/srs.ts';
-import { type SingleLevelTrainerId, type VocabBank } from '@shared/types';
+import { STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
+import { countMastery, isDue, pickDueIds, reviewItem, type MasteryCounts } from '@shared/lib/srs.ts';
+import { allCards, cardsFor, idsFor } from '@shared/lib/studyItems.ts';
+import { type SingleLevelTrainerId, type StudyCard, type StudyCategory, type VocabBank } from '@shared/types';
 
 import { useToday } from '@features/plan';
 import { touchActivity, useTrainerSlice, type TrainerSlice } from '@features/progress';
@@ -15,7 +17,6 @@ import {
   type PracticeSession
 } from '../lib/practiceStore.ts';
 import { buildQuiz } from '../lib/quiz.ts';
-import { allCards, cardsFor, idsFor, STUDY_CATEGORIES, type StudyCard } from '../lib/studyItems.ts';
 
 const FLASHCARD_SESSION_SIZE = 20;
 const QUIZ_SESSION_SIZE = 15;
@@ -23,6 +24,8 @@ const QUIZ_SESSION_SIZE = 15;
 export interface PracticeController {
   readonly vocab: VocabBank;
   readonly today: string;
+  readonly mastery: MasteryCounts;
+  readonly categoryMastery: Readonly<Record<StudyCategory, MasteryCounts>>;
   readonly session: PracticeSession | null;
   readonly sessionDone: boolean;
   readonly startFlashcards: (category: PracticeCategory) => void;
@@ -61,6 +64,24 @@ export const usePractice = (level: SingleLevelTrainerId): PracticeController => 
   const { srs, update } = useTrainerSlice(level);
   const today = useToday();
   const vocab = TRAINER_CONTENT[level].vocab;
+
+  const categoryMastery = useMemo(
+    () =>
+      Object.fromEntries(
+        STUDY_CATEGORIES.map(category => [category, countMastery(idsFor(vocab, category), srs, today)])
+      ) as Record<StudyCategory, MasteryCounts>,
+    [vocab, srs, today]
+  );
+
+  const mastery = useMemo(
+    () =>
+      countMastery(
+        STUDY_CATEGORIES.flatMap(category => idsFor(vocab, category)),
+        srs,
+        today
+      ),
+    [vocab, srs, today]
+  );
 
   const session = usePracticeStore(state => state.session);
   const storeStartFlashcards = usePracticeStore(state => state.startFlashcards);
@@ -128,6 +149,8 @@ export const usePractice = (level: SingleLevelTrainerId): PracticeController => 
     () => ({
       vocab,
       today,
+      mastery,
+      categoryMastery,
       session,
       sessionDone: session !== null && isSessionDone(session),
       startFlashcards,
@@ -141,6 +164,8 @@ export const usePractice = (level: SingleLevelTrainerId): PracticeController => 
     [
       vocab,
       today,
+      mastery,
+      categoryMastery,
       session,
       startFlashcards,
       startQuiz,

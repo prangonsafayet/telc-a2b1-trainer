@@ -4,7 +4,8 @@
  * trainer.
  */
 
-import { SINGLE_LEVEL_MODULES } from '@shared/config/singleLevelExam.ts';
+import { SINGLE_LEVEL_MODULE_META, SINGLE_LEVEL_MODULES } from '@shared/config/singleLevelExam.ts';
+import { type ExamModule } from '@shared/types';
 
 import { createRunStore } from '@features/exam/lib/runStore.ts';
 import { type ExamRunFormat } from '@features/exam/types/examFormat.ts';
@@ -15,5 +16,6 @@ const RUN_STORAGE_KEY = 'telcTrainerLevelRunV1';
 export const SINGLE_LEVEL_RUN_FORMAT: ExamRunFormat = {
   id: 'single-level',
   modules: SINGLE_LEVEL_MODULES,
+  moduleShort: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].short,
   runStore: createRunStore(RUN_STORAGE_KEY)
 };

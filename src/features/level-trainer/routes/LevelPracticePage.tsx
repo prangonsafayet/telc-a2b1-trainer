@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 
 import { PageTitle } from '@shared/components';
+import { STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { type StudyCategory, type SingleLevelTrainerId } from '@shared/types';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui';
@@ -12,9 +13,7 @@ import CategoryPicker from '../components/practice/CategoryPicker.tsx';
 import FlashcardSession from '../components/practice/FlashcardSession.tsx';
 import QuizSession from '../components/practice/QuizSession.tsx';
 import ReferenceTables from '../components/reference/ReferenceTables.tsx';
-import { useLevelStats } from '../hooks/useLevelStats.ts';
 import { usePractice } from '../hooks/usePractice.ts';
-import { STUDY_CATEGORIES } from '../lib/studyItems.ts';
 
 interface LevelPracticePageProps {
   readonly level: SingleLevelTrainerId;
@@ -26,7 +25,6 @@ const isCategory = (value: string | null): value is StudyCategory =>
 /** The practice hub: flashcards, quiz drills and the reference tables. */
 const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
   const practice = usePractice(level);
-  const { stats } = useLevelStats(level);
   const [params] = useSearchParams();
 
   /* A "drill it" link lands here as ?tab=quiz&category=… and starts the session itself. */
@@ -91,8 +89,8 @@ const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
       <PageTitle
         lead={
           <>
-            {String(stats.mastery.due)} item{stats.mastery.due === 1 ? '' : 's'} due today. Flashcards and
-            quizzes feed the same spaced-repetition schedule; the tables are for looking things up.
+            {String(practice.mastery.due)} item{practice.mastery.due === 1 ? '' : 's'} due today. Flashcards
+            and quizzes feed the same spaced-repetition schedule; the tables are for looking things up.
           </>
         }
       >
@@ -106,7 +104,7 @@ const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
         </TabsList>
         <TabsContent value="practice">
           <CategoryPicker
-            mastery={stats.categoryMastery}
+            mastery={practice.categoryMastery}
             onFlashcards={practice.startFlashcards}
             onQuiz={practice.startQuiz}
           />

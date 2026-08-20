@@ -22,6 +22,12 @@ export const WRITING_MINUTE_CHOICES: Readonly<Record<ExamFormatId, readonly Sett
   ]
 };
 
+/** How each paper is passed, in one sentence — the lead under a dashboard title. */
+export const PASS_RULES: Readonly<Record<ExamFormatId, string>> = {
+  'dual-level': 'Aim: ≥ 42/60 in three skills and ≥ 24/60 in the fourth = B1.',
+  'single-level': 'Pass rule: ≥ 135/225 written and ≥ 45/75 oral — 60% in each part, judged separately.'
+};
+
 export const PLAYS_ALLOWED_CHOICES: Readonly<Record<ExamFormatId, readonly SettingChoice[]>> = {
   'dual-level': [
     { value: 1, label: '1 (hard mode)' },

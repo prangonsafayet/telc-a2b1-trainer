@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 
-import { A2B1_CURRICULUM } from '@content/trainers/a2b1/curriculum.ts';
-import { DUAL_LEVEL_EXAMS } from '@content/trainers/index.ts';
-
-import { ROOT_TRAINER } from '@shared/config/trainers.ts';
-import { type DualLevelExam, type LearnDay, type Schedule } from '@shared/types';
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { type ExamPaper, type LearnDay, type Schedule, type TrainerId } from '@shared/types';
 
 import { describeClamp, slotHeading, slotKindLabel, useTrainerSchedule } from '@features/plan';
 
@@ -13,9 +10,11 @@ export interface TodayPlan {
   readonly heading: string;
   readonly kindLabel: string;
   readonly lessons: readonly LearnDay[];
-  readonly exams: readonly DualLevelExam[];
+  readonly exams: readonly ExamPaper[];
   /** A day the plan deliberately leaves free of new material. */
   readonly isRest: boolean;
+  /** Where "open today's lessons" goes. */
+  readonly learnTo: string;
 }
 
 export interface SchedulePlan {
@@ -24,30 +23,45 @@ export interface SchedulePlan {
   /** Set when the date needs explaining: past, too near, or too far. */
   readonly notice: string | null;
   readonly needsNewDate: boolean;
+  /** Where the notice's button goes. Settings is shared by every trainer. */
+  readonly settingsTo: string;
 }
 
-/** What the plan asks for today, and whether the date behind it needs attention. */
-export const useTodayPlan = (): SchedulePlan => {
-  const schedule = useTrainerSchedule(ROOT_TRAINER);
+const SETTINGS_PATH = '/settings';
+
+/** What one trainer's plan asks for today, and whether the date behind it needs attention. */
+export const useTodayPlan = (trainer: TrainerId): SchedulePlan => {
+  const schedule = useTrainerSchedule(trainer);
+  const { basePath, content } = TRAINERS[trainer];
 
   return useMemo(() => {
+    const learnTo = `${basePath}/learn`;
     if (!schedule) {
       return {
         schedule: null,
         today: null,
         notice: 'No exam date is set, so there is no plan yet. Add one in Settings.',
-        needsNewDate: true
+        needsNewDate: true,
+        settingsTo: SETTINGS_PATH
       };
     }
 
     const notice = describeClamp(schedule);
     const slot = schedule.todaySlot;
     if (!slot) {
-      return { schedule, today: null, notice, needsNewDate: schedule.phase === 'past-due' };
+      return {
+        schedule,
+        today: null,
+        notice,
+        needsNewDate: schedule.phase === 'past-due',
+        settingsTo: SETTINGS_PATH
+      };
     }
 
-    const lessons = slot.learnDays.flatMap(number => A2B1_CURRICULUM.days.filter(day => day.day === number));
-    const exams = slot.examIds.flatMap(id => DUAL_LEVEL_EXAMS.filter(exam => exam.id === id));
+    const lessons = slot.learnDays.flatMap(number =>
+      content.curriculum.days.filter(day => day.day === number)
+    );
+    const exams = slot.examIds.flatMap(id => content.exams.filter(exam => exam.id === id));
 
     return {
       schedule,
@@ -56,10 +70,12 @@ export const useTodayPlan = (): SchedulePlan => {
         kindLabel: slotKindLabel(slot.kind),
         lessons,
         exams,
-        isRest: lessons.length === 0 && exams.length === 0
+        isRest: lessons.length === 0 && exams.length === 0,
+        learnTo
       },
       notice,
-      needsNewDate: false
+      needsNewDate: false,
+      settingsTo: SETTINGS_PATH
     };
-  }, [schedule]);
+  }, [schedule, basePath, content]);
 };

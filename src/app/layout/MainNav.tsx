@@ -2,14 +2,21 @@ import {
   BookOpen,
   GraduationCap,
   History,
-  LayoutDashboard,
   Layers,
+  LayoutDashboard,
   Settings2,
   type LucideIcon
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { trainerFromPath } from '@shared/config/trainers.ts';
+import {
+  hasGuide,
+  hasVocabBank,
+  TRAINER_ORDER,
+  TRAINERS,
+  trainerFromPath,
+  trainerHome
+} from '@shared/config/trainers.ts';
 import { cn } from '@shared/lib/cn.ts';
 import { type TrainerId } from '@shared/types';
 
@@ -17,28 +24,34 @@ interface NavEntry {
   readonly to: string;
   readonly label: string;
   readonly icon: LucideIcon;
+  /** `end` on a base path, so the dashboard tab is not active on every child route. */
+  readonly exact: boolean;
 }
 
-const levelEntries = (base: string): readonly NavEntry[] => [
-  { to: base, label: 'Dashboard', icon: LayoutDashboard },
-  { to: `${base}/learn`, label: 'Learn', icon: GraduationCap },
-  { to: `${base}/practice`, label: 'Practice', icon: Layers },
-  { to: `${base}/history`, label: 'History', icon: History },
-  { to: '/settings', label: 'Settings', icon: Settings2 }
-];
-
-/** Each trainer gets its own tab set; Settings is shared by all three. */
-const NAV_ENTRIES: Readonly<Record<TrainerId, readonly NavEntry[]>> = {
-  a2b1: [
-    { to: '/', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/learn', label: 'Learn', icon: GraduationCap },
-    { to: '/guide', label: 'Exam Guide', icon: BookOpen },
-    { to: '/history', label: 'History', icon: History },
-    { to: '/settings', label: 'Settings', icon: Settings2 }
-  ],
-  b1: levelEntries('/b1'),
-  b2: levelEntries('/b2')
+/**
+ * The active trainer's tabs, generated from its descriptor: it gets a Guide tab if it
+ * ships a guide and a Practice tab if it has a bank to drill, and Settings is shared by
+ * every trainer. Nothing here names a trainer.
+ */
+const entriesFor = (trainer: TrainerId): readonly NavEntry[] => {
+  const base = TRAINERS[trainer].basePath;
+  return [
+    { to: trainerHome(trainer), label: 'Dashboard', icon: LayoutDashboard, exact: true },
+    { to: `${base}/learn`, label: 'Learn', icon: GraduationCap, exact: false },
+    ...(hasGuide(trainer)
+      ? [{ to: `${base}/guide`, label: 'Exam Guide', icon: BookOpen, exact: false }]
+      : []),
+    ...(hasVocabBank(trainer)
+      ? [{ to: `${base}/practice`, label: 'Practice', icon: Layers, exact: false }]
+      : []),
+    { to: `${base}/history`, label: 'History', icon: History, exact: false },
+    { to: '/settings', label: 'Settings', icon: Settings2, exact: false }
+  ];
 };
+
+const NAV_ENTRIES: Readonly<Record<TrainerId, readonly NavEntry[]>> = Object.fromEntries(
+  TRAINER_ORDER.map(trainer => [trainer, entriesFor(trainer)])
+) as Record<TrainerId, readonly NavEntry[]>;
 
 const MainNav = () => {
   const { pathname } = useLocation();
@@ -46,11 +59,11 @@ const MainNav = () => {
 
   return (
     <nav className="flex w-full flex-wrap gap-1 sm:w-auto" aria-label="Main">
-      {NAV_ENTRIES[trainer].map(({ to, label, icon: Icon }) => (
+      {NAV_ENTRIES[trainer].map(({ to, label, icon: Icon, exact }) => (
         <NavLink
           key={to}
           to={to}
-          end={to === '/' || to === '/b1' || to === '/b2'}
+          end={exact}
           className={({ isActive }) =>
             cn(
               'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground',

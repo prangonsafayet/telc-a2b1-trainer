@@ -1,6 +1,5 @@
+import { CASE_LABELS } from '@shared/config/studyCategories.ts';
 import { type NounEntry, type StudyCategory, type VerbEntry, type VocabBank } from '@shared/types';
-
-import { CASE_LABELS } from './studyItems.ts';
 
 /** One generated multiple-choice drill item. `id` is the SRS key it feeds. */
 export interface QuizQuestion {

@@ -3,18 +3,16 @@ import { Link } from 'react-router-dom';
 
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
-import { type WeakArea } from '@features/level-trainer/lib/levelStats.ts';
+import { type WeakAreaModel } from '../types/dashboard.ts';
 
 interface WeakAreasCardProps {
-  readonly areas: readonly WeakArea[];
-  /** Route namespace, e.g. `/b1`. */
-  readonly basePath: string;
+  readonly areas: readonly WeakAreaModel[];
 }
 
 const SHOWN = 4;
 
 /** The weakest categories and exam sections, each with a one-tap drill. */
-const WeakAreasCard = ({ areas, basePath }: WeakAreasCardProps) => {
+const WeakAreasCard = ({ areas }: WeakAreasCardProps) => {
   if (areas.length === 0) return null;
 
   return (
@@ -36,19 +34,11 @@ const WeakAreasCard = ({ areas, basePath }: WeakAreasCardProps) => {
               </div>
               <p className="text-sm text-muted-foreground">{area.detail}</p>
             </div>
-            {area.drill.kind === 'quiz' ? (
-              <Button asChild size="sm" variant="outline">
-                <Link to={`${basePath}/practice?tab=quiz&category=${area.drill.category}`}>
-                  <Crosshair /> Drill it
-                </Link>
-              </Button>
-            ) : (
-              <Button asChild size="sm" variant="outline">
-                <Link to={basePath || '/'}>
-                  <Crosshair /> Practise a mock
-                </Link>
-              </Button>
-            )}
+            <Button asChild size="sm" variant="outline">
+              <Link to={area.to}>
+                <Crosshair /> {area.actionLabel}
+              </Link>
+            </Button>
           </div>
         ))}
       </CardContent>

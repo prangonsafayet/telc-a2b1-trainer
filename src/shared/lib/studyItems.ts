@@ -1,71 +1,16 @@
+/**
+ * One flashcard-able view of a vocabulary bank, whatever its category. Shared because both
+ * the dashboards (mastery counts) and the practice hub (the cards themselves) read it.
+ */
+
+import { CASE_LABELS, STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
 import {
   type CaseItem,
   type GermanCase,
+  type StudyCard,
   type StudyCategory,
-  type VocabBank,
-  type VocabExample
+  type VocabBank
 } from '@shared/types';
-
-/** One flashcard-able view of any bank entry, whatever its category. */
-export interface StudyCard {
-  readonly id: string;
-  readonly category: StudyCategory;
-  /** German side. */
-  readonly front: string;
-  /** Forms, article + plural, preposition + case — the grammar payload. */
-  readonly frontDetail: string;
-  /** English side. */
-  readonly back: string;
-  readonly example: VocabExample;
-}
-
-export interface CategoryMeta {
-  readonly label: string;
-  readonly labelDe: string;
-  readonly description: string;
-}
-
-export const STUDY_CATEGORIES: readonly StudyCategory[] = [
-  'verbs',
-  'nouns',
-  'adjectives',
-  'prepVerbs',
-  'caseItems'
-];
-
-export const CATEGORY_META: Readonly<Record<StudyCategory, CategoryMeta>> = {
-  verbs: {
-    label: 'Verbs',
-    labelDe: 'Verben',
-    description: 'Präsens, Präteritum and Perfekt of every verb, with English meanings.'
-  },
-  nouns: {
-    label: 'Nouns',
-    labelDe: 'Nomen',
-    description: 'Article and plural of every noun, with English meanings.'
-  },
-  adjectives: {
-    label: 'Adjectives',
-    labelDe: 'Adjektive',
-    description: 'Comparative and superlative forms, with English meanings.'
-  },
-  prepVerbs: {
-    label: 'Verbs + preposition',
-    labelDe: 'Verben mit Präposition',
-    description: 'Fixed verb–preposition pairs and the case each one governs.'
-  },
-  caseItems: {
-    label: 'Cases (Akk · Dat · Gen)',
-    labelDe: 'Kasus',
-    description: 'Prepositions, verbs and phrases that govern Akkusativ, Dativ or Genitiv.'
-  }
-};
-
-export const CASE_LABELS: Readonly<Record<GermanCase, string>> = {
-  akkusativ: 'Akkusativ',
-  dativ: 'Dativ',
-  genitiv: 'Genitiv'
-};
 
 /** All cards of one category, in authored order. */
 export const cardsFor = (bank: VocabBank, category: StudyCategory): readonly StudyCard[] => {

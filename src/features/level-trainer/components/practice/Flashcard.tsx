@@ -1,6 +1,6 @@
+import { CATEGORY_META } from '@shared/config/studyCategories.ts';
 import { cn } from '@shared/lib/cn.ts';
-
-import { CATEGORY_META, type StudyCard } from '@features/level-trainer/lib/studyItems.ts';
+import { type StudyCard } from '@shared/types';
 
 interface FlashcardProps {
   readonly card: StudyCard;

@@ -153,6 +153,8 @@ export interface ExamRunFormat {
   readonly id: ExamFormatId;
   /** Module order of a full sitting. */
   readonly modules: readonly ExamModule[];
+  /** Short module name, e.g. `Hören` — enough to describe a run without loading the paper. */
+  readonly moduleShort: (module: ExamModule) => string;
   readonly runStore: ExamRunStore;
 }
 
@@ -164,7 +166,6 @@ export interface ExamFormat<
   /** Identifies the paper on every screen, e.g. `Modelltest 3 · A2 · leicht`. */
   readonly examLabel: (exam: TExam) => string;
   readonly moduleName: (module: ExamModule) => string;
-  readonly moduleShort: (module: ExamModule) => string;
   readonly minutes: (module: ExamModule, exam: TExam, settings: TSettings) => number;
   readonly briefing: (module: ExamModule, exam: TExam) => string;
   readonly rating: Readonly<Record<RatedModule, RatingSpec>>;

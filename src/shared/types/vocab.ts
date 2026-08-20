@@ -74,6 +74,19 @@ export interface VocabBank {
 /** The study categories a learner can pick, in display order. */
 export type StudyCategory = 'verbs' | 'nouns' | 'adjectives' | 'prepVerbs' | 'caseItems';
 
+/** One flashcard-able view of any bank entry, whatever its category. */
+export interface StudyCard {
+  readonly id: string;
+  readonly category: StudyCategory;
+  /** German side. */
+  readonly front: string;
+  /** Forms, article + plural, preposition + case — the grammar payload. */
+  readonly frontDetail: string;
+  /** English side. */
+  readonly back: string;
+  readonly example: VocabExample;
+}
+
 /* --- Spaced repetition --- */
 
 /** Leitner-box state of one item. Persisted inside the trainer document. */

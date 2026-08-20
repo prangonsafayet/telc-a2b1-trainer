@@ -42,7 +42,6 @@ export const SINGLE_LEVEL_FORMAT: SingleLevelFormat = {
   ...SINGLE_LEVEL_RUN_FORMAT,
   examLabel: exam => `${exam.title} · telc Deutsch ${exam.level.toUpperCase()}`,
   moduleName: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].name,
-  moduleShort: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].short,
   minutes: (module, exam, settings) => singleLevelModuleMinutes(module, exam.level, settings),
   briefing: (module, exam) => singleLevelModuleBriefing(module, exam.level),
   rating: { schreiben: ratingSpec('schreiben'), sprechen: ratingSpec('sprechen') },

@@ -7,10 +7,11 @@ interface SchedulePhaseNoticeProps {
   readonly message: string;
   /** A date in the past or missing needs fixing; a long or short runway only needs saying. */
   readonly needsNewDate: boolean;
+  readonly settingsTo: string;
 }
 
 /** Why the plan looks the way it does, with one click to the thing that changes it. */
-const SchedulePhaseNotice = ({ message, needsNewDate }: SchedulePhaseNoticeProps) => (
+const SchedulePhaseNotice = ({ message, needsNewDate, settingsTo }: SchedulePhaseNoticeProps) => (
   <Alert variant={needsNewDate ? 'warning' : 'default'} className="animate-fade-up mb-6">
     <CalendarClock />
     <AlertTitle>{needsNewDate ? 'Your exam date needs updating' : 'About your plan'}</AlertTitle>
@@ -18,7 +19,7 @@ const SchedulePhaseNotice = ({ message, needsNewDate }: SchedulePhaseNoticeProps
       <p>{message}</p>
       <div className="mt-2">
         <Button asChild size="sm" variant={needsNewDate ? 'default' : 'outline'}>
-          <Link to="/settings">
+          <Link to={settingsTo}>
             <CalendarClock /> {needsNewDate ? 'Set your exam date' : 'Change your exam date'}
           </Link>
         </Button>

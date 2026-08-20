@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 
 import { Search } from 'lucide-react';
 
+import { CASE_LABELS } from '@shared/config/studyCategories.ts';
+import { caseGroups } from '@shared/lib/studyItems.ts';
 import { type VocabBank } from '@shared/types';
 import {
   Badge,
@@ -19,8 +21,6 @@ import {
   TabsList,
   TabsTrigger
 } from '@shared/ui';
-
-import { CASE_LABELS, caseGroups } from '@features/level-trainer/lib/studyItems.ts';
 
 interface ReferenceTablesProps {
   readonly bank: VocabBank;

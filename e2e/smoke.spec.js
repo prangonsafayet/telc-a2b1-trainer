@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
+/* Every trainer's screens carry its name, so the headings are matched by pattern. */
 const PAGES = [
-  { path: '/', heading: 'Dashboard' },
+  { path: '/', heading: /^Dashboard/ },
   { path: '/learn', heading: /AI-assisted learning/ },
   { path: '/guide', heading: /Exam Guide/ },
-  { path: '/history', heading: 'History' },
+  { path: '/history', heading: /^History/ },
   { path: '/settings', heading: 'Settings' }
 ];
 
