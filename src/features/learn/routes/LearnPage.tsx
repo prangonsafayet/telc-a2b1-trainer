@@ -1,7 +1,7 @@
 import { Info, Sparkles } from 'lucide-react';
 
 import { PageTitle, SectionTitle } from '@shared/components';
-import { TRAINERS } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { type LearnDay, type TrainerId } from '@shared/types';
 import {
   Accordion,
@@ -28,7 +28,7 @@ interface LearnPageProps {
 const LearnPage = ({ trainer }: LearnPageProps) => {
   const plan = useLearnPlan(trainer);
   const scheduled = useScheduledLearn(trainer);
-  const curriculum = TRAINERS[trainer].content.curriculum;
+  const curriculum = useTrainerContent(trainer).curriculum;
   const cheatsheets = Object.entries(plan.cheatsheets);
 
   const dayCard = (day: LearnDay, complete: boolean) => (

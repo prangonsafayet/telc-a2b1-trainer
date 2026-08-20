@@ -1,8 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom';
 
-import { findPaper } from '@content/trainers/index.ts';
-
 import { trainerHome } from '@shared/config/trainers.ts';
+import { findPaper } from '@shared/lib/examLookup.ts';
 import { type TrainerId } from '@shared/types';
 
 import RunnerView from '@features/exam/components/runner/RunnerView.tsx';

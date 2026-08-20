@@ -8,6 +8,7 @@ import {
   MAX_EXAMS_PER_DAY,
   MAX_PREP_DAYS,
   MIN_PREP_DAYS,
+  SPRINT_LEARN_DAYS,
   TOTAL_LEARN_DAYS
 } from '@shared/config/schedule.ts';
 import { addDays } from '@shared/lib/format.ts';
@@ -21,7 +22,7 @@ const TODAY = '2026-03-02';
 /* The root trainer's own curriculum and papers: the engine is generic, so one trainer's
    content is enough to sweep its invariants. */
 const CONTENT = TRAINER_CONTENT.a2b1;
-const SOURCE = trainerScheduleSource('a2b1');
+const SOURCE = trainerScheduleSource(CONTENT, SPRINT_LEARN_DAYS);
 const LEARN_DAYS = CONTENT.curriculum.days;
 const EXAM_COUNT = CONTENT.exams.length;
 const CORE_DAYS = LEARN_DAYS.filter(day => day.tier === 'core').map(day => day.day);

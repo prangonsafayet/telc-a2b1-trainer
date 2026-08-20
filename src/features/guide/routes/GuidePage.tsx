@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
-import { TRAINERS, trainerHome } from '@shared/config/trainers.ts';
+import { trainerHome } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { type TrainerId } from '@shared/types';
 
 import { useHashScroll } from '../hooks/useHashScroll.ts';
@@ -16,7 +17,7 @@ interface GuidePageProps {
  */
 const GuidePage = ({ trainer }: GuidePageProps) => {
   useHashScroll();
-  const guide = TRAINERS[trainer].content.guide;
+  const guide = useTrainerContent(trainer).guide;
 
   if (guide === null) return <Navigate to={trainerHome(trainer)} replace />;
 

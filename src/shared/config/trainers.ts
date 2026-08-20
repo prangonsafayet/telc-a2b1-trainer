@@ -9,18 +9,38 @@
  * `no-restricted-syntax` rule in `eslint.config.js` enforces.
  */
 
-import { TRAINER_CONTENT } from '@content/trainers/index.ts';
+import { A2B1_PAPER } from '@content/trainers/a2b1/paper.ts';
+import { B1_PAPER } from '@content/trainers/b1/paper.ts';
+import { B2_PAPER } from '@content/trainers/b2/paper.ts';
 
 import {
   type ExamFormatId,
   type SingleLevelTrainerId,
   type TrainerContent,
+  type TrainerContentLoader,
   type TrainerDocKey,
   type TrainerId,
+  type TrainerPaper,
+  type VocabBank,
   type WeaknessTopic
 } from '@shared/types';
 
 import { SPRINT_LEARN_DAYS } from './schedule.ts';
+
+/*
+ * Only `paper.ts` is imported eagerly here — a few kilobytes of timings and briefing copy
+ * that every screen needs synchronously (the settings page, the runner, the header). The
+ * exams, curriculum, guide and vocabulary bank are the heavy part of a trainer (hundreds of
+ * kilobytes each) and load through `loadContent` below instead, one dynamic `import()` per
+ * trainer so the bundler keys a chunk on each. Do not import `@content/trainers/index.ts`
+ * from this file: that barrel pulls in every trainer's full content and would put the whole
+ * eager graph right back behind the registry.
+ */
+const CONTENT_LOADERS: Readonly<Record<TrainerId, TrainerContentLoader>> = {
+  a2b1: () => import('@content/trainers/a2b1/index.ts').then(m => m.A2B1_CONTENT),
+  b1: () => import('@content/trainers/b1/index.ts').then(m => m.B1_CONTENT),
+  b2: () => import('@content/trainers/b2/index.ts').then(m => m.B2_CONTENT)
+};
 
 /** User-facing app name. UI-level only — repo, package and storage keys keep theirs. */
 export const APP_NAME = 'telc Deutsch Trainer';
@@ -42,8 +62,16 @@ export interface TrainerInfo {
    * whose attempts, learn plan and settings sit at the root of the document.
    */
   readonly docKey: TrainerDocKey | null;
-  /** Everything it studies from. */
-  readonly content: TrainerContent;
+  /** How its own sitting runs — small enough to stay eager alongside the rest of this file. */
+  readonly paper: TrainerPaper;
+  /**
+   * Whether it ships an exam guide, stated directly rather than derived from `loadContent`:
+   * the Guide route and nav tab are decided before anything asks for that trainer's content,
+   * so this has to answer synchronously.
+   */
+  readonly hasGuide: boolean;
+  /** Its exams, curriculum, guide and vocabulary bank — the heavy part, loaded on demand. */
+  readonly loadContent: TrainerContentLoader;
   /** Lesson days the five-day emergency plan reaches for. */
   readonly sprintLearnDays: readonly number[];
   /**
@@ -70,7 +98,9 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     accent: 'var(--primary)',
     format: 'dual-level',
     docKey: null,
-    content: TRAINER_CONTENT.a2b1,
+    paper: A2B1_PAPER,
+    hasGuide: true,
+    loadContent: CONTENT_LOADERS.a2b1,
     sprintLearnDays: SPRINT_LEARN_DAYS,
     weaknessCheatsheets: {
       cases: ['cases'],
@@ -89,7 +119,9 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     accent: 'var(--primary)',
     format: 'single-level',
     docKey: 'b1',
-    content: TRAINER_CONTENT.b1,
+    paper: B1_PAPER,
+    hasGuide: true,
+    loadContent: CONTENT_LOADERS.b1,
     sprintLearnDays: SPRINT_LEARN_DAYS,
     weaknessCheatsheets: {
       /* The B1 'cases' cheatsheet ('Kasus incl. Genitiv & Adjektivendungen') already
@@ -111,7 +143,9 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     accent: 'var(--warning)',
     format: 'single-level',
     docKey: 'b2',
-    content: TRAINER_CONTENT.b2,
+    paper: B2_PAPER,
+    hasGuide: true,
+    loadContent: CONTENT_LOADERS.b2,
     sprintLearnDays: SPRINT_LEARN_DAYS,
     weaknessCheatsheets: {
       /* 'genitiv' is titled 'Genitiv & formal prepositions' — B2's only case cheatsheet
@@ -147,36 +181,24 @@ export const ROOT_TRAINER: TrainerId =
 /** Its landing route. The root trainer's base path is empty, and `/` is not. */
 export const trainerHome = (trainer: TrainerId): string => TRAINERS[trainer].basePath || '/';
 
-/** How many Modelltests a trainer offers. Counted from its content, never restated. */
-export const examCount = (trainer: TrainerId): number => TRAINERS[trainer].content.exams.length;
+/**
+ * How many Modelltests a trainer offers. Counted from its content, never restated — but
+ * that content loads lazily now, so this reads the trainer's already-resolved content
+ * rather than reaching into the registry itself.
+ */
+export const examCount = (content: TrainerContent): number => content.exams.length;
 
-/** Whether a trainer offers a vocabulary and grammar bank to drill. */
-export const hasVocabBank = (trainer: TrainerId): boolean => {
-  const { vocab } = TRAINERS[trainer].content;
-  return (
-    vocab.verbs.length +
-      vocab.nouns.length +
-      vocab.adjectives.length +
-      vocab.prepVerbs.length +
-      vocab.caseItems.length >
-    0
-  );
-};
+/** Whether a vocabulary bank has anything in it to drill. */
+export const hasVocabBank = (vocab: VocabBank): boolean =>
+  vocab.verbs.length +
+    vocab.nouns.length +
+    vocab.adjectives.length +
+    vocab.prepVerbs.length +
+    vocab.caseItems.length >
+  0;
 
 /** Whether a trainer ships an exam guide. Drives its Guide tab and route. */
-export const hasGuide = (trainer: TrainerId): boolean => TRAINERS[trainer].content.guide !== null;
-
-/** What the trainer offers, in one line, derived from the content it actually ships. */
-export const trainerTagline = (trainer: TrainerId): string => {
-  const { content } = TRAINERS[trainer];
-  const parts = [
-    `${String(content.exams.length)} Modelltests`,
-    `${String(content.curriculum.days.length)}-Tage-Plan`
-  ];
-  if (hasVocabBank(trainer)) parts.push('Vokabeln & Grammatik');
-  if (hasGuide(trainer)) parts.push('Prüfungsguide');
-  return parts.join(' · ');
-};
+export const hasGuide = (trainer: TrainerId): boolean => TRAINERS[trainer].hasGuide;
 
 /** Which trainer a pathname belongs to. The root trainer owns everything unclaimed. */
 export const trainerFromPath = (pathname: string): TrainerId =>

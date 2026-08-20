@@ -1,13 +1,7 @@
 import { Check, ChevronsUpDown, GraduationCap } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import {
-  TRAINER_ORDER,
-  TRAINERS,
-  trainerFromPath,
-  trainerHome,
-  trainerTagline
-} from '@shared/config/trainers.ts';
+import { TRAINER_ORDER, TRAINERS, trainerFromPath, trainerHome } from '@shared/config/trainers.ts';
 import {
   Button,
   DropdownMenu,
@@ -47,10 +41,9 @@ const TrainerSwitcher = () => {
               className="items-start gap-2 py-2"
             >
               <Check className={`mt-0.5 size-4 shrink-0 ${id === active ? '' : 'invisible'}`} aria-hidden />
-              <span>
-                <span className="block font-medium">{trainer.name}</span>
-                <span className="block text-xs text-muted-foreground">{trainerTagline(id)}</span>
-              </span>
+              {/* Name and route only — this menu lists every trainer at once, and only the
+                  active one's content has (or will have) loaded. */}
+              <span className="font-medium">{trainer.name}</span>
             </DropdownMenuItem>
           );
         })}

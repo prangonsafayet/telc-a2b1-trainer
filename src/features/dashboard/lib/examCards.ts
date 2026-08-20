@@ -1,5 +1,3 @@
-import { DUAL_LEVEL_EXAMS, SINGLE_LEVEL_EXAMS } from '@content/trainers/index.ts';
-
 import { EXAM_MODULES, FULL_EXAM_MAX, MODULE_META } from '@shared/config/exam.ts';
 import {
   SINGLE_LEVEL_MODULE_META,
@@ -9,7 +7,7 @@ import {
 import { type TrainerInfo } from '@shared/config/trainers.ts';
 import { difficultyTone, gradeTone } from '@shared/lib/examBadges.ts';
 import { moduleMinutes } from '@shared/lib/paper.ts';
-import { type ExamDifficulty } from '@shared/types';
+import { type DualLevelExam, type ExamDifficulty, type ExamPaper, type SingleLevelExam } from '@shared/types';
 
 import { type TrainerSlice } from '@features/progress';
 
@@ -31,19 +29,26 @@ const bestOf = (totals: readonly (number | undefined)[]): number | null => {
  * One card per Modelltest of one trainer, with its best result and where the plan puts it.
  * The two papers differ in what a card can say about itself — a difficulty chip against a
  * level chip, 240 points against 300 — so each is resolved here and the card only renders.
+ *
+ * `exams` is the trainer's own content, loaded by the caller (its content is lazy, this
+ * function is not). It arrives as the generic `TrainerContent` shape's `readonly
+ * ExamPaper[]` — narrowed to whichever paper `slice.format` says it is, which the registry
+ * guarantees but the type system cannot see once the content has come through that generic
+ * shape, hence the one cast per branch below.
  */
 export const buildExamCards = (
   slice: TrainerSlice,
   trainer: TrainerInfo,
+  exams: readonly ExamPaper[],
   scheduleLabel: (examId: number) => string | null
 ): readonly ExamCardModel[] => {
   if (slice.format === 'single-level') {
     const modules: readonly ExamModuleChoice[] = SINGLE_LEVEL_MODULES.map(module => ({
       mode: module,
-      label: `${SINGLE_LEVEL_MODULE_META[module].short} (${String(moduleMinutes(trainer.content.paper, module, slice.settings))} min)`
+      label: `${SINGLE_LEVEL_MODULE_META[module].short} (${String(moduleMinutes(trainer.paper, module, slice.settings))} min)`
     }));
 
-    return SINGLE_LEVEL_EXAMS[slice.trainer].map<ExamCardModel>(exam => {
+    return (exams as readonly SingleLevelExam[]).map<ExamCardModel>(exam => {
       const attempts = slice.attempts.filter(attempt => attempt.examId === exam.id);
       const best = bestOf(attempts.map(attempt => attempt.total));
       const lastResult = attempts.at(-1)?.result ?? null;
@@ -67,10 +72,10 @@ export const buildExamCards = (
 
   const modules: readonly ExamModuleChoice[] = EXAM_MODULES.map(module => ({
     mode: module,
-    label: `${MODULE_META[module].short} (${String(moduleMinutes(trainer.content.paper, module, slice.settings))} min)`
+    label: `${MODULE_META[module].short} (${String(moduleMinutes(trainer.paper, module, slice.settings))} min)`
   }));
 
-  return DUAL_LEVEL_EXAMS.map<ExamCardModel>(exam => {
+  return (exams as readonly DualLevelExam[]).map<ExamCardModel>(exam => {
     const attempts = slice.attempts.filter(attempt => attempt.examId === exam.id);
     const full = attempts.filter(attempt => attempt.mode === 'full');
     const best = full.length > 0 ? full.reduce((a, b) => ((b.total ?? 0) > (a.total ?? 0) ? b : a)) : null;

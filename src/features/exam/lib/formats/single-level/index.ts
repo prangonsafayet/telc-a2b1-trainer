@@ -4,7 +4,12 @@
  * which the paper itself carries.
  */
 
-import { SINGLE_LEVEL_PAPERS } from '@content/trainers/index.ts';
+/* Sourced straight from each trainer's own paper.ts, not from the content barrel: that
+   barrel's evaluation is all-or-nothing (importing one export loads every trainer's whole
+   content), which is exactly what per-trainer chunking depends on nobody doing — see the
+   comment atop `content/trainers/index.ts`. */
+import { B1_PAPER } from '@content/trainers/b1/paper.ts';
+import { B2_PAPER } from '@content/trainers/b2/paper.ts';
 
 import {
   SINGLE_LEVEL_MODULE_META,
@@ -12,7 +17,7 @@ import {
   SINGLE_LEVEL_RATING_SCALE
 } from '@shared/config/singleLevelExam.ts';
 import { moduleMinutes } from '@shared/lib/paper.ts';
-import { type ExamModule } from '@shared/types';
+import { type ExamModule, type SingleLevelTrainerId, type TrainerPaper } from '@shared/types';
 
 import HoerenModule from '@features/exam/components/modules/single-level/HoerenModule.tsx';
 import LesenModule from '@features/exam/components/modules/single-level/LesenModule.tsx';
@@ -29,6 +34,12 @@ import { buildReviewSections } from './review.ts';
 import { SINGLE_LEVEL_RUN_FORMAT } from './runFormat.ts';
 import { countUnanswered } from './scoring.ts';
 import { summarizeAttempt } from './summary.ts';
+
+/** Named by format rather than by trainer, same as the papers this file used to import. */
+const SINGLE_LEVEL_PAPERS: Readonly<Record<SingleLevelTrainerId, TrainerPaper>> = {
+  b1: B1_PAPER,
+  b2: B2_PAPER
+};
 
 const ratingSpec = (module: RatedModule): RatingSpec => {
   const criteria = SINGLE_LEVEL_RATING_CRITERIA[module];

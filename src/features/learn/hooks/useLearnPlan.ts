@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { TRAINERS } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { learnTaskKey } from '@shared/lib/learnProgress.ts';
 import { type Cheatsheet, type TrainerId } from '@shared/types';
 
@@ -30,7 +30,7 @@ export const useLearnPlan = (trainer: TrainerId): LearnPlanState => {
   const { learnDone: done, update } = useTrainerSlice(trainer);
   const today = useToday();
   const { hash } = useLocation();
-  const curriculum = TRAINERS[trainer].content.curriculum;
+  const curriculum = useTrainerContent(trainer).curriculum;
 
   /* A "#cs-writing" link from a day card should open that cheatsheet, not just scroll to
      a collapsed header. */

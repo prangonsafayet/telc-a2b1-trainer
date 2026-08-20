@@ -4,7 +4,11 @@
  * Nicht bestanden.
  */
 
-import { DUAL_LEVEL_PAPER } from '@content/trainers/index.ts';
+/* Sourced straight from its own paper.ts, not from the content barrel: that barrel's
+   evaluation is all-or-nothing (importing one export loads every trainer's whole content),
+   which is exactly what per-trainer chunking depends on nobody doing — see the comment atop
+   `content/trainers/index.ts`. */
+import { A2B1_PAPER as DUAL_LEVEL_PAPER } from '@content/trainers/a2b1/paper.ts';
 
 import { MODULE_META, RATING_CRITERIA } from '@shared/config/exam.ts';
 import { moduleMinutes } from '@shared/lib/paper.ts';

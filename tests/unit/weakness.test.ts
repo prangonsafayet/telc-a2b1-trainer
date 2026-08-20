@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { TRAINER_CONTENT } from '@content/trainers/index.ts';
+
 import { buildErrorReport } from '@features/feedback/lib/errorReport.ts';
 import { LT_RULE_TO_WEAKNESS, WEAKNESS_CATEGORIES, WEAKNESS_TOPICS } from '@shared/config/weakness.ts';
 import { TRAINER_ORDER, TRAINERS } from '@shared/config/trainers.ts';
@@ -22,7 +24,7 @@ describe('weakness → cheatsheet resolution', () => {
   it('only points at cheatsheets each trainer actually authored', () => {
     for (const trainerId of TRAINER_ORDER) {
       const trainer = TRAINERS[trainerId];
-      const realKeys = new Set(Object.keys(trainer.content.curriculum.cheatsheets));
+      const realKeys = new Set(Object.keys(TRAINER_CONTENT[trainerId].curriculum.cheatsheets));
       for (const category of WEAKNESS_CATEGORIES) {
         const topic = WEAKNESS_TOPICS[category];
         const keys = trainer.weaknessCheatsheets[topic];

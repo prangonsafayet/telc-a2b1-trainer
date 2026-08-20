@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { TRAINERS } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { isLearnDayComplete } from '@shared/lib/learnProgress.ts';
 import { type LearnDay, type TrainerId } from '@shared/types';
 
@@ -44,8 +45,8 @@ export interface ScheduledLearn {
 export const useScheduledLearn = (trainer: TrainerId): ScheduledLearn => {
   const { learnDone: done } = useTrainerSlice(trainer);
   const schedule = useTrainerSchedule(trainer);
-  const { short, content } = TRAINERS[trainer];
-  const curriculum = content.curriculum;
+  const { short } = TRAINERS[trainer];
+  const curriculum = useTrainerContent(trainer).curriculum;
 
   return useMemo(() => {
     const byDay = new Map(curriculum.days.map(day => [day.day, day]));

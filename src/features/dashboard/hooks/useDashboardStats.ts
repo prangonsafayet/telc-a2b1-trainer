@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { examCount, TRAINERS } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { buildScoreChart } from '@shared/lib/scoreChart.ts';
 import { type ScoreChartModel, type TrainerId } from '@shared/types';
 
@@ -50,7 +51,8 @@ export const useDashboardStats = (trainer: TrainerId): DashboardStats => {
   const schedule = useTrainerSchedule(trainer);
   const today = useToday();
   const info = TRAINERS[trainer];
-  const vocab = info.content.vocab;
+  const content = useTrainerContent(trainer);
+  const vocab = content.vocab;
 
   return useMemo(() => {
     const mastery = buildMastery(trainer, vocab, slice.srs, today);
@@ -58,8 +60,8 @@ export const useDashboardStats = (trainer: TrainerId): DashboardStats => {
     return {
       heading: `Dashboard · ${info.short}`,
       lead: schedule
-        ? `${info.name}: ${describeMockLead(schedule, examCount(trainer))}`
-        : `${info.name}: ${String(examCount(trainer))} Modelltests, easiest first. Take them in order under real timing.`,
+        ? `${info.name}: ${describeMockLead(schedule, examCount(content))}`
+        : `${info.name}: ${String(examCount(content))} Modelltests, easiest first. Take them in order under real timing.`,
       passRule: passRuleFor(info),
       attemptCount: slice.attempts.length,
       historyTo: `${info.basePath}/history`,
@@ -68,7 +70,7 @@ export const useDashboardStats = (trainer: TrainerId): DashboardStats => {
       mastery,
       weakAreas: buildWeakAreas(slice, vocab, info.basePath),
       chart: buildScoreChart(slice),
-      examCards: buildExamCards(slice, info, examId => examSlotLabel(schedule, examId))
+      examCards: buildExamCards(slice, info, content.exams, examId => examSlotLabel(schedule, examId))
     };
-  }, [trainer, info, vocab, slice, schedule, today]);
+  }, [trainer, info, content, vocab, slice, schedule, today]);
 };

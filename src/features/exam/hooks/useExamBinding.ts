@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 
-import { DUAL_LEVEL_EXAMS, SINGLE_LEVEL_EXAMS } from '@content/trainers/index.ts';
-
-import { type TrainerId } from '@shared/types';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
+import { type DualLevelExam, type SingleLevelExam, type TrainerId } from '@shared/types';
 
 import { DUAL_LEVEL_FORMAT } from '@features/exam/lib/formats/dual-level/index.ts';
 import { SINGLE_LEVEL_FORMAT } from '@features/exam/lib/formats/single-level/index.ts';
@@ -14,9 +13,14 @@ import { useTrainerSlice } from '@features/progress';
  * attempts live in, so the three exam screens narrow once and then render the same generic
  * views either way. Which paper that is comes from the trainer's stored slice, which the
  * registry places — never from the trainer's id.
+ *
+ * `content.exams` comes back as the generic `TrainerContent` shape, so each branch below
+ * casts it to the paper `slice.format` already says it is — the registry pairs a trainer
+ * with one paper for good; only the type system needs telling twice.
  */
 export const useExamBinding = (trainer: TrainerId): ExamBinding => {
   const slice = useTrainerSlice(trainer);
+  const content = useTrainerContent(trainer);
 
   return useMemo(() => {
     if (slice.format === 'single-level') {
@@ -24,7 +28,7 @@ export const useExamBinding = (trainer: TrainerId): ExamBinding => {
         kind: 'single-level',
         trainer,
         format: SINGLE_LEVEL_FORMAT,
-        papers: SINGLE_LEVEL_EXAMS[slice.trainer],
+        papers: content.exams as readonly SingleLevelExam[],
         store: { settings: slice.settings, attempts: slice.attempts, saveAttempt: slice.saveAttempt }
       };
     }
@@ -32,8 +36,8 @@ export const useExamBinding = (trainer: TrainerId): ExamBinding => {
       kind: 'dual-level',
       trainer,
       format: DUAL_LEVEL_FORMAT,
-      papers: DUAL_LEVEL_EXAMS,
+      papers: content.exams as readonly DualLevelExam[],
       store: { settings: slice.settings, attempts: slice.attempts, saveAttempt: slice.saveAttempt }
     };
-  }, [trainer, slice]);
+  }, [trainer, slice, content]);
 };

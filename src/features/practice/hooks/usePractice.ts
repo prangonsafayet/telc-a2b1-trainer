@@ -1,8 +1,7 @@
 import { useCallback, useMemo } from 'react';
 
-import { TRAINER_CONTENT } from '@content/trainers/index.ts';
-
 import { STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { countMastery, isDue, pickDueIds, reviewItem, type MasteryCounts } from '@shared/lib/srs.ts';
 import { allCards, cardsFor, idsFor } from '@shared/lib/studyItems.ts';
 import { type StudyCard, type StudyCategory, type TrainerId, type VocabBank } from '@shared/types';
@@ -67,7 +66,7 @@ const pickSessionCards = (
 export const usePractice = (trainer: TrainerId): PracticeController => {
   const { srs, update } = useTrainerSlice(trainer);
   const today = useToday();
-  const vocab = TRAINER_CONTENT[trainer].vocab;
+  const vocab = useTrainerContent(trainer).vocab;
 
   const categoryMastery = useMemo(
     () =>

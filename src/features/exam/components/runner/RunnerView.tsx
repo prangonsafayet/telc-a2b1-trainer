@@ -111,7 +111,7 @@ const RunnerView = <TExam extends ExamPaper, TSettings extends RunSettings, TAtt
 
       <ModuleComponent
         exam={exam}
-        paper={TRAINERS[trainer].content.paper}
+        paper={TRAINERS[trainer].paper}
         answers={run.run.answers}
         setAnswer={run.setAnswer}
         settings={store.settings}

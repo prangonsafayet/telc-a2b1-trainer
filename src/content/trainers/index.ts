@@ -2,18 +2,25 @@
  * The content layer, keyed by trainer. Every trainer exposes the same shape, so a screen
  * reads `TRAINER_CONTENT[trainer]` and never asks which trainer it is looking at.
  *
- * The narrowed paper lists below exist for the format layer only: marking a paper needs its
- * concrete type, and only `features/exam` does that.
+ * This barrel is deliberately eager — `validate.cjs` and the content-shape tests read every
+ * trainer's content directly through it at build and test time — and deliberately the ONLY
+ * eager route to it: importing so much as one named export here pulls in all three
+ * trainers' exams, curricula, guides and vocabulary banks, because module evaluation runs
+ * every import in the file regardless of which export a caller wanted. Application code
+ * reaches a trainer's content through `TRAINERS[trainer].loadContent()` in
+ * `@shared/config/trainers.ts` (or the `useTrainerContent` hook) instead, which is what
+ * lets the bundler key a chunk per trainer. The exam format layer's small, trainer-specific
+ * facts (a paper's timings, `findPaper`) are sourced directly from their own files for the
+ * same reason — see each format's own `index.ts` under `features/exam/lib/formats` and
+ * `@shared/lib/examLookup.ts`.
  */
 
 import {
   type DualLevelExam,
-  type ExamPaper,
   type SingleLevelExam,
   type SingleLevelTrainerId,
   type TrainerContent,
-  type TrainerId,
-  type TrainerPaper
+  type TrainerId
 } from '@shared/types';
 
 import { A2B1_CONTENT } from './a2b1/index.ts';
@@ -27,35 +34,11 @@ export const TRAINER_CONTENT: Readonly<Record<TrainerId, TrainerContent>> = {
   b2: B2_CONTENT
 };
 
-/**
- * The papers of each format, named by format rather than by trainer, so `features/exam`
- * reaches its own paper type without naming a trainer. A second trainer setting the
- * dual-level paper would turn this into a record, here — in the content layer, which is
- * the only place that knows which trainer authored what.
- */
+/** The dual-level paper's exams, named by format rather than by trainer — test-only. */
 export const DUAL_LEVEL_EXAMS: readonly DualLevelExam[] = A2B1_CONTENT.exams;
 
+/** The single-level paper's exams, by the trainer that authored them — test-only. */
 export const SINGLE_LEVEL_EXAMS: Readonly<Record<SingleLevelTrainerId, readonly SingleLevelExam[]>> = {
   b1: B1_CONTENT.exams,
   b2: B2_CONTENT.exams
-};
-
-/**
- * How each trainer's sitting runs, reached the same way: the format layer has the paper in
- * hand (or its level) but not the trainer id, so it looks the sitting up by format.
- */
-export const DUAL_LEVEL_PAPER: TrainerPaper = A2B1_CONTENT.paper;
-
-export const SINGLE_LEVEL_PAPERS: Readonly<Record<SingleLevelTrainerId, TrainerPaper>> = {
-  b1: B1_CONTENT.paper,
-  b2: B2_CONTENT.paper
-};
-
-/** Looks up a paper by id; accepts the string form that arrives from route params. */
-export const findPaper = <TExam extends ExamPaper>(
-  exams: readonly TExam[],
-  id: string | number | undefined
-): TExam | undefined => {
-  const numeric = Number(id);
-  return Number.isFinite(numeric) ? exams.find(exam => exam.id === numeric) : undefined;
 };

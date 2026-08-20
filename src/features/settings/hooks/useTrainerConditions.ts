@@ -34,8 +34,8 @@ export interface TrainerConditions {
  */
 export const useTrainerConditions = (trainer: TrainerId): TrainerConditions => {
   const { settings, setSetting } = useTrainerSlice(trainer);
-  const { name, accent, format, content } = TRAINERS[trainer];
-  const officialWritingMinutes = content.paper.minutes.schreiben;
+  const { name, accent, format, paper } = TRAINERS[trainer];
+  const officialWritingMinutes = paper.minutes.schreiben;
 
   return useMemo(
     () => ({

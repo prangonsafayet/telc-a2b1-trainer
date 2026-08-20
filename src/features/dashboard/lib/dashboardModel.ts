@@ -145,7 +145,7 @@ export const buildMastery = (
   srs: SrsMap,
   today: string
 ): MasteryModel | null => {
-  if (!hasVocabBank(trainer)) return null;
+  if (!hasVocabBank(vocab)) return null;
   const base = TRAINERS[trainer].basePath;
   const categories = STUDY_CATEGORIES.map(category => {
     const counts = countMastery(idsFor(vocab, category), srs, today);

@@ -166,7 +166,20 @@ export default defineConfig(({ mode }) => {
              cache entries, so shipping app changes does not re-download them. */
           manualChunks: (id: string) => {
             if (id.includes('src/data/')) return 'exam-data';
-            if (id.includes('src/content/')) return 'content';
+            /* One chunk per trainer's content folder (content-a2b1, content-b1, content-b2)
+               so a visitor only downloads the trainer they are studying — see
+               `TRAINERS[trainer].loadContent` in src/shared/config/trainers.ts, which is what
+               makes each folder load through its own dynamic import() instead of one eager
+               graph.
+               `paper.ts` is excluded on purpose, even though it lives in the same folder: the
+               registry and the exam-format descriptors both import it eagerly (it is small —
+               see the note on `TrainerContent` in src/shared/types/trainer.ts for why it is
+               not part of the lazily loaded shape), and a module the bundler sees imported
+               both eagerly and from an async chunk gets folded into the async one — which
+               would make the eager registry statically import this chunk right back, and the
+               whole heavy chunk would preload on every visit regardless of trainer. */
+            const trainerContentMatch = /src\/content\/trainers\/([^/]+)\/(?!paper\.ts$).+/.exec(id);
+            if (trainerContentMatch) return `content-${trainerContentMatch[1]}`;
             if (id.includes('@supabase')) return 'supabase';
             if (id.includes('react-dom') || id.includes('/react/') || id.includes('react-router'))
               return 'react';

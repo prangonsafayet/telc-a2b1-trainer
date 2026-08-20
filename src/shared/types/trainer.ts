@@ -78,6 +78,14 @@ export type LevelTrainerSettings = TrainerExamSettings;
  * Everything one trainer studies from, authored in `src/content/trainers/<id>/`. Every
  * trainer exposes the same shape; the type parameter narrows the papers for the format
  * layer, which is the only place that knows how to mark them.
+ *
+ * Its sitting (`TrainerPaper`) is deliberately NOT part of this shape, even though it is
+ * authored right next to the rest in the same folder: `TrainerInfo.paper` in
+ * `@shared/config/trainers.ts` needs it eagerly, and this `TrainerContent` is what loads on
+ * demand. A trainer's `paper.ts` importing into both would make the bundler's per-trainer
+ * chunk share code with the eager registry chunk — and a module shared between an eager
+ * chunk and an async one gets folded into the async one, which is exactly the kind of import
+ * that quietly drags a trainer's whole content back into the initial bundle.
  */
 export interface TrainerContent<TExam extends ExamPaper = ExamPaper> {
   readonly trainer: TrainerId;
@@ -89,12 +97,18 @@ export interface TrainerContent<TExam extends ExamPaper = ExamPaper> {
   readonly exams: readonly TExam[];
   /** Authored HTML exam guide, or null while the trainer has none. */
   readonly guide: string | null;
-  /** How its own sitting runs. */
-  readonly paper: TrainerPaper;
 }
 
 /** The single-level content, narrowed to the paper its two trainers set. */
 export type SingleLevelContent = TrainerContent<SingleLevelExam>;
+
+/**
+ * How a trainer's descriptor hands over its content: on demand, not up front. Keying the
+ * bundler's chunks per trainer only works once the registry stops holding every trainer's
+ * content in one eager import graph — see `TRAINERS[trainer].loadContent` in
+ * `@shared/config/trainers.ts` and `useTrainerContent` in `@shared/hooks`.
+ */
+export type TrainerContentLoader = () => Promise<TrainerContent>;
 
 /**
  * Everything a trainer with its own document persists. Lives inside `ProgressDatabase`, so

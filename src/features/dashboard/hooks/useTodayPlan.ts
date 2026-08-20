@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { TRAINERS } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { type ExamPaper, type LearnDay, type Schedule, type TrainerId } from '@shared/types';
 
 import { describeClamp, slotHeading, slotKindLabel, useTrainerSchedule } from '@features/plan';
@@ -32,7 +33,8 @@ const SETTINGS_PATH = '/settings';
 /** What one trainer's plan asks for today, and whether the date behind it needs attention. */
 export const useTodayPlan = (trainer: TrainerId): SchedulePlan => {
   const schedule = useTrainerSchedule(trainer);
-  const { basePath, content } = TRAINERS[trainer];
+  const { basePath } = TRAINERS[trainer];
+  const content = useTrainerContent(trainer);
 
   return useMemo(() => {
     const learnTo = `${basePath}/learn`;

@@ -1,8 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom';
 
-import { findPaper } from '@content/trainers/index.ts';
-
 import { TRAINERS } from '@shared/config/trainers.ts';
+import { findPaper } from '@shared/lib/examLookup.ts';
 import { type TrainerId } from '@shared/types';
 
 import AttemptResults from '@features/exam/components/results/AttemptResults.tsx';

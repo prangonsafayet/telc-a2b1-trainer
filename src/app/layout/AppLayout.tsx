@@ -4,7 +4,7 @@ import { CloudOff } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import { ErrorBoundary, Logo, ThemeToggle } from '@shared/components';
-import { APP_NAME, TRAINERS, trainerFromPath, trainerHome, trainerTagline } from '@shared/config/trainers.ts';
+import { APP_NAME, TRAINERS, trainerFromPath, trainerHome } from '@shared/config/trainers.ts';
 import { stopSpeech } from '@shared/lib/speech.ts';
 import { Badge } from '@shared/ui';
 
@@ -51,9 +51,7 @@ const AppLayout = () => {
               <Logo className="size-9 shrink-0 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105" />
               <span>
                 <span className="block text-base font-bold tracking-tight">{APP_NAME}</span>
-                <span className="hidden text-xs text-muted-foreground sm:block">
-                  {trainer.name} · {trainerTagline(trainer.id)}
-                </span>
+                <span className="hidden text-xs text-muted-foreground sm:block">{trainer.name}</span>
               </span>
             </NavLink>
 
