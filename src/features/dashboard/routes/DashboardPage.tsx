@@ -91,7 +91,14 @@ const DashboardPage = ({ trainer }: DashboardPageProps) => {
       <Card>
         <CardContent className="grid gap-5 sm:grid-cols-2">
           {stats.meters.map(meter => (
-            <Meter key={meter.key} label={meter.label} value={meter.value} of={meter.of} />
+            <Meter
+              key={meter.key}
+              label={meter.label}
+              value={meter.value}
+              of={meter.of}
+              thresholdPercent={meter.thresholdPercent}
+              thresholdLabel={meter.thresholdLabel}
+            />
           ))}
         </CardContent>
       </Card>

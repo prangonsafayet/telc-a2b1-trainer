@@ -29,6 +29,9 @@ export interface MeterModel {
   readonly label: string;
   readonly value: number | null;
   readonly of: number;
+  /** Where this paper's pass line sits, as a percentage. */
+  readonly thresholdPercent: number;
+  readonly thresholdLabel: string;
 }
 
 export interface MasteryCategoryModel {

@@ -48,6 +48,10 @@ const bestFor = (
   return scores.length > 0 ? Math.max(...scores) : null;
 };
 
+/** The A2·B1 paper wants 42 of 60 in three skills; the single-level paper wants 60%. */
+const DUAL_LEVEL_THRESHOLD = 70;
+const SINGLE_LEVEL_THRESHOLD = 60;
+
 /** The best score of each scored part of the paper, against a perfect one. */
 export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] =>
   slice.format === 'single-level'
@@ -55,13 +59,17 @@ export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] =>
         key: section,
         label: SINGLE_LEVEL_MODULE_META[section].short,
         value: bestFor(slice.attempts, section),
-        of: SINGLE_LEVEL_SECTION_MAX[section]
+        of: SINGLE_LEVEL_SECTION_MAX[section],
+        thresholdPercent: SINGLE_LEVEL_THRESHOLD,
+        thresholdLabel: `Pass line (${String(SINGLE_LEVEL_THRESHOLD)}%)`
       }))
     : SKILL_LABELS.map(([key, label]) => ({
         key,
         label,
         value: bestFor(slice.attempts, key),
-        of: SKILL_MAX
+        of: SKILL_MAX,
+        thresholdPercent: DUAL_LEVEL_THRESHOLD,
+        thresholdLabel: `B1 threshold (${String(DUAL_LEVEL_THRESHOLD)}%)`
       }));
 
 const dualLevelCaption = (best: number | null): string => {

@@ -23,7 +23,10 @@ const StatTile = ({ tile }: StatTileProps) => {
   return (
     <Card className="card-hover gap-2 overflow-hidden py-4">
       <CardContent className="relative px-4">
-        <Icon className="absolute right-0 top-0 size-10 text-primary/10" strokeWidth={1.5} aria-hidden />
+        {/* An absolute inset resolves against the padding box, so `right-0` would ignore
+            this container's px-4 and sit flush with the card edge while the label is inset
+            16px. `right-4` gives the icon the same inset the text has. */}
+        <Icon className="absolute right-4 top-0 size-10 text-primary/10" strokeWidth={1.5} aria-hidden />
         <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{tile.label}</div>
         <div className="mt-1 text-2xl font-bold tabular-nums">
           {typeof tile.value === 'number' ? (
