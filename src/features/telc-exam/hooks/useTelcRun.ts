@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { type SpeakingPart } from '@shared/components';
 import { TELC_MODULE_META, TELC_MODULES, telcModuleMinutes } from '@shared/config/telcExam.ts';
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { numberAnswer, WRITING_TASK_KEY } from '@shared/lib/answers.ts';
@@ -16,7 +15,9 @@ import {
   type TelcAttempt,
   type TelcExam,
   type TelcLevel,
-  type TelcSectionScores
+  type TelcSectionScores,
+  type RecordingMap,
+  type SpeakingPart
 } from '@shared/types';
 
 import { touchActivity, useTrainerDoc } from '@features/progress';
@@ -37,7 +38,6 @@ import {
 } from '../lib/scoring.ts';
 
 /** Blob URLs for the speaking module. Session-only — never persisted. */
-export type TelcRecordingMap = Partial<Record<SpeakingPart, string>>;
 
 export interface TelcRunController {
   /** Null for one render while a mismatched or missing run is being replaced. */
@@ -46,7 +46,7 @@ export interface TelcRunController {
   readonly minutes: number;
   readonly secondsRemaining: number;
   readonly totalSeconds: number;
-  readonly recordings: TelcRecordingMap;
+  readonly recordings: RecordingMap;
   readonly setAnswer: (key: string, value: AnswerValue) => void;
   readonly consumePlay: (key: string) => void;
   readonly setRecording: (part: SpeakingPart, url: string) => void;
@@ -79,7 +79,7 @@ export const useTelcRun = ({ level, exam, mode }: TelcRunOptions): TelcRunContro
   const clearRun = useTelcRunStore(state => state.clearRun);
   const patchRun = useTelcRunStore(state => state.patchRun);
 
-  const [recordings, setRecordings] = useState<TelcRecordingMap>({});
+  const [recordings, setRecordings] = useState<RecordingMap>({});
   const [, forceTick] = useState(0);
   const finishedRef = useRef(false);
 

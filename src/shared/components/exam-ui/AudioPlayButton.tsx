@@ -1,23 +1,31 @@
 import { Play, Square } from 'lucide-react';
 
-import { type Exam, type Settings } from '@shared/types';
+import { useAudioPlayback } from '@shared/hooks/useAudioPlayback.ts';
+import { type AudioScript } from '@shared/types';
 import { Badge, Button } from '@shared/ui';
 
-import { useAudioPlayback } from '@features/exam/hooks/useAudioPlayback.ts';
-
 interface AudioPlayButtonProps {
-  readonly exam: Exam;
-  readonly settings: Settings;
+  readonly script: AudioScript;
+  readonly rate: number;
+  readonly voiceName: string;
   readonly itemKey: string;
   readonly playsLeft: number;
   readonly onConsumePlay: (itemKey: string) => void;
 }
 
-/** Play/stop plus the remaining-plays badge for one listening item. */
-const AudioPlayButton = ({ exam, settings, itemKey, playsLeft, onConsumePlay }: AudioPlayButtonProps) => {
+/** Play/stop plus the remaining-plays badge for one listening item, in either format. */
+const AudioPlayButton = ({
+  script,
+  rate,
+  voiceName,
+  itemKey,
+  playsLeft,
+  onConsumePlay
+}: AudioPlayButtonProps) => {
   const { playing, canPlay, toggle } = useAudioPlayback({
-    exam,
-    settings,
+    script,
+    rate,
+    voiceName,
     itemKey,
     playsLeft,
     onConsumePlay

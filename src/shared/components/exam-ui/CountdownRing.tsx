@@ -17,12 +17,7 @@ const STROKE = 4;
  * A stopwatch-style countdown: the ring drains clockwise as time runs out and shifts
  * colour as the deadline nears. Purely visual — the deadline itself lives in run state.
  */
-const CountdownRing = ({
-  secondsRemaining,
-  totalSeconds,
-  size = 64,
-  className
-}: CountdownRingProps) => {
+const CountdownRing = ({ secondsRemaining, totalSeconds, size = 64, className }: CountdownRingProps) => {
   const radius = (size - STROKE) / 2;
   const circumference = 2 * Math.PI * radius;
   const fraction = totalSeconds > 0 ? Math.min(1, Math.max(0, secondsRemaining / totalSeconds)) : 0;

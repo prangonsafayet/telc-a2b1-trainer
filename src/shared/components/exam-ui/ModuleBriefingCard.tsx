@@ -44,7 +44,11 @@ const ModuleBriefingCard = ({
         {guidelineOnly ? ' (guideline)' : ' — auto-submits when time runs out'}
       </Badge>
       <div className="flex flex-col items-center gap-2">
-        <Button size="lg" className="px-8 shadow-sm transition-transform hover:scale-[1.03]" onClick={onBegin}>
+        <Button
+          size="lg"
+          className="px-8 shadow-sm transition-transform hover:scale-[1.03]"
+          onClick={onBegin}
+        >
           {startLabel} ▸
         </Button>
         <Button variant="ghost" size="sm" onClick={onAbort}>

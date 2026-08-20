@@ -1,4 +1,5 @@
 import { Teil } from '@shared/components';
+import { WRITING_TARGETS } from '@shared/config/writing.ts';
 import {
   itemKey,
   numberAnswer,
@@ -7,11 +8,10 @@ import {
   WRITING_TASK_KEY
 } from '@shared/lib/answers.ts';
 import { cn } from '@shared/lib/cn.ts';
+import { describeWordCount } from '@shared/lib/writingFeedback.ts';
 import { Label, RadioGroup, RadioGroupItem, Textarea } from '@shared/ui';
 
-import { describeTelcWordCount } from '@features/telc-exam/lib/wordCount.ts';
-
-import { type TelcModuleProps } from '../moduleProps.ts';
+import { type TelcModuleProps } from '@features/telc-exam/types/moduleProps.ts';
 
 import WritingTaskBrief from './WritingTaskBrief.tsx';
 
@@ -21,7 +21,7 @@ const TelcSchreibenModule = ({ exam, answers, setAnswer }: TelcModuleProps) => {
   const chosen = numberAnswer(answers, WRITING_TASK_KEY) ?? 0;
   const task = schreiben.tasks[chosen] ?? schreiben.tasks[0];
   const text = textAnswer(answers, WRITING_ANSWER_KEY);
-  const { count, hint, inRange } = describeTelcWordCount(text, exam.level);
+  const { count, hint, inRange } = describeWordCount(text, WRITING_TARGETS[exam.level]);
 
   if (!task) return null;
 

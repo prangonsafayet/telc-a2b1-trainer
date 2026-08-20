@@ -2,9 +2,9 @@ import { Mic } from 'lucide-react';
 
 import { Callout, PunkteGrid, RecorderControls, RedemittelList, Teil } from '@shared/components';
 
-import { type ExamModuleProps } from '../moduleProps.ts';
+import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 
-const SprechenModule = ({ exam, recordings, onRecorded }: ExamModuleProps) => {
+const SprechenModule = ({ exam, recordings, onRecorded }: A2b1ModuleProps) => {
   const { sprechen } = exam;
 
   return (

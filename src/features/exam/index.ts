@@ -14,4 +14,3 @@ export {
   scoreSprachbausteine
 } from './lib/scoring.ts';
 export type { ExamRun, RunPhase } from './lib/runState.ts';
-export type { SpeakingPart } from './hooks/useExamRun.ts';

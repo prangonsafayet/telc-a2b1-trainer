@@ -2,7 +2,7 @@ import { Mic } from 'lucide-react';
 
 import { Callout } from '@shared/components';
 
-import { type TelcModuleProps } from '../moduleProps.ts';
+import { type TelcModuleProps } from '@features/telc-exam/types/moduleProps.ts';
 
 import SprechenTeilCard from './SprechenTeilCard.tsx';
 

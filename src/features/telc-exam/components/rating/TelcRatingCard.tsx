@@ -1,8 +1,7 @@
-import { CriteriaRatingPanel, Multiline, type SpeakingPart } from '@shared/components';
-import { type TelcExam } from '@shared/types';
+import { CriteriaRatingPanel, Multiline } from '@shared/components';
+import { type TelcExam, type SpeakingPart, type RecordingMap } from '@shared/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
-import { type TelcRecordingMap } from '@features/telc-exam/hooks/useTelcRun.ts';
 import { useTelcSelfRating } from '@features/telc-exam/hooks/useTelcSelfRating.ts';
 
 interface TelcRatingCardProps {
@@ -11,7 +10,7 @@ interface TelcRatingCardProps {
   readonly writtenText: string;
   /** Which writing task was worked on (B2 offers two). */
   readonly writingTask: number;
-  readonly recordings: TelcRecordingMap;
+  readonly recordings: RecordingMap;
   readonly onConfirm: (score: number) => void;
 }
 

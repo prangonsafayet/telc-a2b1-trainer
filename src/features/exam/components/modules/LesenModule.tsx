@@ -11,11 +11,11 @@ import {
 } from '@shared/components';
 import { booleanAnswer, itemKey, numberAnswer } from '@shared/lib/answers.ts';
 
-import { type ExamModuleProps } from '../moduleProps.ts';
+import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 
 const TEXT_LABELS = ['A', 'B'] as const;
 
-const LesenModule = ({ exam, answers, setAnswer }: ExamModuleProps) => {
+const LesenModule = ({ exam, answers, setAnswer }: A2b1ModuleProps) => {
   const { lesen } = exam;
 
   return (

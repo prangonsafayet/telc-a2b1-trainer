@@ -63,8 +63,8 @@ const TelcResultsPage = ({ level }: TelcResultsPageProps) => {
               <div className="text-lg tabular-nums">
                 <b>
                   <CountedNumber value={attempt.total} durationMs={900} />
-                </b> / 300 points · time used{' '}
-                {fmtClock(summary.totalSeconds)}
+                </b>{' '}
+                / 300 points · time used {fmtClock(summary.totalSeconds)}
               </div>
               <p className="text-sm tabular-nums text-muted-foreground">
                 Written: <b>{attempt.written ?? 0}</b>/225 (pass ≥ {TELC_WRITTEN_PASS}) · Oral:{' '}

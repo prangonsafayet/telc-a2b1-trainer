@@ -10,9 +10,9 @@ import { type AttemptMode, type Exam } from '@shared/types';
 import { Button } from '@shared/ui';
 
 import { useExamRun } from '@features/exam/hooks/useExamRun.ts';
+import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 import { useProgress } from '@features/progress';
 
-import { type ExamModuleProps } from '../moduleProps.ts';
 import HoerenModule from '../modules/HoerenModule.tsx';
 import LesenModule from '../modules/LesenModule.tsx';
 import SchreibenModule from '../modules/SchreibenModule.tsx';
@@ -20,7 +20,7 @@ import SprachbausteineModule from '../modules/SprachbausteineModule.tsx';
 import SprechenModule from '../modules/SprechenModule.tsx';
 import SelfRatingCard from '../rating/SelfRatingCard.tsx';
 
-const MODULE_COMPONENTS: Readonly<Record<string, ComponentType<ExamModuleProps>>> = {
+const MODULE_COMPONENTS: Readonly<Record<string, ComponentType<A2b1ModuleProps>>> = {
   lesen: LesenModule,
   sprachbausteine: SprachbausteineModule,
   hoeren: HoerenModule,

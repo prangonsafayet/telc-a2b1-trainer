@@ -1,16 +1,16 @@
 import { Multiline, Teil } from '@shared/components';
+import { WRITING_TARGETS } from '@shared/config/writing.ts';
 import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { cn } from '@shared/lib/cn.ts';
+import { describeWordCount } from '@shared/lib/writingFeedback.ts';
 import { Textarea } from '@shared/ui';
 
-import { describeWordCount } from '@features/exam/lib/wordCount.ts';
+import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 
-import { type ExamModuleProps } from '../moduleProps.ts';
-
-const SchreibenModule = ({ exam, answers, setAnswer }: ExamModuleProps) => {
+const SchreibenModule = ({ exam, answers, setAnswer }: A2b1ModuleProps) => {
   const { schreiben } = exam;
   const text = textAnswer(answers, WRITING_ANSWER_KEY);
-  const { count, hint, inRange } = describeWordCount(text);
+  const { count, hint, inRange } = describeWordCount(text, WRITING_TARGETS.a2b1);
 
   return (
     <Teil title="Schreiben — E-Mail beantworten" chip="60 Punkte" anweisung={schreiben.anweisung}>

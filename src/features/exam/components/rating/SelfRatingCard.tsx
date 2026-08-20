@@ -1,8 +1,7 @@
 import { CriteriaRatingPanel, Multiline } from '@shared/components';
-import { type Exam } from '@shared/types';
+import { type Exam, type RecordingMap, type SpeakingPart } from '@shared/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
-import { type RecordingMap, type SpeakingPart } from '@features/exam/hooks/useExamRun.ts';
 import { useSelfRating } from '@features/exam/hooks/useSelfRating.ts';
 
 interface SelfRatingCardProps {

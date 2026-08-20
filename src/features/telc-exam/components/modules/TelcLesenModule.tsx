@@ -10,7 +10,7 @@ import {
 } from '@shared/components';
 import { itemKey, numberAnswer } from '@shared/lib/answers.ts';
 
-import { type TelcModuleProps } from '../moduleProps.ts';
+import { type TelcModuleProps } from '@features/telc-exam/types/moduleProps.ts';
 
 const TelcLesenModule = ({ exam, answers, setAnswer }: TelcModuleProps) => {
   const { lesen } = exam;

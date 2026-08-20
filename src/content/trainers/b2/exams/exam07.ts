@@ -298,13 +298,11 @@ Marta Nowak`,
           answer: true
         },
         {
-          statement:
-            'Deutsche Innenstädte wurden seiner Ansicht nach vor allem für Fußgänger geplant.',
+          statement: 'Deutsche Innenstädte wurden seiner Ansicht nach vor allem für Fußgänger geplant.',
           answer: false
         },
         {
-          statement:
-            'In den Superblocks von Barcelona muss der Durchgangsverkehr außen herumfahren.',
+          statement: 'In den Superblocks von Barcelona muss der Durchgangsverkehr außen herumfahren.',
           answer: true
         },
         {
@@ -316,8 +314,7 @@ Marta Nowak`,
           answer: true
         },
         {
-          statement:
-            'Nach einem Jahr wollte die Mehrheit der Anwohner den alten Zustand der Straße zurück.',
+          statement: 'Nach einem Jahr wollte die Mehrheit der Anwohner den alten Zustand der Straße zurück.',
           answer: false
         },
         {

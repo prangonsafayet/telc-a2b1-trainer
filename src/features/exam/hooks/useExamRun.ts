@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { type SpeakingPart } from '@shared/components';
 import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
 import { stopSpeech } from '@shared/lib/speech.ts';
 import {
@@ -13,7 +12,9 @@ import {
   type Exam,
   type ExamModule,
   type SkillScores,
-  type SprachbausteineScore
+  type SprachbausteineScore,
+  type RecordingMap,
+  type SpeakingPart
 } from '@shared/types';
 
 import { useProgress } from '@features/progress';
@@ -34,11 +35,6 @@ import {
   scoreLesen,
   scoreSprachbausteine
 } from '../lib/scoring.ts';
-
-export type { SpeakingPart };
-
-/** Blob URLs for the speaking module. Session-only — never persisted. */
-export type RecordingMap = Partial<Record<SpeakingPart, string>>;
 
 export interface ExamRunController {
   readonly run: ExamRun;

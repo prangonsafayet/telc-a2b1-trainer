@@ -1,10 +1,8 @@
 import { Circle, Mic, Square } from 'lucide-react';
 
 import { useRecorder } from '@shared/hooks/useRecorder.ts';
+import { type SpeakingPart } from '@shared/types';
 import { Button } from '@shared/ui';
-
-/** The three parts of an oral exam. */
-export type SpeakingPart = 't1' | 't2' | 't3';
 
 interface RecorderControlsProps {
   readonly part: SpeakingPart;

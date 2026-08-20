@@ -12,8 +12,8 @@ import { Button } from '@shared/ui';
 
 import { useTrainerDoc } from '@features/progress';
 import { useTelcRun } from '@features/telc-exam/hooks/useTelcRun.ts';
+import { type TelcModuleProps } from '@features/telc-exam/types/moduleProps.ts';
 
-import { type TelcModuleProps } from '../moduleProps.ts';
 import TelcHoerenModule from '../modules/TelcHoerenModule.tsx';
 import TelcLesenModule from '../modules/TelcLesenModule.tsx';
 import TelcSchreibenModule from '../modules/TelcSchreibenModule.tsx';

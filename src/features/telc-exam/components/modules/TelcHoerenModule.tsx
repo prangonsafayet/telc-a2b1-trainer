@@ -1,17 +1,23 @@
 import { Headphones } from 'lucide-react';
 
 import { Callout, QuestionItem, QuestionText, RichtigFalsch, Teil } from '@shared/components';
+import AudioPlayButton from '@shared/components/exam-ui/AudioPlayButton.tsx';
 import { booleanAnswer, itemKey } from '@shared/lib/answers.ts';
 
-import TelcAudioButton from '../audio/TelcAudioButton.tsx';
-import { type TelcModuleProps } from '../moduleProps.ts';
+import { useSettings } from '@features/progress';
+import { telcAudioForKey, telcRate } from '@features/telc-exam/lib/audio.ts';
+import { type TelcModuleProps } from '@features/telc-exam/types/moduleProps.ts';
 
 const TelcHoerenModule = ({ exam, answers, setAnswer, settings, plays, onConsumePlay }: TelcModuleProps) => {
   const { hoeren } = exam;
+  /* Voice and speed are the global speech settings, shared across all three trainers. */
+  const { ttsRate, voiceName } = useSettings();
 
   const playButton = (key: string) => (
-    <TelcAudioButton
-      exam={exam}
+    <AudioPlayButton
+      script={telcAudioForKey(exam, key)}
+      rate={telcRate(exam.level, ttsRate)}
+      voiceName={voiceName}
       itemKey={key}
       playsLeft={plays[key] ?? settings.playsAllowed}
       onConsumePlay={onConsumePlay}

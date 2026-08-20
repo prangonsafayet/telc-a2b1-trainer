@@ -9,19 +9,21 @@ import {
   RichtigFalsch,
   Teil
 } from '@shared/components';
+import AudioPlayButton from '@shared/components/exam-ui/AudioPlayButton.tsx';
 import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '@shared/lib/answers.ts';
+import { audioForKey, rateForExam } from '@shared/lib/speech.ts';
 import { Input } from '@shared/ui';
 
-import AudioPlayButton from '../audio/AudioPlayButton.tsx';
-import { type ExamModuleProps } from '../moduleProps.ts';
+import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 
-const HoerenModule = ({ exam, answers, setAnswer, settings, plays, onConsumePlay }: ExamModuleProps) => {
+const HoerenModule = ({ exam, answers, setAnswer, settings, plays, onConsumePlay }: A2b1ModuleProps) => {
   const { hoeren } = exam;
 
   const playButton = (key: string) => (
     <AudioPlayButton
-      exam={exam}
-      settings={settings}
+      script={audioForKey(exam, key)}
+      rate={rateForExam(exam, settings)}
+      voiceName={settings.voiceName}
       itemKey={key}
       playsLeft={plays[key] ?? settings.playsAllowed}
       onConsumePlay={onConsumePlay}

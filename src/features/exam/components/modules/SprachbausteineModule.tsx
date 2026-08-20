@@ -9,9 +9,9 @@ import {
 import { itemKey, numberAnswer } from '@shared/lib/answers.ts';
 import { LETTERS } from '@shared/lib/format.ts';
 
-import { type ExamModuleProps } from '../moduleProps.ts';
+import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
 
-const SprachbausteineModule = ({ exam, answers, setAnswer }: ExamModuleProps) => {
+const SprachbausteineModule = ({ exam, answers, setAnswer }: A2b1ModuleProps) => {
   const { sprachbausteine } = exam;
 
   return (

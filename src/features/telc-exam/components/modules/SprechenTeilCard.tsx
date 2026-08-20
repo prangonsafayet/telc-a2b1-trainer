@@ -1,5 +1,5 @@
-import { PunkteGrid, RecorderControls, RedemittelList, Teil, type SpeakingPart } from '@shared/components';
-import { type TelcSprechenTeil } from '@shared/types';
+import { PunkteGrid, RecorderControls, RedemittelList, Teil } from '@shared/components';
+import { type TelcSprechenTeil, type SpeakingPart } from '@shared/types';
 
 interface SprechenTeilProps {
   readonly teil: TelcSprechenTeil;

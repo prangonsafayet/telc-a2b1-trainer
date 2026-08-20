@@ -309,8 +309,7 @@ Ana Ribeiro`,
           answer: false
         },
         {
-          statement:
-            'Frau Albers hält kurze, regelmäßige Lerneinheiten für wirksamer als seltene Seminare.',
+          statement: 'Frau Albers hält kurze, regelmäßige Lerneinheiten für wirksamer als seltene Seminare.',
           answer: true
         },
         {
@@ -325,8 +324,7 @@ Ana Ribeiro`,
         },
         { statement: 'Der Online-Test des Instituts ist kostenlos.', answer: true },
         {
-          statement:
-            'Frau Albers rät, mit der Weiterbildung bis zu einer beruflichen Krise zu warten.',
+          statement: 'Frau Albers rät, mit der Weiterbildung bis zu einer beruflichen Krise zu warten.',
           answer: false
         }
       ]

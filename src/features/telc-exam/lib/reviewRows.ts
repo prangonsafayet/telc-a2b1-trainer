@@ -8,7 +8,6 @@ import {
   type TelcExam
 } from '@shared/types';
 
-
 /** One reviewable item: what was asked, what was given, what was right. */
 export interface TelcReviewRow {
   readonly label: string;
