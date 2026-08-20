@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
+import { TRAINER_ORDER, TRAINERS } from '@shared/config/trainers.ts';
+import { type TrainerId } from '@shared/types';
+
 import { click, findByText, mount } from './harness.ts';
 
 /* Authored content mixes plain text and HTML. A field that carries markup must be injected,
@@ -7,7 +10,12 @@ import { click, findByText, mount } from './harness.ts';
 
 const RAW_TAG = /<\/?(b|i|em|strong|br|p|ul|li|div|span|code|h[1-6])\b[^>]*>/i;
 
-describe.each(['/learn', '/guide'])('%s', route => {
+/* Every trainer's Guide route, derived from the registry — a fourth trainer with a guide
+   is covered here for free, with no new test case to add. */
+const guideRoute = (trainer: TrainerId): string => `${TRAINERS[trainer].basePath}/guide`;
+const guideRoutes = TRAINER_ORDER.map(guideRoute);
+
+describe.each(['/learn', ...guideRoutes])('%s', route => {
   it('shows no literal HTML tag anywhere on the page', async () => {
     const page = await mount(route);
     expect(page.text()).not.toMatch(RAW_TAG);
@@ -15,9 +23,9 @@ describe.each(['/learn', '/guide'])('%s', route => {
   });
 });
 
-describe('the guide', () => {
+describe.each(TRAINER_ORDER)('the %s guide', trainer => {
   it('injects its authored markup as real elements', async () => {
-    const page = await mount('/guide');
+    const page = await mount(guideRoute(trainer));
     expect(page.container.querySelectorAll('h2, h3').length).toBeGreaterThan(0);
     await page.unmount();
   });
