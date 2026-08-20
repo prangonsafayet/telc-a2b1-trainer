@@ -58,6 +58,16 @@ export interface TrainerInfo {
   /** Which paper it sets. Trainers may share one. */
   readonly format: ExamFormatId;
   /**
+   * What it offers, in one short line, for a menu row and a header subtitle — e.g. "Dual-
+   * level paper · A2 or B1 certificate". Static and hand-written against the verified figures
+   * in `docs/level-trainers.local.md`, never a count derived from `loadContent`: an earlier
+   * version counted exams and once claimed "10 Modelltests" while the arrays were still
+   * empty, and a menu that lists every trainer at once cannot wait on three content chunks
+   * just to render its rows. A screen that has already loaded a trainer's content (the
+   * dashboard lead) is where a real count belongs.
+   */
+  readonly tagline: string;
+  /**
    * Where its slice of the progress document lives: its own key, or null for the trainer
    * whose attempts, learn plan and settings sit at the root of the document.
    */
@@ -97,6 +107,7 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     basePath: '',
     accent: 'var(--primary)',
     format: 'dual-level',
+    tagline: 'Dual-level paper · A2 or B1 certificate',
     docKey: null,
     paper: A2B1_PAPER,
     hasGuide: true,
@@ -118,6 +129,7 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     basePath: '/b1',
     accent: 'var(--primary)',
     format: 'single-level',
+    tagline: 'Zertifikat Deutsch · single-level paper',
     docKey: 'b1',
     paper: B1_PAPER,
     hasGuide: true,
@@ -142,6 +154,7 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     basePath: '/b2',
     accent: 'var(--warning)',
     format: 'single-level',
+    tagline: 'Single-level paper · 300 points',
     docKey: 'b2',
     paper: B2_PAPER,
     hasGuide: true,

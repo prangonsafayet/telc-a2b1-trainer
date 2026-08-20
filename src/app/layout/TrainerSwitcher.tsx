@@ -41,9 +41,12 @@ const TrainerSwitcher = () => {
               className="items-start gap-2 py-2"
             >
               <Check className={`mt-0.5 size-4 shrink-0 ${id === active ? '' : 'invisible'}`} aria-hidden />
-              {/* Name and route only — this menu lists every trainer at once, and only the
-                  active one's content has (or will have) loaded. */}
-              <span className="font-medium">{trainer.name}</span>
+              {/* Name and the static registry tagline only — this menu lists every trainer
+                  at once, and only the active one's content has (or will have) loaded. */}
+              <span>
+                <span className="block font-medium">{trainer.name}</span>
+                <span className="block text-xs text-muted-foreground">{trainer.tagline}</span>
+              </span>
             </DropdownMenuItem>
           );
         })}

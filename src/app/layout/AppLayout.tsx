@@ -51,7 +51,9 @@ const AppLayout = () => {
               <Logo className="size-9 shrink-0 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105" />
               <span>
                 <span className="block text-base font-bold tracking-tight">{APP_NAME}</span>
-                <span className="hidden text-xs text-muted-foreground sm:block">{trainer.name}</span>
+                <span className="hidden text-xs text-muted-foreground sm:block">
+                  {trainer.name} · {trainer.tagline}
+                </span>
               </span>
             </NavLink>
 
