@@ -20,7 +20,7 @@ export const B2_GUIDE = `
 <div class="card">
 <p><b>Leseverstehen und Sprachbausteine (reading and language elements) share one 90-minute block</b> — the same skeleton as B1, just with denser, faster-moving texts.<br>
 Leseverstehen — 3 Teile, 20 items, 75 points: Teil 1 matches 5 texts to 10 headlines (Globalverstehen, 5 pts each) · Teil 2 is one article with 5 three-option questions (Detailverstehen, 5 pts each) · Teil 3 matches 10 situations to 12 advertisements, so 2 ads are always pure distractors (Selektives Verstehen, 2.5 pts each).<br>
-Sprachbausteine — 2 Teile, 20 items, 30 points: Teil 1 is a text with 10 grammar gaps, choose a/b/c (1.5 pts each) · Teil 2 is a text with 10 gaps filled from a word bank of 15 words — 3 of them are never used (1.5 pts each).</p>
+Sprachbausteine — 2 Teile, 20 items, 30 points: Teil 1 is a text with 10 grammar gaps, choose a/b/c (1.5 pts each) · Teil 2 is a text with 10 gaps filled from a word bank of 15 words — 5 of them are never used (1.5 pts each).</p>
 <p><b>Hörverstehen (Listening)</b> — ≈20 minutes, 3 Teile, 20 items, 75 points.<br>
 Teil 1: 5 short texts, richtig/falsch (5 pts each) · Teil 2: one long interview, 10 richtig/falsch statements (2.5 pts each) · Teil 3: 5 announcements, richtig/falsch (5 pts each). Same task types as B1, compressed into roughly two-thirds the time — the recordings run faster and give you less room to relisten.</p>
 <p><b>Schriftlicher Ausdruck (Writing)</b> — 30 minutes, 45 points. Write a <b>halbformelle E-Mail</b> (semi-formal) that fully answers what the prompt asks — not a formal Behördenbrief, and not a choice between two tasks.</p>
@@ -36,8 +36,8 @@ Teil 1: Über Erfahrungen sprechen (25 pts, ~5 min) · Teil 2: Diskussion (25 pt
 
 <h2 id="g-lesen">3. Crack: Lesen (part of the 90-minute block, 75 points)</h2>
 <div class="card">
-<div class="tactic"><b>Budget ≈30 min for Lesen and 60 for Sprachbausteine — but watch a clock, not a bell.</b> Nothing in the exam tells you when to switch; decide your own split before you sit down and hold to it.</div>
-<div class="tactic"><b>Teil 1: at B2 the headlines get abstract.</b> They increasingly name the underlying idea of a text rather than repeating its vocabulary — a text about commuters complaining reads under a headline about "Mobilität in der Stadt", not "Verkehr". Read for the point being made, not just the topic. Two of the 10 headlines are never used.</div>
+<div class="tactic"><b>Budget ≈60 min for Lesen and 30 for Sprachbausteine — but watch a clock, not a bell.</b> Nothing in the exam tells you when to switch; decide your own split before you sit down and hold to it.</div>
+<div class="tactic"><b>Teil 1: at B2 the headlines get abstract.</b> They increasingly name the underlying idea of a text rather than repeating its vocabulary — a text about commuters complaining reads under a headline about "Mobilität in der Stadt", not "Verkehr". Read for the point being made, not just the topic. Five of the 10 headlines are never used.</div>
 <div class="tactic"><b>Teil 2: expect argument, not just fact.</b> The article often weighs a debate; questions test whether you followed the author's stance and reasoning, not only isolated details. Work the five questions in text order and watch for options that state the opposite of the author's actual position.</div>
 <div class="tactic"><b>Teil 3: pull the hard facts out of each situation first</b> — who, what, when, how much — before scanning the 12 ads. Two ads are pure distractors, near-misses on price, audience or availability. If nothing fits perfectly, pick the closest match; there is no "none of the above" option.</div>
 <div class="tactic"><b>Never leave an item blank.</b> A wrong guess costs nothing.</div>
@@ -45,8 +45,8 @@ Teil 1: Über Erfahrungen sprechen (25 pts, ~5 min) · Teil 2: Diskussion (25 pt
 
 <h2 id="g-sb">4. Crack: Sprachbausteine (part of the 90-minute block, 30 points)</h2>
 <div class="card">
-<div class="tactic"><b>Teil 1: check both sides of the gap, then the sentence's logic.</b> At B2 the gaps increasingly test connectors and subordinate structures (obwohl, trotzdem, sodass) rather than simple case endings — read past the gap to see how the two clauses relate before choosing.</div>
-<div class="tactic"><b>Teil 2: sort the 15 words by type before placing any of them.</b> Decide which gaps need a verb, a noun, a connector — that alone rules out most of the bank per gap. Fill the certain ones first and cross them off the list; three words are decoys and will never be used.</div>
+<div class="tactic"><b>Teil 1: check both sides of the gap, then the sentence's logic.</b> At B2 the gaps increasingly test how two clauses relate rather than simple case endings: subordinating conjunctions like obwohl and sodass send the verb to the end of their own clause, while adverbial connectors like trotzdem keep normal verb-second order — read past the gap to work out which kind of link it is before choosing.</div>
+<div class="tactic"><b>Teil 2: sort the 15 words by type before placing any of them.</b> Decide which gaps need a verb, a noun, a connector — that alone rules out most of the bank per gap. Fill the certain ones first and cross them off the list; five words are decoys and will never be used.</div>
 <div class="tactic"><b>Don't let Sprachbausteine eat into your Lesen time.</b> If a gap has you stuck, mark your best guess and move on — the shared 90 minutes are there so you can come back if there's time left.</div>
 </div>
 

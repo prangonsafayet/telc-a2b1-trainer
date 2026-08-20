@@ -20,7 +20,7 @@ export const B1_GUIDE = `
 <div class="card">
 <p><b>Leseverstehen und Sprachbausteine (reading and language elements) share one 90-minute block</b> — nobody signals when to switch between them, so you own the split.<br>
 Leseverstehen — 3 Teile, 20 items, 75 points: Teil 1 matches 5 short texts to 10 headlines (Globalverstehen, 5 pts each) · Teil 2 is one article with 5 three-option questions (Detailverstehen, 5 pts each) · Teil 3 matches 10 everyday situations to 12 advertisements, so 2 ads are always pure distractors (Selektives Verstehen, 2.5 pts each).<br>
-Sprachbausteine — 2 Teile, 20 items, 30 points: Teil 1 is a letter with 10 grammar gaps, choose a/b/c (1.5 pts each) · Teil 2 is a text with 10 gaps filled from a word bank of 15 words — 3 of them are never used (1.5 pts each).</p>
+Sprachbausteine — 2 Teile, 20 items, 30 points: Teil 1 is a letter with 10 grammar gaps, choose a/b/c (1.5 pts each) · Teil 2 is a text with 10 gaps filled from a word bank of 15 words — 5 of them are never used (1.5 pts each).</p>
 <p><b>Hörverstehen (Listening)</b> — ≈30 minutes, 3 Teile, 20 items, 75 points.<br>
 Teil 1: 5 short texts, richtig/falsch (5 pts each) · Teil 2: one long interview, 10 richtig/falsch statements — by far the densest listening task in the exam (2.5 pts each) · Teil 3: 5 announcements, richtig/falsch (5 pts each).</p>
 <p><b>Schriftlicher Ausdruck (Writing)</b> — 30 minutes, 45 points. Reply to an informal or semi-formal email, addressing all four given Leitpunkte.</p>
@@ -36,8 +36,8 @@ Teil 1: Einander kennenlernen (15 pts, ~3 min) · Teil 2: Über ein Thema sprech
 
 <h2 id="g-lesen">3. Crack: Lesen (part of the 90-minute block, 75 points)</h2>
 <div class="card">
-<div class="tactic"><b>Budget ≈30 min for Lesen and 60 for Sprachbausteine — but watch a clock, not a bell.</b> Nothing in the exam tells you when to switch; decide your own split before you sit down and hold to it.</div>
-<div class="tactic"><b>Teil 1: read the 5 short texts first, the headlines second.</b> Underline who is writing and why — a headline echoes the purpose of a text (looking for, offering, warning, inviting…), not just a noun the two happen to share. Two of the 10 headlines are never used; don't force a fit that isn't there.</div>
+<div class="tactic"><b>Budget ≈60 min for Lesen and 30 for Sprachbausteine — but watch a clock, not a bell.</b> Nothing in the exam tells you when to switch; decide your own split before you sit down and hold to it.</div>
+<div class="tactic"><b>Teil 1: read the 5 short texts first, the headlines second.</b> Underline who is writing and why — a headline echoes the purpose of a text (looking for, offering, warning, inviting…), not just a noun the two happen to share. Five of the 10 headlines are never used; don't force a fit that isn't there.</div>
 <div class="tactic"><b>Teil 2: work the five questions in text order.</b> The article is long enough that hunting for the relevant paragraph beats reading start to finish. Wrong options usually recycle a phrase from the text in a context that quietly changes its meaning.</div>
 <div class="tactic"><b>Teil 3: pull the hard facts out of each situation first</b> — who, what, when, how much — before scanning the 12 ads. Two ads are pure distractors, near-misses on price, age group or availability. If nothing fits perfectly, pick the closest match; there is no "none of the above" option.</div>
 <div class="tactic"><b>Never leave an item blank.</b> A wrong guess costs nothing.</div>
@@ -46,7 +46,7 @@ Teil 1: Einander kennenlernen (15 pts, ~3 min) · Teil 2: Über ein Thema sprech
 <h2 id="g-sb">4. Crack: Sprachbausteine (part of the 90-minute block, 30 points)</h2>
 <div class="card">
 <div class="tactic"><b>Teil 1: check both sides of the gap.</b> The word before it often fixes the case (a preposition governs Dativ or Akkusativ), the word after it often fixes agreement (a verb ending, a noun's gender). Read the whole sentence, never just the gap in isolation.</div>
-<div class="tactic"><b>Teil 2: sort the 15 words by type before placing any of them.</b> Decide which gaps need a verb, a noun, a connector — that alone rules out most of the bank per gap. Fill the certain ones first and cross them off the list; three words are decoys and will never be used.</div>
+<div class="tactic"><b>Teil 2: sort the 15 words by type before placing any of them.</b> Decide which gaps need a verb, a noun, a connector — that alone rules out most of the bank per gap. Fill the certain ones first and cross them off the list; five words are decoys and will never be used.</div>
 <div class="tactic"><b>Don't let Sprachbausteine eat into your Lesen time.</b> If a gap has you stuck, mark your best guess and move on — the shared 90 minutes are there so you can come back if there's time left.</div>
 </div>
 
