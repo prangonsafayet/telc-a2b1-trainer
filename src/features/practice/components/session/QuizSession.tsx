@@ -4,7 +4,7 @@ import { cn } from '@shared/lib/cn.ts';
 import { LETTERS } from '@shared/lib/format.ts';
 import { Button, Card, CardContent, Progress } from '@shared/ui';
 
-import { type QuizSession as QuizSessionState } from '@features/level-trainer/lib/practiceStore.ts';
+import { type QuizSession as QuizSessionState } from '@features/practice/lib/practiceStore.ts';
 
 import SessionSummary from './SessionSummary.tsx';
 

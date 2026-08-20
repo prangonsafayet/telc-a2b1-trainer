@@ -5,7 +5,7 @@ import { type MasteryCounts } from '@shared/lib/srs.ts';
 import { type StudyCategory } from '@shared/types';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
-import { type PracticeCategory } from '@features/level-trainer/lib/practiceStore.ts';
+import { type PracticeCategory } from '@features/practice/lib/practiceStore.ts';
 
 import MasteryLine from './MasteryLine.tsx';
 

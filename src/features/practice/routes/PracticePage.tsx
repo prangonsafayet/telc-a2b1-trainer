@@ -6,26 +6,32 @@ import { useSearchParams } from 'react-router-dom';
 import { PageTitle } from '@shared/components';
 import { STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
 import { TRAINERS } from '@shared/config/trainers.ts';
-import { type StudyCategory, type SingleLevelTrainerId } from '@shared/types';
+import { type StudyCategory, type TrainerId } from '@shared/types';
 import { Button, Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui';
 
-import CategoryPicker from '../components/practice/CategoryPicker.tsx';
-import FlashcardSession from '../components/practice/FlashcardSession.tsx';
-import QuizSession from '../components/practice/QuizSession.tsx';
+import EmptyBankNotice from '../components/EmptyBankNotice.tsx';
 import ReferenceTables from '../components/reference/ReferenceTables.tsx';
+import CategoryPicker from '../components/session/CategoryPicker.tsx';
+import FlashcardSession from '../components/session/FlashcardSession.tsx';
+import QuizSession from '../components/session/QuizSession.tsx';
 import { usePractice } from '../hooks/usePractice.ts';
 
-interface LevelPracticePageProps {
-  readonly level: SingleLevelTrainerId;
+interface PracticePageProps {
+  readonly trainer: TrainerId;
 }
 
 const isCategory = (value: string | null): value is StudyCategory =>
   value !== null && (STUDY_CATEGORIES as readonly string[]).includes(value);
 
-/** The practice hub: flashcards, quiz drills and the reference tables. */
-const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
-  const practice = usePractice(level);
+/**
+ * The practice hub of any trainer: flashcards, quiz drills and the reference tables, all
+ * over whatever bank its descriptor offers. A trainer whose bank is empty gets the same
+ * screen with its empty state — there is no second implementation.
+ */
+const PracticePage = ({ trainer }: PracticePageProps) => {
+  const practice = usePractice(trainer);
   const [params] = useSearchParams();
+  const { name, short, basePath } = TRAINERS[trainer];
 
   /* A "drill it" link lands here as ?tab=quiz&category=… and starts the session itself. */
   const autoStarted = useRef(false);
@@ -50,7 +56,7 @@ const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
                 : 'Instant feedback after every answer, with the English meaning.'
             }
           >
-            {session.kind === 'flashcards' ? 'Flashcards' : 'Quiz'} · {TRAINERS[level].short}
+            {session.kind === 'flashcards' ? 'Flashcards' : 'Quiz'} · {short}
           </PageTitle>
           <Button variant="ghost" size="sm" onClick={practice.endSession}>
             <X /> End session
@@ -84,6 +90,17 @@ const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
     );
   }
 
+  if (practice.mastery.total === 0) {
+    return (
+      <>
+        <PageTitle lead="Flashcards and quizzes feed one spaced-repetition schedule; the tables are for looking things up.">
+          Practice · {name}
+        </PageTitle>
+        <EmptyBankNotice trainerName={name} learnTo={`${basePath}/learn`} />
+      </>
+    );
+  }
+
   return (
     <>
       <PageTitle
@@ -94,7 +111,7 @@ const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
           </>
         }
       >
-        Practice · {TRAINERS[level].name}
+        Practice · {name}
       </PageTitle>
 
       <Tabs defaultValue={wantedTab === 'tables' ? 'tables' : 'practice'}>
@@ -117,4 +134,4 @@ const LevelPracticePage = ({ level }: LevelPracticePageProps) => {
   );
 };
 
-export default LevelPracticePage;
+export default PracticePage;

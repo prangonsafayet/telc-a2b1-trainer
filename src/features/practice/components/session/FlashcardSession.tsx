@@ -2,7 +2,7 @@ import { Check, X } from 'lucide-react';
 
 import { Button, Progress } from '@shared/ui';
 
-import { type FlashcardSession as FlashcardSessionState } from '@features/level-trainer/lib/practiceStore.ts';
+import { type FlashcardSession as FlashcardSessionState } from '@features/practice/lib/practiceStore.ts';
 
 import Flashcard from './Flashcard.tsx';
 import SessionSummary from './SessionSummary.tsx';

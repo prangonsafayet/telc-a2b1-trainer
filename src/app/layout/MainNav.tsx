@@ -9,14 +9,7 @@ import {
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import {
-  hasGuide,
-  hasVocabBank,
-  TRAINER_ORDER,
-  TRAINERS,
-  trainerFromPath,
-  trainerHome
-} from '@shared/config/trainers.ts';
+import { hasGuide, TRAINER_ORDER, TRAINERS, trainerFromPath, trainerHome } from '@shared/config/trainers.ts';
 import { cn } from '@shared/lib/cn.ts';
 import { type TrainerId } from '@shared/types';
 
@@ -29,9 +22,8 @@ interface NavEntry {
 }
 
 /**
- * The active trainer's tabs, generated from its descriptor: it gets a Guide tab if it
- * ships a guide and a Practice tab if it has a bank to drill, and Settings is shared by
- * every trainer. Nothing here names a trainer.
+ * The active trainer's tabs, generated from its descriptor: it gets a Guide tab if it ships
+ * a guide, and Settings is shared by every trainer. Nothing here names a trainer.
  */
 const entriesFor = (trainer: TrainerId): readonly NavEntry[] => {
   const base = TRAINERS[trainer].basePath;
@@ -41,9 +33,7 @@ const entriesFor = (trainer: TrainerId): readonly NavEntry[] => {
     ...(hasGuide(trainer)
       ? [{ to: `${base}/guide`, label: 'Exam Guide', icon: BookOpen, exact: false }]
       : []),
-    ...(hasVocabBank(trainer)
-      ? [{ to: `${base}/practice`, label: 'Practice', icon: Layers, exact: false }]
-      : []),
+    { to: `${base}/practice`, label: 'Practice', icon: Layers, exact: false },
     { to: `${base}/history`, label: 'History', icon: History, exact: false },
     { to: '/settings', label: 'Settings', icon: Settings2, exact: false }
   ];

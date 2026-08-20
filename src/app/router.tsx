@@ -3,14 +3,7 @@ import { lazy, Suspense, type ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { RouteFallback } from '@shared/components';
-import {
-  hasGuide,
-  hasVocabBank,
-  isSingleLevelTrainer,
-  ROOT_TRAINER,
-  TRAINER_ORDER,
-  trainerHome
-} from '@shared/config/trainers.ts';
+import { hasGuide, ROOT_TRAINER, TRAINER_ORDER, trainerHome } from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
 
 import DashboardPage from '@features/dashboard/routes/DashboardPage.tsx';
@@ -26,7 +19,7 @@ const LearnPage = lazy(() => import('@features/learn/routes/LearnPage.tsx'));
 const GuidePage = lazy(() => import('@features/guide/routes/GuidePage.tsx'));
 const HistoryPage = lazy(() => import('@features/history/routes/HistoryPage.tsx'));
 const SettingsPage = lazy(() => import('@features/settings/routes/SettingsPage.tsx'));
-const PracticePage = lazy(() => import('@features/level-trainer/routes/LevelPracticePage.tsx'));
+const PracticePage = lazy(() => import('@features/practice/routes/PracticePage.tsx'));
 
 /* One exam feature serves every trainer; the screens take the trainer as a prop. */
 const RunnerPage = lazy(() => import('@features/exam/routes/RunnerPage.tsx'));
@@ -36,12 +29,6 @@ const ReviewPage = lazy(() => import('@features/exam/routes/ReviewPage.tsx'));
 /** The guide screen, mounted only for a trainer whose descriptor ships one. */
 const guideRoutes = (trainer: TrainerId): readonly ReactElement[] =>
   hasGuide(trainer) ? [<Route key="guide" path="guide" element={<GuidePage trainer={trainer} />} />] : [];
-
-/** The practice hub, mounted for a trainer with a vocabulary and grammar bank to drill. */
-const practiceRoutes = (trainer: TrainerId): readonly ReactElement[] =>
-  hasVocabBank(trainer) && isSingleLevelTrainer(trainer)
-    ? [<Route key="practice" path="practice" element={<PracticePage level={trainer} />} />]
-    : [];
 
 /**
  * The three exam screens, mounted relative to whichever trainer's base path they sit
@@ -63,7 +50,7 @@ const trainerRoutes = (trainer: TrainerId): ReactElement => (
     <Route index element={<DashboardPage trainer={trainer} />} />
     <Route path="learn" element={<LearnPage trainer={trainer} />} />
     {guideRoutes(trainer)}
-    {practiceRoutes(trainer)}
+    <Route path="practice" element={<PracticePage trainer={trainer} />} />
     <Route path="history" element={<HistoryPage trainer={trainer} />} />
     {examRoutes(trainer)}
   </Route>

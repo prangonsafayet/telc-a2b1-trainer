@@ -11,11 +11,15 @@ const ROUTES = [
   { path: '/guide', expect: /telc/ },
   { path: '/history', expect: /History|attempts/i },
   { path: '/settings', expect: /Settings/ },
+  /* The practice hub serves every trainer; the root one has no bank authored yet, so it
+     must render its empty state rather than five 0/0 categories or a missing route. */
+  { path: '/practice', expect: /No vocabulary bank yet/ },
   { path: '/nope', expect: /not found|404/i },
   /* The B1 and B2 trainers mount the same three exam screens as the root trainer, so a
      regression in the shared runner has to fail on one of these. */
   { path: '/b1', expect: /telc Deutsch B1/ },
   { path: '/b1/exam/1/lesen', expect: /Leseverstehen/ },
+  { path: '/b1/practice', expect: /Reference tables/ },
   { path: '/b2', expect: /telc Deutsch B2/ },
   { path: '/b2/exam/1/full', expect: /Leseverstehen/ }
 ] as const;

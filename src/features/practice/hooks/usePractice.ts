@@ -5,7 +5,7 @@ import { TRAINER_CONTENT } from '@content/trainers/index.ts';
 import { STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
 import { countMastery, isDue, pickDueIds, reviewItem, type MasteryCounts } from '@shared/lib/srs.ts';
 import { allCards, cardsFor, idsFor } from '@shared/lib/studyItems.ts';
-import { type SingleLevelTrainerId, type StudyCard, type StudyCategory, type VocabBank } from '@shared/types';
+import { type StudyCard, type StudyCategory, type TrainerId, type VocabBank } from '@shared/types';
 
 import { useToday } from '@features/plan';
 import { touchActivity, useTrainerSlice, type TrainerSlice } from '@features/progress';
@@ -59,11 +59,15 @@ const pickSessionCards = (
   ].slice(0, limit);
 };
 
-/** One practice hub session: the store drives the screen, every answer lands in SRS. */
-export const usePractice = (level: SingleLevelTrainerId): PracticeController => {
-  const { srs, update } = useTrainerSlice(level);
+/**
+ * One practice hub session for one trainer: the store drives the screen, every answer lands
+ * in that trainer's own SRS state. The bank comes from its content, so a trainer with an
+ * empty one simply has nothing due.
+ */
+export const usePractice = (trainer: TrainerId): PracticeController => {
+  const { srs, update } = useTrainerSlice(trainer);
   const today = useToday();
-  const vocab = TRAINER_CONTENT[level].vocab;
+  const vocab = TRAINER_CONTENT[trainer].vocab;
 
   const categoryMastery = useMemo(
     () =>
