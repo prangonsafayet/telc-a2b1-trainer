@@ -11,7 +11,13 @@ const ROUTES = [
   { path: '/guide', expect: /telc/ },
   { path: '/history', expect: /History|attempts/i },
   { path: '/settings', expect: /Settings/ },
-  { path: '/nope', expect: /not found|404/i }
+  { path: '/nope', expect: /not found|404/i },
+  /* The B1 and B2 trainers mount the same three exam screens as the root trainer, so a
+     regression in the shared runner has to fail on one of these. */
+  { path: '/b1', expect: /telc Deutsch B1/ },
+  { path: '/b1/exam/1/lesen', expect: /Leseverstehen/ },
+  { path: '/b2', expect: /telc Deutsch B2/ },
+  { path: '/b2/exam/1/full', expect: /Leseverstehen/ }
 ] as const;
 
 let errors: ReturnType<typeof captureErrors>;

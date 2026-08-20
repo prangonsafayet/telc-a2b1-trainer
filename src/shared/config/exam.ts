@@ -30,6 +30,11 @@ export const MODULE_META: Readonly<Record<ExamModule, ModuleMeta>> = {
 export const moduleMinutes = (module: ExamModule, settings: Settings): number =>
   MODULE_META[module].minutes(settings);
 
+/** Points a perfect module scores. Four skills × 60 make up the 240-point total. */
+export const SKILL_MAX = 60;
+
+export const FULL_EXAM_MAX = 240;
+
 /** Shown on the briefing screen before each module starts. */
 export const MODULE_BRIEFING: Readonly<Record<ExamModule, string>> = {
   lesen:

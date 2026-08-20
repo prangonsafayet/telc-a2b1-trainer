@@ -3,10 +3,9 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { EXAM_MODULES } from '@shared/config/exam.ts';
-import { type AttemptMode, type ExamModule } from '@shared/types';
+import { type AttemptMode } from '@shared/types';
 
-import { clearRun, createRun, loadRun, saveRun, type ExamRun } from '@features/exam';
+import { A2B1_RUN_FORMAT, useStartAttempt, type ExamRun } from '@features/exam';
 
 export interface ResumableRun {
   readonly run: ExamRun | null;
@@ -18,26 +17,19 @@ export interface ResumableRun {
 
 export const useResumableRun = (): ResumableRun => {
   const navigate = useNavigate();
-  const [run, setRun] = useState<ExamRun | null>(() => loadRun());
+  const store = A2B1_RUN_FORMAT.runStore;
+  const start = useStartAttempt('a2b1');
+  const [run, setRun] = useState<ExamRun | null>(() => store.load());
 
   const discard = useCallback(() => {
-    clearRun();
+    store.clear();
     setRun(null);
     toast.info('In-progress attempt discarded.');
-  }, []);
+  }, [store]);
 
   const resume = useCallback(() => {
     if (run) void navigate(`/exam/${String(run.examId)}/${run.mode}`);
   }, [navigate, run]);
-
-  const start = useCallback(
-    (examId: number, mode: AttemptMode) => {
-      const queue: readonly ExamModule[] = mode === 'full' ? EXAM_MODULES : [mode];
-      saveRun(createRun(examId, mode, queue));
-      void navigate(`/exam/${String(examId)}/${mode}`);
-    },
-    [navigate]
-  );
 
   return { run, discard, resume, start };
 };

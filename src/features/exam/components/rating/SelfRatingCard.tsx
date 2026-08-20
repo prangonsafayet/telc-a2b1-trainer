@@ -1,37 +1,62 @@
 import { CriteriaRatingPanel, Multiline } from '@shared/components';
-import { type Exam, type RecordingMap, type SpeakingPart } from '@shared/types';
+import { type AnswerMap, type RecordingMap } from '@shared/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
+import { SPEAKING_PARTS } from '@features/exam/config/run.ts';
 import { useSelfRating } from '@features/exam/hooks/useSelfRating.ts';
+import {
+  type ExamFormat,
+  type ExamPaper,
+  type RunSettings,
+  type StoredAttempt
+} from '@features/exam/types/examFormat.ts';
+import { type RatedModule } from '@features/exam/types/run.ts';
 
-interface SelfRatingCardProps {
-  readonly module: 'schreiben' | 'sprechen';
-  readonly exam: Exam;
+interface SelfRatingCardProps<
+  TExam extends ExamPaper,
+  TSettings extends RunSettings,
+  TAttempt extends StoredAttempt
+> {
+  readonly format: ExamFormat<TExam, TSettings, TAttempt>;
+  readonly module: RatedModule;
+  readonly exam: TExam;
+  readonly answers: AnswerMap;
   readonly writtenText: string;
   readonly recordings: RecordingMap;
   readonly onConfirm: (score: number) => void;
 }
 
-const SPEAKING_PARTS: readonly SpeakingPart[] = ['t1', 't2', 't3'];
-
 /** Schreiben and Sprechen are self-scored against the sample answer / Redemittel. */
-const SelfRatingCard = ({ module, exam, writtenText, recordings, onConfirm }: SelfRatingCardProps) => {
-  const { criteria, values, total, setValue } = useSelfRating(module);
+const SelfRatingCard = <
+  TExam extends ExamPaper,
+  TSettings extends RunSettings,
+  TAttempt extends StoredAttempt
+>({
+  format,
+  module,
+  exam,
+  answers,
+  writtenText,
+  recordings,
+  onConfirm
+}: SelfRatingCardProps<TExam, TSettings, TAttempt>) => {
+  const { criteria, values, total, max, setValue } = useSelfRating(format.rating[module]);
+  const sample = format.scoring.writingSample(exam, answers);
   const isWriting = module === 'schreiben';
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">
-          {isWriting ? 'Schreiben' : 'Sprechen'} — self-scoring (max 60)
+          {format.moduleShort(module)} — self-scoring (max {max})
         </h2>
         <p className="mt-1 text-muted-foreground">
-          Compare honestly with the sample, then move the sliders. 0 = not at all · 5 = fully. Score = sum ×
-          3.
+          Compare honestly with the sample, then move the sliders. 0 = not at all · 5 = fully. Score = sum ×{' '}
+          {format.rating[module].scale}.
         </p>
       </div>
 
-      {isWriting ? (
+      {isWriting && sample ? (
         <Card>
           <CardHeader>
             <CardTitle>Your text</CardTitle>
@@ -43,13 +68,13 @@ const SelfRatingCard = ({ module, exam, writtenText, recordings, onConfirm }: Se
             <div>
               <h3 className="mb-2 font-semibold">Sample answer (Musterlösung)</h3>
               <div className="rounded-lg border-l-4 border-[color:var(--success)] bg-[color-mix(in_oklab,var(--success)_8%,transparent)] p-4 leading-relaxed">
-                <Multiline text={exam.schreiben.musterloesung} />
+                <Multiline text={sample.musterloesung} />
               </div>
             </div>
             <div className="text-sm text-muted-foreground">
-              💡 {exam.schreiben.tipps} — Check: did you cover all three points?
+              💡 {sample.tipps}
               <ul className="mt-1 list-disc pl-5">
-                {exam.schreiben.points.map((point, index) => (
+                {sample.points.map((point, index) => (
                   <li key={index}>{point}</li>
                 ))}
               </ul>
@@ -77,10 +102,7 @@ const SelfRatingCard = ({ module, exam, writtenText, recordings, onConfirm }: Se
                 </p>
               );
             })}
-            <p className="pt-2 text-sm text-muted-foreground">
-              💡 Rate against the Redemittel: did you use suggestion phrases, react, ask back, reach a result
-              in Teil 3?
-            </p>
+            <p className="pt-2 text-sm text-muted-foreground">💡 {format.speakingHint}</p>
           </CardContent>
         </Card>
       )}
@@ -89,7 +111,7 @@ const SelfRatingCard = ({ module, exam, writtenText, recordings, onConfirm }: Se
         criteria={criteria}
         values={values}
         total={total}
-        max={60}
+        max={max}
         setValue={setValue}
         onConfirm={onConfirm}
       />

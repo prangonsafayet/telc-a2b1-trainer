@@ -1,23 +1,32 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { type Attempt } from '@shared/types';
-import { clearRun, loadRun } from '@features/exam';
+import { A2B1_RUN_FORMAT } from '@features/exam';
 import { PROGRESS_STORAGE_KEY } from '@features/progress';
 
-import { click, findByText, mount, seedProgress, waitFor } from './harness.ts';
+import { captureErrors, click, findByText, mount, seedProgress, waitFor } from './harness.ts';
 
 /* Drives a real attempt end to end, including a mid-module page refresh — the failure this
    guards against lost a candidate's answers and their remaining time. */
+
+const runStore = A2B1_RUN_FORMAT.runStore;
 
 const storedAttempts = (): readonly Attempt[] => {
   const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
   return raw ? ((JSON.parse(raw) as { attempts?: Attempt[] }).attempts ?? []) : [];
 };
 
+let errors: ReturnType<typeof captureErrors>;
+
 beforeEach(() => {
   localStorage.clear();
-  clearRun();
+  runStore.clear();
   seedProgress({ daysUntilExam: 30 });
+  errors = captureErrors();
+});
+
+afterEach(() => {
+  errors.restore();
 });
 
 describe('a single-module practice run', () => {
@@ -32,7 +41,7 @@ describe('a single-module practice run', () => {
     await click(start);
     expect(view.text()).toMatch(/Teil 1 — Anzeigen zuordnen/);
     expect(view.text()).toMatch(/4[45]:\d\d/);
-    const started = loadRun();
+    const started = runStore.load();
     expect(started?.phase).toBe('module');
     /* An absolute deadline, not a countdown: a countdown cannot survive a reload. */
     expect(started?.deadline).toBeTruthy();
@@ -41,15 +50,15 @@ describe('a single-module practice run', () => {
     const radios = [...document.querySelectorAll('button[role="radio"]')];
     expect(radios.length).toBeGreaterThan(0);
     await click(radios[0]);
-    expect(Object.keys(loadRun()?.answers ?? {})).toHaveLength(1);
+    expect(Object.keys(runStore.load()?.answers ?? {})).toHaveLength(1);
 
     /* 4. The refresh: tear the tree down and remount at the same URL. */
-    const savedDeadline = loadRun()?.deadline;
+    const savedDeadline = runStore.load()?.deadline;
     await view.unmount();
     view = await mount('/exam/1/lesen');
     expect(view.text()).toMatch(/Teil 1 — Anzeigen zuordnen/);
-    expect(loadRun()?.deadline).toBe(savedDeadline);
-    expect(Object.keys(loadRun()?.answers ?? {})).toHaveLength(1);
+    expect(runStore.load()?.deadline).toBe(savedDeadline);
+    expect(Object.keys(runStore.load()?.answers ?? {})).toHaveLength(1);
     expect(document.querySelectorAll('button[role="radio"][data-state="checked"]')).toHaveLength(1);
 
     /* 5. Submit with blanks: confirm, then results. */
@@ -64,11 +73,15 @@ describe('a single-module practice run', () => {
     await waitFor(() => /time used/.test(view.text()));
     expect(view.text()).toMatch(/time used/);
     /* The in-progress run must be gone, or the dashboard offers to resume a finished exam. */
-    expect(loadRun()).toBeNull();
+    expect(runStore.load()).toBeNull();
 
     const attempts = storedAttempts();
     expect(attempts).toHaveLength(1);
     expect(typeof attempts[0]?.scores.lesen).toBe('number');
+
+    /* The finish path writes an attempt, clears the run and navigates. None of that may
+       produce a React error — storing from inside a state updater used to. */
+    expect(errors.real()).toEqual([]);
 
     await view.unmount();
   });

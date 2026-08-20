@@ -1,98 +1,38 @@
-import { Home, RotateCcw } from 'lucide-react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
-import { Multiline, PageTitle, SectionTitle, Transcript } from '@shared/components';
-import { fmtDate } from '@shared/lib/format.ts';
-import { Button, Card, CardContent } from '@shared/ui';
+import { findExamById } from '@content/exams';
+import { findTelcExam } from '@content/trainers/index.ts';
 
-import ReviewEntryCard from '../components/review/ReviewEntryCard.tsx';
-import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
-import { attemptIncludes, buildReviewSections } from '../lib/reviewItems.ts';
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { type TrainerId } from '@shared/types';
 
-const ReviewPage = () => {
+import AttemptReview from '@features/exam/components/review/AttemptReview.tsx';
+import { useExamBinding } from '@features/exam/hooks/useExamBinding.ts';
+import { useStartAttempt } from '@features/exam/hooks/useStartAttempt.ts';
+import { findAttempt } from '@features/exam/lib/attempts.ts';
+
+interface ReviewPageProps {
+  readonly trainer: TrainerId;
+}
+
+/** Every item of an attempt with the given and the correct answer, plus transcripts. */
+const ReviewPage = ({ trainer }: ReviewPageProps) => {
   const { attemptId } = useParams<{ attemptId: string }>();
-  const { attempt, exam } = useAttempt(attemptId);
-  const retry = useRetryExam();
+  const binding = useExamBinding(trainer);
+  const retry = useStartAttempt(trainer);
+  const history = `${TRAINERS[trainer].basePath}/history`;
 
-  if (!attempt || !exam) return <Navigate to="/history" replace />;
+  if (binding.kind === 'telc') {
+    const attempt = findAttempt(binding.store.attempts, attemptId);
+    const exam = attempt ? findTelcExam(binding.level, attempt.examId) : undefined;
+    if (!attempt || !exam) return <Navigate to={history} replace />;
+    return <AttemptReview format={binding.format} exam={exam} attempt={attempt} onRetry={retry} />;
+  }
 
-  const sections = buildReviewSections(exam, attempt);
-  const writtenText = typeof attempt.answers['w.text'] === 'string' ? attempt.answers['w.text'] : '';
-
-  return (
-    <>
-      <PageTitle
-        lead={`${fmtDate(attempt.date)} · Green = correct, red = wrong. Learn every red item before the next test.`}
-      >
-        Review — {exam.title}
-      </PageTitle>
-
-      {sections.map(section => (
-        <section key={section.module}>
-          <SectionTitle>{section.heading}</SectionTitle>
-          {section.transcripts?.map((audio, index) => (
-            <Card className="my-3" key={index}>
-              <CardContent>
-                <Transcript audio={audio} />
-              </CardContent>
-            </Card>
-          ))}
-          {section.entries.map(entry => (
-            <ReviewEntryCard key={entry.id} entry={entry} />
-          ))}
-        </section>
-      ))}
-
-      {attemptIncludes(attempt, 'schreiben') ? (
-        <section>
-          <SectionTitle>Schreiben — {attempt.scores.schreiben ?? '–'}/60 (self-scored)</SectionTitle>
-          <Card>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="mb-2 font-semibold">Your text</h3>
-                <div className="rounded-lg border bg-muted/40 p-4 leading-relaxed">
-                  <Multiline text={writtenText || '(empty)'} />
-                </div>
-              </div>
-              <div>
-                <h3 className="mb-2 font-semibold">Musterlösung</h3>
-                <div className="rounded-lg border-l-4 border-[color:var(--success)] bg-[color-mix(in_oklab,var(--success)_8%,transparent)] p-4 leading-relaxed">
-                  <Multiline text={exam.schreiben.musterloesung} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-      ) : null}
-
-      {attemptIncludes(attempt, 'sprechen') ? (
-        <section>
-          <SectionTitle>Sprechen — {attempt.scores.sprechen ?? '–'}/60 (self-scored)</SectionTitle>
-          <Card>
-            <CardContent className="text-sm text-muted-foreground">
-              Recordings are session-only and not stored. Re-run the module to practice again — and re-read
-              the Sprechen tactics in the Exam Guide.
-            </CardContent>
-          </Card>
-        </section>
-      ) : null}
-
-      <div className="mt-6 flex flex-wrap gap-2">
-        <Button
-          onClick={() => {
-            retry(attempt.examId, attempt.mode);
-          }}
-        >
-          <RotateCcw /> Retry this exam
-        </Button>
-        <Button asChild variant="ghost">
-          <Link to="/">
-            <Home /> Dashboard
-          </Link>
-        </Button>
-      </div>
-    </>
-  );
+  const attempt = findAttempt(binding.store.attempts, attemptId);
+  const exam = attempt ? findExamById(attempt.examId) : undefined;
+  if (!attempt || !exam) return <Navigate to={history} replace />;
+  return <AttemptReview format={binding.format} exam={exam} attempt={attempt} onRetry={retry} />;
 };
 
 export default ReviewPage;

@@ -1,24 +1,35 @@
 import { Navigate, useParams } from 'react-router-dom';
 
 import { findExamById } from '@content/exams';
+import { findTelcExam } from '@content/trainers/index.ts';
 
-import { EXAM_MODULES } from '@shared/config/exam.ts';
-import { type AttemptMode } from '@shared/types';
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { type TrainerId } from '@shared/types';
 
 import RunnerView from '@features/exam/components/runner/RunnerView.tsx';
+import { useExamBinding } from '@features/exam/hooks/useExamBinding.ts';
+import { isAttemptMode } from '@features/exam/lib/attemptMode.ts';
 
-const isAttemptMode = (value: string | undefined): value is AttemptMode =>
-  value === 'full' || (EXAM_MODULES as readonly string[]).includes(value ?? '');
+interface RunnerPageProps {
+  readonly trainer: TrainerId;
+}
 
 /** Drives one attempt: briefing → module → optional self-scoring → results. */
-const RunnerPage = () => {
+const RunnerPage = ({ trainer }: RunnerPageProps) => {
   const { examId, mode } = useParams<{ examId: string; mode: string }>();
-  const exam = findExamById(examId);
-  const validMode = isAttemptMode(mode);
+  const binding = useExamBinding(trainer);
+  const home = TRAINERS[trainer].basePath || '/';
 
   /* An unknown exam or mode is a bad URL, not a state worth rendering. */
-  if (!exam || !validMode) return <Navigate to="/" replace />;
-  return <RunnerView exam={exam} mode={mode} />;
+  if (binding.kind === 'telc') {
+    const exam = findTelcExam(binding.level, examId);
+    if (!exam || !isAttemptMode(binding.format, mode)) return <Navigate to={home} replace />;
+    return <RunnerView format={binding.format} exam={exam} mode={mode} store={binding.store} />;
+  }
+
+  const exam = findExamById(examId);
+  if (!exam || !isAttemptMode(binding.format, mode)) return <Navigate to={home} replace />;
+  return <RunnerView format={binding.format} exam={exam} mode={mode} store={binding.store} />;
 };
 
 export default RunnerPage;

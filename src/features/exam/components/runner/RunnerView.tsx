@@ -1,47 +1,48 @@
-import { useCallback, type ComponentType } from 'react';
-
-import { Navigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 import { ExamModuleToolbar, ModuleBriefingCard } from '@shared/components';
-import { MODULE_BRIEFING, MODULE_META } from '@shared/config/exam.ts';
 import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { useConfirm } from '@shared/providers/useConfirm.ts';
-import { type AttemptMode, type Exam } from '@shared/types';
+import { type AttemptMode } from '@shared/types';
 import { Button } from '@shared/ui';
 
+import SelfRatingCard from '@features/exam/components/rating/SelfRatingCard.tsx';
+import { UNTIMED_MODULES } from '@features/exam/config/run.ts';
 import { useExamRun } from '@features/exam/hooks/useExamRun.ts';
-import { type A2b1ModuleProps } from '@features/exam/types/moduleProps.ts';
-import { useProgress } from '@features/progress';
+import { type ExamStore } from '@features/exam/types/examBinding.ts';
+import {
+  type ExamFormat,
+  type ExamPaper,
+  type RunSettings,
+  type StoredAttempt
+} from '@features/exam/types/examFormat.ts';
 
-import HoerenModule from '../modules/HoerenModule.tsx';
-import LesenModule from '../modules/LesenModule.tsx';
-import SchreibenModule from '../modules/SchreibenModule.tsx';
-import SprachbausteineModule from '../modules/SprachbausteineModule.tsx';
-import SprechenModule from '../modules/SprechenModule.tsx';
-import SelfRatingCard from '../rating/SelfRatingCard.tsx';
-
-const MODULE_COMPONENTS: Readonly<Record<string, ComponentType<A2b1ModuleProps>>> = {
-  lesen: LesenModule,
-  sprachbausteine: SprachbausteineModule,
-  hoeren: HoerenModule,
-  schreiben: SchreibenModule,
-  sprechen: SprechenModule
-};
-
-interface RunnerViewProps {
-  readonly exam: Exam;
+interface RunnerViewProps<
+  TExam extends ExamPaper,
+  TSettings extends RunSettings,
+  TAttempt extends StoredAttempt
+> {
+  readonly format: ExamFormat<TExam, TSettings, TAttempt>;
+  readonly exam: TExam;
   readonly mode: AttemptMode;
+  readonly store: ExamStore<TSettings, TAttempt>;
 }
 
 /** One attempt after the route params are known good: briefing → module → rating. */
-const RunnerView = ({ exam, mode }: RunnerViewProps) => {
+const RunnerView = <TExam extends ExamPaper, TSettings extends RunSettings, TAttempt extends StoredAttempt>({
+  format,
+  exam,
+  mode,
+  store
+}: RunnerViewProps<TExam, TSettings, TAttempt>) => {
   const confirm = useConfirm();
-  const { db } = useProgress();
-  const run = useExamRun({ exam, mode });
-
-  const step = run.run.mode === 'full' ? { index: run.run.index + 1, total: run.run.queue.length } : null;
-  const stepLabel = step ? ` · Module ${String(step.index)} of ${String(step.total)}` : '';
-
+  const run = useExamRun({
+    format,
+    exam,
+    mode,
+    settings: store.settings,
+    saveAttempt: store.saveAttempt
+  });
   const handleSubmit = useCallback(async () => {
     const missing = run.requestSubmit();
     if (missing > 0) {
@@ -65,15 +66,18 @@ const RunnerView = ({ exam, mode }: RunnerViewProps) => {
     if (ok) run.abort();
   }, [run, confirm]);
 
+  const step = run.run.mode === 'full' ? { index: run.run.index + 1, total: run.run.queue.length } : null;
+  const label = format.examLabel(exam);
+
   if (run.run.phase === 'brief') {
     return (
       <ModuleBriefingCard
-        kicker={`${exam.title} · ${exam.level}${step ? stepLabel : ' · Single-module practice'}`}
-        title={MODULE_META[run.module].name}
-        briefing={MODULE_BRIEFING[run.module]}
+        kicker={`${label}${step ? ` · Module ${String(step.index)} of ${String(step.total)}` : ' · Single-module practice'}`}
+        title={format.moduleName(run.module)}
+        briefing={format.briefing(run.module, exam)}
         minutes={run.minutes}
-        guidelineOnly={run.module === 'sprechen'}
-        startLabel={`Start ${MODULE_META[run.module].short}`}
+        guidelineOnly={UNTIMED_MODULES.includes(run.module)}
+        startLabel={`Start ${format.moduleShort(run.module)}`}
         onBegin={run.beginModule}
         onAbort={() => void handleAbort()}
       />
@@ -83,8 +87,11 @@ const RunnerView = ({ exam, mode }: RunnerViewProps) => {
   if (run.run.phase === 'rating' && (run.module === 'schreiben' || run.module === 'sprechen')) {
     return (
       <SelfRatingCard
+        key={run.module}
+        format={format}
         module={run.module}
         exam={exam}
+        answers={run.run.answers}
         writtenText={textAnswer(run.run.answers, WRITING_ANSWER_KEY)}
         recordings={run.recordings}
         onConfirm={run.confirmRating}
@@ -92,23 +99,22 @@ const RunnerView = ({ exam, mode }: RunnerViewProps) => {
     );
   }
 
-  const ModuleComponent = MODULE_COMPONENTS[run.module];
-  if (!ModuleComponent) return <Navigate to="/" replace />;
+  const ModuleComponent = format.moduleComponents[run.module];
 
   return (
     <>
       <ExamModuleToolbar
-        title={MODULE_META[run.module].name}
-        subtitle={`${exam.title}${step ? ` · module ${String(step.index)}/${String(step.total)}` : ''}`}
+        title={format.moduleName(run.module)}
+        subtitle={`${label}${step ? ` · module ${String(step.index)}/${String(step.total)}` : ''}`}
         secondsRemaining={run.secondsRemaining}
-        totalSeconds={run.minutes * 60}
+        totalSeconds={run.totalSeconds}
       />
 
       <ModuleComponent
         exam={exam}
         answers={run.run.answers}
         setAnswer={run.setAnswer}
-        settings={db.settings}
+        settings={store.settings}
         plays={run.run.plays}
         onConsumePlay={run.consumePlay}
         recordings={run.recordings}
@@ -117,7 +123,7 @@ const RunnerView = ({ exam, mode }: RunnerViewProps) => {
 
       <div className="mt-6 flex flex-wrap gap-2">
         <Button size="lg" onClick={() => void handleSubmit()}>
-          Submit {MODULE_META[run.module].short} ✓
+          Submit {format.moduleShort(run.module)} ✓
         </Button>
         <Button variant="ghost" size="lg" onClick={() => void handleAbort()}>
           Abort attempt

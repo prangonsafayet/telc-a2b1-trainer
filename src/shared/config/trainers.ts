@@ -20,6 +20,9 @@ export interface TrainerInfo {
 
 export const TRAINER_ORDER: readonly TrainerId[] = ['a2b1', 'b1', 'b2'];
 
+/** The two single-level trainers, in the order they are offered. */
+export const TELC_LEVELS: readonly TelcLevel[] = ['b1', 'b2'];
+
 export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
   a2b1: {
     id: 'a2b1',

@@ -7,8 +7,8 @@ import { fmtDate } from '@shared/lib/format.ts';
 import { type TelcLevel } from '@shared/types';
 import { Alert, AlertDescription, Button, Card, CardContent, Progress } from '@shared/ui';
 
+import { useStartAttempt } from '@features/exam';
 import { describeClamp, examSlotLabel, useTrainerSchedule } from '@features/plan';
-import { useTelcStart } from '@features/telc-exam';
 
 import TelcExamCard from '../components/exams/TelcExamCard.tsx';
 import LevelStatTile from '../components/stats/LevelStatTile.tsx';
@@ -24,7 +24,7 @@ interface LevelDashboardPageProps {
 const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
   const { doc, stats, weakAreas } = useLevelStats(level);
   const schedule = useTrainerSchedule(level);
-  const start = useTelcStart(level);
+  const start = useStartAttempt(level);
   const trainer = TRAINERS[level];
   const base = trainer.basePath;
   const notice = schedule ? describeClamp(schedule) : null;
