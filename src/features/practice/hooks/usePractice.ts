@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
 import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
+import { recordFrom } from '@shared/lib/records.ts';
 import { countMastery, isDue, pickDueIds, reviewItem, type MasteryCounts } from '@shared/lib/srs.ts';
 import { allCards, cardsFor, idsFor } from '@shared/lib/studyItems.ts';
 import { type StudyCard, type StudyCategory, type TrainerId, type VocabBank } from '@shared/types';
@@ -69,10 +70,7 @@ export const usePractice = (trainer: TrainerId): PracticeController => {
   const vocab = useTrainerContent(trainer).vocab;
 
   const categoryMastery = useMemo(
-    () =>
-      Object.fromEntries(
-        STUDY_CATEGORIES.map(category => [category, countMastery(idsFor(vocab, category), srs, today)])
-      ) as Record<StudyCategory, MasteryCounts>,
+    () => recordFrom(STUDY_CATEGORIES, category => countMastery(idsFor(vocab, category), srs, today)),
     [vocab, srs, today]
   );
 

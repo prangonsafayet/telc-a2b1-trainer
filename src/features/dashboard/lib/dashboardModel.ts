@@ -1,4 +1,4 @@
-import { SKILL_MAX } from '@shared/config/exam.ts';
+import { A2_TOTAL, B1_TOTAL, SKILL_MAX } from '@shared/config/exam.ts';
 import { PAPER_TOTAL_MAX, PASS_PERCENT, PASS_RULES, passLineLabel } from '@shared/config/examConditions.ts';
 import { SINGLE_LEVEL_MODULE_META, SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
 import { CATEGORY_META, STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
@@ -16,10 +16,6 @@ import {
   type StatTileModel,
   type WeakAreaModel
 } from '../types/dashboard.ts';
-
-/** B1 needs 168/240 overall; A2 territory starts around 96. */
-const B1_TOTAL = 168;
-const A2_TOTAL = 96;
 
 const SKILL_LABELS: readonly (readonly [SkillKey, string])[] = [
   ['lesen', 'Lesen'],
@@ -73,7 +69,7 @@ export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] => {
 const dualLevelCaption = (best: number | null): string => {
   if (best == null) return 'no full exam yet';
   if (best >= B1_TOTAL) return 'B1 territory 🎉';
-  if (best >= A2_TOTAL) return 'A2 zone — push to 168';
+  if (best >= A2_TOTAL) return `A2 zone — push to ${String(B1_TOTAL)}`;
   return 'keep training';
 };
 

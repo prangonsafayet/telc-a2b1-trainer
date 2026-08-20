@@ -8,6 +8,7 @@ import AttemptReview from '@features/exam/components/review/AttemptReview.tsx';
 import { useExamBinding } from '@features/exam/hooks/useExamBinding.ts';
 import { useStartAttempt } from '@features/exam/hooks/useStartAttempt.ts';
 import { findAttempt } from '@features/exam/lib/attempts.ts';
+import { withBinding } from '@features/exam/lib/examBinding.ts';
 
 interface ReviewPageProps {
   readonly trainer: TrainerId;
@@ -20,27 +21,12 @@ const ReviewPage = ({ trainer }: ReviewPageProps) => {
   const retry = useStartAttempt(trainer);
   const history = `${TRAINERS[trainer].basePath}/history`;
 
-  if (binding.kind === 'single-level') {
-    const attempt = findAttempt(binding.store.attempts, attemptId);
-    const exam = attempt ? findPaper(binding.papers, attempt.examId) : undefined;
+  return withBinding(binding, ({ format, papers, store }) => {
+    const attempt = findAttempt(store.attempts, attemptId);
+    const exam = attempt ? findPaper(papers, attempt.examId) : undefined;
     if (!attempt || !exam) return <Navigate to={history} replace />;
-    return (
-      <AttemptReview
-        trainer={trainer}
-        format={binding.format}
-        exam={exam}
-        attempt={attempt}
-        onRetry={retry}
-      />
-    );
-  }
-
-  const attempt = findAttempt(binding.store.attempts, attemptId);
-  const exam = attempt ? findPaper(binding.papers, attempt.examId) : undefined;
-  if (!attempt || !exam) return <Navigate to={history} replace />;
-  return (
-    <AttemptReview trainer={trainer} format={binding.format} exam={exam} attempt={attempt} onRetry={retry} />
-  );
+    return <AttemptReview trainer={trainer} format={format} exam={exam} attempt={attempt} onRetry={retry} />;
+  });
 };
 
 export default ReviewPage;

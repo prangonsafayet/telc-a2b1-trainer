@@ -1,6 +1,6 @@
 /** Turns stored attempts into the score-history chart's model, per paper. */
 
-import { FULL_EXAM_MAX } from '@shared/config/exam.ts';
+import { A2_TOTAL, B1_TOTAL, FULL_EXAM_MAX } from '@shared/config/exam.ts';
 import {
   SINGLE_LEVEL_ORAL_PASS,
   SINGLE_LEVEL_TOTAL_MAX,
@@ -20,12 +20,11 @@ const MAX_BARS = 12;
 
 const DUAL_LEVEL_GRIDLINES: readonly ScoreChartGridline[] = [
   { value: FULL_EXAM_MAX, label: String(FULL_EXAM_MAX) },
-  { value: 168, label: '168 · B1' },
-  { value: 96, label: '96 · A2' }
+  { value: B1_TOTAL, label: `${String(B1_TOTAL)} · B1` },
+  { value: A2_TOTAL, label: `${String(A2_TOTAL)} · A2` }
 ];
 
-const DUAL_LEVEL_DESCRIPTION =
-  'Total points per full exam. Gridlines mark the B1 (168) and A2 (96) zones — the official rule uses per-skill minimums, see the Exam Guide.';
+const DUAL_LEVEL_DESCRIPTION = `Total points per full exam. Gridlines mark the B1 (${String(B1_TOTAL)}) and A2 (${String(A2_TOTAL)}) zones — the official rule uses per-skill minimums, see the Exam Guide.`;
 
 /** 60% written plus 60% oral is the lowest total any pass can add up to. */
 const SINGLE_LEVEL_PASS_LINE = SINGLE_LEVEL_WRITTEN_PASS + SINGLE_LEVEL_ORAL_PASS;

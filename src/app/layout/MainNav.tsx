@@ -11,6 +11,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 import { hasGuide, TRAINER_ORDER, TRAINERS, trainerFromPath, trainerHome } from '@shared/config/trainers.ts';
 import { cn } from '@shared/lib/cn.ts';
+import { recordFrom } from '@shared/lib/records.ts';
 import { type TrainerId } from '@shared/types';
 
 interface NavEntry {
@@ -39,9 +40,7 @@ const entriesFor = (trainer: TrainerId): readonly NavEntry[] => {
   ];
 };
 
-const NAV_ENTRIES: Readonly<Record<TrainerId, readonly NavEntry[]>> = Object.fromEntries(
-  TRAINER_ORDER.map(trainer => [trainer, entriesFor(trainer)])
-) as Record<TrainerId, readonly NavEntry[]>;
+const NAV_ENTRIES = recordFrom(TRAINER_ORDER, entriesFor);
 
 const MainNav = () => {
   const { pathname } = useLocation();

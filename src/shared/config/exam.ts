@@ -32,6 +32,14 @@ export const SKILL_MAX = 60;
 
 export const FULL_EXAM_MAX = 240;
 
+/**
+ * Where the A2·B1 paper's overall zones start, out of 240. The official verdict is per-skill
+ * (see `PASS_RULES`), but these two totals are what the score chart's gridlines and the
+ * dashboard's caption both talk about, so they are stated once.
+ */
+export const B1_TOTAL = 168;
+export const A2_TOTAL = 96;
+
 /** Self-assessment criteria: 4 × 0–5, multiplied by 3 for a 60-point module score. */
 export const RATING_CRITERIA: Readonly<
   Record<'schreiben' | 'sprechen', readonly (readonly [string, string])[]>

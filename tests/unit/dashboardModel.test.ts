@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import { PASS_PERCENT } from '@shared/config/examConditions.ts';
-import { SKILL_MAX } from '@shared/config/exam.ts';
+import { A2_TOTAL, B1_TOTAL, SKILL_MAX } from '@shared/config/exam.ts';
 import { SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
-import { buildMeters, buildWeakAreas } from '@features/dashboard/lib/dashboardModel.ts';
+import { buildScoreChart } from '@shared/lib/scoreChart.ts';
+import { buildMeters, buildTiles, buildWeakAreas } from '@features/dashboard/lib/dashboardModel.ts';
 import type { TrainerSlice } from '@features/progress';
 import type {
   DualLevelAttempt,
@@ -115,5 +116,42 @@ describe('the pass line each paper is judged on', () => {
 
   it('leaves a skill above 70% alone on the A2·B1 paper', () => {
     expect(lesenArea(dualLevelSlice(0.8))).toBeUndefined();
+  });
+});
+
+/* The A2·B1 paper's two grade zones had a copy in the score chart and another in the
+   dashboard model, which is exactly how a "168" and a "170" end up on the same screen.
+   They now come from one place; this is the guard that they still do. */
+describe('the A2·B1 grade zones', () => {
+  const withTotal = (total: number): TrainerSlice => {
+    const attempt: DualLevelAttempt = {
+      id: 1,
+      examId: 1,
+      mode: 'full',
+      date: '2026-08-20T10:00:00.000Z',
+      times: {},
+      scores: {},
+      sb: null,
+      answers: {},
+      ratings: {},
+      total,
+      result: 'B1'
+    };
+    return { ...base, trainer: 'a2b1', format: 'dual-level', settings: SETTINGS, attempts: [attempt] };
+  };
+
+  const bestCaption = (total: number): string =>
+    buildTiles(withTotal(total), null, '2026-08-20').find(tile => tile.kind === 'best')?.caption ?? '';
+
+  it('calls the B1 total B1 territory and nothing below it', () => {
+    expect(bestCaption(B1_TOTAL)).toBe('B1 territory 🎉');
+    expect(bestCaption(B1_TOTAL - 1)).not.toBe('B1 territory 🎉');
+  });
+
+  it('points the A2 zone at the same B1 total the chart draws', () => {
+    expect(bestCaption(A2_TOTAL)).toContain(String(B1_TOTAL));
+    const gridlines = buildScoreChart({ format: 'dual-level', attempts: [] }).gridlines;
+    expect(gridlines.map(line => line.value)).toContain(B1_TOTAL);
+    expect(gridlines.map(line => line.value)).toContain(A2_TOTAL);
   });
 });
