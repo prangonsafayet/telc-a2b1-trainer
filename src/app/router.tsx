@@ -3,7 +3,13 @@ import { lazy, Suspense, type ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { RouteFallback } from '@shared/components';
-import { ROOT_TRAINER, SINGLE_LEVEL_TRAINERS, TRAINERS, trainerHome } from '@shared/config/trainers.ts';
+import {
+  hasGuide,
+  ROOT_TRAINER,
+  SINGLE_LEVEL_TRAINERS,
+  TRAINERS,
+  trainerHome
+} from '@shared/config/trainers.ts';
 import { type TrainerId } from '@shared/types';
 
 import DashboardPage from '@features/dashboard/routes/DashboardPage.tsx';
@@ -30,6 +36,10 @@ const RunnerPage = lazy(() => import('@features/exam/routes/RunnerPage.tsx'));
 const ResultsPage = lazy(() => import('@features/exam/routes/ResultsPage.tsx'));
 const ReviewPage = lazy(() => import('@features/exam/routes/ReviewPage.tsx'));
 
+/** The guide screen, mounted only for a trainer whose descriptor ships one. */
+const guideRoutes = (trainer: TrainerId): readonly ReactElement[] =>
+  hasGuide(trainer) ? [<Route key="guide" path="guide" element={<GuidePage trainer={trainer} />} />] : [];
+
 /**
  * The three exam screens, mounted relative to whichever trainer's base path they sit
  * under. Every trainer sets a paper, so every trainer gets the same three URLs.
@@ -48,7 +58,7 @@ export const AppRouter = () => (
         <Route path={trainerHome(ROOT_TRAINER)}>
           <Route index element={<DashboardPage />} />
           <Route path="learn" element={<LearnPage />} />
-          <Route path="guide" element={<GuidePage />} />
+          {guideRoutes(ROOT_TRAINER)}
           <Route path="history" element={<HistoryPage trainer={ROOT_TRAINER} />} />
           <Route path="settings" element={<SettingsPage />} />
           {examRoutes(ROOT_TRAINER)}
@@ -58,6 +68,7 @@ export const AppRouter = () => (
           <Route key={level} path={TRAINERS[level].basePath}>
             <Route index element={<LevelDashboardPage level={level} />} />
             <Route path="learn" element={<LevelLearnPage level={level} />} />
+            {guideRoutes(level)}
             <Route path="practice" element={<LevelPracticePage level={level} />} />
             <Route path="history" element={<HistoryPage trainer={level} />} />
             {examRoutes(level)}
