@@ -9,7 +9,11 @@ interface SettingsFieldProps {
    * name — a <label htmlFor> would otherwise replace it, hiding the current value.
    */
   readonly htmlFor?: string;
-  readonly hint?: string;
+  /**
+   * Said under the control. Null when there is nothing to say, so a derived hint can be
+   * passed straight through.
+   */
+  readonly hint?: string | null;
   readonly children: ReactNode;
 }
 

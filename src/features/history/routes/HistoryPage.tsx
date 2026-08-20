@@ -4,9 +4,10 @@ import { PageTitle, ScoreHistoryChart } from '@shared/components';
 import { type TrainerId } from '@shared/types';
 import { Button, Card, CardContent } from '@shared/ui';
 
+import { useProgressBackup } from '@features/progress';
+
 import AttemptTable from '../components/AttemptTable.tsx';
 import { useAttemptHistory } from '../hooks/useAttemptHistory.ts';
-import { useProgressBackup } from '../hooks/useProgressBackup.ts';
 
 interface HistoryPageProps {
   readonly trainer: TrainerId;

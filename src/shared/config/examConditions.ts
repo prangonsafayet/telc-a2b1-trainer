@@ -54,6 +54,12 @@ export const PASS_RULES: Readonly<Record<ExamFormatId, string>> = {
   'single-level': 'Pass rule: ≥ 135/225 written and ≥ 45/75 oral — 60% in each part, judged separately.'
 };
 
+/**
+ * What the official paper allows, said next to the writing-time choice. The number comes
+ * from the trainer's own paper rather than from a second list, so the two cannot disagree.
+ */
+export const officialWritingHint = (minutes: number): string => `Official: ${String(minutes)} minutes.`;
+
 export const PLAYS_ALLOWED_CHOICES: Readonly<Record<ExamFormatId, readonly SettingChoice[]>> = {
   'dual-level': [
     { value: 1, label: '1 (hard mode)' },
@@ -65,4 +71,10 @@ export const PLAYS_ALLOWED_CHOICES: Readonly<Record<ExamFormatId, readonly Setti
     { value: 2, label: '2 (training)' },
     { value: 3, label: '3 (training)' }
   ]
+};
+
+/** What the real sitting does with its audio, said next to the plays-per-item choice. */
+export const PLAYS_ALLOWED_HINTS: Readonly<Record<ExamFormatId, string>> = {
+  'dual-level': 'The real exam plays most items twice.',
+  'single-level': 'The real exam plays each item once.'
 };

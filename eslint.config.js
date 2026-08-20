@@ -200,7 +200,11 @@ const componentDefaultExport = {
 };
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage', 'playwright-report', 'test-results', 'node_modules'] },
+  /* `.claude/worktrees/` holds agent worktrees — whole checkouts of this repo. Linting one
+     lints every file twice, against whatever revision it sits on. */
+  {
+    ignores: ['dist', 'coverage', 'playwright-report', 'test-results', 'node_modules', '.claude/worktrees']
+  },
 
   js.configs.recommended,
 

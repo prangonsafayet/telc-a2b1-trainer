@@ -2,7 +2,9 @@ import { useCallback } from 'react';
 
 import { toast } from 'sonner';
 
-import { normalizeDatabase, stamp, useProgress } from '@features/progress';
+import { normalizeDatabase, stamp } from '../lib/progressDb.ts';
+
+import { useProgress } from './useProgress.ts';
 
 export interface ProgressBackup {
   readonly exportToFile: () => void;
@@ -13,7 +15,9 @@ const EXPORT_FILENAME = 'telc-trainer-progress.json';
 
 /**
  * Export and import of the whole progress document, for backup or moving between
- * browsers. The file input is created on demand rather than rendered hidden: a hidden
+ * browsers. It belongs to the progress feature because the document does: both Settings and
+ * a trainer's History offer the pair, and neither owns the file format.
+ * The file input is created on demand rather than rendered hidden: a hidden
  * input is still reachable by assistive technology, and a ref would have to cross the
  * hook boundary for no benefit.
  */
