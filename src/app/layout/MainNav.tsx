@@ -40,7 +40,7 @@ const NAV_ENTRIES: Readonly<Record<TrainerId, readonly NavEntry[]>> = {
   b2: levelEntries('/b2')
 };
 
-export const MainNav = () => {
+const MainNav = () => {
   const { pathname } = useLocation();
   const trainer = trainerFromPath(pathname);
 
@@ -65,3 +65,5 @@ export const MainNav = () => {
     </nav>
   );
 };
+
+export default MainNav;

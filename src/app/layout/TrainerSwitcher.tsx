@@ -13,7 +13,7 @@ import {
 } from '@shared/ui';
 
 /** Switches between the three trainers; each one owns its own area of the app. */
-export const TrainerSwitcher = () => {
+const TrainerSwitcher = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const active = trainerFromPath(pathname);
@@ -52,3 +52,5 @@ export const TrainerSwitcher = () => {
     </DropdownMenu>
   );
 };
+
+export default TrainerSwitcher;

@@ -11,13 +11,13 @@ import { Badge } from '@shared/ui';
 import { AccountMenu, SyncContext, useCloudSync } from '@features/auth';
 import { useProgress } from '@features/progress';
 
-import { AppFooter } from './AppFooter.tsx';
-import { ExamCountdownBadge } from './ExamCountdownBadge.tsx';
-import { MainNav } from './MainNav.tsx';
-import { TrainerSwitcher } from './TrainerSwitcher.tsx';
+import AppFooter from './AppFooter.tsx';
+import ExamCountdownBadge from './ExamCountdownBadge.tsx';
+import MainNav from './MainNav.tsx';
+import TrainerSwitcher from './TrainerSwitcher.tsx';
 import { useHeaderHeight } from './useHeaderHeight.ts';
 
-export const AppLayout = () => {
+const AppLayout = () => {
   const { db, dbRef, replaceLocal } = useProgress();
   const sync = useCloudSync({ dbRef, replaceLocal, updatedAt: db._updatedAt });
   const { pathname } = useLocation();
@@ -25,8 +25,7 @@ export const AppLayout = () => {
 
   /* The header follows the active trainer: name, countdown and nav all switch with it. */
   const trainer = TRAINERS[trainerFromPath(pathname)];
-  const examDate =
-    trainer.id === 'a2b1' ? db.settings.examDate : (db[trainer.id]?.settings.examDate ?? '');
+  const examDate = trainer.id === 'a2b1' ? db.settings.examDate : (db[trainer.id]?.settings.examDate ?? '');
 
   /* Every navigation starts at the top and with the speaker silent. */
   useEffect(() => {
@@ -90,3 +89,5 @@ export const AppLayout = () => {
     </SyncContext.Provider>
   );
 };
+
+export default AppLayout;

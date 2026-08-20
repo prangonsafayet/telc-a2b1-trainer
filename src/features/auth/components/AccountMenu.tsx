@@ -32,7 +32,7 @@ import { useSync } from '../hooks/useSync.ts';
  * Always-visible account state. Whether progress leaves this browser is the one thing a
  * user must never have to guess about, so it sits in the header on every page.
  */
-export const AccountMenu = () => {
+const AccountMenu = () => {
   const sync = useSync();
   const identity = useAccountIdentity();
   const navigate = useNavigate();
@@ -137,3 +137,5 @@ export const AccountMenu = () => {
     </DropdownMenu>
   );
 };
+
+export default AccountMenu;

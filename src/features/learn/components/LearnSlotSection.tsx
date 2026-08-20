@@ -8,7 +8,7 @@ import { Badge } from '@shared/ui';
 
 import { type LearnPlanState } from '../hooks/useLearnPlan.ts';
 
-import { LearnDayCard } from './LearnDayCard.tsx';
+import LearnDayCard from './LearnDayCard.tsx';
 
 interface LearnSlotSectionProps {
   readonly heading: string;
@@ -19,7 +19,7 @@ interface LearnSlotSectionProps {
 }
 
 /** One day of the plan: its date, what it is for, and the lessons it holds. */
-export const LearnSlotSection = ({ heading, kindLabel, isToday, days, plan }: LearnSlotSectionProps) => (
+const LearnSlotSection = ({ heading, kindLabel, isToday, days, plan }: LearnSlotSectionProps) => (
   <section className="space-y-3">
     <div className="flex flex-wrap items-center gap-2">
       <h3
@@ -51,3 +51,5 @@ export const LearnSlotSection = ({ heading, kindLabel, isToday, days, plan }: Le
     </div>
   </section>
 );
+
+export default LearnSlotSection;

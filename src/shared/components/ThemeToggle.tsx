@@ -16,7 +16,7 @@ const initialTheme = (): Theme => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
 
-export const ThemeToggle = () => {
+const ThemeToggle = () => {
   const [theme, setTheme] = useState<Theme>(initialTheme);
 
   useEffect(() => {
@@ -37,3 +37,5 @@ export const ThemeToggle = () => {
     </Button>
   );
 };
+
+export default ThemeToggle;

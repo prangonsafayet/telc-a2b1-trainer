@@ -1,3 +1,4 @@
+import { booleanAnswer, numberAnswer } from '@shared/lib/answers.ts';
 import { LETTERS } from '@shared/lib/format.ts';
 import {
   type AnswerMap,
@@ -7,7 +8,6 @@ import {
   type TelcExam
 } from '@shared/types';
 
-import { booleanAnswer, numberAnswer } from './answers.ts';
 
 /** One reviewable item: what was asked, what was given, what was right. */
 export interface TelcReviewRow {

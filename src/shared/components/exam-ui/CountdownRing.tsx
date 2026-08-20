@@ -17,7 +17,7 @@ const STROKE = 4;
  * A stopwatch-style countdown: the ring drains clockwise as time runs out and shifts
  * colour as the deadline nears. Purely visual — the deadline itself lives in run state.
  */
-export const CountdownRing = ({
+const CountdownRing = ({
   secondsRemaining,
   totalSeconds,
   size = 64,
@@ -74,3 +74,5 @@ export const CountdownRing = ({
     </span>
   );
 };
+
+export default CountdownRing;

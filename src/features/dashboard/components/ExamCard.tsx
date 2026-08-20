@@ -39,7 +39,7 @@ const scheduleTone = (label: string): BadgeVariant => {
 /** Difficulty accent, so the ramp from A2 to B1 is visible at a glance. */
 const ACCENTS = { easy: 'var(--success)', medium: 'var(--warning)', b1: 'var(--primary)' } as const;
 
-export const ExamCard = ({ stats, settings, scheduleLabel, onStart }: ExamCardProps) => {
+const ExamCard = ({ stats, settings, scheduleLabel, onStart }: ExamCardProps) => {
   const { exam, best, attemptCount } = stats;
   const attempted = best !== null || attemptCount > 0;
 
@@ -112,3 +112,5 @@ export const ExamCard = ({ stats, settings, scheduleLabel, onStart }: ExamCardPr
     </Card>
   );
 };
+
+export default ExamCard;

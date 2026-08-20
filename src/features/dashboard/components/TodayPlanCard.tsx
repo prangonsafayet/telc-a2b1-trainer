@@ -11,7 +11,7 @@ interface TodayPlanCardProps {
 }
 
 /** The one card that answers "what do I do today?" without any reading. */
-export const TodayPlanCard = ({ plan, onStartExam }: TodayPlanCardProps) => (
+const TodayPlanCard = ({ plan, onStartExam }: TodayPlanCardProps) => (
   <Card className="animate-pop-in mb-6 border-l-4 border-l-primary shadow-md">
     <CardHeader>
       <div className="flex flex-wrap items-center gap-2">
@@ -82,3 +82,5 @@ export const TodayPlanCard = ({ plan, onStartExam }: TodayPlanCardProps) => (
     </CardContent>
   </Card>
 );
+
+export default TodayPlanCard;

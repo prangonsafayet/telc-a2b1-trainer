@@ -4,7 +4,7 @@ import { Skeleton } from '@shared/ui';
  * Shown while a lazily-loaded route chunk is in flight. It mirrors the rough shape of a
  * content page so the layout does not jump when the real screen arrives.
  */
-export const RouteFallback = () => (
+const RouteFallback = () => (
   <div className="animate-in fade-in duration-200" role="status" aria-busy="true" aria-live="polite">
     <span className="sr-only">Loading…</span>
     <Skeleton className="h-8 w-64" />
@@ -18,3 +18,5 @@ export const RouteFallback = () => (
     <Skeleton className="mt-6 h-56" />
   </div>
 );
+
+export default RouteFallback;

@@ -5,11 +5,11 @@ import { Multiline, PageTitle, SectionTitle, Transcript } from '@shared/componen
 import { fmtDate } from '@shared/lib/format.ts';
 import { Button, Card, CardContent } from '@shared/ui';
 
-import { ReviewEntryCard } from '../components/ReviewEntryCard.tsx';
+import ReviewEntryCard from '../components/review/ReviewEntryCard.tsx';
 import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
 import { attemptIncludes, buildReviewSections } from '../lib/reviewItems.ts';
 
-export const ReviewPage = () => {
+const ReviewPage = () => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const { attempt, exam } = useAttempt(attemptId);
   const retry = useRetryExam();
@@ -94,3 +94,5 @@ export const ReviewPage = () => {
     </>
   );
 };
+
+export default ReviewPage;

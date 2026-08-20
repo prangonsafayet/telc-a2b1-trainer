@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { type SpeakingPart } from '@shared/components';
 import { TELC_MODULE_META, TELC_MODULES, telcModuleMinutes } from '@shared/config/telcExam.ts';
 import { TRAINERS } from '@shared/config/trainers.ts';
+import { numberAnswer, WRITING_TASK_KEY } from '@shared/lib/answers.ts';
 import { toIsoDate } from '@shared/lib/format.ts';
 import { stopSpeech } from '@shared/lib/speech.ts';
 import {
@@ -20,7 +21,6 @@ import {
 
 import { touchActivity, useTrainerDoc } from '@features/progress';
 
-import { numberAnswer, WRITING_TASK_KEY } from '../lib/answers.ts';
 import {
   createTelcRun,
   currentTelcModule,

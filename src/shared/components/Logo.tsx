@@ -7,7 +7,7 @@ interface LogoProps {
  * Kept visually identical to `public/logo.svg`, which is the favicon, PWA icon and
  * social-preview source — change both together.
  */
-export const Logo = ({ className = 'size-9' }: LogoProps) => (
+const Logo = ({ className = 'size-9' }: LogoProps) => (
   <svg className={className} viewBox="0 0 64 64" role="img" aria-label="telc A2·B1 Trainer logo">
     <defs>
       <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
@@ -33,3 +33,5 @@ export const Logo = ({ className = 'size-9' }: LogoProps) => (
     />
   </svg>
 );
+
+export default Logo;

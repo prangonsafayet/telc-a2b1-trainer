@@ -6,7 +6,7 @@ interface TranscriptProps {
 }
 
 /** Collapsed by default — transcripts must stay hidden until the review screen. */
-export const Transcript = ({ audio }: TranscriptProps) => (
+const Transcript = ({ audio }: TranscriptProps) => (
   <Accordion type="single" collapsible className="mt-2">
     <AccordionItem value="transcript" className="border-b-0">
       <AccordionTrigger className="py-2 text-xs text-muted-foreground">Transcript</AccordionTrigger>
@@ -24,3 +24,5 @@ export const Transcript = ({ audio }: TranscriptProps) => (
     </AccordionItem>
   </Accordion>
 );
+
+export default Transcript;

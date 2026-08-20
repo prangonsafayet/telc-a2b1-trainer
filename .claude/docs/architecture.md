@@ -6,17 +6,26 @@ src/features   vertical slices, each with components/ hooks/ lib/ routes/ and an
                index.ts naming its public surface.
 src/shared     feature-agnostic building blocks — ui/ primitives, components, hooks,
                lib, config, types, providers.
-src/content    inert data — the ten exams, the guide HTML, the 14-day plan.
+src/content    inert data — the exams, the guide HTML, the study plans.
 ```
+
+Three trainers ship as three features: `features/exam` (the original A2·B1 mock exams),
+`features/telc-exam` (the shared-format B1/B2 exams, mounted once per level) and
+`features/level-trainer` (B1/B2 flashcards, quizzes and reference). Everything both exam
+features render — inputs, Teil layout, gap fills, briefing card, toolbar, rating panel,
+recorder — lives in `shared/components/exam-ui/` and is consumed through
+`@shared/components`; neither feature keeps a private copy.
 
 ## The dependency rules are ESLint rules, not conventions
 
 - A feature must not import another feature's internals. Go through
-  `@features/<name>` (its `index.ts`).
+  `@features/<name>` (its `index.ts`). A feature MAY deep-import itself via its own
+  alias — one generated config entry per feature directory allows exactly that.
 - A feature must not import `@app/**` — that inverts the dependency direction.
 - `src/shared` must not import features or the app.
 - `src/content` must not import application code at all.
 - Primitives are imported from `@shared/ui`, never from a file inside it.
+- Relative imports climb at most one level; `../../` and deeper must use an alias.
 
 Violations fail `npm run lint`. They are not style preferences; two of them were added
 after real import cycles.

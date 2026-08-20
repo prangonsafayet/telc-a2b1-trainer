@@ -12,7 +12,7 @@ interface RecorderControlsProps {
   readonly onRecorded: (part: SpeakingPart, url: string) => void;
 }
 
-export const RecorderControls = ({ part, recordingUrl, onRecorded }: RecorderControlsProps) => {
+const RecorderControls = ({ part, recordingUrl, onRecorded }: RecorderControlsProps) => {
   const recorder = useRecorder({
     onRecorded: url => {
       onRecorded(part, url);
@@ -45,3 +45,5 @@ export const RecorderControls = ({ part, recordingUrl, onRecorded }: RecorderCon
     </div>
   );
 };
+
+export default RecorderControls;

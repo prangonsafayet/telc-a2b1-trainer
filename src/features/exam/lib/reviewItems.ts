@@ -1,7 +1,7 @@
+import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '@shared/lib/answers.ts';
 import { LETTERS } from '@shared/lib/format.ts';
 import { type Attempt, type AudioScript, type Exam, type ExamModule } from '@shared/types';
 
-import { booleanAnswer, itemKey, numberAnswer, textAnswer } from './answers.ts';
 import { isGapCorrect } from './scoring.ts';
 
 /** One reviewed item: what was asked, what was answered, and what was right. */

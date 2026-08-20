@@ -12,7 +12,7 @@ interface MeterProps {
 }
 
 /** A labelled progress bar with the 70% B1 threshold marked. */
-export const Meter = ({ label, value, of = 60, colorByScore = false }: MeterProps) => {
+const Meter = ({ label, value, of = 60, colorByScore = false }: MeterProps) => {
   const pct = value == null ? 0 : Math.round((value / of) * 100);
   const tone =
     !colorByScore || pct >= 70 ? 'bg-primary' : pct >= 40 ? 'bg-[color:var(--warning)]' : 'bg-destructive';
@@ -49,3 +49,5 @@ export const Meter = ({ label, value, of = 60, colorByScore = false }: MeterProp
     </div>
   );
 };
+
+export default Meter;

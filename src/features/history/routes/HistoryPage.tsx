@@ -1,16 +1,16 @@
 import { Download, Upload } from 'lucide-react';
 
 import { PageTitle } from '@shared/components';
-import { ScoreHistoryChart } from '@shared/components/data-display/ScoreHistoryChart.tsx';
+import ScoreHistoryChart from '@shared/components/data-display/ScoreHistoryChart.tsx';
 import { Button, Card, CardContent } from '@shared/ui';
 
 import { useProgress } from '@features/progress';
 
-import { AttemptTable } from '../components/AttemptTable.tsx';
+import AttemptTable from '../components/AttemptTable.tsx';
 import { useProgressBackup } from '../hooks/useProgressBackup.ts';
 import { buildAttemptRows } from '../lib/attemptRows.ts';
 
-export const HistoryPage = () => {
+const HistoryPage = () => {
   const { db } = useProgress();
   const backup = useProgressBackup();
   const rows = buildAttemptRows(db.attempts);
@@ -40,3 +40,5 @@ export const HistoryPage = () => {
     </>
   );
 };
+
+export default HistoryPage;

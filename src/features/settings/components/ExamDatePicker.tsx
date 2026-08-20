@@ -10,7 +10,7 @@ interface ExamDatePickerProps {
 }
 
 /** The calendar half of the exam-date controls, limited to the plannable window. */
-export const ExamDatePicker = ({ picker }: ExamDatePickerProps) => (
+const ExamDatePicker = ({ picker }: ExamDatePickerProps) => (
   <Popover open={picker.open} onOpenChange={picker.setOpen}>
     <PopoverTrigger asChild>
       <Button
@@ -47,3 +47,5 @@ export const ExamDatePicker = ({ picker }: ExamDatePickerProps) => (
     </PopoverContent>
   </Popover>
 );
+
+export default ExamDatePicker;

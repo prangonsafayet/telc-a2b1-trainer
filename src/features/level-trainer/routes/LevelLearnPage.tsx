@@ -1,9 +1,8 @@
-import { CalendarCheck, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 import { LEVEL_CONTENT } from '@content/trainers/index.ts';
 
 import { PageTitle, SectionTitle } from '@shared/components';
-import { cn } from '@shared/lib/cn.ts';
 import { type TelcLevel } from '@shared/types';
 import {
   Accordion,
@@ -12,60 +11,22 @@ import {
   AccordionTrigger,
   Alert,
   AlertDescription,
-  Badge,
   Card,
   CardContent,
   Progress
 } from '@shared/ui';
 
-import { CurriculumDayCard } from '../components/CurriculumDayCard.tsx';
+import CurriculumDayCard from '../components/curriculum/CurriculumDayCard.tsx';
+import CurriculumSlotSection from '../components/curriculum/CurriculumSlotSection.tsx';
 import { useLevelPlan } from '../hooks/useLevelPlan.ts';
-import { useScheduledLevelLearn, type LevelLearnSlotGroup } from '../hooks/useScheduledLevelLearn.ts';
+import { useScheduledLevelLearn } from '../hooks/useScheduledLevelLearn.ts';
 
 interface LevelLearnPageProps {
   readonly level: TelcLevel;
 }
 
-interface SlotSectionProps {
-  readonly group: LevelLearnSlotGroup;
-  readonly plan: ReturnType<typeof useLevelPlan>;
-}
-
-const SlotSection = ({ group, plan }: SlotSectionProps) => (
-  <section className="space-y-3">
-    <div className="flex flex-wrap items-center gap-2">
-      <h3
-        className={cn(
-          'flex items-center gap-1.5 text-sm font-semibold',
-          group.isToday ? 'text-foreground' : 'text-muted-foreground'
-        )}
-      >
-        {group.isToday ? <CalendarCheck className="size-4 text-primary" aria-hidden /> : null}
-        {group.heading}
-      </h3>
-      <Badge variant={group.isToday ? 'default' : 'outline'}>{group.kindLabel}</Badge>
-      {group.days.length > 1 ? (
-        <Badge variant="warning">{group.days.length} lessons — a long day</Badge>
-      ) : null}
-    </div>
-    <div className="space-y-4">
-      {group.days.map(day => (
-        <CurriculumDayCard
-          key={day.day}
-          day={day}
-          complete={plan.isDayComplete(day.day)}
-          isTaskDone={index => plan.isTaskDone(day.day, index)}
-          onToggleTask={(index, done) => {
-            plan.toggleTask(day.day, index, done);
-          }}
-        />
-      ))}
-    </div>
-  </section>
-);
-
 /** The level trainer's curriculum, re-paced around its exam date. */
-export const LevelLearnPage = ({ level }: LevelLearnPageProps) => {
+const LevelLearnPage = ({ level }: LevelLearnPageProps) => {
   const plan = useLevelPlan(level);
   const scheduled = useScheduledLevelLearn(level);
   const curriculum = LEVEL_CONTENT[level].curriculum;
@@ -105,7 +66,7 @@ export const LevelLearnPage = ({ level }: LevelLearnPageProps) => {
           <SectionTitle>Your schedule</SectionTitle>
           <div className="stagger space-y-8">
             {scheduled.groups.map(group => (
-              <SlotSection key={group.key} group={group} plan={plan} />
+              <CurriculumSlotSection key={group.key} group={group} plan={plan} />
             ))}
           </div>
         </>
@@ -208,3 +169,5 @@ export const LevelLearnPage = ({ level }: LevelLearnPageProps) => {
     </>
   );
 };
+
+export default LevelLearnPage;

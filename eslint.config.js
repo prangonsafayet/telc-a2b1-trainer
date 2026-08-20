@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -52,6 +54,16 @@ const APPLICATION_CODE = {
   message: 'src/content is inert data. It must not depend on application code.'
 };
 
+/* Relative imports may step up one level at most. Anything deeper is unreadable and
+   breaks when files move; the aliases exist precisely for those paths. Because
+   `no-restricted-imports` options replace rather than merge, this pattern is restated in
+   EVERY restrict(...) entry below. */
+const DEEP_RELATIVE = {
+  group: ['../../**'],
+  message:
+    'Relative imports may climb at most one level; use a path alias (@features/<name>/…, @shared/…) instead.'
+};
+
 const restrict = (...patterns) => ({ 'no-restricted-imports': ['error', { patterns }] });
 
 /* The design system is consumed through its barrel, never file by file. This is the
@@ -60,20 +72,39 @@ const UI_THROUGH_BARREL = {
   name: 'ui-through-barrel',
   files: ['src/**/*.{ts,tsx}'],
   ignores: ['src/shared/ui/**'],
-  rules: restrict(UI_BY_FILE)
+  rules: restrict(UI_BY_FILE, DEEP_RELATIVE)
 };
 
 const NO_CROSS_FEATURE_INTERNALS = {
   name: 'no-cross-feature-internals',
   files: ['src/features/*/**/*.{ts,tsx}'],
-  rules: restrict(CROSS_FEATURE_INTERNALS, APP_SHELL, UI_BY_FILE)
+  rules: restrict(CROSS_FEATURE_INTERNALS, APP_SHELL, UI_BY_FILE, DEEP_RELATIVE)
 };
+
+/* A feature may deep-import ITSELF through its own alias — that is how its files avoid
+   `../../` paths — while every other feature's internals stay off limits. One entry per
+   feature directory; each must follow (and therefore restate) the generic entry above,
+   because the later entry's options replace the earlier one's for the files it matches. */
+const FEATURE_SELF_ALIAS = fs.readdirSync('src/features').map(name => ({
+  name: `feature-self-alias-${name}`,
+  files: [`src/features/${name}/**/*.{ts,tsx}`],
+  rules: restrict(
+    {
+      group: ['@features/*/*/**', `!@features/${name}/**`],
+      message:
+        "Import another feature only through its public surface: '@features/<name>'. Reaching into its folders couples you to its internals."
+    },
+    APP_SHELL,
+    UI_BY_FILE,
+    DEEP_RELATIVE
+  )
+}));
 
 const SHARED_STAYS_GENERIC = {
   name: 'shared-stays-generic',
   files: ['src/shared/**/*.{ts,tsx}'],
   ignores: ['src/shared/ui/**'],
-  rules: restrict(FEATURES_AND_APP, UI_BY_FILE)
+  rules: restrict(FEATURES_AND_APP, UI_BY_FILE, DEEP_RELATIVE)
 };
 
 /* The vendored shadcn files are exempt from the barrel rule — they import their siblings
@@ -81,13 +112,32 @@ const SHARED_STAYS_GENERIC = {
 const SHARED_UI_STAYS_GENERIC = {
   name: 'shared-ui-stays-generic',
   files: ['src/shared/ui/**/*.{ts,tsx}'],
-  rules: restrict(FEATURES_AND_APP)
+  rules: restrict(FEATURES_AND_APP, DEEP_RELATIVE)
 };
 
 const CONTENT_IS_DATA_ONLY = {
   name: 'content-is-data-only',
   files: ['src/content/**/*.ts'],
-  rules: restrict(APPLICATION_CODE, UI_BY_FILE)
+  rules: restrict(APPLICATION_CODE, UI_BY_FILE, DEEP_RELATIVE)
+};
+
+/* Component files default-export their component, so imports and lazy() routes are
+   uniform. Defined inline: the rule is three lines and not worth a package. */
+const componentDefaultExport = {
+  rules: {
+    'component-default-export': {
+      meta: {
+        type: 'problem',
+        messages: { missing: 'Component files must default-export their component.' }
+      },
+      create: context => ({
+        'Program:exit': node => {
+          const hasDefault = node.body.some(s => s.type === 'ExportDefaultDeclaration');
+          if (!hasDefault) context.report({ node, messageId: 'missing' });
+        }
+      })
+    }
+  }
 };
 
 export default tseslint.config(
@@ -247,9 +297,32 @@ export default tseslint.config(
      restate it, so the more specific configuration is the one that survives. */
   UI_THROUGH_BARREL,
   NO_CROSS_FEATURE_INTERNALS,
+  ...FEATURE_SELF_ALIAS,
   SHARED_STAYS_GENERIC,
   SHARED_UI_STAYS_GENERIC,
   CONTENT_IS_DATA_ONLY,
+
+  {
+    /* One component per file. The vendored shadcn files ship several per file and are
+       exempt below. */
+    name: 'one-component-per-file',
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/shared/ui/*.tsx'],
+    plugins: { react },
+    rules: { 'react/no-multi-comp': 'error' }
+  },
+  {
+    name: 'component-files-default-export',
+    files: [
+      'src/app/layout/*.tsx',
+      'src/app/routes/*.tsx',
+      'src/**/components/**/*.tsx',
+      'src/**/routes/*.tsx'
+    ],
+    ignores: ['src/shared/ui/**', '**/moduleProps.ts'],
+    plugins: { local: componentDefaultExport },
+    rules: { 'local/component-default-export': 'error' }
+  },
 
   {
     /* Ambient declarations for Vite's build-time defines use the conventional

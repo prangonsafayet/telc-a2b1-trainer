@@ -1,6 +1,6 @@
 /** Public surface of the auth / cloud-sync feature. */
-export { AccountMenu } from './components/AccountMenu.tsx';
-export { SyncPanel } from './components/SyncPanel.tsx';
+export { default as AccountMenu } from './components/AccountMenu.tsx';
+export { default as SyncPanel } from './components/sync/SyncPanel.tsx';
 export { useAccountIdentity } from './hooks/useAccountIdentity.ts';
 export { usePasswordAuth } from './hooks/usePasswordAuth.ts';
 export { useCloudSync } from './hooks/useCloudSync.ts';

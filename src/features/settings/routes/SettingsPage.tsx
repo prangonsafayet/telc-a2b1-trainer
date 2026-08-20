@@ -1,5 +1,3 @@
-import { type ReactNode } from 'react';
-
 import { Trash2, Volume2 } from 'lucide-react';
 
 import { PageTitle } from '@shared/components';
@@ -10,7 +8,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Label,
   Select,
   SelectContent,
   SelectItem,
@@ -21,37 +18,15 @@ import {
 
 import { SyncPanel } from '@features/auth';
 
-import { ExamDateControls } from '../components/ExamDateControls.tsx';
-import { LevelTrainerSettingsCard } from '../components/LevelTrainerSettingsCard.tsx';
+import ExamDateControls from '../components/ExamDateControls.tsx';
+import LevelTrainerSettingsCard from '../components/LevelTrainerSettingsCard.tsx';
+import SettingsField from '../components/SettingsField.tsx';
 import { useExamSettings } from '../hooks/useExamSettings.ts';
-
-interface FieldProps {
-  readonly label: string;
-  /**
-   * Id of the control this labels. Omit for controls that carry their own accessible
-   * name — a <label htmlFor> would otherwise replace it, hiding the current value.
-   */
-  readonly htmlFor?: string;
-  readonly hint?: string;
-  readonly children: ReactNode;
-}
-
-const Field = ({ label, htmlFor, hint, children }: FieldProps) => (
-  <div className="space-y-1.5">
-    {htmlFor === undefined ? (
-      <span className="text-sm font-medium leading-none">{label}</span>
-    ) : (
-      <Label htmlFor={htmlFor}>{label}</Label>
-    )}
-    {children}
-    {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
-  </div>
-);
 
 /** "Auto" is stored as an empty voice name; Radix Select needs a non-empty value. */
 const AUTO_VOICE = 'auto';
 
-export const SettingsPage = () => {
+const SettingsPage = () => {
   const { settings, voices, setSetting, testVoice, deleteAllProgress } = useExamSettings();
 
   return (
@@ -67,7 +42,7 @@ export const SettingsPage = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Writing time" htmlFor="setting-writing" hint="Official: 10 minutes.">
+            <SettingsField label="Writing time" htmlFor="setting-writing" hint="Official: 10 minutes.">
               <Select
                 value={String(settings.writingMinutes)}
                 onValueChange={value => {
@@ -82,9 +57,9 @@ export const SettingsPage = () => {
                   <SelectItem value="15">15 minutes (relaxed)</SelectItem>
                 </SelectContent>
               </Select>
-            </Field>
+            </SettingsField>
 
-            <Field label="Listening speed" htmlFor="setting-rate">
+            <SettingsField label="Listening speed" htmlFor="setting-rate">
               <Select
                 value={String(settings.ttsRate)}
                 onValueChange={value => {
@@ -100,9 +75,9 @@ export const SettingsPage = () => {
                   <SelectItem value="1.1">Faster (challenge)</SelectItem>
                 </SelectContent>
               </Select>
-            </Field>
+            </SettingsField>
 
-            <Field
+            <SettingsField
               label="Audio plays per item"
               htmlFor="setting-plays"
               hint="The real exam plays most items twice."
@@ -122,9 +97,9 @@ export const SettingsPage = () => {
                   <SelectItem value="3">3 (training)</SelectItem>
                 </SelectContent>
               </Select>
-            </Field>
+            </SettingsField>
 
-            <Field label="German voice" htmlFor="setting-voice">
+            <SettingsField label="German voice" htmlFor="setting-voice">
               <Select
                 value={settings.voiceName || AUTO_VOICE}
                 onValueChange={value => {
@@ -143,16 +118,16 @@ export const SettingsPage = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </Field>
+            </SettingsField>
 
-            <Field label="Your exam date">
+            <SettingsField label="Your exam date">
               <ExamDateControls
                 value={settings.examDate}
                 onChange={iso => {
                   setSetting('examDate', iso);
                 }}
               />
-            </Field>
+            </SettingsField>
           </div>
 
           <p className="text-sm text-muted-foreground">
@@ -182,3 +157,5 @@ export const SettingsPage = () => {
     </>
   );
 };
+
+export default SettingsPage;

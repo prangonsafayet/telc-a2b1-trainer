@@ -11,7 +11,7 @@ interface StatTileProps {
   readonly icon: LucideIcon;
 }
 
-export const StatTile = ({ label, value, caption, icon: Icon }: StatTileProps) => (
+const StatTile = ({ label, value, caption, icon: Icon }: StatTileProps) => (
   <Card className="card-hover gap-2 overflow-hidden py-4">
     <CardContent className="relative px-4">
       <Icon className="absolute right-0 top-0 size-10 text-primary/10" strokeWidth={1.5} aria-hidden />
@@ -21,3 +21,5 @@ export const StatTile = ({ label, value, caption, icon: Icon }: StatTileProps) =
     </CardContent>
   </Card>
 );
+
+export default StatTile;

@@ -10,10 +10,10 @@ import { Alert, AlertDescription, Button, Card, CardContent, Progress } from '@s
 import { describeClamp, examSlotLabel, useTrainerSchedule } from '@features/plan';
 import { useTelcStart } from '@features/telc-exam';
 
-import { LevelStatTile } from '../components/LevelStatTile.tsx';
-import { TelcExamCard } from '../components/TelcExamCard.tsx';
-import { TelcScoreChart } from '../components/TelcScoreChart.tsx';
-import { WeakAreasCard } from '../components/WeakAreasCard.tsx';
+import TelcExamCard from '../components/exams/TelcExamCard.tsx';
+import LevelStatTile from '../components/stats/LevelStatTile.tsx';
+import TelcScoreChart from '../components/stats/TelcScoreChart.tsx';
+import WeakAreasCard from '../components/stats/WeakAreasCard.tsx';
 import { useLevelStats } from '../hooks/useLevelStats.ts';
 import { CATEGORY_META, STUDY_CATEGORIES } from '../lib/studyItems.ts';
 
@@ -21,7 +21,7 @@ interface LevelDashboardPageProps {
   readonly level: TelcLevel;
 }
 
-export const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
+const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
   const { doc, stats, weakAreas } = useLevelStats(level);
   const schedule = useTrainerSchedule(level);
   const start = useTelcStart(level);
@@ -156,3 +156,5 @@ export const LevelDashboardPage = ({ level }: LevelDashboardPageProps) => {
     </>
   );
 };
+
+export default LevelDashboardPage;

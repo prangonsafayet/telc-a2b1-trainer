@@ -15,12 +15,12 @@ import {
   Progress
 } from '@shared/ui';
 
-import { LearnDayCard } from '../components/LearnDayCard.tsx';
-import { LearnSlotSection } from '../components/LearnSlotSection.tsx';
+import LearnDayCard from '../components/LearnDayCard.tsx';
+import LearnSlotSection from '../components/LearnSlotSection.tsx';
 import { useLearnPlan } from '../hooks/useLearnPlan.ts';
 import { useScheduledLearn } from '../hooks/useScheduledLearn.ts';
 
-export const LearnPage = () => {
+const LearnPage = () => {
   const plan = useLearnPlan();
   const scheduled = useScheduledLearn();
 
@@ -176,3 +176,5 @@ export const LearnPage = () => {
     </>
   );
 };
+
+export default LearnPage;

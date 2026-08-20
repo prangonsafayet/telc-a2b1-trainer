@@ -8,7 +8,7 @@ interface ScoreHistoryChartProps {
 }
 
 /** Total points per full exam, most recent attempts last. */
-export const ScoreHistoryChart = ({ attempts }: ScoreHistoryChartProps) => {
+const ScoreHistoryChart = ({ attempts }: ScoreHistoryChartProps) => {
   const bars = buildScoreHistory(attempts);
 
   return (
@@ -70,3 +70,5 @@ export const ScoreHistoryChart = ({ attempts }: ScoreHistoryChartProps) => {
     </Card>
   );
 };
+
+export default ScoreHistoryChart;

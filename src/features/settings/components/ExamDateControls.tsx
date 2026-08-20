@@ -2,8 +2,8 @@ import { TriangleAlert } from 'lucide-react';
 
 import { useExamDate } from '../hooks/useExamDate.ts';
 
-import { DaysUntilInput } from './DaysUntilInput.tsx';
-import { ExamDatePicker } from './ExamDatePicker.tsx';
+import DaysUntilInput from './DaysUntilInput.tsx';
+import ExamDatePicker from './ExamDatePicker.tsx';
 
 interface ExamDateControlsProps {
   /** `YYYY-MM-DD`, interpreted in local time. */
@@ -12,7 +12,7 @@ interface ExamDateControlsProps {
 }
 
 /** The exam date, the runway in days, and what the two of them do to the plan. */
-export const ExamDateControls = ({ value, onChange }: ExamDateControlsProps) => {
+const ExamDateControls = ({ value, onChange }: ExamDateControlsProps) => {
   const picker = useExamDate(value, onChange);
 
   return (
@@ -31,3 +31,5 @@ export const ExamDateControls = ({ value, onChange }: ExamDateControlsProps) => 
     </div>
   );
 };
+
+export default ExamDateControls;

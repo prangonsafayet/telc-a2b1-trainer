@@ -1,12 +1,11 @@
 import { Sparkles } from 'lucide-react';
 
+import { CopyTextButton } from '@shared/components';
 import { cn } from '@shared/lib/cn.ts';
 import { type Cheatsheet, type LearnDay } from '@shared/types';
 import { Badge, Card, CardContent, CardHeader, CardTitle, Checkbox, Label } from '@shared/ui';
 
 import { learnTaskKey } from '../lib/planProgress.ts';
-
-import { CopyPromptButton } from './CopyPromptButton.tsx';
 
 interface LearnDayCardProps {
   readonly day: LearnDay;
@@ -16,7 +15,7 @@ interface LearnDayCardProps {
   readonly onToggleTask: (taskIndex: number, done: boolean) => void;
 }
 
-export const LearnDayCard = ({ day, complete, cheatsheets, isTaskDone, onToggleTask }: LearnDayCardProps) => (
+const LearnDayCard = ({ day, complete, cheatsheets, isTaskDone, onToggleTask }: LearnDayCardProps) => (
   <Card
     className={cn(
       'card-hover',
@@ -83,9 +82,11 @@ export const LearnDayCard = ({ day, complete, cheatsheets, isTaskDone, onToggleT
             <Sparkles className="size-4" aria-hidden /> AI practice — {prompt.t}
           </div>
           <p className="mt-1 text-sm text-muted-foreground">{prompt.p}</p>
-          <CopyPromptButton prompt={prompt.p} />
+          <CopyTextButton text={prompt.p} />
         </div>
       ))}
     </CardContent>
   </Card>
 );
+
+export default LearnDayCard;

@@ -19,7 +19,7 @@ import {
   TableRow
 } from '@shared/ui';
 
-import { TelcScoreChart } from '../components/TelcScoreChart.tsx';
+import TelcScoreChart from '../components/stats/TelcScoreChart.tsx';
 import { useLevelStats } from '../hooks/useLevelStats.ts';
 
 interface LevelHistoryPageProps {
@@ -27,7 +27,7 @@ interface LevelHistoryPageProps {
 }
 
 /** Every stored attempt of one level trainer, newest first. */
-export const LevelHistoryPage = ({ level }: LevelHistoryPageProps) => {
+const LevelHistoryPage = ({ level }: LevelHistoryPageProps) => {
   const { stats } = useLevelStats(level);
   const base = TRAINERS[level].basePath;
   const rows = [...stats.attempts].reverse();
@@ -38,8 +38,8 @@ export const LevelHistoryPage = ({ level }: LevelHistoryPageProps) => {
         lead={
           <>
             Every attempt in the {TRAINERS[level].name} trainer — {String(stats.fullAttempts.length)} full
-            exam{stats.fullAttempts.length === 1 ? '' : 's'} and {String(stats.practiceCount)} module
-            practice run{stats.practiceCount === 1 ? '' : 's'}.
+            exam{stats.fullAttempts.length === 1 ? '' : 's'} and {String(stats.practiceCount)} module practice
+            run{stats.practiceCount === 1 ? '' : 's'}.
           </>
         }
       >
@@ -75,9 +75,7 @@ export const LevelHistoryPage = ({ level }: LevelHistoryPageProps) => {
                     <TableCell className="whitespace-nowrap">{fmtDate(attempt.date)}</TableCell>
                     <TableCell>Test {attempt.examId}</TableCell>
                     <TableCell>
-                      {attempt.mode === 'full'
-                        ? 'Full exam'
-                        : TELC_MODULE_META[attempt.mode].short}
+                      {attempt.mode === 'full' ? 'Full exam' : TELC_MODULE_META[attempt.mode].short}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {attempt.written != null ? `${String(attempt.written)}/225` : '—'}
@@ -114,3 +112,5 @@ export const LevelHistoryPage = ({ level }: LevelHistoryPageProps) => {
     </>
   );
 };
+
+export default LevelHistoryPage;

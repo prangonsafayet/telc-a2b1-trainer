@@ -1,7 +1,7 @@
 import { Home, ListChecks, RotateCcw } from 'lucide-react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
-import { Meter } from '@shared/components';
+import { CountedNumber, Meter } from '@shared/components';
 import {
   TELC_MODULE_META,
   TELC_ORAL_PASS,
@@ -9,7 +9,6 @@ import {
   telcModuleMinutes
 } from '@shared/config/telcExam.ts';
 import { TRAINERS } from '@shared/config/trainers.ts';
-import { useCountUp } from '@shared/hooks/useCountUp.ts';
 import { cn } from '@shared/lib/cn.ts';
 import { fmtClock } from '@shared/lib/format.ts';
 import { type ExamModule, type TelcLevel } from '@shared/types';
@@ -20,16 +19,11 @@ import { useTrainerDoc } from '@features/progress';
 import { useTelcAttempt, useTelcStart } from '../hooks/useTelcAttempt.ts';
 import { summarizeTelcAttempt } from '../lib/telcAttemptSummary.ts';
 
-const CountedTotal = ({ value }: { readonly value: number }) => {
-  const shown = useCountUp(value, 900);
-  return <b>{shown}</b>;
-};
-
 interface TelcResultsPageProps {
   readonly level: TelcLevel;
 }
 
-export const TelcResultsPage = ({ level }: TelcResultsPageProps) => {
+const TelcResultsPage = ({ level }: TelcResultsPageProps) => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const { attempt, exam } = useTelcAttempt(level, attemptId);
   const { doc } = useTrainerDoc(level);
@@ -67,7 +61,9 @@ export const TelcResultsPage = ({ level }: TelcResultsPageProps) => {
                 {attempt.result}
               </div>
               <div className="text-lg tabular-nums">
-                <CountedTotal value={attempt.total} /> / 300 points · time used{' '}
+                <b>
+                  <CountedNumber value={attempt.total} durationMs={900} />
+                </b> / 300 points · time used{' '}
                 {fmtClock(summary.totalSeconds)}
               </div>
               <p className="text-sm tabular-nums text-muted-foreground">
@@ -134,3 +130,5 @@ export const TelcResultsPage = ({ level }: TelcResultsPageProps) => {
     </>
   );
 };
+
+export default TelcResultsPage;

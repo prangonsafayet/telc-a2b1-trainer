@@ -8,6 +8,31 @@ A component renders. Anything derived, persisted, timed or networked goes in a h
 Reference implementations: `useExamRun` (the attempt state machine), `buildReviewSections`
 (turns an attempt into rows), `summarizeAttempt`, `useDashboardStats`.
 
+## One component per file, default-exported
+
+Every React component lives in its own file (`react/no-multi-comp`), and every component
+file default-exports its component (the local `component-default-export` rule). Types and
+interfaces may still be named exports from the same file. Hooks, libs, config and
+providers stay named exports. Barrels re-export the defaults by name
+(`export { default as Teil } from './exam-ui/layout/Teil.tsx';`), so consumers keep
+writing `import { Teil } from '@shared/components'`. The vendored `src/shared/ui` files
+are exempt from both rules.
+
+Components are grouped in folders/subfolders by area: `features/<f>/components/<group>/`
+(e.g. `exam/components/{modules,audio,rating,review,runner}/`,
+`auth/components/{sync,password,icons}/`), and shared ones under
+`shared/components/{actions,data-display,layout,exam-ui}/`.
+
+## Shared exam machinery
+
+Everything both exam features render lives in `shared/components/exam-ui/` — inputs
+(`RichtigFalsch`, `MultipleChoice`, `LetterSelect`), layout (`Teil`, `QuestionItem`,
+`QuestionText`, `ReadingText`, `Callout`), gaps (`InlineGapSelect`, `GapFillText`),
+`OptionCards`, `PunkteGrid`, `RedemittelList`, `ModuleBriefingCard`, `ExamModuleToolbar`,
+`CriteriaRatingPanel`, `CountdownRing`, `RecorderControls`, `Transcript`. Both
+`features/exam` and `features/telc-exam` consume it via `@shared/components`; neither
+defines its own copy.
+
 ## Use the design system
 
 Import primitives from `@shared/ui`. No raw `<button>`, `<input>`, `<select>`,
@@ -47,3 +72,9 @@ One alias per layer — `@app/*`, `@features/*`, `@shared/*`, `@content/*` — w
 `.ts`/`.tsx` extensions. There is no catch-all `@/`: the alias names the layer an import
 crosses, which is exactly what the boundary rules match on. `import-x/order` enforces
 grouping and alphabetisation; `--fix` handles it.
+
+Relative imports may climb at most one level (`./x`, `../x`); anything `../../` or deeper
+is banned by lint — use an alias. A feature may deep-import its own internals through its
+own alias (`@features/level-trainer/lib/quiz.ts` from inside `features/level-trainer`);
+other features' internals stay off limits. Both are `no-restricted-imports` patterns, so
+the replace-not-merge pitfall applies (see architecture.md).

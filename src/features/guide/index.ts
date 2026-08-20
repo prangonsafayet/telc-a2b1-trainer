@@ -1,2 +1,2 @@
 /** Public surface of the guide feature. */
-export { GuidePage } from './routes/GuidePage.tsx';
+export { default as GuidePage } from './routes/GuidePage.tsx';

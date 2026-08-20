@@ -1,2 +1,2 @@
 /** Public surface of the learn feature. */
-export { LearnPage } from './routes/LearnPage.tsx';
+export { default as LearnPage } from './routes/LearnPage.tsx';

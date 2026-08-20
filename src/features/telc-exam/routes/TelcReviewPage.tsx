@@ -3,12 +3,12 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 
 import { Multiline, PageTitle, Transcript } from '@shared/components';
 import { TRAINERS } from '@shared/config/trainers.ts';
+import { textAnswer, WRITING_ANSWER_KEY } from '@shared/lib/answers.ts';
 import { cn } from '@shared/lib/cn.ts';
 import { type TelcLevel } from '@shared/types';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@shared/ui';
 
 import { useTelcAttempt } from '../hooks/useTelcAttempt.ts';
-import { textAnswer, WRITING_ANSWER_KEY } from '../lib/answers.ts';
 import { buildTelcReviewSections } from '../lib/reviewRows.ts';
 
 interface TelcReviewPageProps {
@@ -16,7 +16,7 @@ interface TelcReviewPageProps {
 }
 
 /** Every item of an attempt with the given and the correct answer, plus transcripts. */
-export const TelcReviewPage = ({ level }: TelcReviewPageProps) => {
+const TelcReviewPage = ({ level }: TelcReviewPageProps) => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const { attempt, exam } = useTelcAttempt(level, attemptId);
   const base = TRAINERS[level].basePath;
@@ -112,3 +112,5 @@ export const TelcReviewPage = ({ level }: TelcReviewPageProps) => {
     </>
   );
 };
+
+export default TelcReviewPage;

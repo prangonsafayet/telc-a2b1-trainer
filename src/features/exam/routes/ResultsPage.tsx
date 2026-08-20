@@ -1,9 +1,8 @@
 import { Home, ListChecks, RotateCcw } from 'lucide-react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
-import { Meter } from '@shared/components';
+import { CountedNumber, Meter } from '@shared/components';
 import { MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
-import { useCountUp } from '@shared/hooks/useCountUp.ts';
 import { cn } from '@shared/lib/cn.ts';
 import { fmtClock } from '@shared/lib/format.ts';
 import { type ExamModule } from '@shared/types';
@@ -14,12 +13,7 @@ import { useProgress } from '@features/progress';
 import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
 import { summarizeAttempt } from '../lib/attemptSummary.ts';
 
-const CountedTotal = ({ value }: { readonly value: number }) => {
-  const shown = useCountUp(value, 900);
-  return <b>{shown}</b>;
-};
-
-export const ResultsPage = () => {
+const ResultsPage = () => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const { attempt, exam } = useAttempt(attemptId);
   const { db } = useProgress();
@@ -54,8 +48,10 @@ export const ResultsPage = () => {
             <>
               <div className={cn('text-6xl font-bold tracking-tight', gradeTone)}>{attempt.result}</div>
               <div className="text-lg tabular-nums">
-                <CountedTotal value={attempt.total} /> / 240 points · time used{' '}
-                {fmtClock(summary.totalSeconds)}
+                <b>
+                  <CountedNumber value={attempt.total} durationMs={900} />
+                </b>{' '}
+                / 240 points · time used {fmtClock(summary.totalSeconds)}
               </div>
               <p className="text-sm text-muted-foreground">
                 B1 rule: ≥42/60 in three skills + ≥24/60 in the fourth. A2 rule: ≥24/60 in three + ≥6/60 in
@@ -121,3 +117,5 @@ export const ResultsPage = () => {
     </>
   );
 };
+
+export default ResultsPage;

@@ -1,9 +1,7 @@
 import { CalendarClock, ClipboardCheck, Trophy } from 'lucide-react';
 
-import { Meter, PageTitle, SectionTitle } from '@shared/components';
-import { ScoreHistoryChart } from '@shared/components/data-display/ScoreHistoryChart.tsx';
+import { CountedNumber, Meter, PageTitle, ScoreHistoryChart, SectionTitle } from '@shared/components';
 import { MODULE_META } from '@shared/config/exam.ts';
-import { useCountUp } from '@shared/hooks/useCountUp.ts';
 import { fmtDate } from '@shared/lib/format.ts';
 import { Card, CardContent } from '@shared/ui';
 
@@ -11,12 +9,12 @@ import { useAccountIdentity } from '@features/auth';
 import { describeMockLead, examSlotLabel } from '@features/plan';
 import { useProgress } from '@features/progress';
 
-import { ExamCard } from '../components/ExamCard.tsx';
-import { LocalOnlyNotice } from '../components/LocalOnlyNotice.tsx';
-import { ResumeRunNotice } from '../components/ResumeRunNotice.tsx';
-import { SchedulePhaseNotice } from '../components/SchedulePhaseNotice.tsx';
-import { StatTile } from '../components/StatTile.tsx';
-import { TodayPlanCard } from '../components/TodayPlanCard.tsx';
+import ExamCard from '../components/ExamCard.tsx';
+import LocalOnlyNotice from '../components/LocalOnlyNotice.tsx';
+import ResumeRunNotice from '../components/ResumeRunNotice.tsx';
+import SchedulePhaseNotice from '../components/SchedulePhaseNotice.tsx';
+import StatTile from '../components/StatTile.tsx';
+import TodayPlanCard from '../components/TodayPlanCard.tsx';
 import { useDashboardStats } from '../hooks/useDashboardStats.ts';
 import { useResumableRun } from '../hooks/useResumableRun.ts';
 import { useTodayPlan } from '../hooks/useTodayPlan.ts';
@@ -28,12 +26,7 @@ const SKILL_LABELS = [
   ['sprechen', 'Sprechen']
 ] as const;
 
-const Counted = ({ value }: { readonly value: number | null }) => {
-  const shown = useCountUp(value);
-  return <>{shown ?? '–'}</>;
-};
-
-export const DashboardPage = () => {
+const DashboardPage = () => {
   const { db } = useProgress();
   const stats = useDashboardStats();
   const identity = useAccountIdentity();
@@ -83,7 +76,7 @@ export const DashboardPage = () => {
         <StatTile
           icon={ClipboardCheck}
           label="Full exams taken"
-          value={<Counted value={stats.fullAttempts.length} />}
+          value={<CountedNumber value={stats.fullAttempts.length} />}
           caption={`${String(stats.practiceCount)} module practice runs`}
         />
         <StatTile
@@ -91,7 +84,7 @@ export const DashboardPage = () => {
           label="Best total"
           value={
             <>
-              <Counted value={stats.bestTotal} />
+              <CountedNumber value={stats.bestTotal} />
               <span className="text-base font-normal text-muted-foreground">/240</span>
             </>
           }
@@ -133,3 +126,5 @@ export const DashboardPage = () => {
     </>
   );
 };
+
+export default DashboardPage;

@@ -10,7 +10,7 @@ interface SchedulePhaseNoticeProps {
 }
 
 /** Why the plan looks the way it does, with one click to the thing that changes it. */
-export const SchedulePhaseNotice = ({ message, needsNewDate }: SchedulePhaseNoticeProps) => (
+const SchedulePhaseNotice = ({ message, needsNewDate }: SchedulePhaseNoticeProps) => (
   <Alert variant={needsNewDate ? 'warning' : 'default'} className="animate-fade-up mb-6">
     <CalendarClock />
     <AlertTitle>{needsNewDate ? 'Your exam date needs updating' : 'About your plan'}</AlertTitle>
@@ -26,3 +26,5 @@ export const SchedulePhaseNotice = ({ message, needsNewDate }: SchedulePhaseNoti
     </AlertDescription>
   </Alert>
 );
+
+export default SchedulePhaseNotice;

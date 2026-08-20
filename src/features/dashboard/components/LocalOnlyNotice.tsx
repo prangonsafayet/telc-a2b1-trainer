@@ -10,7 +10,7 @@ interface LocalOnlyNoticeProps {
 }
 
 /** Signed-out warning. Progress living only in one browser is easy to lose by accident. */
-export const LocalOnlyNotice = ({ attemptCount, syncAvailable }: LocalOnlyNoticeProps) => (
+const LocalOnlyNotice = ({ attemptCount, syncAvailable }: LocalOnlyNoticeProps) => (
   <Alert variant="warning" className="animate-fade-up mb-6">
     <TriangleAlert />
     <AlertTitle>You are not signed in — progress is saved only in this browser</AlertTitle>
@@ -39,3 +39,5 @@ export const LocalOnlyNotice = ({ attemptCount, syncAvailable }: LocalOnlyNotice
     </AlertDescription>
   </Alert>
 );
+
+export default LocalOnlyNotice;

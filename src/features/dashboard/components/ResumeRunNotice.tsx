@@ -11,7 +11,7 @@ interface ResumeRunNoticeProps {
   readonly onDiscard: () => void;
 }
 
-export const ResumeRunNotice = ({ run, onResume, onDiscard }: ResumeRunNoticeProps) => {
+const ResumeRunNotice = ({ run, onResume, onDiscard }: ResumeRunNoticeProps) => {
   const modeLabel = run.mode === 'full' ? 'full exam' : MODULE_META[run.mode].short;
 
   return (
@@ -34,3 +34,5 @@ export const ResumeRunNotice = ({ run, onResume, onDiscard }: ResumeRunNoticePro
     </Card>
   );
 };
+
+export default ResumeRunNotice;

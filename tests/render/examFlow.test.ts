@@ -4,7 +4,7 @@ import { type Attempt } from '@shared/types';
 import { clearRun, loadRun } from '@features/exam';
 import { PROGRESS_STORAGE_KEY } from '@features/progress';
 
-import { click, findByText, mount, seedProgress } from './harness.ts';
+import { click, findByText, mount, seedProgress, waitFor } from './harness.ts';
 
 /* Drives a real attempt end to end, including a mid-module page refresh — the failure this
    guards against lost a candidate's answers and their remaining time. */
@@ -59,6 +59,9 @@ describe('a single-module practice run', () => {
     expect(document.body.textContent ?? '').toMatch(/still unanswered/);
     await click(findByText(/Submit anyway/));
 
+    /* The results screen is a lazy route chunk; under full-suite load it can outlast the
+       click helper's fixed settle, so wait for it the same way mount() waits out chunks. */
+    await waitFor(() => /time used/.test(view.text()));
     expect(view.text()).toMatch(/time used/);
     /* The in-progress run must be gone, or the dashboard offers to resume a finished exam. */
     expect(loadRun()).toBeNull();

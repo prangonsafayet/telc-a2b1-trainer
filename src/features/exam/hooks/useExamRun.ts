@@ -35,7 +35,6 @@ import {
   scoreSprachbausteine
 } from '../lib/scoring.ts';
 
-
 export type { SpeakingPart };
 
 /** Blob URLs for the speaking module. Session-only — never persisted. */
