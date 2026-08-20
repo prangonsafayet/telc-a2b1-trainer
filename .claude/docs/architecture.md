@@ -13,10 +13,25 @@ src/content    inert data, keyed by trainer — `content/trainers/<id>/` holds t
 The trainers are peers, described once in the **registry** at
 `shared/config/trainers.ts`: one `TRAINERS` descriptor per trainer names its identity and
 route namespace, which paper it sets, where its slice of the progress document lives, and
-the content it studies from. That is the only place a per-trainer fact may live — a
-`no-restricted-syntax` rule refuses the literals `'a2b1'`, `'b1'` and `'b2'` as values
-anywhere else in `src/`. Adding a trainer is a content folder plus one entry: every screen,
-route and nav item is generated from `TRAINER_ORDER`.
+the content it studies from (loaded lazily — see below). That is the only place a
+per-trainer fact may live — a `no-restricted-syntax` rule refuses the literals `'a2b1'`,
+`'b1'` and `'b2'` as values anywhere else in `src/`. Every screen, route, hook and nav item
+is generated from `TRAINER_ORDER`, so none of them needs editing to add a trainer.
+
+**The extensibility claim, stated precisely.** This was measured, not assumed: a fourth
+trainer was planted to see what actually needs to change. Adding one costs its content
+folder (`content/trainers/<id>/`), one entry in `TRAINERS`, and a row in the type-level
+plumbing that keeps the registry exhaustive and the persisted document typed —
+`TrainerId` and, if it sets the single-level paper, `SingleLevelTrainerId` (both in
+`shared/types/trainer.ts` / `shared/types/singleLevelExam.ts`), plus a field on
+`ProgressDatabase` (`shared/types/progress.ts`) with matching cases in `normalizeDatabase`
+and `mergeProgress` (`features/progress/lib/progressDb.ts`,
+`features/auth/lib/mergeProgress.ts`). No screen, route, hook, nav item or test needs
+editing — that part of the original claim held. The earlier phrasing, "a content folder
+plus one registry entry", undercounted this: the id unions and the persisted document's
+own shape are irreducible without widening `TrainerId` to `string` and losing the
+exhaustiveness checking the registry is built on, which is a worse trade than the three
+extra edit points.
 
 `features/exam` runs every mock exam of every trainer: one run-state machine, one runner
 shell, one results screen and one review screen, driven by a **format descriptor** in

@@ -49,7 +49,7 @@ describe('reviewItem', () => {
 
   it('produces a due date that survives a spring-forward DST boundary', () => {
     /* addDays builds the date from its parts, so the hour lost to DST cannot turn "+1 day"
-       into "same day, 23:00" — see docs/lessons.local.md. */
+       into "same day, 23:00" (see .claude/docs/pitfalls.md). */
     const before: SrsEntry = { box: 0, due: '2026-03-28', seen: 0, correct: 0, wrong: 0 };
     const after = reviewItem(before, true, '2026-03-28');
     expect(after.due).toBe('2026-03-29');

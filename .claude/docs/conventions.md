@@ -48,7 +48,7 @@ kebab-case filenames so `npx shadcn add` keeps working; the barrel is the stable
 | ---------------------------- | ---------------------- | ------------------- |
 | Component / route module     | `PascalCase.tsx`       | `ExamCard.tsx`      |
 | Hook                         | `useThing.ts`          | `useExamRun.ts`     |
-| Util, config, types, context | `camelCase.ts`         | `attemptSummary.ts` |
+| Util, config, types, context | `camelCase.ts`         | `dashboardModel.ts` |
 | Folder                       | `kebab-case`           | `exam-ui/`          |
 | Module constant              | `SCREAMING_SNAKE_CASE` | `EXAM_MODULES`      |
 | Type / interface             | `PascalCase`           | `SignUpOutcome`     |
