@@ -14,6 +14,7 @@ import {
   buildTiles,
   buildWeakAreas,
   masteryCounts,
+  metersHeading,
   passRuleFor
 } from '../lib/dashboardModel.ts';
 import { buildExamCards } from '../lib/examCards.ts';
@@ -33,8 +34,9 @@ export interface DashboardStats {
   /** This trainer's own history page. */
   readonly historyTo: string;
   readonly tiles: readonly StatTileModel[];
-  /** Best score per scored part of the paper. */
+  /** Best score per scored part of the paper, under the name that paper gives them. */
   readonly meters: readonly MeterModel[];
+  readonly metersHeading: string;
   /** Null for a trainer with no vocabulary bank; its Practice page shows its empty state. */
   readonly mastery: MasteryModel | null;
   readonly weakAreas: readonly WeakAreaModel[];
@@ -67,6 +69,7 @@ export const useDashboardStats = (trainer: TrainerId): DashboardStats => {
       historyTo: `${info.basePath}/history`,
       tiles: buildTiles(slice, counts, today),
       meters: buildMeters(slice),
+      metersHeading: metersHeading(slice),
       mastery,
       weakAreas: buildWeakAreas(slice, vocab, info.basePath),
       chart: buildScoreChart(slice),

@@ -42,6 +42,15 @@ const bestFor = (
   return scores.length > 0 ? Math.max(...scores) : null;
 };
 
+/**
+ * What the meters are, per paper: the A2·B1 paper's four 60-point skills, or the
+ * single-level paper's five marked sections out of 75/30/75/45/75. Calling the latter
+ * "skills" would be wrong twice — Sprachbausteine is not a skill, and none of them is
+ * out of 60.
+ */
+export const metersHeading = (slice: TrainerSlice): string =>
+  slice.format === 'single-level' ? 'Section results (best scores)' : 'Skill progress (best scores)';
+
 /** The best score of each scored part of the paper, against a perfect one. */
 export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] => {
   const thresholdPercent = PASS_PERCENT[slice.format];

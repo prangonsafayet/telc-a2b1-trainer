@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.1.0",
   "type": "module",
-  "description": "telc Deutsch A2·B1 mock exam trainer — 15 full model tests and an adaptive study plan",
+  "description": "telc Deutsch trainer for the A2·B1, B1 and B2 exams — 35 full model tests, a 28-day study plan per exam, and a vocabulary bank with spaced repetition",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

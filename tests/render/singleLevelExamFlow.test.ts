@@ -60,6 +60,12 @@ describe.each(SINGLE_LEVEL_TRAINERS)('a single-module practice run — %s', trai
     /* An absolute deadline, not a countdown: a countdown cannot survive a reload. */
     expect(started?.deadline).toBeTruthy();
 
+    /* The paper's label is `<title> · <level>` on both papers. It said "· telc Deutsch B1"
+       here and nothing at all on the other paper; every exam in the app is a telc exam, so
+       the brand distinguished nothing and only the level marker is carried. */
+    expect(view.text()).toMatch(/Modelltest 1 · B[12]/);
+    expect(view.text()).not.toMatch(/Modelltest 1 · telc/);
+
     /* 3. Answer one item (a Teil 2 multiple-choice question). */
     const radios = [...document.querySelectorAll('button[role="radio"]')];
     expect(radios.length).toBeGreaterThan(0);

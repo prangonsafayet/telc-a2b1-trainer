@@ -89,7 +89,7 @@ const DashboardPage = ({ trainer }: DashboardPageProps) => {
         </div>
       ) : null}
 
-      <SectionTitle>Skill progress (best scores)</SectionTitle>
+      <SectionTitle>{stats.metersHeading}</SectionTitle>
       <Card>
         <CardContent className="grid gap-5 sm:grid-cols-2">
           {stats.meters.map(meter => (

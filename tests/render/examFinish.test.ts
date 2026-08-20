@@ -28,7 +28,7 @@ import { captureErrors, settle } from './harness.ts';
 const RUN_KEY = 'examFinishRegressionRunV1';
 const runStore = createRunStore(RUN_KEY);
 
-const EXAM: ExamPaper = { id: 1, title: 'Modelltest 1' };
+const EXAM: ExamPaper = { id: 1, title: 'Modelltest 1', theme: 'Fixture' };
 const SETTINGS: RunSettings = { writingMinutes: 30, playsAllowed: 1 };
 const RATING: ExamFormat<ExamPaper, RunSettings, StoredAttempt>['rating']['schreiben'] = {
   criteria: [['Inhalt', 'all three points covered']],

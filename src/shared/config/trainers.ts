@@ -3,9 +3,13 @@
  * is allowed to live.
  *
  * The three trainers are peers. A fourth one — telc Deutsch C1, a Deutsch-Test für
- * Zuwanderer — is a content folder under `src/content/trainers/` plus one entry here; no
- * screen, route, hook or nav item needs to learn about it. Everything else in `src/`
- * therefore reads a trainer's facts from this file rather than testing its id, which the
+ * Zuwanderer — costs a content folder under `src/content/trainers/`, one entry here, and a
+ * row in the type-level plumbing that keeps this registry exhaustive and the persisted
+ * document typed: `TrainerId`, `SingleLevelTrainerId` if it sets that paper, and a field on
+ * `ProgressDatabase` with matching cases in `normalizeDatabase` and `mergeProgress`. That
+ * was measured by planting one, not assumed — see `.claude/docs/architecture.md`. No screen,
+ * route, hook, nav item or test needs to learn about it, because everything else in `src/`
+ * reads a trainer's facts from this file rather than testing its id, which the
  * `no-restricted-syntax` rule in `eslint.config.js` enforces.
  */
 

@@ -48,7 +48,7 @@ const TodayPlanCard = ({ plan, onStartExam }: TodayPlanCardProps) => (
           {plan.exams.map(exam => (
             <div key={exam.id} className="flex flex-wrap items-center gap-2 text-sm">
               <span className="grow">
-                <b className="font-medium">{exam.title}</b>
+                <b className="font-medium">{exam.title}</b> — {exam.theme}
               </span>
               <Button
                 size="sm"

@@ -75,7 +75,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       title: 'Die halbformelle E-Mail (45 Punkte, 150–220 Wörter)',
       html: `<p><b>The task:</b> 30 minutes, ONE task — no choice between two. Write a <b>halbformelle E-Mail</b> of 150–220 words that answers everything the prompt raises, covering all Leitpunkte fully. Register sits between "Sehr geehrte Damen und Herren" and casual Du: "Lieber Herr Fischer" or "Guten Tag Frau Berger" is usually right — not a formal Behördenbrief.</p>
 <p><b>Fixed skeleton — memorize it:</b><br>
-1. <b>Betreff</b> — one bold subject line: <i>Beschwerde über die Lieferung vom 12. Mai</i> / <i>Anfrage zu Ihrem Kursangebot</i> / <i>Bewerbung als …</i><br>
+1. <b>Betreff</b> — one subject line on its own, written the way every Musterlösung here writes it (<i>Betreff: …</i>), then a blank line: <i>Betreff: Beschwerde über die Lieferung vom 12. Mai</i> / <i>Anfrage zu Ihrem Kursangebot</i> / <i>Bewerbung als …</i><br>
 2. <b>Anrede:</b> Sehr geehrte Damen und Herren, / Sehr geehrte Frau Weber, / Lieber Herr Fischer, — after the comma continue <b>lowercase</b>.<br>
 3. <b>Einstieg — why are you writing?</b> Ich wende mich an Sie, weil … · Mit großem Interesse habe ich Ihre Anzeige gelesen. · Ich beziehe mich auf Ihr Schreiben vom …<br>
 4. <b>Hauptteil</b> — one short paragraph per Leitpunkt, connected with daher, allerdings, außerdem, aus diesem Grund.<br>
@@ -91,7 +91,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       html: `<p><b>Teil 1 — Über Erfahrungen sprechen (ca. 3 Min., eine eigene Erfahrung erzählen — KEINE Präsentation):</b><br>
 · Einstieg: Ich möchte Ihnen von einer Erfahrung erzählen, bei der … · Bei mir war das so: …<br>
 · Verlauf: Zuerst …, dann …, am Ende …<br>
-· Gefühl & Bewertung: Aus meiner Erfahrung … · Das kann ich gut nachvollziehen, weil … · Rückblickend würde ich sagen, dass …<br>
+· Gefühl & Bewertung: Aus meiner Erfahrung … · Damals habe ich mich … gefühlt, weil … · Rückblickend würde ich sagen, dass …<br>
 · Vergleich & Abschluss: In meinem Heimatland ist das ähnlich/anders: … · Zusammenfassend würde ich sagen, dass … · Haben Sie das auch schon einmal erlebt?</p>
 <p><b>Teil 2 — Diskussion (Position beziehen & reagieren):</b><br>
 · Meinung: Meiner Ansicht/Meinung nach … · Ich bin fest davon überzeugt, dass … · Ich stehe dem eher kritisch/skeptisch gegenüber.<br>

@@ -66,14 +66,14 @@ export const describeLearnLead = (schedule: Schedule): string => {
 };
 
 /** The Dashboard lead. */
-export const describeMockLead = (schedule: Schedule, examCount: number): string => {
+export const describeMockLead = (schedule: Schedule, totalExams: number): string => {
   const scheduled = schedule.slots.reduce((sum, slot) => sum + slot.examIds.length, 0);
   if (schedule.phase === 'past-due' || scheduled === 0) {
-    return `${String(examCount)} Modelltests, easiest first. Take them in order under real timing.`;
+    return `${String(totalExams)} Modelltests, easiest first. Take them in order under real timing.`;
   }
   const optional = schedule.unscheduledExamIds.length;
   const tail = optional > 0 ? ` The other ${String(optional)} stay available if you find the time.` : '';
-  return `${String(examCount)} Modelltests, easiest first. Your date fits ${String(scheduled)} of them into the plan.${tail}`;
+  return `${String(totalExams)} Modelltests, easiest first. Your date fits ${String(scheduled)} of them into the plan.${tail}`;
 };
 
 /** Where an exam sits in the plan: `today`, `planned Do, 28. Aug`, or `optional`. */

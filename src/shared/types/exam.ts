@@ -7,6 +7,8 @@
 export interface ExamPaper {
   readonly id: number;
   readonly title: string;
+  /** What the paper is about, e.g. `Wohnen & Nachbarschaft`. */
+  readonly theme: string;
 }
 
 export type ExamDifficulty = 'easy' | 'medium' | 'b1';

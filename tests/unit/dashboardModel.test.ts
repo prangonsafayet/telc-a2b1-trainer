@@ -4,7 +4,12 @@ import { PASS_PERCENT } from '@shared/config/examConditions.ts';
 import { A2_TOTAL, B1_TOTAL, SKILL_MAX } from '@shared/config/exam.ts';
 import { SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
 import { buildScoreChart } from '@shared/lib/scoreChart.ts';
-import { buildMeters, buildTiles, buildWeakAreas } from '@features/dashboard/lib/dashboardModel.ts';
+import {
+  buildMeters,
+  buildTiles,
+  buildWeakAreas,
+  metersHeading
+} from '@features/dashboard/lib/dashboardModel.ts';
 import type { TrainerSlice } from '@features/progress';
 import type {
   DualLevelAttempt,
@@ -153,5 +158,22 @@ describe('the A2·B1 grade zones', () => {
     const gridlines = buildScoreChart({ format: 'dual-level', attempts: [] }).gridlines;
     expect(gridlines.map(line => line.value)).toContain(B1_TOTAL);
     expect(gridlines.map(line => line.value)).toContain(A2_TOTAL);
+  });
+});
+
+/* The heading over the meters used to read "Skill progress" for both papers. On the
+   single-level paper the meters are its five marked sections out of 75/30/75/45/75 — one of
+   which (Sprachbausteine) is explicitly not a skill — so the heading has to follow the
+   paper the way the meters already do. */
+describe('the heading over the meters', () => {
+  it('says skills on the A2·B1 paper, whose meters are its four 60-point skills', () => {
+    expect(metersHeading(dualLevelSlice(1))).toMatch(/Skill/);
+    expect(buildMeters(dualLevelSlice(1))).toHaveLength(4);
+  });
+
+  it("does not call the single-level paper's five marked sections skills", () => {
+    expect(metersHeading(singleLevelSlice(1))).not.toMatch(/Skill/);
+    expect(metersHeading(singleLevelSlice(1))).toMatch(/Section/);
+    expect(buildMeters(singleLevelSlice(1))).toHaveLength(5);
   });
 });
