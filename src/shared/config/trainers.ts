@@ -16,7 +16,8 @@ import {
   type SingleLevelTrainerId,
   type TrainerContent,
   type TrainerDocKey,
-  type TrainerId
+  type TrainerId,
+  type WeaknessTopic
 } from '@shared/types';
 
 import { SPRINT_LEARN_DAYS } from './schedule.ts';
@@ -45,6 +46,16 @@ export interface TrainerInfo {
   readonly content: TrainerContent;
   /** Lesson days the five-day emergency plan reaches for. */
   readonly sprintLearnDays: readonly number[];
+  /**
+   * Its own cheatsheet keys (into `content.curriculum.cheatsheets`) for each weakness
+   * topic — see `WEAKNESS_TOPICS` in `@shared/config/weakness.ts`. A trainer resolves this
+   * itself rather than sharing one flat map, because the three trainers name and group
+   * their cheatsheets differently (A2·B1 has twelve keys, B1 and B2 have six each, and no
+   * key is shared across all three). Empty where a trainer authors no cheatsheet for that
+   * topic — B1 and B2 have no dedicated vocabulary cheatsheet, so a learner with a spelling
+   * weakness there falls back to the practice hub instead of a cheatsheet link.
+   */
+  readonly weaknessCheatsheets: Readonly<Record<WeaknessTopic, readonly string[]>>;
 }
 
 /** The trainers, in the order they are offered. */
@@ -60,7 +71,15 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     format: 'dual-level',
     docKey: null,
     content: TRAINER_CONTENT.a2b1,
-    sprintLearnDays: SPRINT_LEARN_DAYS
+    sprintLearnDays: SPRINT_LEARN_DAYS,
+    weaknessCheatsheets: {
+      cases: ['cases'],
+      verbForms: ['verbs', 'modal', 'passivkii'],
+      connectors: ['connectors', 'nebensaetze'],
+      prepositions: ['verbpraep', 'cases'],
+      vocabulary: ['vocab'],
+      writing: ['writing', 'formal']
+    }
   },
   b1: {
     id: 'b1',
@@ -71,7 +90,18 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     format: 'single-level',
     docKey: 'b1',
     content: TRAINER_CONTENT.b1,
-    sprintLearnDays: SPRINT_LEARN_DAYS
+    sprintLearnDays: SPRINT_LEARN_DAYS,
+    weaknessCheatsheets: {
+      /* The B1 'cases' cheatsheet ('Kasus incl. Genitiv & Adjektivendungen') already
+         carries the preposition-case lists — day 4 of its own curriculum points learners
+         with a preposition weakness here too. */
+      cases: ['cases'],
+      verbForms: ['verbs'],
+      connectors: ['konnektoren'],
+      prepositions: ['cases'],
+      vocabulary: [],
+      writing: ['schreiben']
+    }
   },
   b2: {
     id: 'b2',
@@ -82,7 +112,17 @@ export const TRAINERS: Readonly<Record<TrainerId, TrainerInfo>> = {
     format: 'single-level',
     docKey: 'b2',
     content: TRAINER_CONTENT.b2,
-    sprintLearnDays: SPRINT_LEARN_DAYS
+    sprintLearnDays: SPRINT_LEARN_DAYS,
+    weaknessCheatsheets: {
+      /* 'genitiv' is titled 'Genitiv & formal prepositions' — B2's only case cheatsheet
+         and its preposition one at once. */
+      cases: ['genitiv'],
+      verbForms: ['passiv', 'kii'],
+      connectors: ['nominal'],
+      prepositions: ['genitiv'],
+      vocabulary: [],
+      writing: ['brief']
+    }
   }
 };
 

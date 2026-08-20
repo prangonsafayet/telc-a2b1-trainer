@@ -1,5 +1,6 @@
 export * from './exam.ts';
 export * from './examRun.ts';
+export * from './feedback.ts';
 export * from './languageTool.ts';
 export * from './learn.ts';
 export * from './progress.ts';
