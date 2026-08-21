@@ -2,15 +2,24 @@
  * The trainer registry: one descriptor per trainer, and the only place a per-trainer fact
  * is allowed to live.
  *
- * The three trainers are peers. A fourth one — telc Deutsch C1, a Deutsch-Test für
- * Zuwanderer — costs a content folder under `src/content/trainers/`, one entry here, and a
- * row in the type-level plumbing that keeps this registry exhaustive and the persisted
- * document typed: `TrainerId`, `SingleLevelTrainerId` if it sets that paper, and a field on
- * `ProgressDatabase` with matching cases in `normalizeDatabase` and `mergeProgress`. That
- * was measured by planting one, not assumed — see `.claude/docs/architecture.md`. No screen,
- * route, hook, nav item or test needs to learn about it, because everything else in `src/`
- * reads a trainer's facts from this file rather than testing its id, which the
- * `no-restricted-syntax` rule in `eslint.config.js` enforces.
+ * The three trainers are peers, and a fourth that sets one of the two existing papers — telc
+ * Deutsch B2 Beruf, say — costs a content folder under `src/content/trainers/`, one entry
+ * here, and a row in the type-level plumbing that keeps this registry exhaustive and the
+ * persisted document typed: `TrainerId`, `SingleLevelTrainerId` if it sets that paper, and a
+ * field on `ProgressDatabase` with matching cases in `EMPTY_DATABASE`, `normalizeDatabase`
+ * and `mergeProgress`. Plus two more places, both measured rather than assumed by planting a
+ * fourth trainer: `src/content/trainers/index.ts` and one `vi.mock` in
+ * `tests/unit/contentChunks.test.ts`. `.claude/docs/architecture.md` states the whole list
+ * and why each entry is irreducible.
+ *
+ * No screen, route, hook or nav item needs to learn about it, because everything else in
+ * `src/` reads a trainer's facts from this file rather than testing its id — which the
+ * `no-restricted-syntax` rule in `eslint.config.js` enforces over the id list it reads back
+ * out of this file.
+ *
+ * A trainer that sets a *new* paper costs much more: another `ExamFormatId`, a whole
+ * `features/exam/lib/formats/<new>/`, five module renderers, a `TrainerSlice` variant, an
+ * attempt type and seven format-keyed records in `@shared/config/examConditions.ts`.
  */
 
 import { A2B1_PAPER } from '@content/trainers/a2b1/paper.ts';

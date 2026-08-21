@@ -19,25 +19,55 @@ per-trainer fact may live — a `no-restricted-syntax` rule refuses a trainer id
 else in `src/`, in every shape it can take: as a value (`mode === 'b1'`), as an object key
 (`{ b1: … }`) and as a property read (`db.b1`, `TRAINERS.a2b1`). Type-level uses are not
 matched, so the unions that DEFINE the ids and `ProgressDatabase`'s own fields still
-declare theirs. Four files are exempt: the registry, `src/content/**`, and the persisted
-document's two irreducible per-trainer spots (`progress/lib/progressDb.ts`,
-`auth/lib/mergeProgress.ts`). Every screen, route, hook and nav item is generated from
-`TRAINER_ORDER`, so none of them needs editing to add a trainer.
+declare theirs. Three files and one folder are exempt: the registry itself,
+`src/content/**` (keyed by trainer by definition), and the persisted document's two
+irreducible per-trainer spots — `progress/lib/progressDb.ts` and
+`auth/lib/mergeProgress.ts`. `eslint.config.js` is not on that list because it no longer
+names an id: `scripts/trainerRegistry.mjs` reads them back out of the registry, so the rule
+covers a new trainer without being edited. Every screen, route, hook and nav item is
+generated from `TRAINER_ORDER`, so none of them needs editing to add a trainer either.
 
 **The extensibility claim, stated precisely.** This was measured, not assumed: a fourth
-trainer was planted to see what actually needs to change. Adding one costs its content
-folder (`content/trainers/<id>/`), one entry in `TRAINERS`, and a row in the type-level
-plumbing that keeps the registry exhaustive and the persisted document typed —
-`TrainerId` and, if it sets the single-level paper, `SingleLevelTrainerId` (both in
-`shared/types/trainer.ts` / `shared/types/singleLevelExam.ts`), plus a field on
-`ProgressDatabase` (`shared/types/progress.ts`) with matching cases in `normalizeDatabase`
-and `mergeProgress` (`features/progress/lib/progressDb.ts`,
-`features/auth/lib/mergeProgress.ts`). No screen, route, hook, nav item or test needs
-editing — that part of the original claim held. The earlier phrasing, "a content folder
-plus one registry entry", undercounted this: the id unions and the persisted document's
-own shape are irreducible without widening `TrainerId` to `string` and losing the
-exhaustiveness checking the registry is built on, which is a worse trade than the three
-extra edit points.
+trainer was planted to see what actually needs to change. **The claim is scoped to a
+trainer that sets one of the two existing papers** — a new paper is a much larger job, and
+its cost is listed at the end of this section.
+
+Adding one costs seven edits, and every one of them is a list the type system needs
+spelled out:
+
+| Edit                                                                           | Why it cannot be derived                                                                                          |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `content/trainers/<id>/` — the content folder                                  | it is the content                                                                                                 |
+| one entry in `TRAINERS` (`shared/config/trainers.ts`)                          | it is the registry                                                                                                |
+| `TrainerId`, and `SingleLevelTrainerId` if it sets that paper                  | widening either to `string` loses the exhaustiveness the whole design rests on                                    |
+| a field on `ProgressDatabase` (`shared/types/progress.ts`)                     | the persisted document's own shape                                                                                |
+| `EMPTY_DATABASE` + `normalizeDatabase` (`features/progress/lib/progressDb.ts`) | `exactOptionalPropertyTypes` means a trainer nobody has opened is an ABSENT key, so the defaulting is per trainer |
+| `mergeProgress` (`features/auth/lib/mergeProgress.ts`)                         | it rebuilds the document field by field on purpose — see pitfalls.md; this is where two trainers were once wiped  |
+| `TRAINER_CONTENT` (`src/content/trainers/index.ts`)                            | the three static content imports live here and nowhere else; four suites and `validate.cjs` read it eagerly       |
+
+Two **tests** need editing, and the earlier claim that none did was simply false:
+
+- `tests/unit/contentChunks.test.ts` — one `vi.mock` per trainer's content module.
+  `vi.mock` takes a literal path, so this cannot be looped. Miss it and the new
+  trainer's lazy-loading guarantee goes unverified while the suite stays green, which is
+  the exact silent failure that suite exists to catch.
+- `tests/unit/mergeProgress.test.ts` — pitfalls.md requires a test per new
+  `ProgressDatabase` field, so this one is a feature of the process rather than a cost.
+
+Everything else that used to be an edit point is now generated, and the removals matter
+more than the documentation: `eslint.config.js`'s `TRAINER_IDS`, `vite.config.ts`'s
+sitemap and `robots.txt`, `tests/render/routes.test.ts`'s route list and
+`e2e/singleLevelTrainers.spec.js`'s trainer list all read the registry through
+`scripts/trainerRegistry.mjs`, which parses it as text because none of those four
+resolves the layer aliases the registry imports through.
+`tests/unit/trainerRegistry.test.js` asserts that parse against the real `TRAINERS`.
+
+A trainer that sets a **new paper** additionally costs: another `ExamFormatId`
+(`shared/types/trainer.ts`), a whole `features/exam/lib/formats/<new>/` mirroring
+`single-level/`, five module renderers under `components/modules/<new>/`, an
+`eslint.config.js` exemption for that folder, an entry in `RUN_FORMATS`, a `TrainerSlice`
+variant, a `ProgressDatabase` attempt type and seven format-keyed records in
+`shared/config/examConditions.ts`. That is a paper, not a registry entry.
 
 `features/exam` runs every mock exam of every trainer: one run-state machine, one runner
 shell, one results screen and one review screen, driven by a **format descriptor** in
@@ -105,6 +135,11 @@ score-history chart live there.
 | Screen                    | `features/<f>/routes/`                     | `DashboardPage.tsx`            |
 | Feature-private component | `features/<f>/components/`                 | `ExamCard.tsx`                 |
 | Feature logic             | `features/<f>/hooks/`, `features/<f>/lib/` | `useExamRun.ts`, `runStore.ts` |
+| Cross-feature component   | `shared/components/<group>/`               | `data-display/Meter.tsx`       |
+| Design-system primitive   | `shared/ui/` (shadcn CLI writes here)      | `button.tsx`                   |
+| Domain type               | `shared/types/`                            | `exam.ts`, `progress.ts`       |
+| Shared constant           | `shared/config/`                           | `exam.ts`, `appInfo.ts`        |
+| Exam or study content     | `content/trainers/<id>/`                   | `a2b1/exams/exam07.ts`         |
 
 ## The `plan` feature
 
@@ -125,8 +160,3 @@ The schedule is derived on render and **never persisted**. Its inputs — `setti
 `learnDone`, `attempts` — are the only stored state, so a plan can never disagree with
 progress. Constants live in `@shared/config/schedule.ts` and the types in
 `@shared/types/schedule.ts`.
-| Cross-feature component | `shared/components/<group>/` | `data-display/Meter.tsx` |
-| Design-system primitive | `shared/ui/` (shadcn CLI writes here) | `button.tsx` |
-| Domain type | `shared/types/` | `exam.ts`, `progress.ts` |
-| Shared constant | `shared/config/` | `exam.ts`, `appInfo.ts` |
-| Exam or study content | `content/trainers/<id>/` | `a2b1/exams/exam07.ts`, `b1/curriculum.ts` |

@@ -38,7 +38,7 @@ npm run build        # production build into dist/
 
 1. **Components are visual only.** Logic goes in a `use*.ts` hook or a pure `lib/` util.
 2. **Primitives come from `@shared/ui`**, never from a file inside it, and never as raw
-   `<button>` / `<input>` / `<form>` / `<table>` / `<label>`.
+   `<button>` / `<input>` / `<form>` / `<table>` / `<label>`. Both halves are lint rules.
 3. **No `any`, no non-null assertions.** Narrow instead.
 4. **A bug fix ships with a regression test.**
 5. **Never commit to `main`.** Issue → branch → PR → green CI → squash-merge.

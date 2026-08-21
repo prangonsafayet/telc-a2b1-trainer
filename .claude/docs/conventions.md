@@ -36,8 +36,16 @@ single-level module renderers under `features/exam/components/modules/` consume 
 ## Use the design system
 
 Import primitives from `@shared/ui`. No raw `<button>`, `<input>`, `<select>`,
-`<textarea>`, `<table>` or `<label>` in feature code. If a primitive is missing, add it to
-`src/shared/ui` in the same style and export it from the barrel — do not reach for raw HTML.
+`<textarea>`, `<form>`, `<table>` or `<label>` in feature code. If a primitive is missing,
+add it to `src/shared/ui` in the same style and export it from the barrel — do not reach for
+raw HTML. `Pressable` is what a whole card or row that is itself the control uses, where
+`Button`'s box, radius and transition would all have to be overridden back out.
+
+This is the `no-raw-html-controls` rule in `eslint.config.js`, not a convention: it matches
+JSX element names outside `src/shared/ui`. It was prose until a raw `<button>` shipped in the
+flip card, so it is subject to the same replace-not-merge trap as the import rules —
+`no-restricted-syntax` is shared with the trainer-id rule, and that entry's selectors are
+restated there for exactly that reason.
 
 `src/shared/ui/*.tsx` are written by the shadcn CLI and treated as vendored. They keep
 kebab-case filenames so `npx shadcn add` keeps working; the barrel is the stable surface.

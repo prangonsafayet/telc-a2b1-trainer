@@ -37,7 +37,13 @@ npm run test:watch   # vitest in watch mode
 | `unit/dashboardModel`        | dashboard meters, their heading and weak-area detection against each paper's own pass line, not the other paper's                                  |
 | `unit/attemptSummary`        | the pass line a results screen marks its bars at, per paper — the bar primitive used to default it to the A2·B1 paper's                            |
 | `unit/examConditions`        | which exam-condition numbers the copy may call telc's and which it must call the app's own                                                         |
-| `render/routes`              | every route mounts with no React warning                                                                                                           |
+| `unit/attemptTable`          | one column header per cell in the attempts table, on both papers, and none of them unnamed                                                         |
+| `unit/progressDb`            | a fresh trainer document takes its writing time from its own paper rather than a constant                                                          |
+| `unit/referenceSearch`       | the five reference-table filters, which search a different set of fields per table                                                                 |
+| `unit/siteMeta`              | every trainer's namespace reaches the emitted sitemap, and its attempt screens the robots.txt                                                      |
+| `unit/trainerRegistry`       | the Node-side text parse of the registry, field-for-field against the real `TRAINERS`                                                              |
+| `render/routes`              | every route of every trainer mounts with no React warning — generated from `TRAINER_ORDER`                                                         |
+| `render/readableColors`      | the four call sites that render a domain colour as ink or as a mark pick the readable token                                                        |
 | `render/contentInjection`    | authored HTML is injected, never shown as text                                                                                                     |
 | `render/authVisibility`      | the signed-out warnings appear everywhere                                                                                                          |
 | `render/examDate`            | the date window is enforced, not merely suggested                                                                                                  |
@@ -65,7 +71,8 @@ globalThis.localStorage` is itself what triggers the warning.
 `mount()` in `tests/render/harness.ts` waits for `aria-busy` to clear rather than
 sleeping: a lazily-loaded route can outlast any fixed timeout, and a route that renders
 ~8 characters means the Suspense fallback never cleared — usually an import cycle rather
-than a slow chunk. Content is now loaded the same way: `useTrainerContent` suspends on a
+than a slow chunk. Content is now loaded the same way: `@shared/hooks/useTrainerContent.ts`
+— imported by file, because `@shared/hooks` and `@shared/lib` have no barrel — suspends on a
 trainer's `loadContent()` promise, so a route that reads exams, curriculum, guide or
 vocabulary renders behind that same Suspense boundary and `mount()`'s wait covers it too —
 nothing extra to do in a test, but a fixed-timeout wait instead of `mount()`'s polling
@@ -100,8 +107,21 @@ Supabase to drive each outcome deterministically). Runs on Chromium and a Pixel 
 `e2e/singleLevelTrainers.spec.js` covers the B1/B2 trainers and the trainer switcher —
 `exam.spec.js` and `smoke.spec.js` only ever visited the root (A2·B1) trainer, so this is
 where a real browser first exercised `/b1` and `/b2`. Plain JS specs cannot import the
-registry's alias paths, so it keeps its own small trainer list close to
-`shared/config/trainers.ts` and should be updated if that registry changes.
+registry's alias paths, but they can import plain Node: it takes its trainer list from
+`scripts/trainerRegistry.mjs`, which reads the descriptors out of
+`shared/config/trainers.ts`. It no longer needs editing when the registry changes.
+
+`e2e/contrast.spec.js` measures every ink and mark in the palette against its WCAG minimum,
+in both themes, in a real browser. Colours are resolved by painting them onto a canvas and
+reading the pixel back: `getComputedStyle` returns `oklch()` and
+`color-mix(…, transparent)` here, and a tinted background has no real colour until every
+ancestor behind it has been composited. The theme is switched through the app's own storage
+key — toggling a class on `documentElement` does not switch these tokens.
+
+`e2e/reducedMotion.spec.js` asserts that nothing animates on a delay when reduced motion is
+emulated, across five routes. It emulates through `page.emulateMedia` rather than
+`test.use({ reducedMotion })`: the fixture option did not reach the media query here, so the
+suite would have passed without ever enabling the thing it tests.
 
 The **Playwright MCP** plugin is also available for interactive checks — drive the running
 app directly instead of writing a throwaway spec.
