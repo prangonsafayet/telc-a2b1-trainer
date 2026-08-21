@@ -140,13 +140,13 @@ Sollte ich bis zum 30. September keine Rückmeldung erhalten, werde ich einen An
 Mit freundlichen Grüßen
 Robert Steinbach`,
       gaps: [
-        { options: ['worauf', 'auf das', 'wofür'], answer: 0 },
+        { options: ['worauf', 'wovon', 'wofür'], answer: 0 },
         { options: ['das', 'dem', 'den'], answer: 1 },
         { options: ['Wegen', 'Statt', 'Während'], answer: 1 },
         { options: ['dessen', 'deren', 'seinen'], answer: 0 },
         { options: ['abgelehnt', 'verweigert', 'widersprochen'], answer: 0 },
         { options: ['enthaltene', 'enthaltenen', 'enthalten'], answer: 0 },
-        { options: ['über den', 'worüber', 'darüber'], answer: 1 },
+        { options: ['über den', 'über dem', 'darüber'], answer: 0 },
         { options: ['gelassen', 'geworden', 'lassen'], answer: 2 },
         { options: ['mindern', 'sinken', 'verkleinern'], answer: 0 },
         { options: ['an', 'bei', 'zu'], answer: 1 }
