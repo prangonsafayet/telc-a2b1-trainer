@@ -1,37 +1,17 @@
-import { useEffect, useState } from 'react';
-
 import { Moon, Sun } from 'lucide-react';
 
-import { readLocal, writeLocal } from '@shared/lib/storage.ts';
+import { useTheme } from '@shared/hooks/useTheme.ts';
 import { Button } from '@shared/ui';
 
-type Theme = 'light' | 'dark';
-
-/** Must match the pre-paint script in index.html, which avoids a flash of the wrong theme. */
-const THEME_KEY = 'telcTrainerTheme';
-
-const initialTheme = (): Theme => {
-  const saved = readLocal(THEME_KEY);
-  if (saved === 'dark' || saved === 'light') return saved;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-};
-
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState<Theme>(initialTheme);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    writeLocal(THEME_KEY, theme);
-  }, [theme]);
+  const { theme, toggle } = useTheme();
 
   return (
     <Button
       variant="ghost"
       size="icon"
       aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      onClick={() => {
-        setTheme(current => (current === 'dark' ? 'light' : 'dark'));
-      }}
+      onClick={toggle}
     >
       {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
     </Button>
