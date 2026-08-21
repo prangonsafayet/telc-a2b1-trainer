@@ -8,16 +8,15 @@
 import { addDays, toIsoDate } from '@shared/lib/format.ts';
 import { type ExamModule, type LevelTrainerSettings } from '@shared/types';
 
-import { DEFAULT_PREP_DAYS } from './exam.ts';
+import { DEFAULT_PREP_DAYS, EXAM_MODULES } from './exam.ts';
 
-/** Module order of a full B1/B2 sitting. Same keys as the A2·B1 trainer. */
-export const SINGLE_LEVEL_MODULES: readonly ExamModule[] = [
-  'lesen',
-  'sprachbausteine',
-  'hoeren',
-  'schreiben',
-  'sprechen'
-] as const;
+/**
+ * Module order of a full B1/B2 sitting. Both telc papers run the same five modules in the
+ * same order, so this is that tuple rather than a second copy of it — a copy is how the
+ * runner, the dashboard meters and the weak-area rows end up disagreeing about order. A
+ * future paper that runs them differently declares its own.
+ */
+export const SINGLE_LEVEL_MODULES: readonly ExamModule[] = EXAM_MODULES;
 
 /** Maximum points per section. Written = 225, oral = 75. */
 export const SINGLE_LEVEL_SECTION_MAX: Readonly<Record<ExamModule, number>> = {

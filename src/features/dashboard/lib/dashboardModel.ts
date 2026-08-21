@@ -1,12 +1,16 @@
-import { A2_TOTAL, B1_TOTAL, SKILL_MAX } from '@shared/config/exam.ts';
+import { A2_TOTAL, B1_TOTAL, MODULE_META, SKILL_MAX, SKILL_MODULES } from '@shared/config/exam.ts';
 import { PAPER_TOTAL_MAX, PASS_PERCENT, PASS_RULES, passLineLabel } from '@shared/config/examConditions.ts';
-import { SINGLE_LEVEL_MODULE_META, SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
+import {
+  SINGLE_LEVEL_MODULE_META,
+  SINGLE_LEVEL_MODULES,
+  SINGLE_LEVEL_SECTION_MAX
+} from '@shared/config/singleLevelExam.ts';
 import { CATEGORY_META, STUDY_CATEGORIES } from '@shared/config/studyCategories.ts';
 import { hasVocabBank, TRAINERS, type TrainerInfo } from '@shared/config/trainers.ts';
 import { fmtDate } from '@shared/lib/format.ts';
 import { countMastery, streakLength, type MasteryCounts } from '@shared/lib/srs.ts';
 import { idsFor } from '@shared/lib/studyItems.ts';
-import { type ExamModule, type SkillKey, type SrsMap, type TrainerId, type VocabBank } from '@shared/types';
+import { type ExamModule, type SrsMap, type TrainerId, type VocabBank } from '@shared/types';
 
 import { type TrainerSlice } from '@features/progress';
 
@@ -16,21 +20,6 @@ import {
   type StatTileModel,
   type WeakAreaModel
 } from '../types/dashboard.ts';
-
-const SKILL_LABELS: readonly (readonly [SkillKey, string])[] = [
-  ['lesen', 'Lesen'],
-  ['hoeren', 'Hören'],
-  ['schreiben', 'Schreiben'],
-  ['sprechen', 'Sprechen']
-];
-
-const SINGLE_LEVEL_SECTIONS: readonly ExamModule[] = [
-  'lesen',
-  'sprachbausteine',
-  'hoeren',
-  'schreiben',
-  'sprechen'
-];
 
 const bestFor = (
   attempts: readonly { readonly scores: Partial<Record<string, number>> }[],
@@ -57,7 +46,7 @@ export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] => {
   const thresholdLabel = passLineLabel(slice.format);
 
   return slice.format === 'single-level'
-    ? SINGLE_LEVEL_SECTIONS.map(section => ({
+    ? SINGLE_LEVEL_MODULES.map(section => ({
         key: section,
         label: SINGLE_LEVEL_MODULE_META[section].short,
         value: bestFor(slice.attempts, section),
@@ -65,9 +54,9 @@ export const buildMeters = (slice: TrainerSlice): readonly MeterModel[] => {
         thresholdPercent,
         thresholdLabel
       }))
-    : SKILL_LABELS.map(([key, label]) => ({
+    : SKILL_MODULES.map(key => ({
         key,
-        label,
+        label: MODULE_META[key].short,
         value: bestFor(slice.attempts, key),
         of: SKILL_MAX,
         thresholdPercent,
@@ -189,16 +178,16 @@ export const masteryCounts = (vocab: VocabBank, srs: SrsMap, today: string): Mas
 const MIN_SIGNAL = 5;
 /** Below this error rate a category is not worth flagging. */
 const WEAK_RATE = 0.2;
-const SECTION_LABELS: Readonly<Record<ExamModule, string>> = {
-  lesen: 'Leseverstehen',
-  sprachbausteine: 'Sprachbausteine',
-  hoeren: 'Hörverstehen',
-  schreiben: 'Schriftlicher Ausdruck',
-  sprechen: 'Mündliche Prüfung'
-};
-
 interface SectionScores {
   readonly section: ExamModule;
+  /**
+   * What the paper the trainer actually sits calls this section. The two papers name three
+   * of the five differently — the single-level paper's "Schriftlicher Ausdruck" and
+   * "Mündliche Prüfung" are the A2·B1 paper's "Schreiben" and "Sprechen", and its
+   * "Hörverstehen" is that paper's "Hörverstehen · Hören & Schreiben" — so one shared table
+   * put the wrong paper's section names on the A2·B1 dashboard.
+   */
+  readonly label: string;
   readonly scores: readonly number[];
   readonly of: number;
 }
@@ -206,16 +195,18 @@ interface SectionScores {
 /** Every scored section of whichever paper the trainer sets, with the scores it has. */
 const sectionScores = (slice: TrainerSlice): readonly SectionScores[] => {
   if (slice.format === 'single-level') {
-    return SINGLE_LEVEL_SECTIONS.map(section => ({
+    return SINGLE_LEVEL_MODULES.map(section => ({
       section,
+      label: SINGLE_LEVEL_MODULE_META[section].name,
       scores: slice.attempts
         .map(attempt => attempt.scores[section])
         .filter((score): score is number => typeof score === 'number'),
       of: SINGLE_LEVEL_SECTION_MAX[section]
     }));
   }
-  return SKILL_LABELS.map(([key]) => ({
+  return SKILL_MODULES.map(key => ({
     section: key,
+    label: MODULE_META[key].name,
     scores: slice.attempts
       .map(attempt => attempt.scores[key])
       .filter((score): score is number => typeof score === 'number'),
@@ -260,14 +251,14 @@ export const buildWeakAreas = (
      single-level paper — so a skill at 65% is weak on one paper and fine on the other. */
   const passPercent = PASS_PERCENT[slice.format];
 
-  for (const { section, scores, of } of sectionScores(slice)) {
+  for (const { section, label, scores, of } of sectionScores(slice)) {
     if (scores.length === 0) continue;
     const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
     const percent = (average / of) * 100;
     if (percent >= passPercent) continue;
     areas.push({
       key: `exam.${section}`,
-      label: SECTION_LABELS[section],
+      label,
       detail: `Averaging ${String(Math.round(percent))}% across ${String(scores.length)} attempt${scores.length === 1 ? '' : 's'} — below the ${String(passPercent)}% pass line.`,
       severity: 1 - percent / 100,
       to: basePath || '/',

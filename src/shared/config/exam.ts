@@ -1,5 +1,5 @@
 import { addDays, toIsoDate } from '@shared/lib/format.ts';
-import { type ExamModule, type Settings } from '@shared/types';
+import { type ExamModule, type Settings, type SkillKey } from '@shared/types';
 
 /** Module order of a full exam, matching the real sitting. */
 export const EXAM_MODULES: readonly ExamModule[] = [
@@ -26,6 +26,19 @@ export const MODULE_META: Readonly<Record<ExamModule, ModuleMeta>> = {
   schreiben: { name: 'Schreiben', short: 'Schreiben', isSkill: true },
   sprechen: { name: 'Sprechen', short: 'Sprechen', isSkill: true }
 };
+
+/**
+ * The modules that carry one of the four 60-point skill scores, in paper order. Derived from
+ * `isSkill` rather than listed again: `MODULE_META` is where the paper says which of its
+ * modules is a skill, and a second list is a second answer.
+ *
+ * The predicate is a claim the record above makes good on — `SkillKey` is exactly the four
+ * modules whose `isSkill` is true — so it is asserted in `tests/unit/dashboardModel.test.ts`
+ * rather than assumed.
+ */
+const isSkillModule = (module: ExamModule): module is SkillKey => MODULE_META[module].isSkill;
+
+export const SKILL_MODULES: readonly SkillKey[] = EXAM_MODULES.filter(isSkillModule);
 
 /** Points a perfect module scores. Four skills × 60 make up the 240-point total. */
 export const SKILL_MAX = 60;

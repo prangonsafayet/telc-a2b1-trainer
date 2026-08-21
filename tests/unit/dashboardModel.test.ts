@@ -1,8 +1,19 @@
 import { describe, expect, it } from 'vitest';
 
 import { PASS_PERCENT } from '@shared/config/examConditions.ts';
-import { A2_TOTAL, B1_TOTAL, SKILL_MAX } from '@shared/config/exam.ts';
-import { SINGLE_LEVEL_SECTION_MAX } from '@shared/config/singleLevelExam.ts';
+import {
+  A2_TOTAL,
+  B1_TOTAL,
+  EXAM_MODULES,
+  MODULE_META,
+  SKILL_MAX,
+  SKILL_MODULES
+} from '@shared/config/exam.ts';
+import {
+  SINGLE_LEVEL_MODULE_META,
+  SINGLE_LEVEL_MODULES,
+  SINGLE_LEVEL_SECTION_MAX
+} from '@shared/config/singleLevelExam.ts';
 import { buildScoreChart } from '@shared/lib/scoreChart.ts';
 import {
   buildMeters,
@@ -175,5 +186,100 @@ describe('the heading over the meters', () => {
     expect(metersHeading(singleLevelSlice(1))).not.toMatch(/Skill/);
     expect(metersHeading(singleLevelSlice(1))).toMatch(/Section/);
     expect(buildMeters(singleLevelSlice(1))).toHaveLength(5);
+  });
+});
+
+/* Both papers mark five sections with the same keys, and three of them have different
+   names: `schreiben` is "Schreiben" on the A2·B1 paper and "Schriftlicher Ausdruck" on the
+   single-level one, `sprechen` is "Sprechen" against "Mündliche Prüfung", and `hoeren` is
+   "Hörverstehen · Hören & Schreiben" against "Hörverstehen". One shared table of labels
+   therefore prints the other paper's exam on somebody's dashboard. */
+describe('what the weak-area rows call a section', () => {
+  /* Every section scored badly, so every row appears. `lesen` alone would prove nothing: it
+     is the one section both papers call "Leseverstehen". */
+  const failedSections = (slice: TrainerSlice): readonly string[] =>
+    buildWeakAreas(slice, EMPTY_BANK, '')
+      .filter(area => area.key.startsWith('exam.'))
+      .map(area => area.label);
+
+  const dualLevelAllSections: TrainerSlice = {
+    ...base,
+    trainer: 'a2b1',
+    format: 'dual-level',
+    settings: SETTINGS,
+    attempts: [
+      {
+        id: 1,
+        examId: 1,
+        mode: 'full',
+        date: '2026-08-20T10:00:00.000Z',
+        times: {},
+        scores: { lesen: 6, hoeren: 6, schreiben: 6, sprechen: 6 },
+        sb: null,
+        answers: {},
+        ratings: {}
+      }
+    ]
+  };
+
+  const singleLevelAllSections: TrainerSlice = {
+    ...base,
+    trainer: 'b1',
+    format: 'single-level',
+    settings: LEVEL_SETTINGS,
+    attempts: [
+      {
+        id: 1,
+        examId: 1,
+        mode: 'full',
+        date: '2026-08-20T10:00:00.000Z',
+        times: {},
+        scores: { lesen: 7, sprachbausteine: 3, hoeren: 7, schreiben: 4, sprechen: 7 },
+        answers: {},
+        ratings: {}
+      }
+    ]
+  };
+
+  it("uses the A2·B1 paper's own section names on the A2·B1 paper", () => {
+    const labels = failedSections(dualLevelAllSections);
+    expect(labels).toHaveLength(SKILL_MODULES.length);
+    expect(labels.toSorted()).toEqual(SKILL_MODULES.map(module => MODULE_META[module].name).toSorted());
+  });
+
+  it("uses the single-level paper's own section names on that paper", () => {
+    const labels = failedSections(singleLevelAllSections);
+    expect(labels).toHaveLength(SINGLE_LEVEL_MODULES.length);
+    expect(labels.toSorted()).toEqual(
+      SINGLE_LEVEL_MODULES.map(section => SINGLE_LEVEL_MODULE_META[section].name).toSorted()
+    );
+  });
+
+  it('never labels the A2·B1 paper with a name only the other paper uses', () => {
+    const onlySingleLevel = SINGLE_LEVEL_MODULES.map(
+      section => SINGLE_LEVEL_MODULE_META[section].name
+    ).filter(name => !EXAM_MODULES.some(module => MODULE_META[module].name === name));
+    /* Guards the guard: if the two papers ever name every section identically this test
+       proves nothing, and should be deleted rather than left passing. */
+    expect(onlySingleLevel).toEqual(['Hörverstehen', 'Schriftlicher Ausdruck', 'Mündliche Prüfung']);
+
+    const labels = failedSections(dualLevelAllSections);
+    for (const name of onlySingleLevel) expect(labels).not.toContain(name);
+  });
+});
+
+/* `SKILL_MODULES` is filtered out of `EXAM_MODULES` by `MODULE_META[…].isSkill`, and the
+   predicate that does it claims the result is a `SkillKey`. That claim is what this asserts;
+   the meters and the weak-area rows are built from it. */
+describe('which modules the A2·B1 paper counts as skills', () => {
+  it('is the four 60-point ones, in paper order', () => {
+    expect(SKILL_MODULES).toEqual(['lesen', 'hoeren', 'schreiben', 'sprechen']);
+  });
+
+  it('leaves out every module the paper does not call a skill', () => {
+    const skills: readonly string[] = SKILL_MODULES;
+    for (const module of EXAM_MODULES) {
+      expect(skills.includes(module)).toBe(MODULE_META[module].isSkill);
+    }
   });
 });
