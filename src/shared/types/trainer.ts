@@ -3,11 +3,7 @@
 import { type ExamModule, type ExamPaper } from './exam.ts';
 import { type LearnPlan } from './learn.ts';
 import { type LearnDoneMap } from './progress.ts';
-import {
-  type SingleLevelAttempt,
-  type SingleLevelExam,
-  type SingleLevelTrainerId
-} from './singleLevelExam.ts';
+import { type SingleLevelAttempt, type SingleLevelExam } from './singleLevelExam.ts';
 import { type SrsMap, type VocabBank } from './vocab.ts';
 
 /** One of the trainers the app hosts. Every entry has a descriptor in `TRAINERS`. */
@@ -125,5 +121,16 @@ export interface LevelTrainerDoc {
   readonly settings: LevelTrainerSettings;
 }
 
-/** The trainers that keep their own document, as their document key. */
-export type TrainerDocKey = SingleLevelTrainerId;
+/**
+ * The keys under which `ProgressDatabase` holds a trainer's own document.
+ *
+ * Declared in its own right rather than as an alias of `SingleLevelTrainerId`: "where this
+ * trainer's data lives" and "which paper this trainer sets" are two different facts, and
+ * aliasing them made the second unreadable — `useTrainerSlice` inferred a trainer's paper
+ * from its document location, so the only trainer that could set the dual-level paper was
+ * the one at the root of the document. The registry pairs the two explicitly now (see
+ * `TrainerInfo`), which is checkable rather than assumed. The members happen to match the
+ * ids of the trainers that keep their own document, because a document key IS that
+ * trainer's id — that is the naming convention, not a type identity.
+ */
+export type TrainerDocKey = 'b1' | 'b2';

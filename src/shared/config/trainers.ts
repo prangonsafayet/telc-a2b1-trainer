@@ -18,7 +18,6 @@ import { B1_PAPER } from '@content/trainers/b1/paper.ts';
 import { B2_PAPER } from '@content/trainers/b2/paper.ts';
 
 import {
-  type ExamFormatId,
   type SingleLevelTrainerId,
   type TrainerContent,
   type TrainerContentLoader,
@@ -49,7 +48,7 @@ const CONTENT_LOADERS: Readonly<Record<TrainerId, TrainerContentLoader>> = {
 /** User-facing app name. UI-level only — repo, package and storage keys keep theirs. */
 export const APP_NAME = 'telc Deutsch Trainer';
 
-export interface TrainerInfo {
+interface TrainerInfoBase {
   readonly id: TrainerId;
   /** Full exam name, e.g. "telc Deutsch B1". */
   readonly name: string;
@@ -59,8 +58,6 @@ export interface TrainerInfo {
   readonly basePath: string;
   /** Accent colour of its papers and chips, as a CSS custom property reference. */
   readonly accent: string;
-  /** Which paper it sets. Trainers may share one. */
-  readonly format: ExamFormatId;
   /**
    * What it offers, in one short line, for a menu row and a header subtitle — e.g. "Dual-
    * level paper · A2 or B1 certificate". Static and hand-written against the verified figures
@@ -71,11 +68,6 @@ export interface TrainerInfo {
    * dashboard lead) is where a real count belongs.
    */
   readonly tagline: string;
-  /**
-   * Where its slice of the progress document lives: its own key, or null for the trainer
-   * whose attempts, learn plan and settings sit at the root of the document.
-   */
-  readonly docKey: TrainerDocKey | null;
   /** How its own sitting runs — small enough to stay eager alongside the rest of this file. */
   readonly paper: TrainerPaper;
   /**
@@ -99,6 +91,32 @@ export interface TrainerInfo {
    */
   readonly weaknessCheatsheets: Readonly<Record<WeaknessTopic, readonly string[]>>;
 }
+
+/**
+ * A trainer descriptor: everything above, plus the pair of facts that cannot be chosen
+ * independently — which paper it sets, and where its slice of the progress document lives.
+ *
+ * They are paired here rather than each stated on its own, because the persisted document
+ * decides the pairing: `ProgressDatabase.attempts` is the only place a `DualLevelAttempt`
+ * can go and it sits at the root, and `LevelTrainerDoc.attempts` is the only place a
+ * `SingleLevelAttempt` can go and there is one per `TrainerDocKey`. Saying so once, in the
+ * type, is what lets `useTrainerSlice` read a trainer's paper from `format` — the registry —
+ * instead of inferring it from `docKey === null`, which is where two sources of truth for
+ * one fact came from. A mispaired entry is a typecheck error, not a runtime surprise.
+ */
+export type TrainerInfo = TrainerInfoBase &
+  (
+    | {
+        readonly format: 'dual-level';
+        /** Its attempts, learn plan and settings sit at the root of the document. */
+        readonly docKey: null;
+      }
+    | {
+        readonly format: 'single-level';
+        /** Its own slice of the document, keyed by its id. */
+        readonly docKey: TrainerDocKey;
+      }
+  );
 
 /** The trainers, in the order they are offered. */
 export const TRAINER_ORDER: readonly TrainerId[] = ['a2b1', 'b1', 'b2'];

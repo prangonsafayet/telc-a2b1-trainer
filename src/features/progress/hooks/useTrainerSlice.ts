@@ -8,7 +8,6 @@ import {
   type LevelTrainerSettings,
   type Settings,
   type SingleLevelAttempt,
-  type SingleLevelTrainerId,
   type SrsMap,
   type TrainerExamSettings,
   type TrainerId
@@ -43,7 +42,8 @@ interface TrainerSliceBase extends TrainerSliceState {
 /**
  * One trainer's persisted slice, discriminated by the paper its attempts were marked
  * against — which is the only thing about a slice that is not the same shape for every
- * trainer.
+ * trainer. `format` is copied straight off the trainer's registry descriptor, so the run
+ * store, the results screen and every model below mark against the same paper.
  */
 export type TrainerSlice =
   | (TrainerSliceBase & {
@@ -54,8 +54,6 @@ export type TrainerSlice =
     })
   | (TrainerSliceBase & {
       readonly format: 'single-level';
-      /** Narrowed: a trainer that keeps its own document is keyed by its own id. */
-      readonly trainer: SingleLevelTrainerId;
       readonly settings: LevelTrainerSettings;
       readonly attempts: readonly SingleLevelAttempt[];
       readonly saveAttempt: (attempt: SingleLevelAttempt) => void;
@@ -73,12 +71,15 @@ export const touchActivity = (state: TrainerSliceState, today: string, touches =
  * The trainer that owns the root of the URL space also owns the root of the progress
  * document: its attempts, learn plan, SRS state and settings sit at the top level, where
  * they have been since v1. Every other trainer keeps the same fields in its own document
- * under its id. Which of the two applies is read from the registry — `docKey` — so no
- * caller tests a trainer id, and a fourth trainer only has to say where its slice lives.
+ * under its id. Both facts — which paper marks its attempts, and where its slice lives —
+ * are read off the same registry descriptor, so no caller tests a trainer id and the two
+ * cannot drift apart: `TrainerInfo` pairs `format` with `docKey`, which is what makes the
+ * `format` assignments below typecheck against the branch they sit in.
  */
 export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
   const { db, update } = useProgress();
-  const { docKey } = TRAINERS[trainer];
+  const info = TRAINERS[trainer];
+  const { docKey } = info;
 
   /* Always a document, so the hook order never depends on which trainer is active; the
      root trainer's branch below simply does not read it. */
@@ -155,12 +156,14 @@ export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
     };
 
     /* The root slice was written by the dual-level trainer and holds its attempts; a
-       trainer with its own document holds single-level ones. The registry pairs a paper
-       with a document location, and this is the one place that pairing is spelled out. */
-    if (docKey === null) {
+       trainer with its own document holds single-level ones. The registry pairs the paper
+       with the document location, so `info.format` is what says which of the two this is —
+       narrowing `info` here is only how the compiler is shown that the attempts it is about
+       to read match that paper. */
+    if (info.docKey === null) {
       return {
         ...base,
-        format: 'dual-level',
+        format: info.format,
         learnDone: db.learnDone,
         srs: db.srs,
         activity: db.activity,
@@ -172,8 +175,7 @@ export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
 
     return {
       ...base,
-      format: 'single-level',
-      trainer: docKey,
+      format: info.format,
       learnDone: doc.learnDone,
       srs: doc.srs,
       activity: doc.activity,
@@ -181,5 +183,5 @@ export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
       attempts: doc.attempts,
       saveAttempt: saveDocAttempt
     };
-  }, [trainer, docKey, attemptedExamIds, updateSlice, setSetting, doc, db, saveRootAttempt, saveDocAttempt]);
+  }, [trainer, info, attemptedExamIds, updateSlice, setSetting, doc, db, saveRootAttempt, saveDocAttempt]);
 };
