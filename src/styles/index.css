@@ -220,6 +220,14 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      /* The delays matter more than the durations here. Every entrance animation runs with
+         `animation-fill-mode: both` from `opacity: 0` / `scaleY(0)`, so a stagger of up to
+         320ms (`.stagger` below) or the score chart's `index * 60ms` held elements invisible
+         for most of a second even with the duration cut to nothing. `!important` also beats
+         the inline `animationDelay` styles on the history and results cards, because an
+         important author declaration outranks a normal inline one. */
+      animation-delay: 0s !important;
+      transition-delay: 0s !important;
       scroll-behavior: auto !important;
     }
   }
