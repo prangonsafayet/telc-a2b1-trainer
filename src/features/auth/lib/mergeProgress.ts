@@ -30,8 +30,13 @@ const orLearnDone = (remote: LearnDoneMap, local: LearnDoneMap): LearnDoneMap =>
 
 /**
  * Per item, the side that has got further. Boxes only move up through correct answers, so
- * the higher box is the more studied one and its counters come with it; the due date is the
- * later of the two, or an item just answered on one device is asked again today on the other.
+ * the higher box is the more studied one; the due date is the later of the two, or an item
+ * just answered on one device is asked again today on the other.
+ *
+ * `seen`, `correct` and `wrong` are monotone counters, so they merge by `max` rather than
+ * riding along with the winning box: taking the whole entry from the higher box discarded the
+ * other side's history, so an item at box 4 with `seen: 4` beating box 3 with `seen: 20`
+ * reported four reviews where there had been twenty.
  */
 const mergeSrs = (remote: SrsMap | undefined, local: SrsMap | undefined): SrsMap => {
   const merged: SrsMap = { ...remote };
@@ -43,7 +48,13 @@ const mergeSrs = (remote: SrsMap | undefined, local: SrsMap | undefined): SrsMap
       continue;
     }
     const ahead = mine.box >= theirs.box ? mine : theirs;
-    merged[id] = { ...ahead, due: mine.due > theirs.due ? mine.due : theirs.due };
+    merged[id] = {
+      ...ahead,
+      due: mine.due > theirs.due ? mine.due : theirs.due,
+      seen: Math.max(mine.seen, theirs.seen),
+      correct: Math.max(mine.correct, theirs.correct),
+      wrong: Math.max(mine.wrong, theirs.wrong)
+    };
   }
   return merged;
 };

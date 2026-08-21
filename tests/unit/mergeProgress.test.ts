@@ -319,3 +319,43 @@ describe('a document with null where a map belongs', () => {
     expect(fixed.activity).toEqual({});
   });
 });
+
+/*
+ * `seen`, `correct` and `wrong` only ever go up, one review at a time. `mergeSrs` takes the
+ * entry from whichever side has the higher box, so an item studied a lot on the device that
+ * happens to be one box behind used to have its history replaced by the other side's much
+ * smaller counters — twenty reviews reported as four.
+ */
+describe('the SRS counters', () => {
+  const entry = (box: number, due: string, seen: number) => ({
+    box,
+    due,
+    seen,
+    correct: seen - 1,
+    wrong: 1
+  });
+
+  it('never go backwards when the side with the higher box has seen less', () => {
+    const merged = mergeProgress(
+      db({ srs: { item: entry(3, '2026-05-01', 20) } }),
+      db({ srs: { item: entry(4, '2026-04-01', 4) } })
+    );
+
+    /* The box and the due date rules are unchanged: higher box, later due. */
+    expect(merged.srs['item']?.box).toBe(4);
+    expect(merged.srs['item']?.due).toBe('2026-05-01');
+    expect(merged.srs['item']?.seen).toBe(20);
+    expect(merged.srs['item']?.correct).toBe(19);
+  });
+
+  it('merge the same way inside a trainer document, and stay idempotent', () => {
+    const local = db({ b1: levelDoc({ srs: { item: entry(3, '2026-05-01', 20) } }) });
+    const remote = db({ b1: levelDoc({ srs: { item: entry(5, '2026-04-01', 6) } }) });
+
+    const once = mergeProgress(local, remote);
+    expect(once.b1?.srs['item']?.box).toBe(5);
+    expect(once.b1?.srs['item']?.seen).toBe(20);
+    /* Syncing twice must not change the answer, as with the activity counts. */
+    expect(mergeProgress(once, remote).b1?.srs['item']).toEqual(once.b1?.srs['item']);
+  });
+});
