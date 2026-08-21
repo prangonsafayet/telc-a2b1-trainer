@@ -79,7 +79,7 @@ export const SINGLE_LEVEL_RATING_CRITERIA: Readonly<
   Record<'schreiben' | 'sprechen', readonly (readonly [string, string])[]>
 > = {
   schreiben: [
-    ['Inhalt — Leitpunkte behandelt?', 'Enough Leitpunkte covered, fully and on topic'],
+    ['Inhalt — Leitpunkte behandelt?', 'All four Leitpunkte covered, fully and on topic'],
     ['Kommunikative Gestaltung', 'Fitting greeting/sign-off, connected sentences, right register'],
     ['Korrektheit', 'Verb positions, endings and capitalization mostly right']
   ],

@@ -46,7 +46,7 @@ export const B1_CURRICULUM: LearnPlan = {
     },
     schreiben: {
       title: 'The 45-point letter (halbformell)',
-      html: `<p><b>The task:</b> 30 minutes, one half-formal letter or email, <b>4 Leitpunkte</b>. You must address <b>all 4</b> of them, in a sensible order, 1–2 sentences each. Scored 3 × 15 points: Leitpunkte covered, communicative design (Anrede, Gruß, connectors, register), correctness.</p>
+      html: `<p><b>The task:</b> 30 minutes, one half-formal letter or email, <b>4 Leitpunkte</b>. You must address <b>all 4</b> of them, in a sensible order, 1–2 sentences each. Scored on three criteria — Leitpunkte covered, communicative design (Anrede, Gruß, connectors, register), correctness — each graded <b>A/B/C/D = 5/3/1/0</b>. The three grades are summed and tripled, so a criterion is worth 15, 9, 3 or 0 and the maximum is 45. There is no smooth 0–15 scale: 11 out of 15 is not a score this rubric can give.</p>
 <p><b>Fixed skeleton — memorize it:</b></p>
 <p>1. <b>Anrede:</b> Sehr geehrte Frau Weber, / Sehr geehrter Herr Braun, (formal) · Liebe Frau Weber, (half-formal, e.g. course teacher, nice landlady) — then lowercase!<br>
 2. <b>Einstieg (1 sentence):</b> vielen Dank für Ihre E-Mail. · ich schreibe Ihnen, weil … · ich habe Ihre Anzeige gelesen und interessiere mich für …<br>
@@ -274,7 +274,7 @@ export const B1_CURRICULUM: LearnPlan = {
       ai: [
         {
           t: 'Letter examiner',
-          p: 'Du bist telc-B1-Prüfer für den Brief (45 Punkte). Gib mir eine realistische halbformelle Schreibaufgabe mit 4 Leitpunkten. Ich schreibe den Brief. Bewerte ihn nach den drei telc-Kriterien (Berücksichtigung der Leitpunkte, kommunikative Gestaltung, formale Richtigkeit), je 0–15 Punkte, korrigiere jeden Fehler und zeige eine Musterversion. Dann die nächste Aufgabe.'
+          p: 'Du bist telc-B1-Prüfer für den Brief (45 Punkte). Gib mir eine realistische halbformelle Schreibaufgabe mit 4 Leitpunkten. Ich schreibe den Brief. Bewerte ihn nach den drei telc-Kriterien (Berücksichtigung der Leitpunkte, kommunikative Gestaltung, formale Richtigkeit) mit je einer Stufe A, B, C oder D = 5, 3, 1 oder 0 Punkte; addiere die drei Werte und multipliziere sie mit 3 (also höchstens 45). Nenne die Stufen ausdrücklich, keine Zwischenwerte. Korrigiere jeden Fehler und zeige eine Musterversion. Dann die nächste Aufgabe.'
         },
         {
           t: 'Leitpunkt phrases',
@@ -427,7 +427,7 @@ export const B1_CURRICULUM: LearnPlan = {
       ai: [
         {
           t: 'Letter upgrade',
-          p: 'Du bist telc-B1-Prüfer. Ich füge meinen Brief aus dem heutigen Modelltest ein (Aufgabe + mein Text). Bewerte nach den drei Kriterien (Leitpunkte, kommunikative Gestaltung, formale Richtigkeit, je 0–15), markiere jeden Fehler, und zeige dann, wie derselbe Brief mit 3 besseren Konnektoren und 2 Konjunktiv-II-Formulierungen klingt. Danach diktierst du mir die 5 wichtigsten Korrekturen zum Abschreiben.'
+          p: 'Du bist telc-B1-Prüfer. Ich füge meinen Brief aus dem heutigen Modelltest ein (Aufgabe + mein Text). Bewerte nach den drei Kriterien (Leitpunkte, kommunikative Gestaltung, formale Richtigkeit) mit je einer Stufe A/B/C/D = 5/3/1/0, Summe × 3, höchstens 45 Punkte, markiere jeden Fehler, und zeige dann, wie derselbe Brief mit 3 besseren Konnektoren und 2 Konjunktiv-II-Formulierungen klingt. Danach diktierst du mir die 5 wichtigsten Korrekturen zum Abschreiben.'
         }
       ]
     },
@@ -557,7 +557,7 @@ export const B1_CURRICULUM: LearnPlan = {
       ai: [
         {
           t: 'Double examiner',
-          p: 'Du bist telc-B1-Prüfer für die produktiven Teile. Erst Schreiben: Gib mir eine halbformelle Briefaufgabe mit 4 Leitpunkten, ich schreibe in 25 Minuten, du bewertest nach den drei Kriterien mit Punktzahl. Dann Sprechen: Simuliere Teil 2 und Teil 3 auf Deutsch, bleib in der Rolle, und gib mir erst danach Feedback auf Englisch — mit einer ehrlichen Einschätzung, ob das heute 60 Prozent im mündlichen Teil erreichen würde.'
+          p: 'Du bist telc-B1-Prüfer für die produktiven Teile. Erst Schreiben: Gib mir eine halbformelle Briefaufgabe mit 4 Leitpunkten, ich schreibe in 25 Minuten, du bewertest nach den drei Kriterien mit je einer Stufe A/B/C/D = 5/3/1/0, Summe × 3, höchstens 45 Punkte. Dann Sprechen: Simuliere Teil 2 und Teil 3 auf Deutsch, bleib in der Rolle, und gib mir erst danach Feedback auf Englisch — mit einer ehrlichen Einschätzung, ob das heute 60 Prozent im mündlichen Teil erreichen würde.'
         }
       ]
     },
