@@ -133,6 +133,21 @@ describe('streakLength', () => {
     expect(streakLength(activity, TODAY)).toBe(1);
   });
 
+  /* Counting today must not cost the days before it. The fixture above starts from `{}`, so
+     it had no earlier day to lose: dropping the spread in `bumpActivity` would erase the whole
+     history on the next flashcard grade, persist it, and sync it, with nothing failing. */
+  it('keeps every earlier day when it counts today', () => {
+    const before = { [addDays(TODAY, -2) ?? '']: 3, [addDays(TODAY, -1) ?? '']: 1 };
+
+    const after = bumpActivity(before, TODAY);
+
+    expect(after).toEqual({ ...before, [TODAY]: 1 });
+    /* Said as the dashboard says it: a three-day streak, not a one-day one. */
+    expect(streakLength(after, TODAY)).toBe(3);
+    /* And the stored map it was given is not mutated on the way. */
+    expect(before[TODAY]).toBeUndefined();
+  });
+
   it('extends correctly across a month boundary', () => {
     const lastOfMonth = '2026-08-31';
     const firstOfNextMonth = '2026-09-01';

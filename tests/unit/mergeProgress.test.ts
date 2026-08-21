@@ -359,3 +359,57 @@ describe('the SRS counters', () => {
     expect(mergeProgress(once, remote).b1?.srs['item']).toEqual(once.b1?.srs['item']);
   });
 });
+
+/*
+ * Two rules that no fixture executed. The per-trainer settings merge needs a trainer document
+ * on *both* sides to reach its last-write-wins branch — with it on one side only,
+ * `mergeTrainerDoc` returns that side whole and the branch is skipped — so a stale remote
+ * exam date could overwrite a newer local one on sign-in with nothing to catch it. And the
+ * stamp the whole conflict resolution reads was never asserted to come out of the merge.
+ */
+describe('last-write-wins, per trainer document', () => {
+  const dated = (examDate: string): LevelTrainerDoc =>
+    levelDoc({ settings: { examDate, writingMinutes: 30, playsAllowed: 1 } });
+
+  it('takes the exam date from whichever side is newer', () => {
+    const local = db({ b1: dated('2026-11-01'), _updatedAt: '2026-07-01' });
+    const staleRemote = db({ b1: dated('2026-05-05'), _updatedAt: '2026-01-01' });
+
+    expect(mergeProgress(local, staleRemote).b1?.settings.examDate).toBe('2026-11-01');
+    /* And the other way round: a newer remote must win, or a date changed on the phone is
+       undone by the laptop it syncs with. */
+    expect(mergeProgress(staleRemote, local).b1?.settings.examDate).toBe('2026-11-01');
+  });
+
+  it('decides each trainer document independently', () => {
+    const local = db({ b1: dated('2026-11-01'), b2: dated('2027-02-01'), _updatedAt: '2026-07-01' });
+    const remote = db({ b1: dated('2026-05-05'), b2: dated('2026-06-06'), _updatedAt: '2026-01-01' });
+
+    const merged = mergeProgress(local, remote);
+    expect(merged.b1?.settings.examDate).toBe('2026-11-01');
+    expect(merged.b2?.settings.examDate).toBe('2027-02-01');
+  });
+});
+
+describe('the _updatedAt stamp', () => {
+  it('comes out of the merge as the later of the two', () => {
+    expect(mergeProgress(db({ _updatedAt: '2026-07-01' }), db({ _updatedAt: '2026-01-01' }))._updatedAt).toBe(
+      '2026-07-01'
+    );
+    expect(mergeProgress(db({ _updatedAt: '2026-01-01' }), db({ _updatedAt: '2026-07-01' }))._updatedAt).toBe(
+      '2026-07-01'
+    );
+  });
+
+  it('survives when only one side has ever been stamped', () => {
+    expect(mergeProgress(db({ _updatedAt: '2026-07-01' }), db())._updatedAt).toBe('2026-07-01');
+    expect(mergeProgress(db(), db({ _updatedAt: '2026-07-01' }))._updatedAt).toBe('2026-07-01');
+  });
+
+  it('stays absent rather than becoming an explicit undefined', () => {
+    const merged = mergeProgress(db(), db());
+    /* `exactOptionalPropertyTypes`: an absent key and an explicit undefined are different
+       documents, and the second one serialises as `"_updatedAt": null` through some clients. */
+    expect('_updatedAt' in merged).toBe(false);
+  });
+});
