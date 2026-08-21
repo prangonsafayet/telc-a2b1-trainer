@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { EXAMS } from '@content/exams';
-import { LEARN } from '@content/learn.ts';
+import { TRAINER_CONTENT } from '@content/trainers/index.ts';
 
-import { buildSchedule, splitWorkDays } from '@features/plan/lib/buildSchedule.ts';
+import { buildScheduleFrom, splitWorkDays } from '@features/plan/lib/buildSchedule.ts';
+import { trainerScheduleSource } from '@features/plan/lib/trainerSource.ts';
 import {
   MAX_EXAMS_PER_DAY,
   MAX_PREP_DAYS,
   MIN_PREP_DAYS,
-  MOCK_EXAM_COUNT,
+  SPRINT_LEARN_DAYS,
   TOTAL_LEARN_DAYS
 } from '@shared/config/schedule.ts';
 import { addDays } from '@shared/lib/format.ts';
@@ -19,40 +19,49 @@ import { type LearnDoneMap, type Schedule } from '@shared/types';
    screenshot. So the invariants are swept across every runway length rather than spot-checked. */
 
 const TODAY = '2026-03-02';
-const CORE_DAYS = LEARN.days.filter(day => day.tier === 'core').map(day => day.day);
-const EXTENSION_DAYS = LEARN.days.filter(day => day.tier === 'extension').map(day => day.day);
-const ALL_EXAM_IDS = EXAMS.map(exam => exam.id);
+/* The root trainer's own curriculum and papers: the engine is generic, so one trainer's
+   content is enough to sweep its invariants. */
+const CONTENT = TRAINER_CONTENT.a2b1;
+const SOURCE = trainerScheduleSource(CONTENT, SPRINT_LEARN_DAYS);
+const LEARN_DAYS = CONTENT.curriculum.days;
+const EXAM_COUNT = CONTENT.exams.length;
+const CORE_DAYS = LEARN_DAYS.filter(day => day.tier === 'core').map(day => day.day);
+const EXTENSION_DAYS = LEARN_DAYS.filter(day => day.tier === 'extension').map(day => day.day);
+const ALL_EXAM_IDS = CONTENT.exams.map(exam => exam.id);
 
-function isoIn(days: number): string {
+const isoIn = (days: number): string => {
   const iso = addDays(TODAY, days);
   if (iso === null) throw new Error('unreachable: TODAY is a valid date');
   return iso;
-}
+};
 
-function build(
+const build = (
   daysLeft: number,
   options: { readonly done?: LearnDoneMap; readonly attempted?: readonly number[] } = {}
-): Schedule {
-  const schedule = buildSchedule({
-    examDate: isoIn(daysLeft),
-    today: TODAY,
-    learnDone: options.done ?? {},
-    attemptedExamIds: new Set(options.attempted ?? [])
-  });
+): Schedule => {
+  const schedule = buildScheduleFrom(
+    {
+      examDate: isoIn(daysLeft),
+      today: TODAY,
+      learnDone: options.done ?? {},
+      attemptedExamIds: new Set(options.attempted ?? [])
+    },
+    SOURCE
+  );
   if (!schedule) throw new Error('unreachable: a valid date always builds a plan');
   return schedule;
-}
+};
 
 /** Every checkbox of days 1..`through`, so those days read as complete. */
-function completeThrough(through: number): LearnDoneMap {
+const completeThrough = (through: number): LearnDoneMap => {
   const done: Record<string, boolean> = {};
-  for (const day of LEARN.days.filter(candidate => candidate.day <= through)) {
+  for (const day of LEARN_DAYS.filter(candidate => candidate.day <= through)) {
     day.tasks.forEach((_, index) => {
       done[`d${String(day.day)}t${String(index)}`] = true;
     });
   }
   return done;
-}
+};
 
 const learnDaysIn = (schedule: Schedule): readonly number[] => schedule.slots.flatMap(slot => slot.learnDays);
 const examIdsIn = (schedule: Schedule): readonly number[] => schedule.slots.flatMap(slot => slot.examIds);
@@ -61,13 +70,13 @@ const RUNWAYS = Array.from({ length: MAX_PREP_DAYS - MIN_PREP_DAYS + 1 }, (_, i)
 
 describe('the content the engine assumes', () => {
   it('has 28 learn days in two equal tiers', () => {
-    expect(LEARN.days).toHaveLength(TOTAL_LEARN_DAYS);
+    expect(LEARN_DAYS).toHaveLength(TOTAL_LEARN_DAYS);
     expect(CORE_DAYS).toHaveLength(14);
     expect(EXTENSION_DAYS).toHaveLength(14);
   });
 
   it('has 15 exams', () => {
-    expect(EXAMS).toHaveLength(MOCK_EXAM_COUNT);
+    expect(EXAM_COUNT).toBe(15);
   });
 });
 
@@ -121,7 +130,7 @@ describe.each(RUNWAYS)('a %i-day runway', daysLeft => {
 
   it('accounts for every lesson, as planned or as extra material', () => {
     expect([...learnDaysIn(schedule), ...schedule.unscheduledLearnDays].sort((a, b) => a - b)).toEqual(
-      LEARN.days.map(day => day.day)
+      LEARN_DAYS.map(day => day.day)
     );
   });
 
@@ -181,10 +190,16 @@ describe('runways outside the plannable window', () => {
 
   it('builds no plan at all from an unusable date', () => {
     expect(
-      buildSchedule({ examDate: 'soon', today: TODAY, learnDone: {}, attemptedExamIds: new Set() })
+      buildScheduleFrom(
+        { examDate: 'soon', today: TODAY, learnDone: {}, attemptedExamIds: new Set() },
+        SOURCE
+      )
     ).toBeNull();
     expect(
-      buildSchedule({ examDate: isoIn(10), today: '', learnDone: {}, attemptedExamIds: new Set() })
+      buildScheduleFrom(
+        { examDate: isoIn(10), today: '', learnDone: {}, attemptedExamIds: new Set() },
+        SOURCE
+      )
     ).toBeNull();
   });
 });
@@ -224,7 +239,7 @@ describe('the shape at the three interesting lengths', () => {
   it('a 90-day plan covers everything, one lesson a day, with review days between', () => {
     const long = build(MAX_PREP_DAYS);
     expect(new Set(learnDaysIn(long)).size).toBe(TOTAL_LEARN_DAYS);
-    expect(new Set(examIdsIn(long)).size).toBe(MOCK_EXAM_COUNT);
+    expect(new Set(examIdsIn(long)).size).toBe(EXAM_COUNT);
     expect(long.unscheduledExamIds).toEqual([]);
     expect(long.unscheduledLearnDays).toEqual([]);
     expect(long.slots.every(slot => slot.learnDays.length <= 1)).toBe(true);

@@ -42,8 +42,39 @@ through refs and depend only on `phase` and `index`.
 
 The answer map is flat and stringly-keyed (`l1.0`, `h5.2`, `w.text`) because it is
 persisted and must stay readable by older and newer builds. **Do not change the key
-format.** Read values through the accessors in `features/exam/lib/answers.ts`, which
+format.** Read values through the accessors in `shared/lib/answers.ts`, which
 narrow a stored value to what a given input expects.
+
+## Persisted data
+
+`mergeProgress` (`src/features/auth/lib/mergeProgress.ts`) rebuilds the whole progress
+document field by field when cloud sync reconciles a local and a remote copy — it does not
+spread one side over the other. Adding a field to `ProgressDatabase` is therefore three
+edits, not one: `normalizeDatabase` has to default it, `mergeProgress` has to merge it, and
+a test has to assert the merge survives. The B1 and B2 trainer document slices were
+dropped this way once — `normalizeDatabase` quietly re-defaulted them to empty on every
+sign-in, and TypeScript could not catch it because both fields are optional.
+
+Five storage keys are live user data and must never be renamed: `telcTrainerV1`,
+`telcTrainerRunV1`, `telcTrainerLevelRunV1`, `telcTrainerAuth`, `telcTrainerTheme`. Before
+any rename that touches persistence, `grep -rhoE "'telcTrainer[A-Za-z0-9]*'" src/` and diff
+the set before and after — it must be identical.
+
+`learnDone` keys are `d<day>t<index>` (day number, task index within that day). Adding,
+removing or reordering a curriculum day or a task silently re-points a learner's completed
+checkboxes at different work. Rewrite task text in place; never renumber days or tasks.
+
+## Bundling
+
+Rolldown's `manualChunks` assignment is silently ignored for a module that is reachable
+from both an eager import graph and a lazy one — it gets folded into whichever chunk
+reaches it first, and the string a `manualChunks` function returned for it is simply not
+honoured. `TrainerContent.paper` briefly lived in each trainer's lazy content module while
+also being imported eagerly by the registry, which forced a cross-chunk static import back
+into the main bundle even though the config asked for three separate content chunks. A
+field a trainer needs synchronously (the registry, the runner, settings) has to live on the
+eager `TrainerInfo`, not inside anything reachable through `loadContent()` — check with the
+network log in a real browser, not just the chunk names printed in the build report.
 
 ## Auth
 

@@ -10,7 +10,7 @@ export const Accordion = AccordionPrimitive.Root;
 export const AccordionItem = forwardRef<
   ComponentRef<typeof AccordionPrimitive.Item>,
   ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
->(function AccordionItem({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AccordionPrimitive.Item
       ref={ref}
@@ -24,7 +24,7 @@ export const AccordionItem = forwardRef<
 export const AccordionTrigger = forwardRef<
   ComponentRef<typeof AccordionPrimitive.Trigger>,
   ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(function AccordionTrigger({ className, children, ...props }, ref) {
+>(({ className, children, ...props }, ref) => {
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
@@ -46,7 +46,7 @@ export const AccordionTrigger = forwardRef<
 export const AccordionContent = forwardRef<
   ComponentRef<typeof AccordionPrimitive.Content>,
   ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
->(function AccordionContent({ className, children, ...props }, ref) {
+>(({ className, children, ...props }, ref) => {
   return (
     <AccordionPrimitive.Content
       ref={ref}

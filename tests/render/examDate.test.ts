@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { MAX_PREP_DAYS, MIN_PREP_DAYS } from '@shared/config/schedule.ts';
+import { ROOT_TRAINER, TRAINERS } from '@shared/config/trainers.ts';
 import { daysBetween } from '@shared/lib/format.ts';
 import { PROGRESS_STORAGE_KEY } from '@features/progress';
 
-import { blur, byLabel, click, findByText, mount, seedProgress, today, typeInto } from './harness.ts';
+import { blur, byLabel, click, mount, seedProgress, today, typeInto } from './harness.ts';
 
 /* The exam date now drives the whole plan, so the control that sets it has to be strict:
    an unusable date is not a bad plan, it is no plan. Dates before the minimum runway must
@@ -17,6 +18,13 @@ const storedExamDate = (): string | undefined => {
 
 const daysStored = (): number | null => daysBetween(today(), storedExamDate());
 
+/* Settings shows one exam-date control per trainer, each named after it, so the suite
+   addresses the root trainer's pair through the registry rather than by position. */
+const DAYS_FIELD = `#days-until-exam-${ROOT_TRAINER}`;
+
+const dateTrigger = (): Element | undefined =>
+  document.querySelector(`[aria-label^="Your ${TRAINERS[ROOT_TRAINER].name} exam date"]`) ?? undefined;
+
 /** react-day-picker renders its days as buttons inside grid cells. */
 const dayButtons = (): readonly Element[] => [...document.querySelectorAll('[role="gridcell"] button')];
 
@@ -28,7 +36,7 @@ beforeEach(() => {
 describe('the exam-date field', () => {
   it('shows the date as a formatted date, not a raw input', async () => {
     const page = await mount('/settings');
-    const trigger = findByText(/\d{4}/);
+    const trigger = dateTrigger();
     expect(trigger).toBeDefined();
     expect(trigger?.textContent ?? '').toMatch(/\d{4}/);
     expect(page.text()).toMatch(/countdown in the header/);
@@ -46,14 +54,14 @@ describe('the exam-date field', () => {
 describe('the days-from-today field', () => {
   it('writes a date that many days out', async () => {
     const page = await mount('/settings');
-    await typeInto(document.querySelector('#days-until-exam') ?? undefined, '45');
+    await typeInto(document.querySelector(DAYS_FIELD) ?? undefined, '45');
     expect(daysStored()).toBe(45);
     await page.unmount();
   });
 
   it('refuses a runway shorter than the minimum, and says why', async () => {
     const page = await mount('/settings');
-    const field = document.querySelector('#days-until-exam') ?? undefined;
+    const field = document.querySelector(DAYS_FIELD) ?? undefined;
     await typeInto(field, '2');
     expect(daysStored()).toBe(30);
     expect(page.text()).toMatch(/Too close to plan/);
@@ -63,7 +71,7 @@ describe('the days-from-today field', () => {
 
   it('refuses a runway longer than the maximum', async () => {
     const page = await mount('/settings');
-    await typeInto(document.querySelector('#days-until-exam') ?? undefined, '400');
+    await typeInto(document.querySelector(DAYS_FIELD) ?? undefined, '400');
     expect(daysStored()).toBe(30);
     expect(page.text()).toMatch(new RegExp(`${String(MAX_PREP_DAYS)} days is the longest plan`));
     await page.unmount();
@@ -71,7 +79,7 @@ describe('the days-from-today field', () => {
 
   it('drops an unusable draft when the field loses focus', async () => {
     const page = await mount('/settings');
-    const field = document.querySelector('#days-until-exam');
+    const field = document.querySelector(DAYS_FIELD);
     await typeInto(field ?? undefined, '1');
     await blur(field ?? undefined);
     expect((field as HTMLInputElement | null)?.value).toBe('30');
@@ -80,7 +88,7 @@ describe('the days-from-today field', () => {
 
   it('advertises its own limits to assistive tech', async () => {
     const page = await mount('/settings');
-    const field = document.querySelector('#days-until-exam');
+    const field = document.querySelector(DAYS_FIELD);
     expect(field?.getAttribute('min')).toBe(String(MIN_PREP_DAYS));
     expect(field?.getAttribute('max')).toBe(String(MAX_PREP_DAYS));
     await page.unmount();
@@ -97,7 +105,7 @@ describe('the calendar', () => {
 
   it('opens, and uses real selects rather than the native overlay', async () => {
     const page = await mount('/settings');
-    await click(findByText(/\d{4}/));
+    await click(dateTrigger());
     const popover = document.querySelector('[data-slot="popover-content"]');
     expect(popover).not.toBeNull();
     expect(popover?.querySelectorAll('select')).toHaveLength(0);
@@ -108,7 +116,7 @@ describe('the calendar', () => {
 
   it('lets no month outside the plannable window be chosen', async () => {
     const page = await mount('/settings');
-    await click(findByText(/\d{4}/));
+    await click(dateTrigger());
     await click(byLabel('Monat auswählen') ?? undefined);
     const months = [...document.querySelectorAll('[data-slot="select-item"]')];
     const selectable = months.filter(
@@ -124,7 +132,7 @@ describe('the calendar', () => {
 
   it('cannot reach a month before the window', async () => {
     const page = await mount('/settings');
-    await click(findByText(/\d{4}/));
+    await click(dateTrigger());
     /* Opened on the earliest allowed month, so stepping back is refused. react-day-picker
        marks its nav with aria-disabled rather than the disabled attribute. */
     const previous = byLabel('Zum vorherigen Monat');
@@ -135,7 +143,7 @@ describe('the calendar', () => {
 
   it('leaves every day before the minimum runway unselectable', async () => {
     const page = await mount('/settings');
-    await click(findByText(/\d{4}/));
+    await click(dateTrigger());
 
     const earliest = new Date();
     earliest.setDate(earliest.getDate() + MIN_PREP_DAYS);
@@ -155,7 +163,7 @@ describe('the calendar', () => {
 
   it('saves an in-window day as a local ISO date', async () => {
     const page = await mount('/settings');
-    await click(findByText(/\d{4}/));
+    await click(dateTrigger());
     const enabled = dayButtons().filter(
       day => !day.hasAttribute('disabled') && day.getAttribute('aria-disabled') !== 'true'
     );
@@ -170,7 +178,7 @@ describe('the calendar', () => {
 
   it('renders month-navigation chevrons pointing both ways', async () => {
     const page = await mount('/settings');
-    await click(findByText(/\d{4}/));
+    await click(dateTrigger());
     const popover = document.querySelector('[data-slot="popover-content"]');
     const directions = [...(popover?.querySelectorAll('svg') ?? [])]
       .map(icon => /lucide-chevron-(left|right|up|down)/.exec(icon.getAttribute('class') ?? '')?.[1])

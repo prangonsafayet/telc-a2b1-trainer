@@ -1,183 +1,68 @@
-import { type ReactNode } from 'react';
-
-import { Trash2, Volume2 } from 'lucide-react';
-
 import { PageTitle } from '@shared/components';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Separator
-} from '@shared/ui';
+import { TRAINER_ORDER } from '@shared/config/trainers.ts';
 
 import { SyncPanel } from '@features/auth';
 
-import { ExamDateControls } from '../components/ExamDateControls.tsx';
-import { useExamSettings } from '../hooks/useExamSettings.ts';
+import AudioSettingsCard from '../components/AudioSettingsCard.tsx';
+import DeleteProgressCard from '../components/DeleteProgressCard.tsx';
+import ExamConditionsCard from '../components/ExamConditionsCard.tsx';
+import ProgressBackupCard from '../components/ProgressBackupCard.tsx';
+import SettingsSection from '../components/SettingsSection.tsx';
+import TrainerExamDateCard from '../components/TrainerExamDateCard.tsx';
 
-interface FieldProps {
-  readonly label: string;
-  /**
-   * Id of the control this labels. Omit for controls that carry their own accessible
-   * name — a <label htmlFor> would otherwise replace it, hiding the current value.
-   */
-  readonly htmlFor?: string;
-  readonly hint?: string;
-  readonly children: ReactNode;
-}
+/**
+ * Five groups, in the order they matter: when you sit the exam, how strictly a mock exam
+ * runs, what it sounds like, where the results are kept, and what to do with them. Grouping
+ * by what a setting is for is what keeps the destructive action out of a row of dropdowns.
+ */
+const SettingsPage = () => (
+  <>
+    <PageTitle lead="Your exam dates drive the study plans. Everything else here decides how a mock exam runs — set it once and leave it, so your scores stay comparable.">
+      Settings
+    </PageTitle>
 
-function Field({ label, htmlFor, hint, children }: FieldProps) {
-  return (
-    <div className="space-y-1.5">
-      {htmlFor === undefined ? (
-        <span className="text-sm font-medium leading-none">{label}</span>
-      ) : (
-        <Label htmlFor={htmlFor}>{label}</Label>
-      )}
-      {children}
-      {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
-    </div>
-  );
-}
-
-/** "Auto" is stored as an empty voice name; Radix Select needs a non-empty value. */
-const AUTO_VOICE = 'auto';
-
-export function SettingsPage() {
-  const { settings, voices, setSetting, testVoice, deleteAllProgress } = useExamSettings();
-
-  return (
-    <>
-      <PageTitle lead="Tune the exam conditions — then keep them fixed, so your scores stay comparable.">
-        Settings
-      </PageTitle>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Exam conditions</CardTitle>
-          <CardDescription>Defaults match the official telc format.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Writing time" htmlFor="setting-writing" hint="Official: 10 minutes.">
-              <Select
-                value={String(settings.writingMinutes)}
-                onValueChange={value => {
-                  setSetting('writingMinutes', Number(value));
-                }}
-              >
-                <SelectTrigger id="setting-writing" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10 minutes (official)</SelectItem>
-                  <SelectItem value="15">15 minutes (relaxed)</SelectItem>
-                </SelectContent>
-              </Select>
-            </Field>
-
-            <Field label="Listening speed" htmlFor="setting-rate">
-              <Select
-                value={String(settings.ttsRate)}
-                onValueChange={value => {
-                  setSetting('ttsRate', Number(value));
-                }}
-              >
-                <SelectTrigger id="setting-rate" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0.85">Slower</SelectItem>
-                  <SelectItem value="1">Normal (recommended)</SelectItem>
-                  <SelectItem value="1.1">Faster (challenge)</SelectItem>
-                </SelectContent>
-              </Select>
-            </Field>
-
-            <Field
-              label="Audio plays per item"
-              htmlFor="setting-plays"
-              hint="The real exam plays most items twice."
-            >
-              <Select
-                value={String(settings.playsAllowed)}
-                onValueChange={value => {
-                  setSetting('playsAllowed', Number(value));
-                }}
-              >
-                <SelectTrigger id="setting-plays" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1 (hard mode)</SelectItem>
-                  <SelectItem value="2">2 (realistic)</SelectItem>
-                  <SelectItem value="3">3 (training)</SelectItem>
-                </SelectContent>
-              </Select>
-            </Field>
-
-            <Field label="German voice" htmlFor="setting-voice">
-              <Select
-                value={settings.voiceName || AUTO_VOICE}
-                onValueChange={value => {
-                  setSetting('voiceName', value === AUTO_VOICE ? '' : value);
-                }}
-              >
-                <SelectTrigger id="setting-voice" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={AUTO_VOICE}>Auto (first German voice)</SelectItem>
-                  {voices.map(voice => (
-                    <SelectItem key={voice.name} value={voice.name}>
-                      {voice.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
-
-            <Field label="Your exam date">
-              <ExamDateControls
-                value={settings.examDate}
-                onChange={iso => {
-                  setSetting('examDate', iso);
-                }}
-              />
-            </Field>
-          </div>
-
-          <p className="text-sm text-muted-foreground">
-            {voices.length > 0
-              ? `${String(voices.length)} German voice(s) found in this browser.`
-              : '⚠ No German voice found — listening audio needs one. Chrome/Edge usually include German voices; on some systems you must install a German language pack.'}
-          </p>
-
-          <Separator />
-
-          <div className="flex flex-wrap gap-2">
-            <Button variant="outline" onClick={testVoice}>
-              <Volume2 /> Test voice
-            </Button>
-            <Button variant="destructive" onClick={() => void deleteAllProgress()}>
-              <Trash2 /> Delete all progress
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="mt-6">
-        <SyncPanel />
+    <SettingsSection
+      title="Your exams"
+      lead="Each trainer has its own date, and its 28-day plan re-paces itself around that date on its own."
+    >
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {TRAINER_ORDER.map(trainer => (
+          <TrainerExamDateCard key={trainer} trainer={trainer} />
+        ))}
       </div>
-    </>
-  );
-}
+    </SettingsSection>
+
+    <SettingsSection
+      title="Exam conditions"
+      lead="How closely a mock exam copies the real sitting. The defaults match the official format of each paper — relax one and your scores stop being comparable."
+    >
+      <ExamConditionsCard />
+    </SettingsSection>
+
+    <SettingsSection
+      title="Listening audio"
+      lead="Your browser reads the listening modules aloud. One voice serves every trainer."
+    >
+      <AudioSettingsCard />
+    </SettingsSection>
+
+    <SettingsSection
+      title="Account and sync"
+      lead="Sign in to carry your progress between devices. Without it, everything stays in this browser."
+    >
+      <SyncPanel />
+    </SettingsSection>
+
+    <SettingsSection
+      title="Your data"
+      lead="Your attempts, plans and settings are stored in this browser. Take a copy of them, restore one, or clear everything out."
+    >
+      <div className="space-y-4">
+        <ProgressBackupCard />
+        <DeleteProgressCard />
+      </div>
+    </SettingsSection>
+  </>
+);
+
+export default SettingsPage;

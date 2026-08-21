@@ -1,4 +1,15 @@
-/** The shape of one Modelltest, as authored in `src/content/exams`. */
+/** The shape of one Modelltest, as authored in `src/content/trainers/<id>/exams`. */
+
+/**
+ * What every Modelltest of every paper has. Enough for the generic layers — the registry,
+ * the schedule engine, the exam lists — to work with a paper they cannot narrow.
+ */
+export interface ExamPaper {
+  readonly id: number;
+  readonly title: string;
+  /** What the paper is about, e.g. `Wohnen & Nachbarschaft`. */
+  readonly theme: string;
+}
 
 export type ExamDifficulty = 'easy' | 'medium' | 'b1';
 
@@ -157,7 +168,7 @@ export interface SprechenSection {
   };
 }
 
-export interface Exam {
+export interface DualLevelExam {
   readonly id: number;
   readonly title: string;
   readonly difficulty: ExamDifficulty;

@@ -10,9 +10,8 @@ export const PROVIDER_LABELS: Readonly<Record<OAuthProvider, string>> = {
   github: 'GitHub'
 };
 
-function isSupportedProvider(id: string): id is OAuthProvider {
-  return (OAUTH_PROVIDERS as readonly string[]).includes(id);
-}
+const isSupportedProvider = (id: string): id is OAuthProvider =>
+  (OAUTH_PROVIDERS as readonly string[]).includes(id);
 
 /**
  * Only providers that are both supported here and listed in the environment. Offering one
@@ -21,6 +20,4 @@ function isSupportedProvider(id: string): id is OAuthProvider {
  */
 export const enabledProviders: readonly OAuthProvider[] = CONFIGURED_PROVIDER_IDS.filter(isSupportedProvider);
 
-export function providerLabel(provider: OAuthProvider): string {
-  return PROVIDER_LABELS[provider];
-}
+export const providerLabel = (provider: OAuthProvider): string => PROVIDER_LABELS[provider];

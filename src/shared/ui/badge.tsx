@@ -13,7 +13,7 @@ const badgeVariants = cva(
         default: 'border-transparent bg-primary text-primary-foreground',
         secondary: 'border-transparent bg-secondary text-secondary-foreground',
         destructive:
-          'border-transparent bg-[color-mix(in_oklab,var(--destructive)_14%,transparent)] text-destructive',
+          'border-transparent bg-[color-mix(in_oklab,var(--destructive)_14%,transparent)] text-destructive-on-tint',
         outline: 'text-foreground',
         success:
           'border-transparent bg-[color-mix(in_oklab,var(--success)_16%,transparent)] text-[color:var(--success-foreground)]',
@@ -32,9 +32,9 @@ export interface BadgeProps extends ComponentPropsWithoutRef<'span'>, VariantPro
   readonly asChild?: boolean;
 }
 
-export function Badge({ className, variant, asChild = false, ...props }: BadgeProps) {
+export const Badge = ({ className, variant, asChild = false, ...props }: BadgeProps) => {
   const Comp = asChild ? Slot : 'span';
   return <Comp data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />;
-}
+};
 
 export { badgeVariants };

@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -7,8 +9,11 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import checkFile from 'eslint-plugin-check-file';
 import importX from 'eslint-plugin-import-x';
+import preferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import prettier from 'eslint-config-prettier';
+
+import { trainerIds } from './scripts/trainerRegistry.mjs';
 
 /* Architecture rules, enforced rather than documented.
  *
@@ -46,9 +51,22 @@ const FEATURES_AND_APP = {
   message: 'src/shared must stay feature-agnostic. If it needs feature knowledge it belongs in that feature.'
 };
 
+/* `@shared/components` is listed as well as `@shared/components/**`: the `/**` form does
+   not match the bare barrel, so `import { Teil } from '@shared/components'` slipped through
+   this rule while every path under it was refused. Proven with a planted import. */
 const APPLICATION_CODE = {
-  group: ['@features/**', '@app/**', '@shared/components/**'],
+  group: ['@features/**', '@app/**', '@shared/components', '@shared/components/**'],
   message: 'src/content is inert data. It must not depend on application code.'
+};
+
+/* Relative imports may step up one level at most. Anything deeper is unreadable and
+   breaks when files move; the aliases exist precisely for those paths. Because
+   `no-restricted-imports` options replace rather than merge, this pattern is restated in
+   EVERY restrict(...) entry below. */
+const DEEP_RELATIVE = {
+  group: ['../../**'],
+  message:
+    'Relative imports may climb at most one level; use a path alias (@features/<name>/…, @shared/…) instead.'
 };
 
 const restrict = (...patterns) => ({ 'no-restricted-imports': ['error', { patterns }] });
@@ -59,20 +77,71 @@ const UI_THROUGH_BARREL = {
   name: 'ui-through-barrel',
   files: ['src/**/*.{ts,tsx}'],
   ignores: ['src/shared/ui/**'],
-  rules: restrict(UI_BY_FILE)
+  rules: restrict(UI_BY_FILE, DEEP_RELATIVE)
 };
 
 const NO_CROSS_FEATURE_INTERNALS = {
   name: 'no-cross-feature-internals',
   files: ['src/features/*/**/*.{ts,tsx}'],
-  rules: restrict(CROSS_FEATURE_INTERNALS, APP_SHELL, UI_BY_FILE)
+  rules: restrict(CROSS_FEATURE_INTERNALS, APP_SHELL, UI_BY_FILE, DEEP_RELATIVE)
+};
+
+/* A feature may deep-import ITSELF through its own alias — that is how its files avoid
+   `../../` paths — while every other feature's internals stay off limits. One entry per
+   feature directory; each must follow (and therefore restate) the generic entry above,
+   because the later entry's options replace the earlier one's for the files it matches. */
+const FEATURE_SELF_ALIAS = fs.readdirSync('src/features').map(name => ({
+  name: `feature-self-alias-${name}`,
+  files: [`src/features/${name}/**/*.{ts,tsx}`],
+  rules: restrict(
+    {
+      group: ['@features/*/*/**', `!@features/${name}/**`],
+      message:
+        "Import another feature only through its public surface: '@features/<name>'. Reaching into its folders couples you to its internals."
+    },
+    APP_SHELL,
+    UI_BY_FILE,
+    DEEP_RELATIVE
+  )
+}));
+
+/* The ten module renderers come in twin pairs with identical basenames
+   (`modules/dual-level/LesenModule.tsx` and `modules/single-level/LesenModule.tsx`), told
+   apart only by their format folder. Only a format's own descriptor may import them —
+   everything else (a screen, another format, another feature) goes through the format
+   object instead, which is exactly what stops the twins being mixed up. */
+const MODULE_RENDERERS = {
+  group: ['@features/exam/components/modules/**', '**/exam/components/modules/**'],
+  message:
+    "Import a module renderer only from its own format's lib/formats/<format>/index.ts. Reaching into components/modules/ anywhere else bypasses the format descriptor and risks mixing up the dual-level and single-level twins."
+};
+
+/* Restated because this entry's files overlap feature-self-alias-exam above; the later
+   entry replaces rather than merges, so every pattern that still applies here — the
+   cross-feature guard, the app-shell guard, the UI barrel and the one-level relative cap —
+   is repeated alongside the new module-renderer restriction. */
+const EXAM_MODULES_THROUGH_FORMAT = {
+  name: 'exam-modules-through-format',
+  files: ['src/features/exam/**/*.{ts,tsx}'],
+  ignores: ['src/features/exam/lib/formats/*/index.ts'],
+  rules: restrict(
+    {
+      group: ['@features/*/*/**', '!@features/exam/**'],
+      message:
+        "Import another feature only through its public surface: '@features/<name>'. Reaching into its folders couples you to its internals."
+    },
+    APP_SHELL,
+    UI_BY_FILE,
+    DEEP_RELATIVE,
+    MODULE_RENDERERS
+  )
 };
 
 const SHARED_STAYS_GENERIC = {
   name: 'shared-stays-generic',
   files: ['src/shared/**/*.{ts,tsx}'],
   ignores: ['src/shared/ui/**'],
-  rules: restrict(FEATURES_AND_APP, UI_BY_FILE)
+  rules: restrict(FEATURES_AND_APP, UI_BY_FILE, DEEP_RELATIVE)
 };
 
 /* The vendored shadcn files are exempt from the barrel rule — they import their siblings
@@ -80,17 +149,122 @@ const SHARED_STAYS_GENERIC = {
 const SHARED_UI_STAYS_GENERIC = {
   name: 'shared-ui-stays-generic',
   files: ['src/shared/ui/**/*.{ts,tsx}'],
-  rules: restrict(FEATURES_AND_APP)
+  rules: restrict(FEATURES_AND_APP, DEEP_RELATIVE)
+};
+
+/* A trainer's facts live in its registry descriptor, never in a comparison against its id.
+   Naming 'b1' anywhere else is how the three trainers grew special cases in the first
+   place, so it is refused: read the fact from `TRAINERS[trainer]`, or add it there.
+
+   The id list is READ from the registry rather than restated here — see
+   `scripts/trainerRegistry.mjs`. A hardcoded copy was the single most dangerous edit point in
+   the whole design: miss it when adding a trainer and this rule silently stops covering the
+   new id, so `mode === 'c1'` becomes legal everywhere and nothing fails.
+
+   Four exempt places. The registry itself and the content folders are keyed by trainer by
+   definition. The other two are the persisted document's own plumbing —
+   `progress/lib/progressDb.ts` and `auth/lib/mergeProgress.ts` — which architecture.md
+   measured as irreducible: `exactOptionalPropertyTypes` means a trainer nobody has opened
+   must be an ABSENT key rather than an explicit undefined, so the merge is spelled out per
+   trainer instead of looped. Widening this rule is what surfaced them; they are exempted by
+   name rather than silenced line by line, so the count stays visible here.
+
+   The selector deliberately excludes `TSLiteralType`, so the union declarations that DEFINE
+   the ids (`type TrainerId = 'a2b1' | 'b1' | 'b2'`) still typecheck — it is trainer ids used
+   as VALUES that are banned. Unlike no-restricted-imports this is a different rule key, so
+   it neither replaces nor is replaced by the layer entries above. */
+const TRAINER_IDS = trainerIds();
+
+const TRAINER_ID_SYNTAX = TRAINER_IDS.flatMap(id =>
+  [
+    /* `'b1'` as a value, including a computed key: `mode === 'b1'`, `db['b1']`. */
+    `:not(TSLiteralType) > Literal[value='${id}']`,
+    /* An object key that names one: `{ b1: … }`. A TYPE member is a different node
+       (`TSPropertySignature`), so the unions and `ProgressDatabase` still declare theirs. */
+    `Property > Identifier.key[name='${id}']`,
+    /* Reaching one out by name: `db.b1`, `TRAINERS.a2b1`. */
+    `MemberExpression > Identifier.property[name='${id}']`
+  ].map(selector => ({
+    selector,
+    message: `'${id}' is a trainer id: read the fact you need from TRAINERS[trainer] in @shared/config/trainers.ts instead of naming the trainer. If the fact does not exist yet, add it to the descriptor — that is what makes a fourth trainer one registry entry.`
+  }))
+);
+
+/* Primitives come from `@shared/ui`, and until now that was prose only: CLAUDE.md and
+   conventions.md both list it as a non-negotiable, but no rule matched a JSX element name,
+   so a raw `<button>` shipped in the flip card and nothing said a word. The import rules
+   next door were made real for the same reason — architecture.md: "The dependency rules
+   are ESLint rules, not conventions."
+
+   `JSXOpeningElement > JSXIdentifier` matches only the element's own name: attribute names
+   hang off `JSXAttribute`, not off the opening element, so `<Input type="text" />` is fine.
+   A lowercase name is always an intrinsic element, so `<Table>` from the barrel does not
+   match while `<table>` does. */
+const RAW_HTML_CONTROLS = ['button', 'input', 'select', 'textarea', 'form', 'table', 'label'].map(
+  element => ({
+    selector: `JSXOpeningElement > JSXIdentifier[name='${element}']`,
+    message: `<${element}> is a design-system primitive: import it from '@shared/ui'. If the one you need is missing, add it to src/shared/ui in the same style and export it from the barrel — do not reach for raw HTML.`
+  })
+);
+
+const syntax = (...groups) => ({ 'no-restricted-syntax': ['error', ...groups.flat()] });
+
+const NO_TRAINER_ID_LITERALS = {
+  name: 'no-trainer-id-literals',
+  files: ['src/**/*.{ts,tsx}'],
+  ignores: [
+    'src/shared/config/trainers.ts',
+    'src/content/**',
+    'src/features/progress/lib/progressDb.ts',
+    'src/features/auth/lib/mergeProgress.ts'
+  ],
+  rules: syntax(TRAINER_ID_SYNTAX)
+};
+
+/* `no-restricted-syntax` is configured, not accumulated, exactly like `no-restricted-imports`
+   above: this entry matches every `.tsx` the entry above matches, so it has to restate the
+   trainer-id selectors or it would switch them off for every component in the app. None of
+   the four trainer-id exemptions is a `.tsx` file, so restating them here changes nothing
+   about which files they cover. Its own exemption is the design system itself — those files
+   are where the raw elements are supposed to live. */
+const NO_RAW_HTML_CONTROLS = {
+  name: 'no-raw-html-controls',
+  files: ['src/**/*.tsx'],
+  ignores: ['src/shared/ui/**'],
+  rules: syntax(TRAINER_ID_SYNTAX, RAW_HTML_CONTROLS)
 };
 
 const CONTENT_IS_DATA_ONLY = {
   name: 'content-is-data-only',
   files: ['src/content/**/*.ts'],
-  rules: restrict(APPLICATION_CODE, UI_BY_FILE)
+  rules: restrict(APPLICATION_CODE, UI_BY_FILE, DEEP_RELATIVE)
+};
+
+/* Component files default-export their component, so imports and lazy() routes are
+   uniform. Defined inline: the rule is three lines and not worth a package. */
+const componentDefaultExport = {
+  rules: {
+    'component-default-export': {
+      meta: {
+        type: 'problem',
+        messages: { missing: 'Component files must default-export their component.' }
+      },
+      create: context => ({
+        'Program:exit': node => {
+          const hasDefault = node.body.some(s => s.type === 'ExportDefaultDeclaration');
+          if (!hasDefault) context.report({ node, messageId: 'missing' });
+        }
+      })
+    }
+  }
 };
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage', 'playwright-report', 'test-results', 'node_modules'] },
+  /* `.claude/worktrees/` holds agent worktrees — whole checkouts of this repo. Linting one
+     lints every file twice, against whatever revision it sits on. */
+  {
+    ignores: ['dist', 'coverage', 'playwright-report', 'test-results', 'node_modules', '.claude/worktrees']
+  },
 
   js.configs.recommended,
 
@@ -140,8 +314,9 @@ export default tseslint.config(
        *   utils, config, types, providers camelCase.ts
        *   folders                        kebab-case
        *
-       * `src/shared/components/ui` is exempt: the shadcn CLI writes kebab-case there,
-       * and fighting it would break `npx shadcn add`.
+       * `src/shared/ui` is exempt — the shadcn CLI writes kebab-case there and fighting it
+       * would break `npx shadcn add`. It is exempt by matching none of the patterns below
+       * rather than by an ignore entry, which is why no pattern names it.
        */
       'check-file/filename-naming-convention': [
         'error',
@@ -156,7 +331,7 @@ export default tseslint.config(
           'src/**/types/**/*.ts': 'CAMEL_CASE',
           'src/**/providers/*.ts': 'CAMEL_CASE',
           'src/**/providers/*.tsx': 'PASCAL_CASE',
-          'src/content/*.ts': 'CAMEL_CASE'
+          'src/content/**/*.ts': 'CAMEL_CASE'
         },
         { ignoreMiddleExtensions: true }
       ],
@@ -246,9 +421,35 @@ export default tseslint.config(
      restate it, so the more specific configuration is the one that survives. */
   UI_THROUGH_BARREL,
   NO_CROSS_FEATURE_INTERNALS,
+  ...FEATURE_SELF_ALIAS,
+  EXAM_MODULES_THROUGH_FORMAT,
   SHARED_STAYS_GENERIC,
   SHARED_UI_STAYS_GENERIC,
   CONTENT_IS_DATA_ONLY,
+  NO_TRAINER_ID_LITERALS,
+  NO_RAW_HTML_CONTROLS,
+
+  {
+    /* One component per file. The vendored shadcn files ship several per file and are
+       exempt below. */
+    name: 'one-component-per-file',
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/shared/ui/*.tsx'],
+    plugins: { react },
+    rules: { 'react/no-multi-comp': 'error' }
+  },
+  {
+    name: 'component-files-default-export',
+    files: [
+      'src/app/layout/*.tsx',
+      'src/app/routes/*.tsx',
+      'src/**/components/**/*.tsx',
+      'src/**/routes/*.tsx'
+    ],
+    ignores: ['src/shared/ui/**', '**/moduleProps.ts'],
+    plugins: { local: componentDefaultExport },
+    rules: { 'local/component-default-export': 'error' }
+  },
 
   {
     /* Ambient declarations for Vite's build-time defines use the conventional
@@ -258,10 +459,21 @@ export default tseslint.config(
     rules: { '@typescript-eslint/naming-convention': 'off' }
   },
   {
-    /* Exam data files are enormous literals; naming rules there are pure noise. */
+    /* Exam data files are enormous literals; naming rules there are pure noise. The path is
+       `src/content/trainers/<id>/exams/` — the pre-registry `src/content/exams/` this used to
+       name has not existed since the content moved, so the exemption was dead and passed only
+       because `objectLiteralProperty` is `format: null` globally. */
     name: 'content-data',
-    files: ['src/content/exams/**/*.ts'],
+    files: ['src/content/trainers/*/exams/**/*.ts'],
     rules: { '@typescript-eslint/naming-convention': 'off' }
+  },
+  {
+    /* The shadcn CLI writes named function expressions inside `forwardRef`; the arrow
+       rule strips the inline name, so the display-name heuristic can no longer infer
+       one. Display names only matter in devtools, and these files are vendored. */
+    name: 'vendored-ui-display-names',
+    files: ['src/shared/ui/*.tsx'],
+    rules: { 'react/display-name': 'off' }
   },
   {
     /* Barrels and provider modules intentionally export types, hooks and constants
@@ -305,6 +517,37 @@ export default tseslint.config(
     name: 'commonjs-tooling',
     files: ['**/*.cjs'],
     languageOptions: { sourceType: 'commonjs', globals: { ...globals.node } }
+  },
+
+  {
+    /* Every function is an arrow: declarations and `function` expressions are rejected
+       and autofixed to `const fn = () => …`. Class methods are exempt — React lifecycle
+       methods cannot be converted in place, and a method is not a free function. Ambient
+       `.d.ts` declarations are excluded because `declare function` has no arrow form. */
+    name: 'arrow-functions-only',
+    files: [
+      'src/**/*.{ts,tsx}',
+      'tests/**/*.{ts,tsx}',
+      /* The e2e specs are plain JS — `.ts` alone matched nothing, so the rule was inert. */
+      'e2e/**/*.{js,ts}',
+      'scripts/**/*.{js,mjs,ts}',
+      '*.{js,mjs,cjs,ts}'
+    ],
+    ignores: ['**/*.d.ts'],
+    plugins: { 'prefer-arrow-functions': preferArrowFunctions },
+    rules: {
+      'prefer-arrow-callback': 'error',
+      'func-style': ['error', 'expression', { allowArrowFunctions: true }],
+      'prefer-arrow-functions/prefer-arrow-functions': [
+        'error',
+        {
+          allowNamedFunctions: false,
+          classPropertiesAllowed: false,
+          disallowPrototype: true,
+          returnStyle: 'unchanged'
+        }
+      ]
+    }
   },
 
   prettier

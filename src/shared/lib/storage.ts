@@ -5,36 +5,36 @@
  */
 const fallback = new Map<string, string>();
 
-export function readLocal(key: string): string | null {
+export const readLocal = (key: string): string | null => {
   try {
     return localStorage.getItem(key);
   } catch {
     return fallback.get(key) ?? null;
   }
-}
+};
 
-export function writeLocal(key: string, value: string): void {
+export const writeLocal = (key: string, value: string): void => {
   try {
     localStorage.setItem(key, value);
   } catch {
     fallback.set(key, value);
   }
-}
+};
 
-export function removeLocal(key: string): void {
+export const removeLocal = (key: string): void => {
   try {
     localStorage.removeItem(key);
   } catch {
     fallback.delete(key);
   }
-}
+};
 
 /**
  * Reads and parses a JSON value, returning `null` when absent or malformed. Deliberately
  * `unknown`: stored data can come from an older version of the app or a hand-edited
  * import file, so every caller has to validate it rather than assert a shape.
  */
-export function readLocalJson(key: string): unknown {
+export const readLocalJson = (key: string): unknown => {
   const raw = readLocal(key);
   if (raw === null) return null;
   try {
@@ -42,4 +42,4 @@ export function readLocalJson(key: string): unknown {
   } catch {
     return null;
   }
-}
+};

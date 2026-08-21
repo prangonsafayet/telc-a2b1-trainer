@@ -1,76 +1,79 @@
 import { useMemo } from 'react';
 
-import { EXAMS } from '@content/exams';
+import { examCount, TRAINERS } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
+import { buildScoreChart } from '@shared/lib/scoreChart.ts';
+import { type ScoreChartModel, type TrainerId } from '@shared/types';
 
-import { type Attempt, type Exam, type SkillKey } from '@shared/types';
+import { describeMockLead, examSlotLabel, useToday, useTrainerSchedule } from '@features/plan';
+import { useTrainerSlice } from '@features/progress';
 
-import { useProgress } from '@features/progress';
-
-/** B1 needs 168/240 overall; A2 territory starts around 96. */
-const B1_TOTAL = 168;
-const A2_TOTAL = 96;
-
-export interface ExamCardStats {
-  readonly exam: Exam;
-  readonly best: Attempt | null;
-  readonly attemptCount: number;
-}
+import {
+  buildMastery,
+  buildMeters,
+  buildTiles,
+  buildWeakAreas,
+  masteryCounts,
+  metersHeading,
+  passRuleFor
+} from '../lib/dashboardModel.ts';
+import { buildExamCards } from '../lib/examCards.ts';
+import {
+  type ExamCardModel,
+  type MasteryModel,
+  type MeterModel,
+  type StatTileModel,
+  type WeakAreaModel
+} from '../types/dashboard.ts';
 
 export interface DashboardStats {
-  readonly attempts: readonly Attempt[];
-  readonly fullAttempts: readonly Attempt[];
-  readonly practiceCount: number;
-  readonly bestTotal: number | null;
-  readonly bestTotalCaption: string;
-  readonly lastAttempt: Attempt | null;
-  readonly bestPerSkill: Readonly<Record<SkillKey, number | null>>;
-  readonly examCards: readonly ExamCardStats[];
+  readonly heading: string;
+  readonly lead: string;
+  readonly passRule: string;
+  readonly attemptCount: number;
+  /** This trainer's own history page. */
+  readonly historyTo: string;
+  readonly tiles: readonly StatTileModel[];
+  /** Best score per scored part of the paper, under the name that paper gives them. */
+  readonly meters: readonly MeterModel[];
+  readonly metersHeading: string;
+  /** Null for a trainer with no vocabulary bank; its Practice page shows its empty state. */
+  readonly mastery: MasteryModel | null;
+  readonly weakAreas: readonly WeakAreaModel[];
+  readonly chart: ScoreChartModel;
+  readonly examCards: readonly ExamCardModel[];
 }
 
-const SKILL_KEYS: readonly SkillKey[] = ['lesen', 'hoeren', 'schreiben', 'sprechen'];
-
-function captionForBest(best: number | null): string {
-  if (best == null) return 'no full exam yet';
-  if (best >= B1_TOTAL) return 'B1 territory 🎉';
-  if (best >= A2_TOTAL) return 'A2 zone — push to 168';
-  return 'keep training';
-}
-
-/** Everything the dashboard displays, derived from the stored attempts. */
-export function useDashboardStats(): DashboardStats {
-  const { db } = useProgress();
+/**
+ * Everything one trainer's dashboard displays, derived from its stored slice, its content
+ * and its plan. Which sections that adds up to follows from what the descriptor offers.
+ */
+export const useDashboardStats = (trainer: TrainerId): DashboardStats => {
+  const slice = useTrainerSlice(trainer);
+  const schedule = useTrainerSchedule(trainer);
+  const today = useToday();
+  const info = TRAINERS[trainer];
+  const content = useTrainerContent(trainer);
+  const vocab = content.vocab;
 
   return useMemo(() => {
-    const attempts = db.attempts;
-    const fullAttempts = attempts.filter(attempt => attempt.mode === 'full');
-    const totals = fullAttempts.map(attempt => attempt.total ?? 0);
-    const bestTotal = totals.length > 0 ? Math.max(...totals) : null;
-
-    const bestPerSkill = Object.fromEntries(
-      SKILL_KEYS.map(key => {
-        const scores = attempts
-          .map(attempt => attempt.scores[key])
-          .filter((value): value is number => value != null);
-        return [key, scores.length > 0 ? Math.max(...scores) : null];
-      })
-    ) as Record<SkillKey, number | null>;
-
-    const examCards = EXAMS.map<ExamCardStats>(exam => {
-      const forExam = fullAttempts.filter(attempt => attempt.examId === exam.id);
-      const best =
-        forExam.length > 0 ? forExam.reduce((a, b) => ((b.total ?? 0) > (a.total ?? 0) ? b : a)) : null;
-      return { exam, best, attemptCount: attempts.filter(attempt => attempt.examId === exam.id).length };
-    });
-
+    const mastery = buildMastery(trainer, vocab, slice.srs, today);
+    const counts = mastery === null ? null : masteryCounts(vocab, slice.srs, today);
     return {
-      attempts,
-      fullAttempts,
-      practiceCount: attempts.length - fullAttempts.length,
-      bestTotal,
-      bestTotalCaption: captionForBest(bestTotal),
-      lastAttempt: attempts.at(-1) ?? null,
-      bestPerSkill,
-      examCards
+      heading: `Dashboard · ${info.short}`,
+      lead: schedule
+        ? `${info.name}: ${describeMockLead(schedule, examCount(content))}`
+        : `${info.name}: ${String(examCount(content))} Modelltests, easiest first. Take them in order under real timing.`,
+      passRule: passRuleFor(info),
+      attemptCount: slice.attempts.length,
+      historyTo: `${info.basePath}/history`,
+      tiles: buildTiles(slice, counts, today),
+      meters: buildMeters(slice),
+      metersHeading: metersHeading(slice),
+      mastery,
+      weakAreas: buildWeakAreas(slice, vocab, info.basePath),
+      chart: buildScoreChart(slice),
+      examCards: buildExamCards(slice, info, content.exams, examId => examSlotLabel(schedule, examId))
     };
-  }, [db.attempts]);
-}
+  }, [trainer, info, content, vocab, slice, schedule, today]);
+};

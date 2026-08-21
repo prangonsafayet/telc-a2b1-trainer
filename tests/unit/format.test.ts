@@ -1,10 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   addDays,
   daysBetween,
   daysUntil,
   fmtClock,
+  fmtDate,
   parseIsoDate,
   toIsoDate,
   wordCount
@@ -30,6 +31,41 @@ describe('ISO date handling', () => {
     expect(parseIsoDate('')).toBeNull();
     expect(parseIsoDate(undefined)).toBeNull();
     expect(parseIsoDate('2026-9-12')).toBeNull();
+  });
+});
+
+/* `fmtDate` is the module's only formatter and used to be the one export that did NOT go
+   through `parseIsoDate` — `new Date('2026-09-12').toLocaleDateString()` prints the 11th in
+   any negative UTC offset. Every current caller passes a full timestamp, where that does not
+   apply, so the assertion is pinned to a west-of-Greenwich zone: without it the test would
+   pass on a UTC machine with the bug still in place. */
+describe('fmtDate', () => {
+  /* `vi.stubEnv` rather than a direct `process.env` write: `process` is not in the app
+     project's `types`, and `vi.unstubAllEnvs` restores the runner's own zone. */
+  const inZone = (tz: string, run: () => void): void => {
+    vi.stubEnv('TZ', tz);
+    try {
+      run();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  };
+
+  it('formats a full timestamp', () => {
+    expect(fmtDate('2026-09-12T10:00:00.000Z')).toMatch(/^\d{2}\.\d{2}\.\d{2}$/);
+  });
+
+  it('formats a calendar day as that calendar day, west of Greenwich too', () => {
+    inZone('America/Los_Angeles', () => {
+      expect(fmtDate('2026-09-12')).toBe('12.09.26');
+      expect(fmtDate('2026-01-01')).toBe('01.01.26');
+    });
+  });
+
+  it('still formats something that is not a calendar day', () => {
+    inZone('America/Los_Angeles', () => {
+      expect(fmtDate('2026-03-01T23:30:00.000Z')).toBe('01.03.26');
+    });
   });
 });
 

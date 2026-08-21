@@ -11,7 +11,7 @@ interface ExamCountdownBadgeProps {
 /** Under two weeks out, the countdown turns urgent. */
 const URGENT_DAYS = 14;
 
-export function ExamCountdownBadge({ examDate }: ExamCountdownBadgeProps) {
+const ExamCountdownBadge = ({ examDate }: ExamCountdownBadgeProps) => {
   const date = parseIsoDate(examDate);
   const days = daysUntil(examDate);
   if (!date || days == null) return null;
@@ -34,4 +34,6 @@ export function ExamCountdownBadge({ examDate }: ExamCountdownBadgeProps) {
       )}
     </Badge>
   );
-}
+};
+
+export default ExamCountdownBadge;

@@ -18,9 +18,15 @@ blob-report/
 
 # Operational notes kept locally, deliberately not published on the portfolio repo.
 docs/*.local.md
+.superpowers/
+.claude/worktrees/
 
 # Incremental TypeScript build caches — the build writes these to node_modules/.tmp.
 *.tsbuildinfo
 
 # Playwright MCP scratch output (page snapshots, console logs).
 .playwright-mcp/
+
+# Bridge-sync leftovers the sandboxed cloud session cannot delete; safe to remove.
+_to_delete/
+*.tgz

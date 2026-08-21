@@ -1,6 +1,8 @@
 import { toast } from 'sonner';
 
-import { type AudioScript, type Exam, type Settings } from '@shared/types';
+import { type AudioScript, type DualLevelExam, type Settings, type TrainerPaper } from '@shared/types';
+
+import { listeningRate } from './paper.ts';
 
 type VoiceListener = () => void;
 
@@ -13,7 +15,7 @@ const listeners = new Set<VoiceListener>();
  * otherwise set state, re-render and loop forever — which is exactly what happens on a
  * machine with no German voice installed, where the list is always empty.
  */
-function refreshVoices(): void {
+const refreshVoices = (): void => {
   let next: SpeechSynthesisVoice[];
   try {
     next = speechSynthesis.getVoices().filter(voice => voice.lang.toLowerCase().startsWith('de'));
@@ -26,55 +28,55 @@ function refreshVoices(): void {
 
   germanVoices = next;
   for (const listener of listeners) listener();
-}
+};
 
 if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   refreshVoices();
   speechSynthesis.onvoiceschanged = refreshVoices;
 }
 
-export function getGermanVoices(): readonly SpeechSynthesisVoice[] {
-  return germanVoices;
-}
+export const getGermanVoices = (): readonly SpeechSynthesisVoice[] => germanVoices;
 
 /** Store subscription: the callback takes no arguments, per useSyncExternalStore. */
-export function subscribeToVoices(onStoreChange: () => void): () => void {
+export const subscribeToVoices = (onStoreChange: () => void): (() => void) => {
   listeners.add(onStoreChange);
   refreshVoices();
   return () => {
     listeners.delete(onStoreChange);
   };
-}
+};
 
-function pickVoice(preferredName: string): SpeechSynthesisVoice | null {
-  return germanVoices.find(voice => voice.name === preferredName) ?? germanVoices[0] ?? null;
-}
+const pickVoice = (preferredName: string): SpeechSynthesisVoice | null =>
+  germanVoices.find(voice => voice.name === preferredName) ?? germanVoices[0] ?? null;
 
 /** Easier exams are read more slowly, then scaled by the user's speed setting. */
-export function rateForExam(exam: Exam, settings: Settings): number {
+export const rateForExam = (paper: TrainerPaper, exam: DualLevelExam, settings: Settings): number => {
   const base = exam.difficulty === 'easy' ? 0.88 : exam.difficulty === 'medium' ? 0.94 : 1;
-  return base * settings.ttsRate;
-}
+  return base * listeningRate(paper, settings.ttsRate);
+};
 
 let speaking = false;
 
-export function isSpeaking(): boolean {
-  return speaking;
-}
+export const isSpeaking = (): boolean => speaking;
 
-export function stopSpeech(): void {
+export const stopSpeech = (): void => {
   try {
     speechSynthesis.cancel();
   } catch {
     /* Not supported — nothing to cancel. */
   }
   speaking = false;
-}
+};
 
 const TURN_GAP_MS = 350;
 
 /** Reads a monologue or a dialogue aloud, alternating pitch between speakers. */
-export function speakScript(script: AudioScript, rate: number, voiceName: string, onDone?: () => void): void {
+export const speakScript = (
+  script: AudioScript,
+  rate: number,
+  voiceName: string,
+  onDone?: () => void
+): void => {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     toast.error('This browser has no speech synthesis', {
       description: 'The listening audio needs it. You can still read the transcripts in the review.'
@@ -117,10 +119,10 @@ export function speakScript(script: AudioScript, rate: number, voiceName: string
   };
 
   speakNext();
-}
+};
 
 /** Resolves the audio script for a listening item key such as `h2.3`, `h4` or `h5`. */
-export function audioForKey(exam: Exam, key: string): AudioScript {
+export const audioForKey = (exam: DualLevelExam, key: string): AudioScript => {
   const { hoeren } = exam;
   if (key === 'h4') return hoeren.teil4.audio;
   if (key === 'h5') return hoeren.teil5.audio;
@@ -131,4 +133,4 @@ export function audioForKey(exam: Exam, key: string): AudioScript {
   if (part === 'h2') return hoeren.teil2.items[index]?.audio ?? '';
   if (part === 'h3') return hoeren.teil3.items[index]?.audio ?? '';
   return '';
-}
+};

@@ -9,17 +9,17 @@ import { toIsoDate } from '@shared/lib/format.ts';
  * and again whenever the tab becomes visible — a sleeping laptop fires no timers, and
  * waking to yesterday's plan would be worse than a stale clock.
  */
-export function useToday(): string {
+export const useToday = (): string => {
   const [today, setToday] = useState(() => toIsoDate(new Date()));
 
   useEffect(() => {
     let timer: number | undefined;
 
-    function sync(): void {
+    const sync = (): void => {
       setToday(toIsoDate(new Date()));
-    }
+    };
 
-    function scheduleMidnight(): void {
+    const scheduleMidnight = (): void => {
       const now = new Date();
       /* A few seconds past midnight, so the new date is unambiguous. */
       const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5);
@@ -27,11 +27,11 @@ export function useToday(): string {
         sync();
         scheduleMidnight();
       }, next.getTime() - now.getTime());
-    }
+    };
 
-    function onVisibility(): void {
+    const onVisibility = (): void => {
       if (document.visibilityState === 'visible') sync();
-    }
+    };
 
     scheduleMidnight();
     document.addEventListener('visibilitychange', onVisibility);
@@ -42,4 +42,4 @@ export function useToday(): string {
   }, []);
 
   return today;
-}
+};

@@ -1,47 +1,65 @@
+import { ListChecks } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { gradeTone } from '@shared/lib/examBadges.ts';
-import { Badge, Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui';
+import { cn } from '@shared/lib/cn.ts';
+import {
+  Badge,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  VisuallyHidden
+} from '@shared/ui';
 
-import { ATTEMPT_COLUMNS, type AttemptRow } from '../lib/attemptRows.ts';
+import { type AttemptTableModel } from '../types/attemptTable.ts';
 
 interface AttemptTableProps {
-  readonly rows: readonly AttemptRow[];
+  readonly model: AttemptTableModel;
 }
 
-export function AttemptTable({ rows }: AttemptTableProps) {
-  if (rows.length === 0) {
-    return <p className="py-8 text-center text-sm text-muted-foreground">No attempts yet.</p>;
+const AttemptTable = ({ model }: AttemptTableProps) => {
+  if (model.rows.length === 0) {
+    return (
+      <p className="py-8 text-center text-sm text-muted-foreground">
+        Nothing here yet — take a Modelltest and it will show up.
+      </p>
+    );
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          {ATTEMPT_COLUMNS.map((column, index) => (
+          {model.columns.map((column, index) => (
             <TableHead key={index}>{column}</TableHead>
           ))}
+          {/* The action column, header and cell appended in the same place so the two counts
+              cannot disagree. Named for a screen reader, unlabelled on screen — a visible
+              "Review" over a column of Review buttons says it twice. */}
+          <TableHead>
+            <VisuallyHidden>Review</VisuallyHidden>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {rows.map(row => (
+        {model.rows.map(row => (
           <TableRow key={row.id}>
-            <TableCell>{row.date}</TableCell>
-            <TableCell>{row.test}</TableCell>
-            <TableCell>{row.mode}</TableCell>
-            <TableCell className="tabular-nums">{row.lesen}</TableCell>
-            <TableCell className="tabular-nums">{row.sprachbausteine}</TableCell>
-            <TableCell className="tabular-nums">{row.hoeren}</TableCell>
-            <TableCell className="tabular-nums">{row.schreiben}</TableCell>
-            <TableCell className="tabular-nums">{row.sprechen}</TableCell>
-            <TableCell className="font-semibold tabular-nums">{row.total}</TableCell>
-            <TableCell>
-              {row.result ? <Badge variant={gradeTone(row.result)}>{row.result}</Badge> : '–'}
-            </TableCell>
-            <TableCell className="tabular-nums">{row.time}</TableCell>
+            {row.cells.map((cell, index) => (
+              <TableCell
+                key={index}
+                className={cn(cell.numeric && 'tabular-nums', cell.strong && 'font-semibold')}
+              >
+                {cell.badge ? <Badge variant={cell.badge}>{cell.text}</Badge> : cell.text}
+              </TableCell>
+            ))}
             <TableCell>
               <Button asChild variant="ghost" size="sm">
-                <Link to={`/review/${String(row.id)}`}>Review</Link>
+                <Link to={row.reviewTo}>
+                  <ListChecks /> Review
+                </Link>
               </Button>
             </TableCell>
           </TableRow>
@@ -49,4 +67,6 @@ export function AttemptTable({ rows }: AttemptTableProps) {
       </TableBody>
     </Table>
   );
-}
+};
+
+export default AttemptTable;

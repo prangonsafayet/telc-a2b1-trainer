@@ -7,7 +7,7 @@ import { cn } from '@shared/lib/cn.ts';
 export const Avatar = forwardRef<
   ComponentRef<typeof AvatarPrimitive.Root>,
   ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
->(function Avatar({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AvatarPrimitive.Root
       ref={ref}
@@ -21,7 +21,7 @@ export const Avatar = forwardRef<
 export const AvatarImage = forwardRef<
   ComponentRef<typeof AvatarPrimitive.Image>,
   ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(function AvatarImage({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AvatarPrimitive.Image
       ref={ref}
@@ -36,7 +36,7 @@ export const AvatarImage = forwardRef<
 export const AvatarFallback = forwardRef<
   ComponentRef<typeof AvatarPrimitive.Fallback>,
   ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
->(function AvatarFallback({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AvatarPrimitive.Fallback
       ref={ref}

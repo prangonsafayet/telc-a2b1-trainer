@@ -41,7 +41,7 @@ export interface PasswordAuthState {
  * Form state for the email/password flow. Validation lives here so the form component
  * stays presentational; the actual credential handling is Supabase's.
  */
-export function usePasswordAuth(): PasswordAuthState {
+export const usePasswordAuth = (): PasswordAuthState => {
   const sync = useSync();
   const [mode, setMode] = useState<AuthMode>('signin');
   const [email, setEmail] = useState('');
@@ -158,4 +158,4 @@ export function usePasswordAuth(): PasswordAuthState {
     signUpFeedback,
     resendConfirmation
   };
-}
+};

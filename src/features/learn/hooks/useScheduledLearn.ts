@@ -1,12 +1,18 @@
 import { useMemo } from 'react';
 
-import { LEARN } from '@content/learn.ts';
-
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
 import { isLearnDayComplete } from '@shared/lib/learnProgress.ts';
-import { type LearnDay } from '@shared/types';
+import { type LearnDay, type TrainerId } from '@shared/types';
 
-import { describeClamp, describeLearnLead, slotHeading, slotKindLabel, useSchedule } from '@features/plan';
-import { useProgress } from '@features/progress';
+import {
+  describeClamp,
+  describeLearnLead,
+  slotHeading,
+  slotKindLabel,
+  useTrainerSchedule
+} from '@features/plan';
+import { useTrainerSlice } from '@features/progress';
 
 export interface LearnSlotGroup {
   readonly key: string;
@@ -24,7 +30,7 @@ export interface ScheduledLearn {
    */
   readonly scheduled: boolean;
   readonly headline: string;
-  /** Null falls back to the authored `LEARN.intro`. */
+  /** Null falls back to the trainer's authored curriculum intro. */
   readonly lead: string | null;
   readonly notice: string | null;
   readonly groups: readonly LearnSlotGroup[];
@@ -35,23 +41,24 @@ export interface ScheduledLearn {
   readonly pending: readonly LearnDay[];
 }
 
-/** Turns the plan into the sections the Learn page renders. */
-export function useScheduledLearn(): ScheduledLearn {
-  const { db } = useProgress();
-  const schedule = useSchedule();
-  const done = db.learnDone;
+/** Turns one trainer's plan into the sections its Learn page renders. */
+export const useScheduledLearn = (trainer: TrainerId): ScheduledLearn => {
+  const { learnDone: done } = useTrainerSlice(trainer);
+  const schedule = useTrainerSchedule(trainer);
+  const { short } = TRAINERS[trainer];
+  const curriculum = useTrainerContent(trainer).curriculum;
 
   return useMemo(() => {
-    const byDay = new Map(LEARN.days.map(day => [day.day, day]));
-    const complete = LEARN.days.filter(day => isLearnDayComplete(day, done));
-    const pending = LEARN.days.filter(day => !isLearnDayComplete(day, done));
+    const byDay = new Map(curriculum.days.map(day => [day.day, day]));
+    const complete = curriculum.days.filter(day => isLearnDayComplete(day, done));
+    const pending = curriculum.days.filter(day => !isLearnDayComplete(day, done));
     const lookup = (numbers: readonly number[]): readonly LearnDay[] =>
       numbers.flatMap(number => byDay.get(number) ?? []);
 
     if (!schedule || schedule.phase === 'past-due') {
       return {
         scheduled: false,
-        headline: 'AI-assisted learning — the 28-day curriculum',
+        headline: `AI-assisted learning · ${short} — the ${String(curriculum.days.length)}-day curriculum`,
         lead: schedule ? describeLearnLead(schedule) : null,
         notice: schedule ? describeClamp(schedule) : null,
         groups: [],
@@ -73,7 +80,7 @@ export function useScheduledLearn(): ScheduledLearn {
 
     return {
       scheduled: groups.length > 0,
-      headline: `AI-assisted learning — ${String(schedule.daysLeft)} days to exam day`,
+      headline: `AI-assisted learning · ${short} — ${String(schedule.daysLeft)} days to exam day`,
       lead: describeLearnLead(schedule),
       notice: describeClamp(schedule),
       groups,
@@ -81,5 +88,5 @@ export function useScheduledLearn(): ScheduledLearn {
       done: complete,
       pending
     };
-  }, [schedule, done]);
-}
+  }, [schedule, done, curriculum, short]);
+};

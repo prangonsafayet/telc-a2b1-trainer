@@ -11,7 +11,7 @@ recorded — a commit explains what changed, an issue explains why it was worth
 changing.
 
 Pick the template that fits: **Bug report**, **Feature request**, or **Exam content
-correction** for a wrong or ambiguous item in one of the ten Modelltests.
+correction** for a wrong or ambiguous item in one of the 35 Modelltests.
 
 Label it so the release notes group correctly (see `.github/release.yml`):
 
@@ -129,7 +129,7 @@ most easily:
 
 - `new Date('YYYY-MM-DD')` instead of `parseIsoDate` — off by one west of Greenwich.
 - Timer or interval effects depending on an object that changes per keystroke.
-- Answer-map access without the `features/exam/lib/answers.ts` accessors.
+- Answer-map access without the `shared/lib/answers.ts` accessors.
 - Anything touching passwords client-side.
 - Authored HTML rendered as text, or content text injected as HTML.
 - Primitives imported from `@shared/ui/<file>` instead of `@shared/ui`.
@@ -200,7 +200,7 @@ rather than surviving review:
 | ---------------------------- | ---------------------- | ------------------------------------- |
 | Component / route module     | `PascalCase.tsx`       | `ExamCard.tsx`, `DashboardPage.tsx`   |
 | Hook                         | `useThing.ts`          | `useExamRun.ts`, `useCountUp.ts`      |
-| Util, config, types, context | `camelCase.ts`         | `attemptSummary.ts`, `runState.ts`    |
+| Util, config, types, context | `camelCase.ts`         | `dashboardModel.ts`, `runStore.ts`    |
 | Folder                       | `kebab-case`           | `exam-ui/`, `data-display/`           |
 | Module constant              | `SCREAMING_SNAKE_CASE` | `EXAM_MODULES`, `MIN_PASSWORD_LENGTH` |
 | Type / interface             | `PascalCase`           | `ExamRun`, `SignUpOutcome`            |

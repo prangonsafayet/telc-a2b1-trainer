@@ -1,8 +1,8 @@
 import { Info, Sparkles } from 'lucide-react';
 
-import { LEARN } from '@content/learn.ts';
-
 import { PageTitle, SectionTitle } from '@shared/components';
+import { useTrainerContent } from '@shared/hooks/useTrainerContent.ts';
+import { type LearnDay, type TrainerId } from '@shared/types';
 import {
   Accordion,
   AccordionContent,
@@ -15,22 +15,42 @@ import {
   Progress
 } from '@shared/ui';
 
-import { LearnDayCard } from '../components/LearnDayCard.tsx';
-import { LearnSlotSection } from '../components/LearnSlotSection.tsx';
+import LearnDayCard from '../components/LearnDayCard.tsx';
+import LearnSlotSection from '../components/LearnSlotSection.tsx';
 import { useLearnPlan } from '../hooks/useLearnPlan.ts';
 import { useScheduledLearn } from '../hooks/useScheduledLearn.ts';
 
-export function LearnPage() {
-  const plan = useLearnPlan();
-  const scheduled = useScheduledLearn();
+interface LearnPageProps {
+  readonly trainer: TrainerId;
+}
+
+/** One trainer's curriculum, re-paced around its own exam date. */
+const LearnPage = ({ trainer }: LearnPageProps) => {
+  const plan = useLearnPlan(trainer);
+  const scheduled = useScheduledLearn(trainer);
+  const curriculum = useTrainerContent(trainer).curriculum;
+  const cheatsheets = Object.entries(plan.cheatsheets);
+
+  const dayCard = (day: LearnDay, complete: boolean) => (
+    <LearnDayCard
+      key={day.day}
+      day={day}
+      complete={complete}
+      cheatsheets={plan.cheatsheets}
+      isTaskDone={index => plan.isTaskDone(day.day, index)}
+      onToggleTask={(index, done) => {
+        plan.toggleTask(day.day, index, done);
+      }}
+    />
+  );
 
   return (
     <>
       <PageTitle
-        /* LEARN.intro is authored HTML in content/learn.ts (it bolds a few phrases), so it is
-           injected rather than rendered as text — same as the guide and cheatsheets. It is
-           the fallback for a date no plan can be built from. */
-        lead={scheduled.lead ?? <span dangerouslySetInnerHTML={{ __html: LEARN.intro }} />}
+        /* The curriculum intro is repo-authored HTML (it bolds a few phrases) and is
+           injected rather than rendered as text — same as the guide and the cheatsheets. It
+           is the fallback for a date no plan can be built from. */
+        lead={scheduled.lead ?? <span dangerouslySetInnerHTML={{ __html: curriculum.intro }} />}
       >
         {scheduled.headline}
       </PageTitle>
@@ -59,34 +79,14 @@ export function LearnPage() {
           <SectionTitle>Your schedule</SectionTitle>
           <div className="stagger space-y-8">
             {scheduled.groups.map(group => (
-              <LearnSlotSection
-                key={group.key}
-                heading={group.heading}
-                kindLabel={group.kindLabel}
-                isToday={group.isToday}
-                days={group.days}
-                plan={plan}
-              />
+              <LearnSlotSection key={group.key} group={group} plan={plan} />
             ))}
           </div>
         </>
       ) : (
         <>
-          <SectionTitle>The 28-day curriculum</SectionTitle>
-          <div className="stagger space-y-4">
-            {scheduled.pending.map(day => (
-              <LearnDayCard
-                key={day.day}
-                day={day}
-                complete={false}
-                cheatsheets={LEARN.cheatsheets}
-                isTaskDone={index => plan.isTaskDone(day.day, index)}
-                onToggleTask={(index, done) => {
-                  plan.toggleTask(day.day, index, done);
-                }}
-              />
-            ))}
-          </div>
+          <SectionTitle>The curriculum</SectionTitle>
+          <div className="stagger space-y-4">{scheduled.pending.map(day => dayCard(day, false))}</div>
         </>
       )}
 
@@ -94,23 +94,10 @@ export function LearnPage() {
         <>
           <SectionTitle>Extra material</SectionTitle>
           <p className="mb-3 text-muted-foreground">
-            Not scheduled at your pace — these {scheduled.extra.length} B1 days are worth doing if you find
-            the time, and they move into the plan automatically if your exam date moves.
+            Not scheduled at your pace — these {scheduled.extra.length} days are worth doing if you find the
+            time, and they move into the plan automatically if your exam date moves.
           </p>
-          <div className="stagger space-y-4">
-            {scheduled.extra.map(day => (
-              <LearnDayCard
-                key={day.day}
-                day={day}
-                complete={false}
-                cheatsheets={LEARN.cheatsheets}
-                isTaskDone={index => plan.isTaskDone(day.day, index)}
-                onToggleTask={(index, done) => {
-                  plan.toggleTask(day.day, index, done);
-                }}
-              />
-            ))}
-          </div>
+          <div className="stagger space-y-4">{scheduled.extra.map(day => dayCard(day, false))}</div>
         </>
       ) : null}
 
@@ -125,20 +112,7 @@ export function LearnPage() {
                     {scheduled.done.length} day{scheduled.done.length === 1 ? '' : 's'} finished
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="space-y-4">
-                      {scheduled.done.map(day => (
-                        <LearnDayCard
-                          key={day.day}
-                          day={day}
-                          complete
-                          cheatsheets={LEARN.cheatsheets}
-                          isTaskDone={index => plan.isTaskDone(day.day, index)}
-                          onToggleTask={(index, done) => {
-                            plan.toggleTask(day.day, index, done);
-                          }}
-                        />
-                      ))}
-                    </div>
+                    <div className="space-y-4">{scheduled.done.map(day => dayCard(day, true))}</div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -147,32 +121,38 @@ export function LearnPage() {
         </>
       ) : null}
 
-      <SectionTitle>Cheatsheets</SectionTitle>
-      <p className="mb-3 flex items-center gap-1.5 text-muted-foreground">
-        <Sparkles className="size-4 shrink-0" aria-hidden />
-        Open, study, and come back before every mock exam.
-      </p>
-      <Card>
-        <CardContent>
-          <Accordion
-            type="multiple"
-            value={[...plan.openCheatsheets]}
-            onValueChange={plan.setOpenCheatsheets}
-          >
-            {Object.entries(LEARN.cheatsheets).map(([id, sheet]) => (
-              <AccordionItem key={id} value={id} id={`cs-${id}`} className="scroll-mt-24">
-                <AccordionTrigger className="text-base font-semibold">{sheet.title}</AccordionTrigger>
-                <AccordionContent>
-                  <div
-                    className="prose prose-sm prose-stone max-w-none dark:prose-invert"
-                    dangerouslySetInnerHTML={{ __html: sheet.html }}
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </CardContent>
-      </Card>
+      {cheatsheets.length > 0 ? (
+        <>
+          <SectionTitle>Cheatsheets</SectionTitle>
+          <p className="mb-3 flex items-center gap-1.5 text-muted-foreground">
+            <Sparkles className="size-4 shrink-0" aria-hidden />
+            Open, study, and come back before every mock exam.
+          </p>
+          <Card>
+            <CardContent>
+              <Accordion
+                type="multiple"
+                value={[...plan.openCheatsheets]}
+                onValueChange={plan.setOpenCheatsheets}
+              >
+                {cheatsheets.map(([id, sheet]) => (
+                  <AccordionItem key={id} value={id} id={`cs-${id}`} className="scroll-mt-24">
+                    <AccordionTrigger className="text-base font-semibold">{sheet.title}</AccordionTrigger>
+                    <AccordionContent>
+                      <div
+                        className="prose prose-sm prose-stone max-w-none dark:prose-invert"
+                        dangerouslySetInnerHTML={{ __html: sheet.html }}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </CardContent>
+          </Card>
+        </>
+      ) : null}
     </>
   );
-}
+};
+
+export default LearnPage;

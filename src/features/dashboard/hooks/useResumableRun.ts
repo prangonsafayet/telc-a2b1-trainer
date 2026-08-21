@@ -1,43 +1,47 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { EXAM_MODULES } from '@shared/config/exam.ts';
-import { type AttemptMode, type ExamModule } from '@shared/types';
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { type AttemptMode, type TrainerId } from '@shared/types';
 
-import { clearRun, createRun, loadRun, saveRun, type ExamRun } from '@features/exam';
+import { runFormatFor, useStartAttempt, type ExamRun } from '@features/exam';
 
 export interface ResumableRun {
   readonly run: ExamRun | null;
+  /** What the run is: "full exam", or the short name of its module in that paper. */
+  readonly modeLabel: string;
   readonly discard: () => void;
   readonly resume: () => void;
   /** Always starts fresh, discarding any half-finished attempt for that exam. */
   readonly start: (examId: number, mode: AttemptMode) => void;
 }
 
-export function useResumableRun(): ResumableRun {
+/**
+ * The half-finished run of one trainer's paper, if there is one. Two trainers that set the
+ * same paper share its storage key but keep separate entries under it, so this only ever
+ * offers — and only ever discards — the run belonging to the trainer it was asked about.
+ */
+export const useResumableRun = (trainer: TrainerId): ResumableRun => {
   const navigate = useNavigate();
-  const [run, setRun] = useState<ExamRun | null>(() => loadRun());
+  const format = useMemo(() => runFormatFor(trainer), [trainer]);
+  const store = format.runStore;
+  const start = useStartAttempt(trainer);
+  const basePath = TRAINERS[trainer].basePath;
+  const [run, setRun] = useState<ExamRun | null>(() => store.load(trainer));
 
   const discard = useCallback(() => {
-    clearRun();
+    store.clear(trainer);
     setRun(null);
     toast.info('In-progress attempt discarded.');
-  }, []);
+  }, [store, trainer]);
 
   const resume = useCallback(() => {
-    if (run) void navigate(`/exam/${String(run.examId)}/${run.mode}`);
-  }, [navigate, run]);
+    if (run) void navigate(`${basePath}/exam/${String(run.examId)}/${run.mode}`);
+  }, [navigate, run, basePath]);
 
-  const start = useCallback(
-    (examId: number, mode: AttemptMode) => {
-      const queue: readonly ExamModule[] = mode === 'full' ? EXAM_MODULES : [mode];
-      saveRun(createRun(examId, mode, queue));
-      void navigate(`/exam/${String(examId)}/${mode}`);
-    },
-    [navigate]
-  );
+  const modeLabel = run === null || run.mode === 'full' ? 'full exam' : format.moduleShort(run.mode);
 
-  return { run, discard, resume, start };
-}
+  return { run, modeLabel, discard, resume, start };
+};

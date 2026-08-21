@@ -7,7 +7,7 @@ import { cn } from '@shared/lib/cn.ts';
 export const Tabs = forwardRef<
   ComponentRef<typeof TabsPrimitive.Root>,
   ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
->(function Tabs({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <TabsPrimitive.Root
       ref={ref}
@@ -21,7 +21,7 @@ export const Tabs = forwardRef<
 export const TabsList = forwardRef<
   ComponentRef<typeof TabsPrimitive.List>,
   ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(function TabsList({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <TabsPrimitive.List
       ref={ref}
@@ -35,7 +35,7 @@ export const TabsList = forwardRef<
 export const TabsTrigger = forwardRef<
   ComponentRef<typeof TabsPrimitive.Trigger>,
   ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(function TabsTrigger({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <TabsPrimitive.Trigger
       ref={ref}
@@ -52,7 +52,7 @@ export const TabsTrigger = forwardRef<
 export const TabsContent = forwardRef<
   ComponentRef<typeof TabsPrimitive.Content>,
   ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(function TabsContent({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <TabsPrimitive.Content
       ref={ref}

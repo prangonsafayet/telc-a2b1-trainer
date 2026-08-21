@@ -1,6 +1,7 @@
 import { type OAuthProvider } from '../lib/oauthProviders.ts';
 
-import { GitHubIcon, GoogleIcon, type ProviderIconProps } from './ProviderIcons.tsx';
+import GitHubIcon from './icons/GitHubIcon.tsx';
+import GoogleIcon, { type ProviderIconProps } from './icons/GoogleIcon.tsx';
 
 /** Brand mark per provider, used by the sign-in buttons. */
 export const PROVIDER_ICONS: Readonly<

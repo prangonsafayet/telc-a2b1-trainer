@@ -19,8 +19,14 @@ const seedExamDate = (page, days) =>
     );
   }, isoInDays(days));
 
+/* Settings shows one exam-date control per trainer, each named after its exam, so the specs
+   address the A2·B1 group by name rather than by position. */
+const A2B1_DATE = /^Your telc Deutsch A2·B1 exam date/;
+const A2B1_DAYS = '#days-until-exam-a2b1';
+const a2b1Group = page => page.getByRole('group', { name: 'telc Deutsch A2·B1 exam date' });
+
 const openCalendar = async page => {
-  await page.getByRole('button', { name: /Your exam date/ }).click();
+  await page.getByRole('button', { name: A2B1_DATE }).click();
   const popover = page.locator('[data-slot="popover-content"]');
   await expect(popover).toBeVisible();
   return popover;
@@ -64,7 +70,7 @@ test.describe('the exam-date controls', () => {
       () => JSON.parse(window.localStorage.getItem('telcTrainerV1')).settings.examDate
     );
     expect(stored).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-    await expect(page.getByText(/day(s)? to go/)).toBeVisible();
+    await expect(a2b1Group(page).getByText(/day(s)? to go/)).toBeVisible();
   });
 
   test('days outside the plannable window cannot be picked', async ({ page }) => {
@@ -90,18 +96,19 @@ test.describe('the exam-date controls', () => {
 
   test('the days-from-today field accepts the window and rejects the rest', async ({ page }) => {
     await page.goto('/settings');
-    const field = page.getByLabel(/days from today/);
+    const group = a2b1Group(page);
+    const field = page.locator(A2B1_DAYS);
 
     await field.fill('45');
-    await expect(page.getByText(/45 days to go/)).toBeVisible();
+    await expect(group.getByText(/45 days to go/)).toBeVisible();
 
     await field.fill('2');
-    await expect(page.getByText(/Too close to plan/)).toBeVisible();
+    await expect(group.getByText(/Too close to plan/)).toBeVisible();
     /* Refused, not applied: the countdown still reads the last usable value. */
-    await expect(page.getByText(/45 days to go/)).toBeVisible();
+    await expect(group.getByText(/45 days to go/)).toBeVisible();
 
     await field.fill(String(MAX_PREP_DAYS + 10));
-    await expect(page.getByText(new RegExp(`${MAX_PREP_DAYS} days is the longest plan`))).toBeVisible();
+    await expect(group.getByText(new RegExp(`${MAX_PREP_DAYS} days is the longest plan`))).toBeVisible();
   });
 
   test('the calendar is reachable and readable on a phone viewport', async ({ page }) => {

@@ -13,7 +13,7 @@ export const AlertDialogPortal = AlertDialogPrimitive.Portal;
 const AlertDialogOverlay = forwardRef<
   ComponentRef<typeof AlertDialogPrimitive.Overlay>,
   ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
->(function AlertDialogOverlay({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AlertDialogPrimitive.Overlay
       ref={ref}
@@ -29,7 +29,7 @@ const AlertDialogOverlay = forwardRef<
 export const AlertDialogContent = forwardRef<
   ComponentRef<typeof AlertDialogPrimitive.Content>,
   ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
->(function AlertDialogContent({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
@@ -45,20 +45,18 @@ export const AlertDialogContent = forwardRef<
   );
 });
 
-export function AlertDialogHeader({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return <div className={cn('flex flex-col gap-2 text-center sm:text-left', className)} {...props} />;
-}
+export const AlertDialogHeader = ({ className, ...props }: ComponentPropsWithoutRef<'div'>) => (
+  <div className={cn('flex flex-col gap-2 text-center sm:text-left', className)} {...props} />
+);
 
-export function AlertDialogFooter({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  return (
-    <div className={cn('flex flex-col-reverse gap-2 sm:flex-row sm:justify-end', className)} {...props} />
-  );
-}
+export const AlertDialogFooter = ({ className, ...props }: ComponentPropsWithoutRef<'div'>) => (
+  <div className={cn('flex flex-col-reverse gap-2 sm:flex-row sm:justify-end', className)} {...props} />
+);
 
 export const AlertDialogTitle = forwardRef<
   ComponentRef<typeof AlertDialogPrimitive.Title>,
   ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
->(function AlertDialogTitle({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AlertDialogPrimitive.Title ref={ref} className={cn('text-lg font-semibold', className)} {...props} />
   );
@@ -67,7 +65,7 @@ export const AlertDialogTitle = forwardRef<
 export const AlertDialogDescription = forwardRef<
   ComponentRef<typeof AlertDialogPrimitive.Description>,
   ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
->(function AlertDialogDescription({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AlertDialogPrimitive.Description
       ref={ref}
@@ -80,14 +78,14 @@ export const AlertDialogDescription = forwardRef<
 export const AlertDialogAction = forwardRef<
   ComponentRef<typeof AlertDialogPrimitive.Action>,
   ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
->(function AlertDialogAction({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return <AlertDialogPrimitive.Action ref={ref} className={cn(buttonVariants(), className)} {...props} />;
 });
 
 export const AlertDialogCancel = forwardRef<
   ComponentRef<typeof AlertDialogPrimitive.Cancel>,
   ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
->(function AlertDialogCancel({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <AlertDialogPrimitive.Cancel
       ref={ref}

@@ -7,7 +7,7 @@ import { cn } from '@shared/lib/cn.ts';
 export const Separator = forwardRef<
   ComponentRef<typeof SeparatorPrimitive.Root>,
   ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
->(function Separator({ className, orientation = 'horizontal', decorative = true, ...props }, ref) {
+>(({ className, orientation = 'horizontal', decorative = true, ...props }, ref) => {
   return (
     <SeparatorPrimitive.Root
       ref={ref}

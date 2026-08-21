@@ -1,10 +1,11 @@
 # CLAUDE.md
 
-A React study app for the **telc Deutsch A2·B1** German exam: fifteen full mock exams
-and a 28-day curriculum that re-paces itself around the user's exam date. It runs timed
-modules, scores them by the official rules, and stores progress locally with optional
-Supabase sync. It is also a portfolio project, so code quality and presentation count as
-much as features.
+A React study app for three telc German exams — **A2·B1, B1 and B2** — run as peer
+trainers behind one registry: 35 full mock exams, a 28-day curriculum and guide per
+trainer, and a vocabulary/grammar bank driving flashcards, quizzes and spaced repetition.
+It runs timed modules, scores them by the official rules, and stores progress locally
+with optional Supabase sync. It is also a portfolio project, so code quality and
+presentation count as much as features.
 
 ## Read this first
 
@@ -37,7 +38,7 @@ npm run build        # production build into dist/
 
 1. **Components are visual only.** Logic goes in a `use*.ts` hook or a pure `lib/` util.
 2. **Primitives come from `@shared/ui`**, never from a file inside it, and never as raw
-   `<button>` / `<input>` / `<form>` / `<table>` / `<label>`.
+   `<button>` / `<input>` / `<form>` / `<table>` / `<label>`. Both halves are lint rules.
 3. **No `any`, no non-null assertions.** Narrow instead.
 4. **A bug fix ships with a regression test.**
 5. **Never commit to `main`.** Issue → branch → PR → green CI → squash-merge.

@@ -1,25 +1,47 @@
-import { type ReactNode } from 'react';
+import { CalendarClock, ClipboardCheck, Flame, Layers, Trophy, type LucideIcon } from 'lucide-react';
 
-import { type LucideIcon } from 'lucide-react';
-
+import { CountedNumber } from '@shared/components';
 import { Card, CardContent } from '@shared/ui';
 
+import { type StatTileKind, type StatTileModel } from '../types/dashboard.ts';
+
 interface StatTileProps {
-  readonly label: string;
-  readonly value: ReactNode;
-  readonly caption: string;
-  readonly icon: LucideIcon;
+  readonly tile: StatTileModel;
 }
 
-export function StatTile({ label, value, caption, icon: Icon }: StatTileProps) {
+const ICONS: Readonly<Record<StatTileKind, LucideIcon>> = {
+  streak: Flame,
+  due: Layers,
+  exams: ClipboardCheck,
+  best: Trophy,
+  last: CalendarClock
+};
+
+const StatTile = ({ tile }: StatTileProps) => {
+  const Icon = ICONS[tile.kind];
+
   return (
     <Card className="card-hover gap-2 overflow-hidden py-4">
       <CardContent className="relative px-4">
-        <Icon className="absolute right-0 top-0 size-10 text-primary/10" strokeWidth={1.5} aria-hidden />
-        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
-        <div className="mt-1 text-2xl font-bold tabular-nums">{value}</div>
-        <div className="mt-0.5 text-xs text-muted-foreground">{caption}</div>
+        {/* An absolute inset resolves against the padding box, so `right-0` would ignore
+            this container's px-4 and sit flush with the card edge while the label is inset
+            16px. `right-4` gives the icon the same inset the text has. */}
+        <Icon className="absolute right-4 top-0 size-10 text-primary/10" strokeWidth={1.5} aria-hidden />
+        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{tile.label}</div>
+        <div className="mt-1 text-2xl font-bold tabular-nums">
+          {typeof tile.value === 'number' ? (
+            <CountedNumber value={tile.value} />
+          ) : (
+            <span className="text-lg">{tile.value}</span>
+          )}
+          {tile.suffix === null ? null : (
+            <span className="text-base font-normal text-muted-foreground">{tile.suffix}</span>
+          )}
+        </div>
+        <div className="mt-0.5 text-xs text-muted-foreground">{tile.caption}</div>
       </CardContent>
     </Card>
   );
-}
+};
+
+export default StatTile;

@@ -18,7 +18,7 @@ interface ErrorBoundaryState {
  * Catches render and lifecycle crashes so one broken screen never takes the whole trainer
  * down — and, crucially, never blocks access to saved progress.
  */
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { error: null };
@@ -79,3 +79,5 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     );
   }
 }
+
+export default ErrorBoundary;

@@ -3,101 +3,130 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { EXAM_MODULES, MODULE_META, moduleMinutes } from '@shared/config/exam.ts';
+import { TRAINERS } from '@shared/config/trainers.ts';
 import { stopSpeech } from '@shared/lib/speech.ts';
 import {
   type AnswerValue,
-  type Attempt,
   type AttemptMode,
-  type Exam,
   type ExamModule,
-  type SkillScores,
-  type SprachbausteineScore
+  type ExamPaper,
+  type RecordingMap,
+  type SpeakingPart,
+  type TrainerId
 } from '@shared/types';
 
-import { useProgress } from '@features/progress';
-
 import {
-  clearRun,
-  createRun,
-  currentModule,
-  loadRun,
-  saveRun,
-  secondsLeft,
-  type ExamRun
-} from '../lib/runState.ts';
-import {
-  countUnanswered,
-  gradeFullExam,
-  scoreHoeren,
-  scoreLesen,
-  scoreSprachbausteine
-} from '../lib/scoring.ts';
-
-/** The three parts of the oral exam. */
-export type SpeakingPart = 't1' | 't2' | 't3';
-
-/** Blob URLs for the speaking module. Session-only — never persisted. */
-export type RecordingMap = Partial<Record<SpeakingPart, string>>;
+  HEARTBEAT_MS,
+  MS_PER_SECOND,
+  SECONDS_PER_MINUTE,
+  UNTIMED_MODULES
+} from '@features/exam/config/run.ts';
+import { createRun, currentModule, queueForMode, secondsLeft } from '@features/exam/lib/runStore.ts';
+import { type ExamFormat, type RunSettings, type StoredAttempt } from '@features/exam/types/examFormat.ts';
+import { type ExamRun, type RatedModule } from '@features/exam/types/run.ts';
 
 export interface ExamRunController {
   readonly run: ExamRun;
   readonly module: ExamModule;
   readonly minutes: number;
   readonly secondsRemaining: number;
+  readonly totalSeconds: number;
   readonly recordings: RecordingMap;
   readonly setAnswer: (key: string, value: AnswerValue) => void;
   readonly consumePlay: (key: string) => void;
   readonly setRecording: (part: SpeakingPart, url: string) => void;
   readonly beginModule: () => void;
-  /** Resolves false when the user declines the "items unanswered" prompt. */
+  /** How many items are still blank — the page confirms before submitting past them. */
   readonly requestSubmit: () => number;
   readonly submit: () => void;
   readonly confirmRating: (score: number) => void;
   readonly abort: () => void;
 }
 
-interface ExamRunOptions {
-  readonly exam: Exam;
+interface ExamRunOptions<
+  TExam extends ExamPaper,
+  TSettings extends RunSettings,
+  TAttempt extends StoredAttempt
+> {
+  /** Whose run this is: it decides the route prefix and which stored run resumes. */
+  readonly trainer: TrainerId;
+  readonly format: ExamFormat<TExam, TSettings, TAttempt>;
+  readonly exam: TExam;
   readonly mode: AttemptMode;
+  readonly settings: TSettings;
+  /** Appends the finished attempt to whichever document this trainer stores. */
+  readonly saveAttempt: (attempt: TAttempt) => void;
 }
 
-function queueForMode(mode: AttemptMode): readonly ExamModule[] {
-  return mode === 'full' ? EXAM_MODULES : [mode];
-}
+const isRated = (module: ExamModule | undefined): module is RatedModule =>
+  module === 'schreiben' || module === 'sprechen';
 
 /**
  * Owns the whole attempt: which module is open, the answers, the clock, and turning a
  * finished run into a stored attempt. Every transition writes through to localStorage, so
- * a reload resumes exactly where the user was.
+ * a reload resumes exactly where the candidate was.
+ *
+ * Nothing here knows which paper is being sat — the format descriptor answers that.
  */
-export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
+export const useExamRun = <
+  TExam extends ExamPaper,
+  TSettings extends RunSettings,
+  TAttempt extends StoredAttempt
+>({
+  trainer,
+  format,
+  exam,
+  mode,
+  settings,
+  saveAttempt
+}: ExamRunOptions<TExam, TSettings, TAttempt>): ExamRunController => {
   const navigate = useNavigate();
-  const { db, update } = useProgress();
+  const store = format.runStore;
+  const basePath = TRAINERS[trainer].basePath;
+  const examId = exam.id;
 
   const [run, setRun] = useState<ExamRun>(() => {
-    const saved = loadRun();
-    if (saved !== null && saved.examId === exam.id && saved.mode === mode) return saved;
-    const fresh = createRun(exam.id, mode, queueForMode(mode));
-    saveRun(fresh);
+    /* The store hands back this trainer's run only. The trainer is re-checked all the same:
+       resuming another trainer's run would mark it against the wrong paper, which is a worse
+       failure than starting fresh, so it is asserted where it is relied on. */
+    const saved = store.load(trainer);
+    if (saved !== null && saved.trainer === trainer && saved.examId === examId && saved.mode === mode) {
+      return saved;
+    }
+    const fresh = createRun({ trainer, examId, mode, queue: queueForMode(format.modules, mode) });
+    store.save(fresh);
     return fresh;
   });
   const [recordings, setRecordings] = useState<RecordingMap>({});
   const [, forceTick] = useState(0);
   const finishedRef = useRef(false);
 
+  /* The live run, readable outside render. Every transition writes here first, so a
+     transition can decide what to do next without a state updater — putting the "finish"
+     side effects (a stored attempt, a toast, a navigation) inside one would run them
+     while React is rendering. */
+  const runRef = useRef(run);
+
   /* The queue is never empty, so there is always a current module; fall back to the
      first entry rather than asserting non-null. */
-  const module = currentModule(run) ?? queueForMode(mode)[0] ?? 'lesen';
-  const minutes = moduleMinutes(module, db.settings);
+  const module = currentModule(run) ?? format.modules[0] ?? 'lesen';
+  const minutes = format.minutes(module, exam, settings);
 
-  const patch = useCallback((recipe: (current: ExamRun) => ExamRun) => {
-    setRun(current => {
-      const next = recipe(current);
-      saveRun(next);
-      return next;
-    });
-  }, []);
+  const write = useCallback(
+    (next: ExamRun) => {
+      runRef.current = next;
+      store.save(next);
+      setRun(next);
+    },
+    [store]
+  );
+
+  const patch = useCallback(
+    (recipe: (current: ExamRun) => ExamRun) => {
+      write(recipe(runRef.current));
+    },
+    [write]
+  );
 
   const setAnswer = useCallback(
     (key: string, value: AnswerValue) => {
@@ -106,14 +135,15 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
     [patch]
   );
 
+  const playsAllowed = settings.playsAllowed;
   const consumePlay = useCallback(
     (key: string) => {
       patch(current => ({
         ...current,
-        plays: { ...current.plays, [key]: (current.plays[key] ?? db.settings.playsAllowed) - 1 }
+        plays: { ...current.plays, [key]: (current.plays[key] ?? playsAllowed) - 1 }
       }));
     },
-    [patch, db.settings.playsAllowed]
+    [patch, playsAllowed]
   );
 
   const setRecording = useCallback((part: SpeakingPart, url: string) => {
@@ -126,124 +156,79 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
       if (finishedRef.current) return;
       finishedRef.current = true;
 
-      const includes = (candidate: ExamModule): boolean => finalRun.queue.includes(candidate);
-      const scores: SkillScores = {};
-      let sb: SprachbausteineScore | null = null;
-
-      if (includes('lesen')) scores.lesen = scoreLesen(exam, finalRun.answers).points;
-      if (includes('hoeren')) scores.hoeren = scoreHoeren(exam, finalRun.answers).points;
-      if (includes('sprachbausteine')) sb = scoreSprachbausteine(exam, finalRun.answers);
-      if (includes('schreiben')) scores.schreiben = finalRun.ratings.schreiben ?? 0;
-      if (includes('sprechen')) scores.sprechen = finalRun.ratings.sprechen ?? 0;
-
-      const grade = finalRun.mode === 'full' ? gradeFullExam(scores) : null;
-      const attempt: Attempt = {
-        id: Date.now(),
-        examId: exam.id,
+      const attempt = format.scoring.buildAttempt({
+        exam,
         mode: finalRun.mode,
-        date: new Date().toISOString(),
-        times: finalRun.times,
-        scores,
-        sb,
+        queue: finalRun.queue,
         answers: finalRun.answers,
         ratings: finalRun.ratings,
-        ...(grade ? { total: grade.total, result: grade.result } : {})
-      };
+        times: finalRun.times
+      });
 
-      update(current => ({ ...current, attempts: [...current.attempts, attempt] }));
-      clearRun();
+      saveAttempt(attempt);
+      store.clear(trainer);
       stopSpeech();
 
-      if (grade) {
-        const passed = grade.result !== 'Nicht bestanden';
-        toast[passed ? 'success' : 'info'](`${exam.title} finished — ${grade.result}`, {
-          description: `${String(grade.total)}/240 points. Review every red item before your next test.`
-        });
-      } else {
-        toast.success(`${MODULE_META[finalRun.mode as ExamModule].short} practice saved`, {
-          description: 'Open the review to see the correct answers and transcripts.'
-        });
-      }
+      const copy = format.scoring.completionToast(exam, attempt);
+      toast[copy.tone](copy.title, { description: copy.description });
 
-      void navigate(`/results/${String(attempt.id)}`, { replace: true });
+      void navigate(`${basePath}/results/${String(attempt.id)}`, { replace: true });
     },
-    [exam, update, navigate]
+    [format, exam, saveAttempt, store, trainer, navigate, basePath]
   );
 
   /** Records the time spent, then moves to the next module, the rating screen, or the end. */
   const submit = useCallback(() => {
-    setRun(current => {
-      const finishedModule = currentModule(current);
-      if (!finishedModule || current.phase !== 'module') return current;
+    const current = runRef.current;
+    const finishedModule = currentModule(current);
+    if (!finishedModule || current.phase !== 'module') return;
 
-      stopSpeech();
-      const times = {
-        ...current.times,
-        [finishedModule]: Math.round((Date.now() - (current.moduleStart ?? Date.now())) / 1000)
-      };
+    stopSpeech();
+    const times = {
+      ...current.times,
+      [finishedModule]: Math.round((Date.now() - (current.moduleStart ?? Date.now())) / MS_PER_SECOND)
+    };
 
-      if (finishedModule === 'schreiben' || finishedModule === 'sprechen') {
-        const next: ExamRun = { ...current, times, phase: 'rating', deadline: null };
-        saveRun(next);
-        return next;
-      }
+    if (isRated(finishedModule)) {
+      write({ ...current, times, phase: 'rating', deadline: null });
+      return;
+    }
 
-      const nextIndex = current.index + 1;
-      const upcoming = current.queue[nextIndex];
-      if (!upcoming) {
-        const done: ExamRun = { ...current, times };
-        finish(done);
-        return done;
-      }
+    const nextIndex = current.index + 1;
+    const upcoming = current.queue[nextIndex];
+    if (!upcoming) {
+      finish({ ...current, times });
+      return;
+    }
 
-      const next: ExamRun = {
-        ...current,
-        times,
-        index: nextIndex,
-        phase: 'brief',
-        deadline: null,
-        moduleStart: null
-      };
-      saveRun(next);
-      toast.success(`${MODULE_META[finishedModule].short} submitted`, {
-        description: `Next up: ${MODULE_META[upcoming].name}.`
-      });
-      return next;
+    write({ ...current, times, index: nextIndex, phase: 'brief', deadline: null, moduleStart: null });
+    toast.success(`${format.moduleShort(finishedModule)} submitted`, {
+      description: `Next up: ${format.moduleName(upcoming)}.`
     });
-  }, [finish]);
+  }, [finish, write, format]);
 
-  /** Number of blanks, so the page can confirm before submitting an incomplete module. */
   const requestSubmit = useCallback(
-    () => countUnanswered(exam, module, run.answers),
-    [exam, module, run.answers]
+    () => format.scoring.countUnanswered(exam, module, run.answers),
+    [format, exam, module, run.answers]
   );
 
   const confirmRating = useCallback(
     (score: number) => {
-      setRun(current => {
-        const rated = currentModule(current);
-        if (rated !== 'schreiben' && rated !== 'sprechen') return current;
+      const current = runRef.current;
+      const rated = currentModule(current);
+      if (!isRated(rated)) return;
 
-        const withRating: ExamRun = { ...current, ratings: { ...current.ratings, [rated]: score } };
-        const nextIndex = current.index + 1;
-        const upcoming = current.queue[nextIndex];
+      const withRating: ExamRun = { ...current, ratings: { ...current.ratings, [rated]: score } };
+      const nextIndex = current.index + 1;
+      const upcoming = current.queue[nextIndex];
 
-        if (!upcoming) {
-          finish(withRating);
-          return withRating;
-        }
-        const next: ExamRun = {
-          ...withRating,
-          index: nextIndex,
-          phase: 'brief',
-          deadline: null,
-          moduleStart: null
-        };
-        saveRun(next);
-        return next;
-      });
+      if (!upcoming) {
+        finish(withRating);
+        return;
+      }
+      write({ ...withRating, index: nextIndex, phase: 'brief', deadline: null, moduleStart: null });
     },
-    [finish]
+    [finish, write]
   );
 
   const beginModule = useCallback(() => {
@@ -251,42 +236,42 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
       ...current,
       phase: 'module',
       moduleStart: Date.now(),
-      deadline: Date.now() + minutes * 60_000
+      deadline: Date.now() + minutes * SECONDS_PER_MINUTE * MS_PER_SECOND
     }));
     window.scrollTo(0, 0);
   }, [patch, minutes]);
 
   const abort = useCallback(() => {
-    clearRun();
+    store.clear(trainer);
     stopSpeech();
-    toast.info('Attempt aborted', { description: 'Nothing was saved. Start again whenever you are ready.' });
-    void navigate('/');
-  }, [navigate]);
+    toast.info('Attempt aborted', {
+      description: 'Nothing was saved. Start again whenever you are ready.'
+    });
+    void navigate(basePath || '/');
+  }, [store, trainer, navigate, basePath]);
 
   /*
    * One-second heartbeat while a timed module is open. It must not depend on `run`
    * itself: that object changes on every keystroke, which would restart the interval
    * before it ever fired and stall the clock. Live values are read through refs.
    */
-  const runRef = useRef(run);
   const submitRef = useRef(submit);
   useEffect(() => {
-    runRef.current = run;
     submitRef.current = submit;
-  }, [run, submit]);
+  }, [submit]);
 
   useEffect(() => {
     if (run.phase !== 'module') return undefined;
     const interval = setInterval(() => {
       forceTick(tick => tick + 1);
       const live = runRef.current;
-      /* Sprechen has no hard stop — the clock is only a guideline there. */
-      if (secondsLeft(live) <= 0 && currentModule(live) !== 'sprechen') {
+      const open = currentModule(live);
+      if (secondsLeft(live) <= 0 && (!open || !UNTIMED_MODULES.includes(open))) {
         clearInterval(interval);
         toast.warning('⏱ Time is up — the module was submitted automatically.');
         submitRef.current();
       }
-    }, 1000);
+    }, HEARTBEAT_MS);
     return () => {
       clearInterval(interval);
     };
@@ -300,6 +285,7 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
       module,
       minutes,
       secondsRemaining,
+      totalSeconds: minutes * SECONDS_PER_MINUTE,
       recordings,
       setAnswer,
       consumePlay,
@@ -326,4 +312,4 @@ export function useExamRun({ exam, mode }: ExamRunOptions): ExamRunController {
       abort
     ]
   );
-}
+};

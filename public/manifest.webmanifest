@@ -1,7 +1,7 @@
 {
-  "name": "telc Deutsch A2·B1 — Mock Exam Trainer",
+  "name": "telc Deutsch Trainer",
   "short_name": "telc Trainer",
-  "description": "10 full mock exams for the telc Deutsch A2·B1 exam, with real timing, official scoring and full review.",
+  "description": "35 full mock exams across the telc Deutsch A2·B1, B1 and B2 trainers, with real timing, official scoring and full review.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

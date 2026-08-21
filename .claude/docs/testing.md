@@ -18,31 +18,68 @@ npm run test:render  # just the mounted pages
 npm run test:watch   # vitest in watch mode
 ```
 
-| Suite                     | Covers                                                        |
-| ------------------------- | ------------------------------------------------------------- |
-| `unit/schedule`           | the plan engine, swept across all 86 plannable runways        |
-| `unit/distribute`         | the bucketing helpers the engine compresses with              |
-| `unit/format`             | date maths, including DST and leap days                       |
-| `unit/signUpOutcome`      | every shape Supabase's sign-up response can take              |
-| `unit/content`            | curriculum and exam-list shape the engine trusts              |
-| `render/routes`           | every route mounts with no React warning                      |
-| `render/contentInjection` | authored HTML is injected, never shown as text                |
-| `render/authVisibility`   | the signed-out warnings appear everywhere                     |
-| `render/examDate`         | the date window is enforced, not merely suggested             |
-| `render/examFlow`         | a full attempt, including a mid-module reload                 |
-| `render/schedulePlan`     | the pages re-shape with the exam date, all fallbacks included |
+| Suite                        | Covers                                                                                                                                             |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unit/schedule`              | the plan engine, swept across all 86 plannable runways                                                                                             |
+| `unit/distribute`            | the bucketing helpers the engine compresses with                                                                                                   |
+| `unit/format`                | date maths, including DST and leap days                                                                                                            |
+| `unit/signUpOutcome`         | every shape Supabase's sign-up response can take                                                                                                   |
+| `unit/content`               | curriculum and exam-list shape the engine trusts                                                                                                   |
+| `unit/runStore`              | the run in progress, in both storage shapes it has had                                                                                             |
+| `unit/contentChunks`         | the module graph — importing the registry never touches any trainer's content, and resolving one trainer's `loadContent()` never touches another's |
+| `unit/singleLevelScoring`    | the telc B1/B2 marking scheme (Lesen/Sprachbausteine/Hören/Schreiben/Sprechen) against the verified official points                                |
+| `unit/srs`                   | the spaced-repetition engine and the daily streak, both pure functions of an explicit `today`                                                      |
+| `unit/quiz`                  | generated quiz questions are well-formed across every item shape, including its random branches                                                    |
+| `unit/weakness`              | every weakness category resolves to a real cheatsheet, or an explicit empty list, on every trainer                                                 |
+| `unit/errorReport`           | a LanguageTool match maps to the right weakness category and issue type                                                                            |
+| `unit/languageToolClient`    | the dynamic-feedback client — its feature flag and its base URL are independent switches                                                           |
+| `unit/mergeProgress`         | cloud sync's field-by-field merge plus a runtime enumeration of the document's fields, so nothing is silently dropped                              |
+| `unit/weaknessProfile`       | the running record of what a learner gets wrong — additive per session, deterministic to rank                                                      |
+| `unit/dashboardModel`        | dashboard meters, their heading and weak-area detection against each paper's own pass line, not the other paper's                                  |
+| `unit/attemptSummary`        | the pass line a results screen marks its bars at, per paper — the bar primitive used to default it to the A2·B1 paper's                            |
+| `unit/examConditions`        | which exam-condition numbers the copy may call telc's and which it must call the app's own                                                         |
+| `unit/attemptTable`          | one column header per cell in the attempts table, on both papers, and none of them unnamed                                                         |
+| `unit/progressDb`            | a fresh trainer document takes its writing time from its own paper rather than a constant                                                          |
+| `unit/referenceSearch`       | the five reference-table filters, which search a different set of fields per table                                                                 |
+| `unit/siteMeta`              | every trainer's namespace reaches the emitted sitemap, and its attempt screens the robots.txt                                                      |
+| `unit/trainerRegistry`       | the Node-side text parse of the registry, field-for-field against the real `TRAINERS`                                                              |
+| `render/routes`              | every route of every trainer mounts with no React warning — generated from `TRAINER_ORDER`                                                         |
+| `render/readableColors`      | the four call sites that render a domain colour as ink or as a mark pick the readable token                                                        |
+| `render/contentInjection`    | authored HTML is injected, never shown as text                                                                                                     |
+| `render/authVisibility`      | the signed-out warnings appear everywhere                                                                                                          |
+| `render/examDate`            | the date window is enforced, not merely suggested                                                                                                  |
+| `render/examFlow`            | a full attempt on the dual-level paper, including a mid-module reload                                                                              |
+| `render/examFinish`          | the finish path acts on submit, not inside a state updater                                                                                         |
+| `render/examBinding`         | a trainer's paper, papers and store survive a progress write that does not touch the exam                                                          |
+| `render/selfRating`          | the ×3 self-rating maths, against each productive module's own maximum on both papers                                                              |
+| `render/schedulePlan`        | the pages re-shape with the exam date, all fallbacks included                                                                                      |
+| `render/practiceHub`         | flashcard and quiz answers write a real SRS transition into a trainer's own document slice, swept over every single-level trainer                  |
+| `render/singleLevelExamFlow` | the single-level equivalent of `examFlow` — a full attempt including a mid-module reload, swept over every single-level trainer                    |
 
 **No jsdom.** happy-dom provides `matchMedia`, both observers, `scrollIntoView` and
 pointer capture out of the box, so `tests/render/setup.ts` only adds React's act flag and
-an in-memory `Storage` — happy-dom ships none, and without it every persistence assertion
-would pass vacuously. Anything that needs a genuine browser belongs in Playwright.
+the in-memory `Storage` from `tests/support/memoryStorage.ts` — happy-dom ships none, and
+without it every persistence assertion would pass vacuously. Anything that needs a genuine
+browser belongs in Playwright.
+
+The **logic** project installs that same storage wherever a suite persists anything
+(`unit/runStore`). Node 22+ defines `localStorage` as an experimental getter that is
+unusable without `--localstorage-file`: merely reading it warns, and `@shared/lib/storage.ts`
+then silently degrades to its private fallback, so the suite tested the wrong path and every
+run printed an `ExperimentalWarning`. Install it, never probe for it — `typeof
+globalThis.localStorage` is itself what triggers the warning.
 
 `mount()` in `tests/render/harness.ts` waits for `aria-busy` to clear rather than
 sleeping: a lazily-loaded route can outlast any fixed timeout, and a route that renders
 ~8 characters means the Suspense fallback never cleared — usually an import cycle rather
-than a slow chunk.
+than a slow chunk. Content is now loaded the same way: `@shared/hooks/useTrainerContent.ts`
+— imported by file, because `@shared/hooks` and `@shared/lib` have no barrel — suspends on a
+trainer's `loadContent()` promise, so a route that reads exams, curriculum, guide or
+vocabulary renders behind that same Suspense boundary and `mount()`'s wait covers it too —
+nothing extra to do in a test, but a fixed-timeout wait instead of `mount()`'s polling
+would flake.
 
-Three things the harness exists to stop you re-learning:
+Things the harness exists to stop you re-learning:
 
 - `seedProgress({ daysUntilExam })` writes the stored document **before** mounting, and
   always relative to today. A suite that hardcodes an exam date passes now and turns
@@ -55,11 +92,37 @@ The render setup clears `document.body` after every test: a test that fails befo
 unmounts would otherwise leave its tree behind and make the next one fail for the wrong
 reason.
 
+**Run the render project from the main checkout, not a nested worktree.** A worktree
+under `.claude/worktrees/...` resolves a second copy of React, so `tests/render/*` fails
+with `Cannot read properties of null (reading 'useCallback')` even with no other changes
+present, while the identical suite passes in the main checkout. Worktrees are fine for
+content authoring and other pure-logic work; anything that renders has to be verified
+where the app actually runs.
+
 ## Playwright — `e2e/`
 
 Anything happy-dom cannot judge: layout at three breakpoints, dark-mode persistence, real
 reload behaviour, popover positioning, and network-level stubbing (the sign-up specs stub
 Supabase to drive each outcome deterministically). Runs on Chromium and a Pixel 7 profile.
+
+`e2e/singleLevelTrainers.spec.js` covers the B1/B2 trainers and the trainer switcher —
+`exam.spec.js` and `smoke.spec.js` only ever visited the root (A2·B1) trainer, so this is
+where a real browser first exercised `/b1` and `/b2`. Plain JS specs cannot import the
+registry's alias paths, but they can import plain Node: it takes its trainer list from
+`scripts/trainerRegistry.mjs`, which reads the descriptors out of
+`shared/config/trainers.ts`. It no longer needs editing when the registry changes.
+
+`e2e/contrast.spec.js` measures every ink and mark in the palette against its WCAG minimum,
+in both themes, in a real browser. Colours are resolved by painting them onto a canvas and
+reading the pixel back: `getComputedStyle` returns `oklch()` and
+`color-mix(…, transparent)` here, and a tinted background has no real colour until every
+ancestor behind it has been composited. The theme is switched through the app's own storage
+key — toggling a class on `documentElement` does not switch these tokens.
+
+`e2e/reducedMotion.spec.js` asserts that nothing animates on a delay when reduced motion is
+emulated, across five routes. It emulates through `page.emulateMedia` rather than
+`test.use({ reducedMotion })`: the fixture option did not reach the media query here, so the
+suite would have passed without ever enabling the thing it tests.
 
 The **Playwright MCP** plugin is also available for interactive checks — drive the running
 app directly instead of writing a throwaway spec.

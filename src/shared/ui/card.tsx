@@ -4,13 +4,13 @@ import { cn } from '@shared/lib/cn.ts';
 
 type DivProps = ComponentPropsWithoutRef<'div'>;
 
-function makeCardPart(slot: string, base: string, displayName: string) {
-  const Part = forwardRef<HTMLDivElement, DivProps>(function CardPart({ className, ...props }, ref) {
+const makeCardPart = (slot: string, base: string, displayName: string) => {
+  const Part = forwardRef<HTMLDivElement, DivProps>(({ className, ...props }, ref) => {
     return <div ref={ref} data-slot={slot} className={cn(base, className)} {...props} />;
   });
   Part.displayName = displayName;
   return Part;
-}
+};
 
 export const Card = makeCardPart(
   'card',

@@ -7,6 +7,8 @@ interface SectionTitleProps {
   readonly className?: string;
 }
 
-export function SectionTitle({ children, className }: SectionTitleProps) {
-  return <h2 className={cn('mb-3 mt-8 text-lg font-semibold tracking-tight', className)}>{children}</h2>;
-}
+const SectionTitle = ({ children, className }: SectionTitleProps) => (
+  <h2 className={cn('mb-3 mt-8 text-lg font-semibold tracking-tight', className)}>{children}</h2>
+);
+
+export default SectionTitle;

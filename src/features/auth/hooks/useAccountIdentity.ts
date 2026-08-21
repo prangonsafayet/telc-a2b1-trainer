@@ -21,7 +21,7 @@ interface ProviderMetadata {
 }
 
 /** Flattens the provider's metadata into the strings the account UI displays. */
-export function useAccountIdentity(): AccountIdentity {
+export const useAccountIdentity = (): AccountIdentity => {
   const sync = useSync();
   const meta = sync.user?.user_metadata as ProviderMetadata | undefined;
 
@@ -41,4 +41,4 @@ export function useAccountIdentity(): AccountIdentity {
       ? `Synced ${sync.lastSyncedAt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} — progress is backed up and follows you across devices.`
       : 'Signed in — progress syncs automatically after each change.'
   };
-}
+};

@@ -8,11 +8,44 @@ A component renders. Anything derived, persisted, timed or networked goes in a h
 Reference implementations: `useExamRun` (the attempt state machine), `buildReviewSections`
 (turns an attempt into rows), `summarizeAttempt`, `useDashboardStats`.
 
+## One component per file, default-exported
+
+Every React component lives in its own file (`react/no-multi-comp`), and every component
+file default-exports its component (the local `component-default-export` rule). Types and
+interfaces may still be named exports from the same file. Hooks, libs, config and
+providers stay named exports. Barrels re-export the defaults by name
+(`export { default as Teil } from './exam-ui/layout/Teil.tsx';`), so consumers keep
+writing `import { Teil } from '@shared/components'`. The vendored `src/shared/ui` files
+are exempt from both rules.
+
+Components are grouped in folders/subfolders by area: `features/<f>/components/<group>/`
+(e.g. `exam/components/{modules,audio,rating,review,runner}/`,
+`auth/components/{sync,password,icons}/`), and shared ones under
+`shared/components/{actions,data-display,layout,exam-ui}/`.
+
+## Shared exam machinery
+
+Everything both exam formats render lives in `shared/components/exam-ui/` — inputs
+(`RichtigFalsch`, `MultipleChoice`, `LetterSelect`), layout (`Teil`, `QuestionItem`,
+`QuestionText`, `ReadingText`, `Callout`), gaps (`InlineGapSelect`, `GapFillText`),
+`OptionCards`, `PunkteGrid`, `RedemittelList`, `ModuleBriefingCard`, `ExamModuleToolbar`,
+`CriteriaRatingPanel`, `CountdownRing`, `RecorderControls`, `Transcript`. The dual-level and
+single-level module renderers under `features/exam/components/modules/` consume it via
+`@shared/components`; neither keeps a copy of its own.
+
 ## Use the design system
 
 Import primitives from `@shared/ui`. No raw `<button>`, `<input>`, `<select>`,
-`<textarea>`, `<table>` or `<label>` in feature code. If a primitive is missing, add it to
-`src/shared/ui` in the same style and export it from the barrel — do not reach for raw HTML.
+`<textarea>`, `<form>`, `<table>` or `<label>` in feature code. If a primitive is missing,
+add it to `src/shared/ui` in the same style and export it from the barrel — do not reach for
+raw HTML. `Pressable` is what a whole card or row that is itself the control uses, where
+`Button`'s box, radius and transition would all have to be overridden back out.
+
+This is the `no-raw-html-controls` rule in `eslint.config.js`, not a convention: it matches
+JSX element names outside `src/shared/ui`. It was prose until a raw `<button>` shipped in the
+flip card, so it is subject to the same replace-not-merge trap as the import rules —
+`no-restricted-syntax` is shared with the trainer-id rule, and that entry's selectors are
+restated there for exactly that reason.
 
 `src/shared/ui/*.tsx` are written by the shadcn CLI and treated as vendored. They keep
 kebab-case filenames so `npx shadcn add` keeps working; the barrel is the stable surface.
@@ -23,7 +56,7 @@ kebab-case filenames so `npx shadcn add` keeps working; the barrel is the stable
 | ---------------------------- | ---------------------- | ------------------- |
 | Component / route module     | `PascalCase.tsx`       | `ExamCard.tsx`      |
 | Hook                         | `useThing.ts`          | `useExamRun.ts`     |
-| Util, config, types, context | `camelCase.ts`         | `attemptSummary.ts` |
+| Util, config, types, context | `camelCase.ts`         | `dashboardModel.ts` |
 | Folder                       | `kebab-case`           | `exam-ui/`          |
 | Module constant              | `SCREAMING_SNAKE_CASE` | `EXAM_MODULES`      |
 | Type / interface             | `PascalCase`           | `SignUpOutcome`     |
@@ -47,3 +80,9 @@ One alias per layer — `@app/*`, `@features/*`, `@shared/*`, `@content/*` — w
 `.ts`/`.tsx` extensions. There is no catch-all `@/`: the alias names the layer an import
 crosses, which is exactly what the boundary rules match on. `import-x/order` enforces
 grouping and alphabetisation; `--fix` handles it.
+
+Relative imports may climb at most one level (`./x`, `../x`); anything `../../` or deeper
+is banned by lint — use an alias. A feature may deep-import its own internals through its
+own alias (`@features/practice/lib/quiz.ts` from inside `features/practice`);
+other features' internals stay off limits. Both are `no-restricted-imports` patterns, so
+the replace-not-merge pitfall applies (see architecture.md).

@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 
 import { type ProgressDatabase } from '@shared/types';
 
+import { normalizeDatabase } from '@features/progress';
+
 import { mergeProgress } from '../lib/mergeProgress.ts';
 import { enabledProviders, providerLabel, type OAuthProvider } from '../lib/oauthProviders.ts';
 import {
@@ -37,6 +39,11 @@ export interface CloudSyncState {
   readonly resendConfirmation: (email: string) => Promise<boolean>;
   readonly sendPasswordReset: (email: string) => Promise<void>;
   readonly fullSync: (options?: { readonly announce?: boolean }) => Promise<void>;
+  /**
+   * Deletes this account's stored row. True when it is gone (or there was nothing to
+   * delete); false when the database could not be reached, which the caller has to say.
+   */
+  readonly deleteRemote: () => Promise<boolean>;
   readonly signOut: () => Promise<void>;
 }
 
@@ -49,12 +56,10 @@ interface CloudSyncOptions {
 
 const PUSH_DEBOUNCE_MS = 1500;
 
-function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
-}
+const errorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
 /** Drives cloud sync: session, pull/merge/push, and the OAuth handoff. */
-export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOptions): CloudSyncState {
+export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOptions): CloudSyncState => {
   const [user, setUser] = useState<User | null>(null);
   const [status, setStatus] = useState('');
   const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
@@ -107,7 +112,9 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
           .maybeSingle();
         if (error) throw new Error(error.message);
 
-        const remote = (data?.data ?? null) as ProgressDatabase | null;
+        /* The stored row is JSON written by whichever build last synced, so it is coerced
+           into a full document before it is merged rather than trusted field by field. */
+        const remote = data?.data == null ? null : normalizeDatabase(data.data);
         const merged = mergeProgress(dbRef.current, remote);
         replaceLocal(merged);
         await push(merged);
@@ -130,6 +137,24 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     },
     [user, dbRef, replaceLocal, push]
   );
+
+  /**
+   * The one operation the union-only merge cannot express. Emptying the local document and
+   * letting the debounced push carry it up is not a delete: another signed-in device merges
+   * its full copy with the empty remote and restores everything. Removing the row is what
+   * makes "delete" mean delete on this account's side of it.
+   */
+  const deleteRemote = useCallback(async (): Promise<boolean> => {
+    if (!supabase || !user) return true;
+    try {
+      const { error } = await supabase.from(PROGRESS_TABLE).delete().eq('user_id', user.id);
+      if (error) throw new Error(error.message);
+      return true;
+    } catch (error) {
+      setStatus(`Could not delete the cloud copy: ${errorMessage(error)}`);
+      return false;
+    }
+  }, [user]);
 
   /* Surface a failed or cancelled OAuth callback instead of silently landing signed out. */
   useEffect(() => {
@@ -195,10 +220,18 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
   /* Debounced push whenever the local document changes after the first sync. */
   useEffect(() => {
     if (!supabase || !user || !updatedAt) return undefined;
-    if (pushedAtRef.current === null || pushedAtRef.current === updatedAt) return undefined;
+    if (pushedAtRef.current === updatedAt) return undefined;
 
     clearTimeout(pushTimerRef.current);
     pushTimerRef.current = setTimeout(() => {
+      /* Nothing has been pulled yet, so the sign-in sync failed (or has not finished).
+         Pushing now would upsert this device's document over a remote nobody has merged
+         with, so the retry is a full sync rather than a push. Gating the push alone on this
+         meant one failed sync stalled every later change for the rest of the session. */
+      if (pushedAtRef.current === null) {
+        void fullSync();
+        return;
+      }
       push(dbRef.current).catch(() => {
         setChip({
           text: 'offline',
@@ -210,7 +243,7 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     return () => {
       clearTimeout(pushTimerRef.current);
     };
-  }, [updatedAt, user, push, dbRef]);
+  }, [updatedAt, user, push, fullSync, dbRef]);
 
   /**
    * Hands off to the provider's consent screen. On success the browser navigates away, so
@@ -421,6 +454,7 @@ export function useCloudSync({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     resendConfirmation,
     sendPasswordReset,
     fullSync,
+    deleteRemote,
     signOut
   };
-}
+};

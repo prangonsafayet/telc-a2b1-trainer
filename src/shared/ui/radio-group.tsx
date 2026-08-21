@@ -8,7 +8,7 @@ import { cn } from '@shared/lib/cn.ts';
 export const RadioGroup = forwardRef<
   ComponentRef<typeof RadioGroupPrimitive.Root>,
   ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
->(function RadioGroup({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
       ref={ref}
@@ -22,7 +22,7 @@ export const RadioGroup = forwardRef<
 export const RadioGroupItem = forwardRef<
   ComponentRef<typeof RadioGroupPrimitive.Item>,
   ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
->(function RadioGroupItem({ className, ...props }, ref) {
+>(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
       ref={ref}

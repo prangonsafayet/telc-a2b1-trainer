@@ -1,7 +1,17 @@
 name: Exam content correction
-description: A wrong, ambiguous or unfair item in one of the ten Modelltests
+description: A wrong, ambiguous or unfair item in one of the 35 Modelltests
 labels: [content]
 body:
+  - type: dropdown
+    id: trainer
+    attributes:
+      label: Which trainer
+      options:
+        - telc Deutsch A2·B1
+        - telc Deutsch B1
+        - telc Deutsch B2
+    validations:
+      required: true
   - type: input
     id: exam
     attributes:

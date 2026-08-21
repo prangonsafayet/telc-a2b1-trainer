@@ -6,16 +6,24 @@ import { Progress } from '@shared/ui';
 interface MeterProps {
   readonly label: string;
   readonly value: number | null | undefined;
-  readonly of?: number;
+  /** Points a perfect score on this bar is worth — a paper fact, so never defaulted. */
+  readonly of: number;
   /** Tint the bar amber/red below the B1/A2 thresholds instead of always using primary. */
   readonly colorByScore?: boolean;
+  /** Where the pass line of this paper sits, as a percentage of `of`. */
+  readonly thresholdPercent: number;
+  readonly thresholdLabel: string;
 }
 
-/** A labelled progress bar with the 70% B1 threshold marked. */
-export function Meter({ label, value, of = 60, colorByScore = false }: MeterProps) {
+/** A labelled progress bar with its paper's pass line marked. */
+const Meter = ({ label, value, of, colorByScore = false, thresholdPercent, thresholdLabel }: MeterProps) => {
   const pct = value == null ? 0 : Math.round((value / of) * 100);
   const tone =
-    !colorByScore || pct >= 70 ? 'bg-primary' : pct >= 40 ? 'bg-[color:var(--warning)]' : 'bg-destructive';
+    !colorByScore || pct >= thresholdPercent
+      ? 'bg-primary'
+      : pct >= 40
+        ? 'bg-warning-foreground'
+        : 'bg-destructive';
 
   /* Start empty and fill on the next frame so the bar animates in. */
   const [shown, setShown] = useState(0);
@@ -44,8 +52,14 @@ export function Meter({ label, value, of = 60, colorByScore = false }: MeterProp
             'transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]'
           )}
         />
-        <div className="absolute inset-y-0 left-[70%] w-px bg-foreground/40" title="B1 threshold (70%)" />
+        <div
+          className="absolute inset-y-0 w-px bg-foreground/40"
+          style={{ left: `${String(thresholdPercent)}%` }}
+          title={thresholdLabel}
+        />
       </div>
     </div>
   );
-}
+};
+
+export default Meter;

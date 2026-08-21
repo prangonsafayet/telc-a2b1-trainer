@@ -1,19 +1,18 @@
 import { PlayCircle } from 'lucide-react';
 
-import { MODULE_META } from '@shared/config/exam.ts';
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui';
 
 import { type ExamRun } from '@features/exam';
 
 interface ResumeRunNoticeProps {
   readonly run: ExamRun;
+  /** Module name of the paper this run belongs to, or "full exam". */
+  readonly modeLabel: string;
   readonly onResume: () => void;
   readonly onDiscard: () => void;
 }
 
-export function ResumeRunNotice({ run, onResume, onDiscard }: ResumeRunNoticeProps) {
-  const modeLabel = run.mode === 'full' ? 'full exam' : MODULE_META[run.mode].short;
-
+const ResumeRunNotice = ({ run, modeLabel, onResume, onDiscard }: ResumeRunNoticeProps) => {
   return (
     <Card className="animate-pop-in mb-6 border-l-4 border-l-primary shadow-md">
       <CardHeader>
@@ -33,4 +32,6 @@ export function ResumeRunNotice({ run, onResume, onDiscard }: ResumeRunNoticePro
       </CardContent>
     </Card>
   );
-}
+};
+
+export default ResumeRunNotice;

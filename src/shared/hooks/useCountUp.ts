@@ -7,7 +7,7 @@ import { prefersReducedMotion } from '@shared/lib/motion.ts';
  * Returns `null` when `to` is nullish, and jumps straight to the value when the viewer
  * has asked for reduced motion.
  */
-export function useCountUp(to: number | null | undefined, durationMs = 700): number | null {
+export const useCountUp = (to: number | null | undefined, durationMs = 700): number | null => {
   /* When motion is reduced there is no animation at all, so the final value is the
      initial value — no effect, no cascading render. */
   const [value, setValue] = useState(() => (prefersReducedMotion() ? (to ?? 0) : 0));
@@ -28,4 +28,4 @@ export function useCountUp(to: number | null | undefined, durationMs = 700): num
   }, [to, durationMs]);
 
   return to == null ? null : value;
-}
+};

@@ -1,96 +1,32 @@
-import { Home, RotateCcw } from 'lucide-react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
-import { Multiline, PageTitle, SectionTitle, Transcript } from '@shared/components';
-import { fmtDate } from '@shared/lib/format.ts';
-import { Button, Card, CardContent } from '@shared/ui';
+import { TRAINERS } from '@shared/config/trainers.ts';
+import { findPaper } from '@shared/lib/examLookup.ts';
+import { type TrainerId } from '@shared/types';
 
-import { ReviewEntryCard } from '../components/ReviewEntryCard.tsx';
-import { useAttempt, useRetryExam } from '../hooks/useAttempt.ts';
-import { attemptIncludes, buildReviewSections } from '../lib/reviewItems.ts';
+import AttemptReview from '@features/exam/components/review/AttemptReview.tsx';
+import { useExamBinding } from '@features/exam/hooks/useExamBinding.ts';
+import { useStartAttempt } from '@features/exam/hooks/useStartAttempt.ts';
+import { findAttempt } from '@features/exam/lib/attempts.ts';
+import { withBinding } from '@features/exam/lib/examBinding.ts';
 
-export function ReviewPage() {
-  const { attemptId } = useParams<{ attemptId: string }>();
-  const { attempt, exam } = useAttempt(attemptId);
-  const retry = useRetryExam();
-
-  if (!attempt || !exam) return <Navigate to="/history" replace />;
-
-  const sections = buildReviewSections(exam, attempt);
-  const writtenText = typeof attempt.answers['w.text'] === 'string' ? attempt.answers['w.text'] : '';
-
-  return (
-    <>
-      <PageTitle
-        lead={`${fmtDate(attempt.date)} · Green = correct, red = wrong. Learn every red item before the next test.`}
-      >
-        Review — {exam.title}
-      </PageTitle>
-
-      {sections.map(section => (
-        <section key={section.module}>
-          <SectionTitle>{section.heading}</SectionTitle>
-          {section.transcripts?.map((audio, index) => (
-            <Card className="my-3" key={index}>
-              <CardContent>
-                <Transcript audio={audio} />
-              </CardContent>
-            </Card>
-          ))}
-          {section.entries.map(entry => (
-            <ReviewEntryCard key={entry.id} entry={entry} />
-          ))}
-        </section>
-      ))}
-
-      {attemptIncludes(attempt, 'schreiben') ? (
-        <section>
-          <SectionTitle>Schreiben — {attempt.scores.schreiben ?? '–'}/60 (self-scored)</SectionTitle>
-          <Card>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="mb-2 font-semibold">Your text</h3>
-                <div className="rounded-lg border bg-muted/40 p-4 leading-relaxed">
-                  <Multiline text={writtenText || '(empty)'} />
-                </div>
-              </div>
-              <div>
-                <h3 className="mb-2 font-semibold">Musterlösung</h3>
-                <div className="rounded-lg border-l-4 border-[color:var(--success)] bg-[color-mix(in_oklab,var(--success)_8%,transparent)] p-4 leading-relaxed">
-                  <Multiline text={exam.schreiben.musterloesung} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-      ) : null}
-
-      {attemptIncludes(attempt, 'sprechen') ? (
-        <section>
-          <SectionTitle>Sprechen — {attempt.scores.sprechen ?? '–'}/60 (self-scored)</SectionTitle>
-          <Card>
-            <CardContent className="text-sm text-muted-foreground">
-              Recordings are session-only and not stored. Re-run the module to practice again — and re-read
-              the Sprechen tactics in the Exam Guide.
-            </CardContent>
-          </Card>
-        </section>
-      ) : null}
-
-      <div className="mt-6 flex flex-wrap gap-2">
-        <Button
-          onClick={() => {
-            retry(attempt.examId, attempt.mode);
-          }}
-        >
-          <RotateCcw /> Retry this exam
-        </Button>
-        <Button asChild variant="ghost">
-          <Link to="/">
-            <Home /> Dashboard
-          </Link>
-        </Button>
-      </div>
-    </>
-  );
+interface ReviewPageProps {
+  readonly trainer: TrainerId;
 }
+
+/** Every item of an attempt with the given and the correct answer, plus transcripts. */
+const ReviewPage = ({ trainer }: ReviewPageProps) => {
+  const { attemptId } = useParams<{ attemptId: string }>();
+  const binding = useExamBinding(trainer);
+  const retry = useStartAttempt(trainer);
+  const history = `${TRAINERS[trainer].basePath}/history`;
+
+  return withBinding(binding, ({ format, papers, store }) => {
+    const attempt = findAttempt(store.attempts, attemptId);
+    const exam = attempt ? findPaper(papers, attempt.examId) : undefined;
+    if (!attempt || !exam) return <Navigate to={history} replace />;
+    return <AttemptReview trainer={trainer} format={format} exam={exam} attempt={attempt} onRetry={retry} />;
+  });
+};
+
+export default ReviewPage;

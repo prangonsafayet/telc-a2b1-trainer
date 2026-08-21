@@ -7,6 +7,10 @@ interface ImportMetaEnv {
   readonly VITE_AUTH_PROVIDERS?: string;
   /** Absolute public URL, used for canonical/OG tags and the sitemap. */
   readonly VITE_SITE_URL?: string;
+  /** Feature switch for dynamic feedback; the actual server address is never shipped here. */
+  readonly VITE_DYNAMIC_FEEDBACK?: string;
+  /** Local-dev-only override: a LanguageTool instance to call directly, e.g. http://localhost:8010. */
+  readonly VITE_LANGUAGETOOL_URL?: string;
 }
 
 interface ImportMeta {

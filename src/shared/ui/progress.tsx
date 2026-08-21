@@ -10,7 +10,7 @@ export interface ProgressProps extends ComponentPropsWithoutRef<typeof ProgressP
 }
 
 export const Progress = forwardRef<ComponentRef<typeof ProgressPrimitive.Root>, ProgressProps>(
-  function Progress({ className, value, indicatorClassName, ...props }, ref) {
+  ({ className, value, indicatorClassName, ...props }, ref) => {
     return (
       <ProgressPrimitive.Root
         ref={ref}

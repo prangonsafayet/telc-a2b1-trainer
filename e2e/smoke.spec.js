@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
+/* Every trainer's screens carry its name, so the headings are matched by pattern. */
 const PAGES = [
-  { path: '/', heading: 'Dashboard' },
+  { path: '/', heading: /^Dashboard/ },
   { path: '/learn', heading: /AI-assisted learning/ },
   { path: '/guide', heading: /Exam Guide/ },
-  { path: '/history', heading: 'History' },
+  { path: '/history', heading: /^History/ },
   { path: '/settings', heading: 'Settings' }
 ];
 
@@ -63,7 +64,7 @@ test.describe('shell', () => {
 test.describe('SEO head', () => {
   test('title, description and social tags are present', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/telc Deutsch A2·B1 Mock Exam Trainer/);
+    await expect(page).toHaveTitle(/telc Deutsch Trainer/);
     const content = name =>
       page.locator(`meta[name="${name}"], meta[property="${name}"]`).first().getAttribute('content');
     expect(await content('description')).toContain('telc Deutsch A2·B1');

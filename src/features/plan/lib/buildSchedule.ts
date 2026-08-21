@@ -5,10 +5,10 @@
  * arguments always give the same plan and the whole thing is unit-testable. The plan is
  * derived on every render and never persisted; the only stored inputs are the exam date,
  * the learn-plan checkboxes and the attempt list.
+ *
+ * Trainer-agnostic: what to schedule arrives as a `ScheduleSource`, which
+ * `trainerScheduleSource` builds from the registry.
  */
-
-import { EXAMS } from '@content/exams';
-import { LEARN } from '@content/learn.ts';
 
 import {
   EXAMS_PER_REVIEW,
@@ -18,13 +18,12 @@ import {
   MAX_PREP_DAYS,
   MIN_MOCK_SLOTS,
   MIN_PREP_DAYS,
-  MOCK_PHASE_WEIGHT,
-  SPRINT_EXAM_IDS,
-  SPRINT_LEARN_DAYS
+  MOCK_PHASE_WEIGHT
 } from '@shared/config/schedule.ts';
 import { daysBetween, parseIsoDate, toIsoDate } from '@shared/lib/format.ts';
 import { isLearnDayComplete } from '@shared/lib/learnProgress.ts';
 import {
+  type LearnDay,
   type PhaseSplit,
   type Schedule,
   type ScheduleClamp,
@@ -35,6 +34,28 @@ import {
 } from '@shared/types';
 
 import { chunkEvenly, interleaveFillers } from './distribute.ts';
+
+/**
+ * What one trainer feeds the engine: its curriculum, its papers, and which of them the
+ * emergency sprint reaches for. The engine itself is trainer-agnostic.
+ */
+export interface ScheduleSource {
+  readonly learnDays: readonly LearnDay[];
+  /** All exam ids of the trainer, easiest first. */
+  readonly examIds: readonly number[];
+  /** The difficulty anchors of the five-day emergency plan. */
+  readonly sprintExamIds: readonly number[];
+  /** Lesson days that carry the crash course when only a sprint is left. */
+  readonly sprintLearnDays: readonly number[];
+}
+
+/** An easy, a middling and a hard paper — the sprint anchors of any exam list. */
+export const sprintAnchors = (examIds: readonly number[]): readonly number[] => {
+  const first = examIds[0];
+  const middle = examIds[Math.floor(examIds.length / 2)];
+  const last = examIds[examIds.length - 1];
+  return [...new Set([first, middle, last])].filter((id): id is number => id !== undefined);
+};
 
 /** A slot before it knows its date or its kind. */
 interface SlotDraft {
@@ -55,23 +76,23 @@ const EVE: SlotDraft = { learnDays: [], examIds: [] };
  * How the plannable days divide between lessons and mocks. The eve is reserved first,
  * then the rest splits by weight, with a floor under each phase so neither disappears.
  */
-export function splitWorkDays(effectiveDays: number): PhaseSplit {
+export const splitWorkDays = (effectiveDays: number): PhaseSplit => {
   const workDays = Math.max(0, effectiveDays - 1);
   const weighted = Math.round((workDays * LEARN_PHASE_WEIGHT) / (LEARN_PHASE_WEIGHT + MOCK_PHASE_WEIGHT));
   const learnSlots = Math.min(Math.max(1, weighted), Math.max(1, workDays - MIN_MOCK_SLOTS));
   return { learnSlots, mockSlots: Math.max(0, workDays - learnSlots) };
-}
+};
 
 /**
  * Lesson days into lesson slots. Core days always win: they are scheduled one per slot
  * whenever they fit and compressed several to a day when they do not, and extension days
  * only get a slot once every core day already has one.
  */
-function placeLearnDays(
+const placeLearnDays = (
   learnSlots: number,
   core: readonly number[],
   extension: readonly number[]
-): Placement {
+): Placement => {
   if (learnSlots < 1) return { groups: [], unscheduled: [...core, ...extension] };
 
   if (learnSlots >= core.length + extension.length) {
@@ -93,10 +114,10 @@ function placeLearnDays(
   /* Not even the core fits one per day, so it compresses — and the extension tier is not
      attempted at all at this pace. */
   return { groups: chunkEvenly(core, learnSlots), unscheduled: [...extension] };
-}
+};
 
 /** Unattempted exams into mock slots, easiest first, never more than two a day. */
-function placeExams(mockSlots: number, pending: readonly number[]): Placement {
+const placeExams = (mockSlots: number, pending: readonly number[]): Placement => {
   if (mockSlots < 1) return { groups: [], unscheduled: [...pending] };
 
   if (pending.length <= mockSlots) {
@@ -109,16 +130,16 @@ function placeExams(mockSlots: number, pending: readonly number[]): Placement {
     groups: chunkEvenly(pending.slice(0, capacity), mockSlots),
     unscheduled: pending.slice(capacity)
   };
-}
+};
 
 /**
  * Picks the exams for the five-day plan: an easy, a middling and a hard one. An exam that
  * has already been taken is replaced by the nearest one that has not, so a sprint always
  * offers fresh papers.
  */
-function pickSprintExams(pending: readonly number[]): readonly number[] {
+const pickSprintExams = (pending: readonly number[], sprintExamIds: readonly number[]): readonly number[] => {
   const chosen: number[] = [];
-  for (const wanted of SPRINT_EXAM_IDS) {
+  for (const wanted of sprintExamIds) {
     const free = pending.filter(id => !chosen.includes(id));
     const [first, ...rest] = free;
     if (first === undefined) break;
@@ -127,20 +148,21 @@ function pickSprintExams(pending: readonly number[]): readonly number[] {
     );
   }
   return chosen;
-}
+};
 
 /**
  * The emergency plan: a crash course, three papers and an eve. Also the shape of any
  * runway shorter than five days, trimmed from the middle so the crash course and the eve
  * always survive.
  */
-function buildSprint(
+const buildSprint = (
   availableSlots: number,
   remainingCore: readonly number[],
-  pending: readonly number[]
-): { readonly drafts: readonly SlotDraft[]; readonly examIds: readonly number[] } {
-  const crashDays = SPRINT_LEARN_DAYS.filter(day => remainingCore.includes(day));
-  const sprintExams = pickSprintExams(pending);
+  pending: readonly number[],
+  source: ScheduleSource
+): { readonly drafts: readonly SlotDraft[]; readonly examIds: readonly number[] } => {
+  const crashDays = source.sprintLearnDays.filter(day => remainingCore.includes(day));
+  const sprintExams = pickSprintExams(pending, source.sprintExamIds);
 
   if (availableSlots <= 1) return { drafts: [EVE], examIds: [] };
 
@@ -149,9 +171,9 @@ function buildSprint(
     drafts: [{ learnDays: crashDays, examIds: [] }, ...middle, EVE],
     examIds: middle.flatMap(draft => draft.examIds)
   };
-}
+};
 
-function kindFor(draft: SlotDraft, isLast: boolean): SlotKind {
+const kindFor = (draft: SlotDraft, isLast: boolean): SlotKind => {
   if (isLast) return 'exam-eve';
   const hasLearn = draft.learnDays.length > 0;
   const hasExam = draft.examIds.length > 0;
@@ -159,13 +181,13 @@ function kindFor(draft: SlotDraft, isLast: boolean): SlotKind {
   if (hasExam) return 'mock';
   if (hasLearn) return 'learn';
   return 'review';
-}
+};
 
 /**
  * The plan for one exam date, or null when the stored date is not a date — callers fall
  * back to the static copy rather than showing a plan built on a guess.
  */
-export function buildSchedule(input: ScheduleInput): Schedule | null {
+export const buildScheduleFrom = (input: ScheduleInput, source: ScheduleSource): Schedule | null => {
   const daysLeft = daysBetween(input.today, input.examDate);
   const start = parseIsoDate(input.today);
   if (daysLeft === null || !start) return null;
@@ -174,10 +196,10 @@ export function buildSchedule(input: ScheduleInput): Schedule | null {
     daysLeft < MIN_PREP_DAYS ? 'below-min' : daysLeft > MAX_PREP_DAYS ? 'above-max' : 'none';
   const effectiveDays = Math.min(Math.max(daysLeft, MIN_PREP_DAYS), MAX_PREP_DAYS);
 
-  const incomplete = LEARN.days.filter(day => !isLearnDayComplete(day, input.learnDone));
+  const incomplete = source.learnDays.filter(day => !isLearnDayComplete(day, input.learnDone));
   const remainingCore = incomplete.filter(day => day.tier === 'core').map(day => day.day);
   const remainingExtension = incomplete.filter(day => day.tier === 'extension').map(day => day.day);
-  const pendingExamIds = EXAMS.filter(exam => !input.attemptedExamIds.has(exam.id)).map(exam => exam.id);
+  const pendingExamIds = source.examIds.filter(id => !input.attemptedExamIds.has(id));
 
   if (daysLeft < 0) {
     return {
@@ -197,7 +219,8 @@ export function buildSchedule(input: ScheduleInput): Schedule | null {
     effectiveDays,
     remainingCore,
     remainingExtension,
-    pendingExamIds
+    pendingExamIds,
+    source
   );
 
   const slots = drafts.map<ScheduleSlot>((draft, index) => ({
@@ -218,7 +241,7 @@ export function buildSchedule(input: ScheduleInput): Schedule | null {
     unscheduledExamIds,
     unscheduledLearnDays
   };
-}
+};
 
 interface Drafted {
   readonly drafts: readonly SlotDraft[];
@@ -226,18 +249,19 @@ interface Drafted {
   readonly unscheduledLearnDays: readonly number[];
 }
 
-function buildDrafts(
+const buildDrafts = (
   daysLeft: number,
   effectiveDays: number,
   remainingCore: readonly number[],
   remainingExtension: readonly number[],
-  pendingExamIds: readonly number[]
-): Drafted {
+  pendingExamIds: readonly number[],
+  source: ScheduleSource
+): Drafted => {
   /* Five days is the shortest plannable runway, and anything shorter is that same plan
      with days taken out of the middle. Both cases are the emergency shape. */
   if (effectiveDays === MIN_PREP_DAYS) {
     const availableSlots = daysLeft < MIN_PREP_DAYS ? Math.max(1, daysLeft) : MIN_PREP_DAYS;
-    const sprint = buildSprint(availableSlots, remainingCore, pendingExamIds);
+    const sprint = buildSprint(availableSlots, remainingCore, pendingExamIds, source);
     const scheduledLearn = sprint.drafts.flatMap(draft => draft.learnDays);
     return {
       drafts: sprint.drafts,
@@ -261,14 +285,14 @@ function buildDrafts(
     unscheduledExamIds: mocks.unscheduled,
     unscheduledLearnDays: learn.unscheduled
   };
-}
+};
 
-function derivePhase(
+const derivePhase = (
   daysLeft: number,
   slots: readonly ScheduleSlot[],
   remainingCore: readonly number[]
-): SchedulePhase {
+): SchedulePhase => {
   if (daysLeft < MIN_PREP_DAYS) return 'final-sprint';
   const lessonsAhead = slots.some(slot => slot.kind === 'learn' || slot.kind === 'mixed');
   return lessonsAhead && remainingCore.length > 0 ? 'learn' : 'mock';
-}
+};

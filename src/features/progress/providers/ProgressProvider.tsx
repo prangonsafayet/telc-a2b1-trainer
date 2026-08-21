@@ -32,7 +32,7 @@ export interface ProgressContextValue {
 export const ProgressContext = createContext<ProgressContextValue | null>(null);
 
 /** Single source of truth for attempts, learn-plan state and settings. */
-export function ProgressProvider({ children }: { readonly children: ReactNode }) {
+export const ProgressProvider = ({ children }: { readonly children: ReactNode }) => {
   const [db, setDb] = useState<ProgressDatabase>(loadDatabase);
 
   /* A stable handle on the current document for callbacks that must not close over a
@@ -65,4 +65,4 @@ export function ProgressProvider({ children }: { readonly children: ReactNode })
   );
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
-}
+};
