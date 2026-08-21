@@ -275,3 +275,47 @@ describe('a document written by a newer build', () => {
     expect(asRow(mergeProgress(older, newer))['b3']).toEqual({ attempts: [attempt(9)] });
   });
 });
+
+/*
+ * `typeof null === 'object'`, so a document with `learnDone: null` — a hand-edited or
+ * foreign JSON file, reachable through the import path — loaded with the null intact. Then
+ * `Object.entries(null)` threw inside `mergeProgress`, so that account could not sign in at
+ * all, and every reader of the map crashed the page it was on, including the Settings screen
+ * the user would have to import a good file from.
+ */
+describe('a document with null where a map belongs', () => {
+  /* Parsed rather than constructed: the type cannot express what a foreign file may hold. */
+  const hostile = (): unknown =>
+    JSON.parse(
+      '{"learnDone":null,"srs":null,"activity":null,"b1":{"learnDone":null,"srs":null,"activity":null}}'
+    );
+
+  it('defaults every null map to an empty one', () => {
+    const fixed = normalizeDatabase(hostile());
+
+    expect(fixed.learnDone).toEqual({});
+    expect(fixed.srs).toEqual({});
+    expect(fixed.activity).toEqual({});
+    expect(fixed.b1?.learnDone).toEqual({});
+    expect(fixed.b1?.srs).toEqual({});
+    expect(fixed.b1?.activity).toEqual({});
+  });
+
+  it('lets sign-in merge it instead of throwing', () => {
+    const local = normalizeDatabase(hostile());
+    const remote = db({ learnDone: { d1t0: true }, b1: levelDoc({ learnDone: { d2t0: true } }) });
+
+    expect(() => mergeProgress(local, remote)).not.toThrow();
+    const merged = mergeProgress(local, remote);
+    expect(merged.learnDone).toEqual({ d1t0: true });
+    expect(merged.b1?.learnDone).toEqual({ d2t0: true });
+  });
+
+  it('defaults an array where a map belongs, which contributes no ticks either way', () => {
+    const fixed = normalizeDatabase(JSON.parse('{"learnDone":[],"srs":[],"activity":[]}'));
+
+    expect(fixed.learnDone).toEqual({});
+    expect(fixed.srs).toEqual({});
+    expect(fixed.activity).toEqual({});
+  });
+});

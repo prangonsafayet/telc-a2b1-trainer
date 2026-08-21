@@ -48,6 +48,16 @@ const withDefaults = <T extends object>(defaults: T, input: unknown): T => {
   return Object.keys(defaults).every(key => key in candidate) ? candidate : { ...defaults, ...candidate };
 };
 
+/**
+ * A map, which `typeof value === 'object'` alone does not establish: it is also true for
+ * `null` and for arrays. A `learnDone: null` in a hand-edited or foreign import file used to
+ * load as `null` and then throw a `TypeError` in `Object.entries` on the next sign-in — so
+ * the account could not sign in, and every reader of the map crashed the page it was on,
+ * including the Settings screen the user would need to import a good file from.
+ */
+const isMap = (value: unknown): value is object =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
 /** True when normalising changed no field, so the caller's object can be kept as it is. */
 const unchanged = <T extends object>(before: Partial<T>, after: T): boolean =>
   Object.keys(after).every(key => before[key as keyof T] === after[key as keyof T]);
@@ -58,9 +68,9 @@ const normalizeTrainerDoc = (raw: unknown): LevelTrainerDoc => {
   const normalized: LevelTrainerDoc = {
     ...input,
     attempts: Array.isArray(input.attempts) ? input.attempts : [],
-    learnDone: typeof input.learnDone === 'object' ? input.learnDone : {},
-    srs: typeof input.srs === 'object' ? input.srs : {},
-    activity: typeof input.activity === 'object' ? input.activity : {},
+    learnDone: isMap(input.learnDone) ? input.learnDone : {},
+    srs: isMap(input.srs) ? input.srs : {},
+    activity: isMap(input.activity) ? input.activity : {},
     settings: withDefaults(defaultLevelSettings(), input.settings)
   };
   return unchanged(input, normalized) ? (input as LevelTrainerDoc) : normalized;
@@ -83,10 +93,10 @@ export const normalizeDatabase = (raw: unknown): ProgressDatabase => {
        validated, so nothing untrusted is believed. */
     ...input,
     attempts: Array.isArray(input.attempts) ? input.attempts : [],
-    learnDone: typeof input.learnDone === 'object' ? input.learnDone : {},
+    learnDone: isMap(input.learnDone) ? input.learnDone : {},
     settings: withDefaults(DEFAULT_SETTINGS, input.settings),
-    srs: typeof input.srs === 'object' ? input.srs : {},
-    activity: typeof input.activity === 'object' ? input.activity : {},
+    srs: isMap(input.srs) ? input.srs : {},
+    activity: isMap(input.activity) ? input.activity : {},
     b1: normalizeTrainerDoc(input.b1),
     b2: normalizeTrainerDoc(input.b2),
     ...(input._updatedAt ? { _updatedAt: input._updatedAt } : {})
