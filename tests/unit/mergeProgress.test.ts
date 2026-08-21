@@ -1,9 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
 import { mergeProgress } from '@features/auth/lib/mergeProgress.ts';
-import { normalizeDatabase } from '@features/progress/lib/progressDb.ts';
+import { EMPTY_DATABASE, normalizeDatabase } from '@features/progress/lib/progressDb.ts';
 import { DEFAULT_SETTINGS } from '@shared/config/exam.ts';
-import { type DualLevelAttempt, type LevelTrainerDoc, type ProgressDatabase } from '@shared/types';
+import {
+  type DualLevelAttempt,
+  type LevelTrainerDoc,
+  type ProgressDatabase,
+  type WeaknessByTrainer
+} from '@shared/types';
 
 /* Sync is the one place where two real documents meet, and anything it forgets to copy is
    gone for good. It rebuilds the document field by field, so every field needs a test —
@@ -277,6 +282,112 @@ describe('a document written by a newer build', () => {
 });
 
 /*
+ * The weakness profile: what a learner keeps getting wrong, per trainer, written by the
+ * writing feedback. It is the newest field on the document, and the fifth thing sync can lose.
+ */
+describe('the weakness profile', () => {
+  const withWeakness = (weakness: WeaknessByTrainer, updatedAt?: string): ProgressDatabase =>
+    db(updatedAt === undefined ? { weakness } : { weakness, _updatedAt: updatedAt });
+
+  it('merges per trainer, taking the larger count and keeping both sides categories', () => {
+    const local = withWeakness({ b1: { case: { count: 7, lastSeen: '2026-08-20' } } });
+    const remote = withWeakness({
+      b1: {
+        case: { count: 3, lastSeen: '2026-08-01' },
+        style: { count: 2, lastSeen: '2026-08-02' }
+      },
+      b2: { spelling: { count: 1, lastSeen: '2026-08-03' } }
+    });
+
+    const merged = mergeProgress(local, remote);
+    expect(merged.weakness?.b1?.case).toEqual({ count: 7, lastSeen: '2026-08-20' });
+    /* The categories only the other side knows about have to come through too — the field is
+       rebuilt, so taking one side whole is the shape of every wipe this suite exists for. */
+    expect(merged.weakness?.b1?.style).toEqual({ count: 2, lastSeen: '2026-08-02' });
+    expect(merged.weakness?.b2?.spelling).toEqual({ count: 1, lastSeen: '2026-08-03' });
+  });
+
+  /* `Math.max`, not the sum — the `mergeActivity` rule, for the same reason: a document that
+     syncs twice must not report more mistakes than the learner made. */
+  it('is idempotent, so syncing twice cannot inflate a count', () => {
+    const local = withWeakness({ b1: { case: { count: 4, lastSeen: '2026-08-20' } } });
+    const remote = withWeakness({ b1: { case: { count: 2, lastSeen: '2026-08-10' } } });
+
+    const once = mergeProgress(local, remote);
+    expect(once.weakness?.b1?.case?.count).toBe(4);
+    expect(mergeProgress(once, remote).weakness).toEqual(once.weakness);
+    expect(mergeProgress(remote, once).weakness).toEqual(once.weakness);
+  });
+
+  it('takes the later date even when the other side has the bigger count', () => {
+    const bigger = withWeakness({ b1: { case: { count: 9, lastSeen: '2026-07-01' } } });
+    const later = withWeakness({ b1: { case: { count: 2, lastSeen: '2026-08-20' } } });
+
+    for (const merged of [mergeProgress(bigger, later), mergeProgress(later, bigger)]) {
+      expect(merged.weakness?.b1?.case).toEqual({ count: 9, lastSeen: '2026-08-20' });
+    }
+  });
+
+  it('carries a trainer only one side has ever written', () => {
+    const merged = mergeProgress(
+      withWeakness({ b2: { wordOrder: { count: 3, lastSeen: '2026-08-20' } } }),
+      db()
+    );
+    expect(merged.weakness?.b2?.wordOrder?.count).toBe(3);
+    expect(merged.weakness?.b1).toBeUndefined();
+  });
+
+  /* Forward compatibility, as everywhere else on this document: the profile of a trainer this
+     build has never heard of must not be stripped and pushed back. */
+  it('keeps the profile of a trainer this build does not know', () => {
+    const remote = normalizeDatabase(
+      JSON.parse('{"weakness":{"b3":{"case":{"count":5,"lastSeen":"2026-08-20"}}},"_updatedAt":"2026-06-01"}')
+    );
+    const local = normalizeDatabase({
+      ...withWeakness({ b1: { style: { count: 1, lastSeen: '2026-08-21' } } }),
+      _updatedAt: '2026-07-01'
+    });
+
+    const pushed = JSON.parse(JSON.stringify(mergeProgress(local, remote))) as Partial<
+      Record<string, unknown>
+    >;
+    const weakness = pushed['weakness'] as Partial<Record<string, unknown>>;
+    expect(weakness['b3']).toEqual({ case: { count: 5, lastSeen: '2026-08-20' } });
+    /* And the known trainer is still merged rather than displaced by the unknown one. */
+    expect(weakness['b1']).toEqual({ style: { count: 1, lastSeen: '2026-08-21' } });
+  });
+
+  /* The current build writes documents without this field at all. One of them has to keep
+     loading and merging, or the field itself is the next wipe. */
+  it('loads and merges a document written before the field existed', () => {
+    const legacy = JSON.parse(
+      JSON.stringify({ attempts: [attempt(1)], learnDone: { d1t0: true }, settings: DEFAULT_SETTINGS })
+    ) as ProgressDatabase;
+
+    const normalized = normalizeDatabase(legacy);
+    expect('weakness' in normalized).toBe(true);
+    expect(normalized.weakness).toEqual({});
+    expect(normalized.attempts.map(a => a.id)).toEqual([1]);
+    expect(normalized.learnDone).toEqual({ d1t0: true });
+
+    const modern = withWeakness({ b1: { case: { count: 2, lastSeen: '2026-08-20' } } });
+    expect(mergeProgress(modern, legacy).weakness?.b1?.case?.count).toBe(2);
+    expect(mergeProgress(legacy, modern).weakness?.b1?.case?.count).toBe(2);
+  });
+
+  it('defaults a profile that is not a map, and merges a null category away', () => {
+    expect(normalizeDatabase(JSON.parse('{"weakness":null}')).weakness).toEqual({});
+    expect(normalizeDatabase(JSON.parse('{"weakness":[]}')).weakness).toEqual({});
+
+    const hostile = normalizeDatabase(JSON.parse('{"weakness":{"b1":{"case":null}}}'));
+    const sound = db({ weakness: { b1: { case: { count: 2, lastSeen: '2026-08-20' } } } });
+    expect(() => mergeProgress(hostile, sound)).not.toThrow();
+    expect(mergeProgress(hostile, sound).weakness?.b1?.case).toEqual({ count: 2, lastSeen: '2026-08-20' });
+    expect(mergeProgress(sound, hostile).weakness?.b1?.case).toEqual({ count: 2, lastSeen: '2026-08-20' });
+  });
+});
+
+/*
  * `typeof null === 'object'`, so a document with `learnDone: null` — a hand-edited or
  * foreign JSON file, reachable through the import path — loaded with the null intact. Then
  * `Object.entries(null)` threw inside `mergeProgress`, so that account could not sign in at
@@ -411,5 +522,117 @@ describe('the _updatedAt stamp', () => {
     /* `exactOptionalPropertyTypes`: an absent key and an explicit undefined are different
        documents, and the second one serialises as `"_updatedAt": null` through some clients. */
     expect('_updatedAt' in merged).toBe(false);
+  });
+});
+
+/*
+ * The enumeration. Every field of `ProgressDatabase` is listed here with a check that only a
+ * real merge of two populated sides satisfies, and the list is compared against the document's
+ * own runtime key set — so a field added to the document without a merge rule, a normalise
+ * default or an `EMPTY_DATABASE` entry fails here rather than on a learner's next sign-in.
+ * This is the check that would have caught the B1/B2 wipe; the review that followed it built
+ * the same enumeration in a throwaway harness outside the repo, which is where it stopped
+ * being run.
+ */
+describe('the field enumeration', () => {
+  /* Both sides are populated in every field, and differently: a merge rule that takes one side
+     whole has to be visible. `_updatedAt` makes the local side the newer one. */
+  const LOCAL: ProgressDatabase = db({
+    attempts: [attempt(1)],
+    learnDone: { d1t0: true },
+    settings: { ...DEFAULT_SETTINGS, examDate: '2026-12-31' },
+    srs: { item: { box: 3, due: '2026-05-01', seen: 20, correct: 19, wrong: 1 } },
+    activity: { '2026-08-20': 12 },
+    b1: levelDoc({ learnDone: { d1t0: true } }),
+    b2: levelDoc({ learnDone: { d5t0: true } }),
+    weakness: { b1: { case: { count: 7, lastSeen: '2026-08-20' } } },
+    _updatedAt: '2026-08-20T00:00:00.000Z'
+  });
+
+  const REMOTE: ProgressDatabase = db({
+    attempts: [attempt(2)],
+    learnDone: { d2t0: true },
+    settings: { ...DEFAULT_SETTINGS, examDate: '2026-01-01' },
+    srs: {
+      item: { box: 4, due: '2026-06-01', seen: 4, correct: 3, wrong: 1 },
+      other: { box: 1, due: '2026-06-02', seen: 1, correct: 0, wrong: 1 }
+    },
+    activity: { '2026-08-19': 3 },
+    b1: levelDoc({ learnDone: { d2t0: true }, activity: { '2026-08-19': 9 } }),
+    b2: levelDoc({ srs: { 'b2.v.001': { box: 2, due: '2026-07-01', seen: 3, correct: 2, wrong: 1 } } }),
+    weakness: {
+      b1: { style: { count: 2, lastSeen: '2026-08-02' } },
+      b2: { spelling: { count: 1, lastSeen: '2026-08-03' } }
+    },
+    _updatedAt: '2026-01-01T00:00:00.000Z'
+  });
+
+  /** Per field: what is true of the merged document only if both sides were really merged. */
+  const KEPT = {
+    attempts: (merged: ProgressDatabase) => merged.attempts.map(a => a.id).join(',') === '1,2',
+    learnDone: (merged: ProgressDatabase) =>
+      merged.learnDone['d1t0'] === true && merged.learnDone['d2t0'] === true,
+    /* Last-write-wins rather than a union: the newer side's date, on a document that still has
+       every other setting. */
+    settings: (merged: ProgressDatabase) =>
+      merged.settings.examDate === '2026-12-31' &&
+      merged.settings.playsAllowed === DEFAULT_SETTINGS.playsAllowed,
+    srs: (merged: ProgressDatabase) =>
+      merged.srs['item']?.box === 4 && merged.srs['item']?.seen === 20 && merged.srs['other'] !== undefined,
+    activity: (merged: ProgressDatabase) =>
+      merged.activity['2026-08-20'] === 12 && merged.activity['2026-08-19'] === 3,
+    b1: (merged: ProgressDatabase) =>
+      merged.b1?.learnDone['d1t0'] === true &&
+      merged.b1?.learnDone['d2t0'] === true &&
+      merged.b1?.activity['2026-08-19'] === 9,
+    b2: (merged: ProgressDatabase) =>
+      merged.b2?.learnDone['d5t0'] === true && merged.b2?.srs['b2.v.001'] !== undefined,
+    weakness: (merged: ProgressDatabase) =>
+      merged.weakness?.b1?.case?.count === 7 &&
+      merged.weakness?.b1?.style?.count === 2 &&
+      merged.weakness?.b2?.spelling?.count === 1
+  };
+
+  const missing = (merged: ProgressDatabase): readonly string[] =>
+    Object.entries(KEPT)
+      .filter(([, kept]) => !kept(merged))
+      .map(([field]) => field);
+
+  it('lists every field the document actually has', () => {
+    /* `normalizeDatabase` is the constructor that names them all — `_updatedAt` aside, which is
+       conditional and has its own tests above. */
+    expect(Object.keys(KEPT).toSorted()).toEqual(Object.keys(normalizeDatabase({})).toSorted());
+  });
+
+  it('finds the same fields in EMPTY_DATABASE, so the two constructors cannot drift', () => {
+    expect(Object.keys(EMPTY_DATABASE).toSorted()).toEqual(Object.keys(normalizeDatabase({})).toSorted());
+  });
+
+  /* Teeth, before the assertion that everything is fine: a build that spread one document over
+     the other instead of merging field by field — the shape of the wipe — must be reported for
+     every field that has a real merge rule. Without this, `missing()` returning nothing would
+     prove nothing. */
+  it('reports every union field when the merge is a spread instead of a merge', () => {
+    expect(missing({ ...REMOTE, ...LOCAL })).toEqual([
+      'attempts',
+      'learnDone',
+      'srs',
+      'activity',
+      'b1',
+      'b2',
+      'weakness'
+    ]);
+  });
+
+  it('finds nothing missing from a real merge, in either direction', () => {
+    expect(missing(mergeProgress(LOCAL, REMOTE))).toEqual([]);
+    expect(missing(mergeProgress(REMOTE, LOCAL))).toEqual([]);
+  });
+
+  it('finds nothing missing after the merged document is normalised and pushed', () => {
+    const merged = mergeProgress(LOCAL, REMOTE);
+    expect(missing(normalizeDatabase(merged))).toEqual([]);
+    /* The row as `push` upserts it: a field lost in serialisation is lost for good. */
+    expect(missing(JSON.parse(JSON.stringify(merged)) as ProgressDatabase)).toEqual([]);
   });
 });

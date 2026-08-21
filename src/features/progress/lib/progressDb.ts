@@ -27,7 +27,9 @@ export const EMPTY_DATABASE: ProgressDatabase = {
   srs: {},
   activity: {},
   b1: emptyTrainerDoc('b1'),
-  b2: emptyTrainerDoc('b2')
+  b2: emptyTrainerDoc('b2'),
+  /* No trainer has an error history yet, and none is keyed until one is recorded. */
+  weakness: {}
 };
 
 /**
@@ -104,6 +106,9 @@ export const normalizeDatabase = (raw: unknown): ProgressDatabase => {
     activity: isMap(input.activity) ? input.activity : {},
     b1: normalizeTrainerDoc('b1', input.b1),
     b2: normalizeTrainerDoc('b2', input.b2),
+    /* Validated only as far as being a map: the trainers inside it are not enumerated here,
+       so a profile written for a trainer this build does not know survives the round trip. */
+    weakness: isMap(input.weakness) ? input.weakness : {},
     ...(input._updatedAt ? { _updatedAt: input._updatedAt } : {})
   };
 };

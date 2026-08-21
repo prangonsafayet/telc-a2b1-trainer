@@ -33,7 +33,8 @@ npm run test:watch   # vitest in watch mode
 | `unit/weakness`              | every weakness category resolves to a real cheatsheet, or an explicit empty list, on every trainer                                                 |
 | `unit/errorReport`           | a LanguageTool match maps to the right weakness category and issue type                                                                            |
 | `unit/languageToolClient`    | the dynamic-feedback client — its feature flag and its base URL are independent switches                                                           |
-| `unit/mergeProgress`         | cloud sync's field-by-field merge, so no attempt, curriculum tick, SRS box or streak is silently dropped                                           |
+| `unit/mergeProgress`         | cloud sync's field-by-field merge plus a runtime enumeration of the document's fields, so nothing is silently dropped                              |
+| `unit/weaknessProfile`       | the running record of what a learner gets wrong — additive per session, deterministic to rank                                                      |
 | `unit/dashboardModel`        | dashboard meters, their heading and weak-area detection against each paper's own pass line, not the other paper's                                  |
 | `unit/attemptSummary`        | the pass line a results screen marks its bars at, per paper — the bar primitive used to default it to the A2·B1 paper's                            |
 | `unit/examConditions`        | which exam-condition numbers the copy may call telc's and which it must call the app's own                                                         |

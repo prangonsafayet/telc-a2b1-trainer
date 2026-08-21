@@ -1,5 +1,6 @@
 import { type AttemptMode, type ExamGrade, type ExamModule, type SkillKey } from './exam.ts';
-import { type LevelTrainerDoc, type TrainerExamSettings } from './trainer.ts';
+import { type WeaknessProfile } from './feedback.ts';
+import { type LevelTrainerDoc, type TrainerExamSettings, type TrainerId } from './trainer.ts';
 import { type SrsMap } from './vocab.ts';
 
 /**
@@ -65,6 +66,16 @@ export type LearnDoneMap = Partial<Record<string, boolean>>;
  */
 export type ActivityMap = Partial<Record<string, number>>;
 
+/**
+ * What each trainer's learner keeps getting wrong, from their written answers.
+ *
+ * Keyed by trainer at the document root deliberately: it avoids the asymmetry between the
+ * root trainer, whose study state sits at the top level, and the trainers with a document of
+ * their own, and it gives cloud sync exactly one new place to merge rather than one per
+ * trainer. Named here because three constructors and one merge rule all hold this shape.
+ */
+export type WeaknessByTrainer = Partial<Record<TrainerId, WeaknessProfile>>;
+
 /** The whole persisted document — what localStorage holds and what cloud sync merges. */
 export interface ProgressDatabase {
   readonly attempts: readonly DualLevelAttempt[];
@@ -84,6 +95,13 @@ export interface ProgressDatabase {
    */
   readonly b1?: LevelTrainerDoc;
   readonly b2?: LevelTrainerDoc;
+  /**
+   * Mistakes seen per trainer, counted from written answers. Optional so a document written
+   * by a build that predates it stays readable; `normalizeDatabase` fills it in, and
+   * `mergeProgress` merges it — adding a field here without doing both is what once wiped
+   * every B1/B2 learner's progress.
+   */
+  readonly weakness?: WeaknessByTrainer;
   /** ISO timestamp of the last local change; drives sync conflict resolution. */
   readonly _updatedAt?: string;
 }

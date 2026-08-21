@@ -5,7 +5,10 @@ import {
   type LevelTrainerDoc,
   type ProgressDatabase,
   type SingleLevelAttempt,
-  type SrsMap
+  type SrsMap,
+  type WeaknessByTrainer,
+  type WeaknessEntry,
+  type WeaknessProfile
 } from '@shared/types';
 
 /** Attempts are immutable once written, so a union by id is always right. */
@@ -69,6 +72,59 @@ const mergeActivity = (remote: ActivityMap | undefined, local: ActivityMap | und
   return merged;
 };
 
+/**
+ * One profile's categories as they may actually arrive. `WeaknessProfile` keys a finite union,
+ * so `Object.entries` types every value as present — but this runs over JSON from the cloud
+ * table or a hand-edited import file, where a category can hold a `null`. Declared here so the
+ * guard in `mergeProfile` is a real check on real input rather than a suppressed lint error.
+ */
+const profileEntries = (
+  profile: WeaknessProfile | undefined
+): readonly (readonly [string, WeaknessEntry | undefined])[] => Object.entries(profile ?? {});
+
+/**
+ * One trainer's error history. The larger count per category wins rather than the sum, for the
+ * same reason as `mergeActivity`: syncing twice must not inflate a learner's history, and both
+ * sides then converge on the same number. The later `lastSeen` wins independently of the count,
+ * so "you last got this wrong in August" cannot be dragged backwards by whichever device holds
+ * the bigger tally. Both sides are walked the same way, so the result does not depend on which
+ * document is called local.
+ */
+const mergeProfile = (
+  remote: WeaknessProfile | undefined,
+  local: WeaknessProfile | undefined
+): WeaknessProfile => {
+  const merged: Record<string, WeaknessEntry> = {};
+  for (const [category, entry] of [...profileEntries(remote), ...profileEntries(local)]) {
+    if (!entry) continue;
+    const seen = merged[category];
+    merged[category] = seen
+      ? {
+          count: Math.max(seen.count, entry.count),
+          lastSeen: seen.lastSeen > entry.lastSeen ? seen.lastSeen : entry.lastSeen
+        }
+      : entry;
+  }
+  return merged;
+};
+
+/**
+ * The error histories, per trainer. Both sides' keys are walked rather than the registry's
+ * trainer list, so a profile written for a trainer this build has never heard of survives the
+ * merge instead of being dropped on the way back to the cloud — the same forward-compatibility
+ * rule the document root and each trainer document already follow.
+ */
+const mergeWeakness = (
+  remote: WeaknessByTrainer | undefined,
+  local: WeaknessByTrainer | undefined
+): WeaknessByTrainer => {
+  const merged: Record<string, WeaknessProfile> = {};
+  for (const [trainer, profile] of [...Object.entries(remote ?? {}), ...Object.entries(local ?? {})]) {
+    merged[trainer] = mergeProfile(merged[trainer], profile);
+  }
+  return merged;
+};
+
 const mergeTrainerDoc = (
   remote: LevelTrainerDoc | undefined,
   local: LevelTrainerDoc | undefined,
@@ -96,7 +152,8 @@ const mergeTrainerDoc = (
  * Attempts are a union keyed by id. Completed learn tasks are OR-ed. Settings are
  * last-write-wins, decided by `_updatedAt`. The root trainer's SRS state and streak
  * activity merge exactly like a trainer document's, and each trainer document is merged
- * the same way, field by field.
+ * the same way, field by field. The weakness profile merges per trainer and per category,
+ * larger count winning.
  *
  * Every field this build knows about is rebuilt rather than spread, so anything added to
  * `ProgressDatabase` and not handled here gets no merge rule — which is exactly how every
@@ -141,6 +198,7 @@ export const mergeProgress = (
     /* The root trainer's study state, merged exactly like a trainer document's. */
     srs: mergeSrs(remote.srs, local.srs),
     activity: mergeActivity(remote.activity, local.activity),
+    weakness: mergeWeakness(remote.weakness, local.weakness),
     ...(b1 ? { b1 } : {}),
     ...(b2 ? { b2 } : {}),
     ...(updatedAt ? { _updatedAt: updatedAt } : {})
