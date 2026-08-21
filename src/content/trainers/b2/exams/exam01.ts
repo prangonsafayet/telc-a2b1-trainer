@@ -129,7 +129,7 @@ Heute führt Hartmann gemeinsam mit einer Freundin eine kleine Agentur, die geme
         'Lesen Sie den Brief und entscheiden Sie, welches Wort (a, b oder c) in die Lücken [1] bis [10] passt.',
       text: `Sehr geehrte Frau Winter,
 
-vielen Dank für Ihre Einladung zum Vorstellungsgespräch, [1] ich sehr gefreut habe. Leider muss ich Ihnen mitteilen, dass ich den vorgeschlagenen Termin aus beruflichen Gründen nicht [2] kann.
+vielen Dank für Ihre Einladung zum Vorstellungsgespräch, [1] ich mich sehr gefreut habe. Leider muss ich Ihnen mitteilen, dass ich den vorgeschlagenen Termin aus beruflichen Gründen nicht [2] kann.
 
 Am 14. Oktober vertrete ich meine Kollegin, [3] sich zurzeit im Mutterschutz befindet, auf einer Fachtagung in Hamburg. Diese Verpflichtung wurde bereits vor mehreren Monaten [4], sodass ich sie nicht mehr verschieben kann.
 

@@ -155,7 +155,7 @@ Amir Hassan`,
         'Lesen Sie den Text und entscheiden Sie, welches Wort aus dem Kasten in die Lücken [1] bis [10] passt. Jedes Wort passt nur einmal.',
       text: `Sehr geehrte Damen und Herren,
 
-ich habe Ihre [1] für die Wohnung in der Gartenstraße 12 gelesen und bin sehr [2] an der Wohnung interessiert. Ich arbeite seit fünf Jahren als Krankenpfleger im Stadtkrankenhaus und suche eine Wohnung in der [3], weil ich oft Nachtdienst habe.
+ich habe Ihre [1] für die Wohnung in der Gartenstraße 12 gelesen und bin an der Wohnung sehr [2]. Ich arbeite seit fünf Jahren als Krankenpfleger im Stadtkrankenhaus und suche eine Wohnung in der [3], weil ich oft Nachtdienst habe.
 
 Zurzeit wohne ich noch in Bergdorf und fahre jeden Tag fast eine Stunde mit dem Auto. Das kostet viel Zeit und [4]. Die Wohnung wäre für mich also ideal.
 
@@ -174,6 +174,7 @@ Jonas Weber`,
         'Fragen',
         'Geld',
         'gerne',
+        'interessiert',
         'melde',
         'möglich',
         'Nähe',
@@ -181,10 +182,9 @@ Jonas Weber`,
         'Termin',
         'Umgebung',
         'verspreche',
-        'Wunsch',
-        'zwar'
+        'Wunsch'
       ],
-      answers: [0, 14, 8, 4, 3, 7, 9, 2, 13, 1]
+      answers: [0, 6, 9, 4, 3, 8, 10, 2, 14, 1]
     }
   },
 
