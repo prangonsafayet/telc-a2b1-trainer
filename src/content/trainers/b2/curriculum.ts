@@ -307,7 +307,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
         'Take Modelltest 1 under real timing — no pausing, no dictionary, letter included.',
         'Full review afterwards: redo every wrong item aloud with the reason why the right answer is right.',
         'Add every unknown word from the test to your flashcards in the practice hub.',
-        'Note your module scores against this trainer\u2019s 60% line — this decides your focus for the next two weeks.'
+        'Note your module scores against this trainer’s 60% line — this decides your focus for the next two weeks.'
       ],
       cheats: [],
       ai: [
@@ -620,7 +620,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       tasks: [
         'Re-read ALL six cheatsheets once, slowly (45 min) — mark the 5 things you still need on a single sheet of paper.',
         'Say your Über-Erfahrungen-sprechen opening, your Kompromiss phrases and your 5 favourite Konjunktiv-II Bitten aloud — they must be automatic.',
-        'Check your Modelltest scores on the dashboard against both of this trainer\u2019s 60% lines, decide which single module gets your last review evening — then close the books and rest.'
+        'Check your Modelltest scores on the dashboard against both of this trainer’s 60% lines, decide which single module gets your last review evening — then close the books and rest.'
       ],
       cheats: ['brief', 'muendlich', 'kii', 'nominal'],
       ai: [
