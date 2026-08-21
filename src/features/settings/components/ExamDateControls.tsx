@@ -32,7 +32,7 @@ const ExamDateControls = ({ trainer, value, onChange }: ExamDateControlsProps) =
       {picker.countdownHint ? <p className="text-xs text-muted-foreground">{picker.countdownHint}</p> : null}
       {picker.planHint ? <p className="text-xs text-muted-foreground">{picker.planHint}</p> : null}
       {picker.rangeWarning ? (
-        <p className="flex items-start gap-1.5 text-xs text-[color:var(--warning)]">
+        <p className="flex items-start gap-1.5 text-xs text-[color:var(--warning-foreground)]">
           <TriangleAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           <span>{picker.rangeWarning}</span>
         </p>
