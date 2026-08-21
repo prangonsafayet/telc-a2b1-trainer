@@ -170,7 +170,6 @@ export default defineConfig(({ mode }) => {
           /* Keep the vendor libraries and the exam content in their own long-lived
              cache entries, so shipping app changes does not re-download them. */
           manualChunks: (id: string) => {
-            if (id.includes('src/data/')) return 'exam-data';
             /* One chunk per trainer's content folder (content-a2b1, content-b1, content-b2)
                so a visitor only downloads the trainer they are studying — see
                `TRAINERS[trainer].loadContent` in src/shared/config/trainers.ts, which is what

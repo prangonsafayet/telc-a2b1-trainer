@@ -307,8 +307,9 @@ export default tseslint.config(
        *   utils, config, types, providers camelCase.ts
        *   folders                        kebab-case
        *
-       * `src/shared/components/ui` is exempt: the shadcn CLI writes kebab-case there,
-       * and fighting it would break `npx shadcn add`.
+       * `src/shared/ui` is exempt — the shadcn CLI writes kebab-case there and fighting it
+       * would break `npx shadcn add`. It is exempt by matching none of the patterns below
+       * rather than by an ignore entry, which is why no pattern names it.
        */
       'check-file/filename-naming-convention': [
         'error',
@@ -323,7 +324,7 @@ export default tseslint.config(
           'src/**/types/**/*.ts': 'CAMEL_CASE',
           'src/**/providers/*.ts': 'CAMEL_CASE',
           'src/**/providers/*.tsx': 'PASCAL_CASE',
-          'src/content/*.ts': 'CAMEL_CASE'
+          'src/content/**/*.ts': 'CAMEL_CASE'
         },
         { ignoreMiddleExtensions: true }
       ],
@@ -451,9 +452,12 @@ export default tseslint.config(
     rules: { '@typescript-eslint/naming-convention': 'off' }
   },
   {
-    /* Exam data files are enormous literals; naming rules there are pure noise. */
+    /* Exam data files are enormous literals; naming rules there are pure noise. The path is
+       `src/content/trainers/<id>/exams/` — the pre-registry `src/content/exams/` this used to
+       name has not existed since the content moved, so the exemption was dead and passed only
+       because `objectLiteralProperty` is `format: null` globally. */
     name: 'content-data',
-    files: ['src/content/exams/**/*.ts'],
+    files: ['src/content/trainers/*/exams/**/*.ts'],
     rules: { '@typescript-eslint/naming-convention': 'off' }
   },
   {
