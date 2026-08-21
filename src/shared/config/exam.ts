@@ -33,9 +33,10 @@ export const SKILL_MAX = 60;
 export const FULL_EXAM_MAX = 240;
 
 /**
- * Where the A2·B1 paper's overall zones start, out of 240. The official verdict is per-skill
- * (see `PASS_RULES`), but these two totals are what the score chart's gridlines and the
- * dashboard's caption both talk about, so they are stated once.
+ * Where the A2·B1 paper's overall zones start, out of 240. `B1_TOTAL` is an official gate —
+ * the B1 verdict needs it *and* the per-subtest minimums (see `gradeFullExam`) — and it also
+ * drives the score chart's gridlines and the dashboard's caption, so it is stated once.
+ * `A2_TOTAL` is presentation only: no official A2 total is sourced, so nothing gates on it.
  */
 export const B1_TOTAL = 168;
 export const A2_TOTAL = 96;

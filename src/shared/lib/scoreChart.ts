@@ -24,7 +24,7 @@ const DUAL_LEVEL_GRIDLINES: readonly ScoreChartGridline[] = [
   { value: A2_TOTAL, label: `${String(A2_TOTAL)} · A2` }
 ];
 
-const DUAL_LEVEL_DESCRIPTION = `Total points per full exam. Gridlines mark the B1 (${String(B1_TOTAL)}) and A2 (${String(A2_TOTAL)}) zones — the official rule uses per-skill minimums, see the Exam Guide.`;
+const DUAL_LEVEL_DESCRIPTION = `Total points per full exam. Gridlines mark the B1 (${String(B1_TOTAL)}) and A2 (${String(A2_TOTAL)}) zones. B1 needs ${String(B1_TOTAL)} points *and* the per-subtest minimums — see the Exam Guide.`;
 
 /** 60% written plus 60% oral is the lowest total any pass can add up to. */
 const SINGLE_LEVEL_PASS_LINE = SINGLE_LEVEL_WRITTEN_PASS + SINGLE_LEVEL_ORAL_PASS;

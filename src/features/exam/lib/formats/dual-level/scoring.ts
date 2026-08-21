@@ -1,3 +1,4 @@
+import { B1_TOTAL } from '@shared/config/exam.ts';
 import {
   type AnswerMap,
   type AnswerValue,
@@ -103,13 +104,23 @@ export interface FullExamGrade {
 }
 
 /**
- * The official rule: B1 needs ≥42/60 in three of the four skills and ≥24/60 in the
- * fourth; A2 needs ≥24/60 in three and ≥6/60 in the fourth.
+ * The official B1 rule has THREE conditions, all of which must hold (telc Deutsch A2·B1
+ * Übungstest 1, "Ermittlung des Gesamtergebnisses" p. 44): ≥70% of the total (168/240),
+ * *and* ≥70% (42/60) in three of the four subtests, *and* ≥40% (24/60) in every subtest.
+ *
+ * The total is not implied by the other two — the cheapest sitting that satisfies them is
+ * 42/42/42/24 = 150, eighteen points short — so leaving it out certifies B1 for a paper
+ * telc would fail. It was left out until this was caught.
+ *
+ * A2 is the fallback when B1 is missed: ≥24/60 in three subtests and ≥6/60 in the fourth.
+ * No official *total* threshold for A2 is quoted in the source above, so none is applied
+ * here. `A2_TOTAL` exists for the chart's gridlines and is deliberately not used as a gate:
+ * inventing the symmetric 40% rule is how five invented telc facts reached twenty papers.
  */
 export const gradeFullExam = (scores: SkillScores): FullExamGrade => {
   const values = (['lesen', 'hoeren', 'schreiben', 'sprechen'] as const).map(key => scores[key] ?? 0);
   const total = values.reduce((sum, value) => sum + value, 0);
-  const isB1 = values.filter(v => v >= 42).length >= 3 && values.every(v => v >= 24);
+  const isB1 = total >= B1_TOTAL && values.filter(v => v >= 42).length >= 3 && values.every(v => v >= 24);
   const isA2 = values.filter(v => v >= 24).length >= 3 && values.every(v => v >= 6);
   return { total, result: isB1 ? 'B1' : isA2 ? 'A2' : 'Nicht bestanden' };
 };
