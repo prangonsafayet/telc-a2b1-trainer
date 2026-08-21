@@ -393,7 +393,7 @@ Ein Werbeverbot allein reicht allerdings nicht. Ich fordere daher, gleichzeitig 
 Ich würde mich freuen, wenn Ihre Zeitung dem Thema weiter so viel Raum geben würde.
 
 Mit freundlichen Grüßen
-Daniel Okafor`
+Tobias Reinhardt`
       }
     ],
     tipps:

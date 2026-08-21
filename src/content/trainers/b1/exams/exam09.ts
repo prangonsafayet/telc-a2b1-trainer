@@ -12,24 +12,24 @@ const exam = {
         'Lesen Sie zuerst die zehn Überschriften. Lesen Sie dann die fünf Texte und entscheiden Sie: Welche Überschrift passt am besten zu welchem Text?',
       headlines: [
         'Immer mehr Väter nehmen Elternzeit',
-        'Wohnprojekt: Studierende und Senioren unter einem Dach',
+        'Kita-Plätze: Eltern warten immer länger',
         'Streit unter Nachbarn: Was tun bei Lärm?',
         'Großeltern als Babysitter: Hilfe mit Grenzen',
         'Familienurlaub: Die beliebtesten Reiseziele',
         'Stadt eröffnet neues Familienzentrum',
         'Hausarbeit: Paare teilen sich die Aufgaben noch immer ungleich',
-        'Immer mehr Menschen leben allein',
+        'Väter und Karriere: Teilzeit bleibt die Ausnahme',
         'Geschwister: Der erste Streit — und die längste Freundschaft',
         'Nachbarschaftshilfe per App: Neue Plattform gestartet'
       ],
       texts: [
-        'Günstig wohnen und dabei Gutes tun: Beim Projekt „Jung hilft Alt“ ziehen Studierende bei älteren Menschen ein, die allein in großen Wohnungen leben. Statt Miete zu zahlen, helfen die jungen Leute im Haushalt, gehen einkaufen oder leisten einfach Gesellschaft. Beide Seiten profitieren: Die Senioren sind weniger einsam, und die Studierenden sparen viel Geld.',
+        'Rund zwei Drittel der Großeltern in Deutschland betreuen regelmäßig ihre Enkelkinder — ohne diese Hilfe könnten viele Eltern gar nicht arbeiten. Eine neue Umfrage zeigt aber auch: Fast die Hälfte der Befragten fühlt sich manchmal überfordert und sagt das aus Rücksicht nicht. Fachleute empfehlen deshalb klare Absprachen — feste Tage, feste Zeiten und ein offenes Gespräch, wenn es zu viel wird.',
         'Nach neuen Zahlen des Statistischen Amtes bleiben immer mehr Männer nach der Geburt ihres Kindes zu Hause. Jeder vierte Vater beantragt inzwischen Elternzeit — vor zehn Jahren war es nur jeder zehnte. Allerdings bleiben die meisten Väter nur zwei Monate zu Hause, während Mütter im Durchschnitt ein Jahr pausieren. Experten fordern deshalb bessere Bedingungen für Familien.',
         'Wer trägt der alten Dame von nebenan den Einkauf in den vierten Stock? Wer leiht einen Werkzeugkasten? Die neue kostenlose App „Nebenan aktiv“ bringt Menschen aus demselben Viertel zusammen, die sich gegenseitig unterstützen möchten. Schon in der ersten Woche haben sich über zweitausend Nutzerinnen und Nutzer angemeldet. Die Stadt unterstützt das Projekt.',
         'Kochen, putzen, Wäsche waschen: Eine aktuelle Untersuchung zeigt, dass Frauen in Deutschland pro Tag fast zwei Stunden mehr im Haushalt arbeiten als ihre Partner — auch dann, wenn beide berufstätig sind. Zwar sagen die meisten Paare, sie wollten sich die Arbeit fair teilen. Im Alltag klappt das aber offenbar selten.',
         'Beratung für Eltern, eine Krabbelgruppe für die Kleinsten und ein offenes Café für alle: Am Samstag eröffnet die Stadt in der Bahnhofstraße ein neues Zentrum für Familien. Dort finden Mütter und Väter künftig alle Angebote an einem Ort — von der Hebammensprechstunde bis zum Erste-Hilfe-Kurs am Kind. Zur Eröffnung gibt es ein Fest mit Kinderprogramm.'
       ],
-      answers: [1, 0, 9, 6, 5]
+      answers: [3, 0, 9, 6, 5]
     },
     teil2: {
       anweisung:
