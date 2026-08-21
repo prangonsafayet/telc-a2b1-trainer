@@ -5,6 +5,13 @@ import { type ExamRun } from '@features/exam/types/run.ts';
 import { readLocal, removeLocal, writeLocal } from '@shared/lib/storage.ts';
 import { type ExamModule } from '@shared/types';
 
+import { installMemoryStorage } from '../support/memoryStorage.ts';
+
+/* Before the first read, which is in `beforeEach`. Without a real `Storage` this suite ran
+   against the private in-memory fallback inside `@shared/lib/storage.ts` — so it tested the
+   degraded path, and warned about Node's unusable experimental `localStorage` on every run. */
+installMemoryStorage();
+
 /* The run in progress is the one piece of state a candidate cannot recreate: mis-reading it
    throws away answers and remaining time mid-exam. It has been written in two shapes — the
    B1/B2 trainer used zustand's `persist`, which wraps the payload as

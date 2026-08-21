@@ -14,9 +14,14 @@ The trainers are peers, described once in the **registry** at
 `shared/config/trainers.ts`: one `TRAINERS` descriptor per trainer names its identity and
 route namespace, which paper it sets, where its slice of the progress document lives, and
 the content it studies from (loaded lazily — see below). That is the only place a
-per-trainer fact may live — a `no-restricted-syntax` rule refuses the literals `'a2b1'`,
-`'b1'` and `'b2'` as values anywhere else in `src/`. Every screen, route, hook and nav item
-is generated from `TRAINER_ORDER`, so none of them needs editing to add a trainer.
+per-trainer fact may live — a `no-restricted-syntax` rule refuses a trainer id anywhere
+else in `src/`, in every shape it can take: as a value (`mode === 'b1'`), as an object key
+(`{ b1: … }`) and as a property read (`db.b1`, `TRAINERS.a2b1`). Type-level uses are not
+matched, so the unions that DEFINE the ids and `ProgressDatabase`'s own fields still
+declare theirs. Four files are exempt: the registry, `src/content/**`, and the persisted
+document's two irreducible per-trainer spots (`progress/lib/progressDb.ts`,
+`auth/lib/mergeProgress.ts`). Every screen, route, hook and nav item is generated from
+`TRAINER_ORDER`, so none of them needs editing to add a trainer.
 
 **The extensibility claim, stated precisely.** This was measured, not assumed: a fourth
 trainer was planted to see what actually needs to change. Adding one costs its content

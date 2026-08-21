@@ -4,20 +4,14 @@
  * which the paper itself carries.
  */
 
-/* Sourced straight from each trainer's own paper.ts, not from the content barrel: that
-   barrel's evaluation is all-or-nothing (importing one export loads every trainer's whole
-   content), which is exactly what per-trainer chunking depends on nobody doing — see the
-   comment atop `content/trainers/index.ts`. */
-import { B1_PAPER } from '@content/trainers/b1/paper.ts';
-import { B2_PAPER } from '@content/trainers/b2/paper.ts';
-
 import {
   SINGLE_LEVEL_MODULE_META,
   SINGLE_LEVEL_RATING_CRITERIA,
   SINGLE_LEVEL_RATING_SCALE
 } from '@shared/config/singleLevelExam.ts';
+import { TRAINERS } from '@shared/config/trainers.ts';
 import { moduleMinutes } from '@shared/lib/paper.ts';
-import { type ExamModule, type SingleLevelTrainerId, type TrainerPaper } from '@shared/types';
+import { type ExamModule, type TrainerId, type TrainerPaper } from '@shared/types';
 
 import HoerenModule from '@features/exam/components/modules/single-level/HoerenModule.tsx';
 import LesenModule from '@features/exam/components/modules/single-level/LesenModule.tsx';
@@ -35,11 +29,10 @@ import { SINGLE_LEVEL_RUN_FORMAT } from './runFormat.ts';
 import { countUnanswered } from './scoring.ts';
 import { summarizeAttempt } from './summary.ts';
 
-/** Named by format rather than by trainer, same as the papers this file used to import. */
-const SINGLE_LEVEL_PAPERS: Readonly<Record<SingleLevelTrainerId, TrainerPaper>> = {
-  b1: B1_PAPER,
-  b2: B2_PAPER
-};
+/* The paper a level sets comes from that trainer's own descriptor. This file used to keep a
+   second map of the same pairing, which is exactly the per-trainer table the registry
+   exists to be the only copy of — `TrainerInfo.paper` is eager for this reason. */
+const paperFor = (level: TrainerId): TrainerPaper => TRAINERS[level].paper;
 
 const ratingSpec = (module: RatedModule): RatingSpec => {
   const criteria = SINGLE_LEVEL_RATING_CRITERIA[module];
@@ -54,8 +47,8 @@ export const SINGLE_LEVEL_FORMAT: SingleLevelFormat = {
   ...SINGLE_LEVEL_RUN_FORMAT,
   examLabel: exam => `${exam.title} · ${exam.level.toUpperCase()}`,
   moduleName: (module: ExamModule) => SINGLE_LEVEL_MODULE_META[module].name,
-  minutes: (module, exam, settings) => moduleMinutes(SINGLE_LEVEL_PAPERS[exam.level], module, settings),
-  briefing: (module, exam) => SINGLE_LEVEL_PAPERS[exam.level].briefing[module],
+  minutes: (module, exam, settings) => moduleMinutes(paperFor(exam.level), module, settings),
+  briefing: (module, exam) => paperFor(exam.level).briefing[module],
   rating: { schreiben: ratingSpec('schreiben'), sprechen: ratingSpec('sprechen') },
   speakingHint:
     'Rate against the Redemittel: did you present clearly, react to your partner, and reach a result in Teil 3?',

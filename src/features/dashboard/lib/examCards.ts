@@ -17,6 +17,9 @@ import { type ExamCardModel, type ExamModuleChoice } from '../types/dashboard.ts
 const DIFFICULTY_ACCENTS: Readonly<Record<ExamDifficulty, string>> = {
   easy: 'var(--success)',
   medium: 'var(--warning)',
+  /* Not the B1 trainer: `b1` is the A2·B1 paper's hardest difficulty tier, and
+     `ExamDifficulty` names the key. The trainer-id rule cannot tell the two apart. */
+  // eslint-disable-next-line no-restricted-syntax -- see above
   b1: 'var(--primary)'
 };
 

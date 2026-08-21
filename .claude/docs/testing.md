@@ -34,21 +34,32 @@ npm run test:watch   # vitest in watch mode
 | `unit/errorReport`           | a LanguageTool match maps to the right weakness category and issue type                                                                            |
 | `unit/languageToolClient`    | the dynamic-feedback client — its feature flag and its base URL are independent switches                                                           |
 | `unit/mergeProgress`         | cloud sync's field-by-field merge, so no attempt, curriculum tick, SRS box or streak is silently dropped                                           |
-| `unit/dashboardModel`        | dashboard meters and weak-area detection against each paper's own pass line, not the other paper's                                                 |
+| `unit/dashboardModel`        | dashboard meters, their heading and weak-area detection against each paper's own pass line, not the other paper's                                  |
+| `unit/attemptSummary`        | the pass line a results screen marks its bars at, per paper — the bar primitive used to default it to the A2·B1 paper's                            |
 | `render/routes`              | every route mounts with no React warning                                                                                                           |
 | `render/contentInjection`    | authored HTML is injected, never shown as text                                                                                                     |
 | `render/authVisibility`      | the signed-out warnings appear everywhere                                                                                                          |
 | `render/examDate`            | the date window is enforced, not merely suggested                                                                                                  |
 | `render/examFlow`            | a full attempt on the dual-level paper, including a mid-module reload                                                                              |
 | `render/examFinish`          | the finish path acts on submit, not inside a state updater                                                                                         |
+| `render/examBinding`         | a trainer's paper, papers and store survive a progress write that does not touch the exam                                                          |
+| `render/selfRating`          | the ×3 self-rating maths, against each productive module's own maximum on both papers                                                              |
 | `render/schedulePlan`        | the pages re-shape with the exam date, all fallbacks included                                                                                      |
 | `render/practiceHub`         | flashcard and quiz answers write a real SRS transition into a trainer's own document slice, swept over every single-level trainer                  |
 | `render/singleLevelExamFlow` | the single-level equivalent of `examFlow` — a full attempt including a mid-module reload, swept over every single-level trainer                    |
 
 **No jsdom.** happy-dom provides `matchMedia`, both observers, `scrollIntoView` and
 pointer capture out of the box, so `tests/render/setup.ts` only adds React's act flag and
-an in-memory `Storage` — happy-dom ships none, and without it every persistence assertion
-would pass vacuously. Anything that needs a genuine browser belongs in Playwright.
+the in-memory `Storage` from `tests/support/memoryStorage.ts` — happy-dom ships none, and
+without it every persistence assertion would pass vacuously. Anything that needs a genuine
+browser belongs in Playwright.
+
+The **logic** project installs that same storage wherever a suite persists anything
+(`unit/runStore`). Node 22+ defines `localStorage` as an experimental getter that is
+unusable without `--localstorage-file`: merely reading it warns, and `@shared/lib/storage.ts`
+then silently degrades to its private fallback, so the suite tested the wrong path and every
+run printed an `ExperimentalWarning`. Install it, never probe for it — `typeof
+globalThis.localStorage` is itself what triggers the warning.
 
 `mount()` in `tests/render/harness.ts` waits for `aria-busy` to clear rather than
 sleeping: a lazily-loaded route can outlast any fixed timeout, and a route that renders

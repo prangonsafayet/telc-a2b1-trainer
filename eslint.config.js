@@ -49,8 +49,11 @@ const FEATURES_AND_APP = {
   message: 'src/shared must stay feature-agnostic. If it needs feature knowledge it belongs in that feature.'
 };
 
+/* `@shared/components` is listed as well as `@shared/components/**`: the `/**` form does
+   not match the bare barrel, so `import { Teil } from '@shared/components'` slipped through
+   this rule while every path under it was refused. Proven with a planted import. */
 const APPLICATION_CODE = {
-  group: ['@features/**', '@app/**', '@shared/components/**'],
+  group: ['@features/**', '@app/**', '@shared/components', '@shared/components/**'],
   message: 'src/content is inert data. It must not depend on application code.'
 };
 
@@ -148,10 +151,16 @@ const SHARED_UI_STAYS_GENERIC = {
 };
 
 /* A trainer's facts live in its registry descriptor, never in a comparison against its id.
-   Writing 'b1' as a value anywhere else is how the three trainers grew special cases in the
-   first place, so it is refused: read the fact from `TRAINERS[trainer]`, or add it there.
-   The two exempt places are the registry itself and the content folders, which are keyed by
-   trainer by definition.
+   Naming 'b1' anywhere else is how the three trainers grew special cases in the first
+   place, so it is refused: read the fact from `TRAINERS[trainer]`, or add it there.
+
+   Four exempt places. The registry itself and the content folders are keyed by trainer by
+   definition. The other two are the persisted document's own plumbing —
+   `progress/lib/progressDb.ts` and `auth/lib/mergeProgress.ts` — which architecture.md
+   measured as irreducible: `exactOptionalPropertyTypes` means a trainer nobody has opened
+   must be an ABSENT key rather than an explicit undefined, so the merge is spelled out per
+   trainer instead of looped. Widening this rule is what surfaced them; they are exempted by
+   name rather than silenced line by line, so the count stays visible here.
 
    The selector deliberately excludes `TSLiteralType`, so the union declarations that DEFINE
    the ids (`type TrainerId = 'a2b1' | 'b1' | 'b2'`) still typecheck — it is trainer ids used
@@ -162,14 +171,29 @@ const TRAINER_IDS = ['a2b1', 'b1', 'b2'];
 const NO_TRAINER_ID_LITERALS = {
   name: 'no-trainer-id-literals',
   files: ['src/**/*.{ts,tsx}'],
-  ignores: ['src/shared/config/trainers.ts', 'src/content/**'],
+  ignores: [
+    'src/shared/config/trainers.ts',
+    'src/content/**',
+    'src/features/progress/lib/progressDb.ts',
+    'src/features/auth/lib/mergeProgress.ts'
+  ],
   rules: {
     'no-restricted-syntax': [
       'error',
-      ...TRAINER_IDS.map(id => ({
-        selector: `:not(TSLiteralType) > Literal[value='${id}']`,
-        message: `'${id}' is a trainer id: read the fact you need from TRAINERS[trainer] in @shared/config/trainers.ts instead of testing the id. If the fact does not exist yet, add it to the descriptor — that is what makes a fourth trainer one registry entry.`
-      }))
+      ...TRAINER_IDS.flatMap(id =>
+        [
+          /* `'b1'` as a value, including a computed key: `mode === 'b1'`, `db['b1']`. */
+          `:not(TSLiteralType) > Literal[value='${id}']`,
+          /* An object key that names one: `{ b1: … }`. A TYPE member is a different node
+             (`TSPropertySignature`), so the unions and `ProgressDatabase` still declare theirs. */
+          `Property > Identifier.key[name='${id}']`,
+          /* Reaching one out by name: `db.b1`, `TRAINERS.a2b1`. */
+          `MemberExpression > Identifier.property[name='${id}']`
+        ].map(selector => ({
+          selector,
+          message: `'${id}' is a trainer id: read the fact you need from TRAINERS[trainer] in @shared/config/trainers.ts instead of naming the trainer. If the fact does not exist yet, add it to the descriptor — that is what makes a fourth trainer one registry entry.`
+        }))
+      )
     ]
   }
 };

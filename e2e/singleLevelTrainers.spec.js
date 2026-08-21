@@ -17,6 +17,13 @@ const SINGLE_LEVEL_TRAINERS = [
 /** Every trainer the switcher offers, root first. */
 const ALL_TRAINERS = [{ path: '/', name: 'telc Deutsch A2·B1' }, ...SINGLE_LEVEL_TRAINERS];
 
+/**
+ * A trainer's name is registry data, not a pattern. No current name holds a regex
+ * metacharacter, but the registry is meant to accept names nobody has written yet — and
+ * `telc Deutsch B2 (Beruf)` would silently match the wrong menu item, or nothing.
+ */
+const startsWith = text => new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`);
+
 const collectConsoleErrors = page => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -82,7 +89,7 @@ test.describe('the trainer switcher', () => {
 
     for (const { path, name } of ALL_TRAINERS) {
       await page.getByRole('button', { name: 'Switch trainer' }).click();
-      await page.getByRole('menuitem', { name: new RegExp(`^${name}`) }).click();
+      await page.getByRole('menuitem', { name: startsWith(name) }).click();
       await expect(page).toHaveURL(`http://localhost:5173${path}`);
       await expect(page.getByRole('heading', { name: /^Dashboard/, level: 1 })).toBeVisible();
     }
