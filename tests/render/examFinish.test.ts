@@ -110,7 +110,7 @@ beforeEach(async () => {
   stored = [];
   nextAttemptId = 1;
   controller = null;
-  runStore.clear();
+  runStore.clear('a2b1');
   errors = captureErrors();
 
   const container = document.createElement('div');
@@ -137,7 +137,7 @@ describe('finishing a run', () => {
     await act(async () => {
       live().beginModule();
     });
-    expect(runStore.load()?.phase).toBe('module');
+    expect(runStore.load('a2b1')?.phase).toBe('module');
 
     /* An answer first: with an update already pending React defers a state updater to the
        next render, so a finish that lives inside one has not run when submit() returns. */
@@ -149,7 +149,7 @@ describe('finishing a run', () => {
        tick is part of the attempt. */
     expect(stored[0]?.answers).toEqual({ 'l1.0': 'a' });
     /* And the whole transition happened, not just the scoring. */
-    expect(runStore.load()).toBeNull();
+    expect(runStore.load('a2b1')).toBeNull();
 
     /* Once, not once per render pass. */
     await settle();
@@ -168,6 +168,6 @@ describe('finishing a run', () => {
     });
 
     expect(stored).toHaveLength(1);
-    expect(runStore.load()).toBeNull();
+    expect(runStore.load('a2b1')).toBeNull();
   });
 });

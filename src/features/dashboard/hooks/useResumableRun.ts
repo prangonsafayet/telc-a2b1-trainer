@@ -20,8 +20,8 @@ export interface ResumableRun {
 
 /**
  * The half-finished run of one trainer's paper, if there is one. Two trainers that set the
- * same paper share its storage key, so a stored run that names another trainer is not this
- * trainer's to offer.
+ * same paper share its storage key but keep separate entries under it, so this only ever
+ * offers — and only ever discards — the run belonging to the trainer it was asked about.
  */
 export const useResumableRun = (trainer: TrainerId): ResumableRun => {
   const navigate = useNavigate();
@@ -29,16 +29,13 @@ export const useResumableRun = (trainer: TrainerId): ResumableRun => {
   const store = format.runStore;
   const start = useStartAttempt(trainer);
   const basePath = TRAINERS[trainer].basePath;
-  const [run, setRun] = useState<ExamRun | null>(() => {
-    const stored = store.load();
-    return stored?.trainer === trainer ? stored : null;
-  });
+  const [run, setRun] = useState<ExamRun | null>(() => store.load(trainer));
 
   const discard = useCallback(() => {
-    store.clear();
+    store.clear(trainer);
     setRun(null);
     toast.info('In-progress attempt discarded.');
-  }, [store]);
+  }, [store, trainer]);
 
   const resume = useCallback(() => {
     if (run) void navigate(`${basePath}/exam/${String(run.examId)}/${run.mode}`);

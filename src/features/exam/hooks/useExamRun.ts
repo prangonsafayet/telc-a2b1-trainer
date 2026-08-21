@@ -86,7 +86,10 @@ export const useExamRun = <
   const examId = exam.id;
 
   const [run, setRun] = useState<ExamRun>(() => {
-    const saved = store.load();
+    /* The store hands back this trainer's run only. The trainer is re-checked all the same:
+       resuming another trainer's run would mark it against the wrong paper, which is a worse
+       failure than starting fresh, so it is asserted where it is relied on. */
+    const saved = store.load(trainer);
     if (saved !== null && saved.trainer === trainer && saved.examId === examId && saved.mode === mode) {
       return saved;
     }
@@ -163,7 +166,7 @@ export const useExamRun = <
       });
 
       saveAttempt(attempt);
-      store.clear();
+      store.clear(trainer);
       stopSpeech();
 
       const copy = format.scoring.completionToast(exam, attempt);
@@ -171,7 +174,7 @@ export const useExamRun = <
 
       void navigate(`${basePath}/results/${String(attempt.id)}`, { replace: true });
     },
-    [format, exam, saveAttempt, store, navigate, basePath]
+    [format, exam, saveAttempt, store, trainer, navigate, basePath]
   );
 
   /** Records the time spent, then moves to the next module, the rating screen, or the end. */
@@ -239,13 +242,13 @@ export const useExamRun = <
   }, [patch, minutes]);
 
   const abort = useCallback(() => {
-    store.clear();
+    store.clear(trainer);
     stopSpeech();
     toast.info('Attempt aborted', {
       description: 'Nothing was saved. Start again whenever you are ready.'
     });
     void navigate(basePath || '/');
-  }, [store, navigate, basePath]);
+  }, [store, trainer, navigate, basePath]);
 
   /*
    * One-second heartbeat while a timed module is open. It must not depend on `run`

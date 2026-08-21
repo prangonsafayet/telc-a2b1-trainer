@@ -50,9 +50,14 @@ export interface ExamRun {
   readonly moduleStart: number | null;
 }
 
-/** Reading and writing the run in progress. One implementation, one key per format. */
+/**
+ * Reading and writing the run in progress. One implementation, one key per format — and
+ * within a key, one entry per trainer, since two trainers can set the same paper. Every
+ * method therefore names the trainer it acts for: `load` hands back that trainer's run and
+ * nobody else's, and `clear` leaves the other trainers' runs where they are.
+ */
 export interface ExamRunStore {
-  readonly load: () => ExamRun | null;
+  readonly load: (trainer: TrainerId) => ExamRun | null;
   readonly save: (run: ExamRun) => void;
-  readonly clear: () => void;
+  readonly clear: (trainer: TrainerId) => void;
 }

@@ -1,7 +1,8 @@
 /**
- * The one place a run in progress is read from and written to. Both papers use it; they
- * differ only in the storage key their descriptor names, so a half-finished A2·B1 attempt
- * and a half-finished B1 attempt never see each other.
+ * The one place a run in progress is read from and written to. Each paper names its own
+ * storage key, and within a key every trainer keeps its own entry — the B1 and B2 trainers
+ * share the single-level key, and a half-finished B1 sitting must survive a candidate
+ * merely opening a B2 exam route.
  */
 
 import { MODULE_META } from '@shared/config/exam.ts';
@@ -82,15 +83,77 @@ export const parseRun = (value: unknown): ExamRun | null => {
   };
 };
 
-export const createRunStore = (storageKey: string): ExamRunStore => ({
-  load: () => parseRun(readLocalJson(storageKey)),
-  save: run => {
-    writeLocal(storageKey, JSON.stringify(run));
-  },
-  clear: () => {
-    removeLocal(storageKey);
+/** In-flight runs of one storage key, keyed by the trainer each one belongs to. */
+export type RunsByTrainer = Partial<Record<TrainerId, ExamRun>>;
+
+/**
+ * Every run stored under one key, whichever of the three shapes it is in.
+ *
+ * The current shape is a map keyed by trainer id. Two older ones are still in real
+ * browsers and both are migrated by filing the single run they hold under the trainer it
+ * names: a bare run (what the A2·B1 key has always held, and what the B1/B2 key held before
+ * the two trainers stopped overwriting each other) and zustand's `{ state: { run } }`
+ * envelope, which called the trainer `level`. Neither key is renamed, so nobody loses an
+ * attempt to the migration.
+ *
+ * Exported for its unit tests: it decides whether a candidate keeps or loses a half-finished
+ * exam, from data the app does not control.
+ */
+export const parseRuns = (value: unknown): RunsByTrainer => {
+  const runs: RunsByTrainer = {};
+
+  /* A legacy payload is a run in its own right — a map never has an `examId` — so try that
+     first and file what it holds under its own trainer. */
+  const legacy = parseRun(value);
+  if (legacy !== null) {
+    runs[legacy.trainer] = legacy;
+    return runs;
   }
-});
+
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return runs;
+  const stored = value as Partial<Record<string, unknown>>;
+  for (const trainer of TRAINER_ORDER) {
+    const run = parseRun(stored[trainer]);
+    /* An entry has to agree with the key it sits under, or a hand-edited file could offer
+       one trainer's run to another and mark it against the wrong paper. */
+    if (run !== null && run.trainer === trainer) runs[trainer] = run;
+  }
+  return runs;
+};
+
+export const createRunStore = (storageKey: string): ExamRunStore => {
+  const read = (): RunsByTrainer => parseRuns(readLocalJson(storageKey));
+
+  /* Drops the key entirely once no trainer has a run left, so an aborted attempt leaves
+     nothing behind — and anything unparseable that was there is cleaned up with it. */
+  const write = (runs: RunsByTrainer): void => {
+    if (Object.keys(runs).length === 0) {
+      removeLocal(storageKey);
+      return;
+    }
+    writeLocal(storageKey, JSON.stringify(runs));
+  };
+
+  return {
+    load: trainer => read()[trainer] ?? null,
+    save: run => {
+      const runs = read();
+      runs[run.trainer] = run;
+      write(runs);
+    },
+    clear: trainer => {
+      /* Rebuilt without the one trainer rather than deleted from, so the other trainers'
+         runs are carried over untouched. */
+      const runs = read();
+      const remaining: RunsByTrainer = {};
+      for (const id of TRAINER_ORDER) {
+        const run = runs[id];
+        if (run !== undefined && id !== trainer) remaining[id] = run;
+      }
+      write(remaining);
+    }
+  };
+};
 
 interface NewRun {
   readonly trainer: TrainerId;

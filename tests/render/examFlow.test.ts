@@ -20,7 +20,7 @@ let errors: ReturnType<typeof captureErrors>;
 
 beforeEach(() => {
   localStorage.clear();
-  runStore.clear();
+  runStore.clear('a2b1');
   seedProgress({ daysUntilExam: 30 });
   errors = captureErrors();
 });
@@ -41,7 +41,7 @@ describe('a single-module practice run', () => {
     await click(start);
     expect(view.text()).toMatch(/Teil 1 — Anzeigen zuordnen/);
     expect(view.text()).toMatch(/4[45]:\d\d/);
-    const started = runStore.load();
+    const started = runStore.load('a2b1');
     expect(started?.phase).toBe('module');
     /* An absolute deadline, not a countdown: a countdown cannot survive a reload. */
     expect(started?.deadline).toBeTruthy();
@@ -50,15 +50,15 @@ describe('a single-module practice run', () => {
     const radios = [...document.querySelectorAll('button[role="radio"]')];
     expect(radios.length).toBeGreaterThan(0);
     await click(radios[0]);
-    expect(Object.keys(runStore.load()?.answers ?? {})).toHaveLength(1);
+    expect(Object.keys(runStore.load('a2b1')?.answers ?? {})).toHaveLength(1);
 
     /* 4. The refresh: tear the tree down and remount at the same URL. */
-    const savedDeadline = runStore.load()?.deadline;
+    const savedDeadline = runStore.load('a2b1')?.deadline;
     await view.unmount();
     view = await mount('/exam/1/lesen');
     expect(view.text()).toMatch(/Teil 1 — Anzeigen zuordnen/);
-    expect(runStore.load()?.deadline).toBe(savedDeadline);
-    expect(Object.keys(runStore.load()?.answers ?? {})).toHaveLength(1);
+    expect(runStore.load('a2b1')?.deadline).toBe(savedDeadline);
+    expect(Object.keys(runStore.load('a2b1')?.answers ?? {})).toHaveLength(1);
     expect(document.querySelectorAll('button[role="radio"][data-state="checked"]')).toHaveLength(1);
 
     /* 5. Submit with blanks: confirm, then results. */
@@ -73,7 +73,7 @@ describe('a single-module practice run', () => {
     await waitFor(() => /time used/.test(view.text()));
     expect(view.text()).toMatch(/time used/);
     /* The in-progress run must be gone, or the dashboard offers to resume a finished exam. */
-    expect(runStore.load()).toBeNull();
+    expect(runStore.load('a2b1')).toBeNull();
 
     const attempts = storedAttempts();
     expect(attempts).toHaveLength(1);
