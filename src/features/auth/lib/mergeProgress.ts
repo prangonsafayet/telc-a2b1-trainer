@@ -68,6 +68,9 @@ const mergeTrainerDoc = (
   if (!remote) return local;
   if (!local) return remote;
   return {
+    /* As at the root: a field this build does not know about is carried over from the newer
+       side rather than dropped. Every field it does know is overwritten below. */
+    ...(localIsNewer ? { ...remote, ...local } : { ...local, ...remote }),
     attempts: unionAttempts(remote.attempts, local.attempts),
     learnDone: orLearnDone(remote.learnDone, local.learnDone),
     srs: mergeSrs(remote.srs, local.srs),
@@ -86,10 +89,12 @@ const mergeTrainerDoc = (
  * activity merge exactly like a trainer document's, and each trainer document is merged
  * the same way, field by field.
  *
- * This function rebuilds the document rather than spreading it, so anything added to
- * `ProgressDatabase` and not handled here is silently dropped on the next sync — which is
- * exactly how every B1/B2 attempt, curriculum tick, SRS box and streak was lost when the
- * two level trainers were first added. Add a field to the document, add it here.
+ * Every field this build knows about is rebuilt rather than spread, so anything added to
+ * `ProgressDatabase` and not handled here gets no merge rule — which is exactly how every
+ * B1/B2 attempt, curriculum tick, SRS box and streak was lost when the two level trainers
+ * were first added. Add a field to the document, add it here. A field this build has never
+ * heard of is a different case: it is carried over from the newer side untouched, so an
+ * older build cannot delete a newer one's progress by syncing.
  *
  * The remote side arrives as untrusted JSON from the cloud table and may have been written
  * by a build with fewer fields, so `useCloudSync` normalizes it before it gets here.
@@ -113,6 +118,12 @@ export const mergeProgress = (
   const b2 = mergeTrainerDoc(remote.b2, local.b2, localIsNewer);
 
   return {
+    /* Fields this build does not know about are carried over from whichever side is newer,
+       rather than dropped. The rebuild below is what makes the merge safe for the fields it
+       does know — and what silently deleted the B1/B2 documents once — so anything a newer
+       build added must survive an older build syncing. Every known field is overwritten
+       below, so the spread decides nothing this function has an opinion about. */
+    ...(localIsNewer ? { ...remote, ...local } : { ...local, ...remote }),
     attempts: unionAttempts(remote.attempts, local.attempts),
     learnDone: orLearnDone(remote.learnDone, local.learnDone),
     settings: localIsNewer

@@ -199,3 +199,79 @@ describe('normalizeDatabase', () => {
     expect(fixed.b1?.settings.writingMinutes).toBeDefined();
   });
 });
+
+/*
+ * Forward compatibility. `useCloudSync` pulls the row, runs `normalizeDatabase` over it and
+ * merges it — and both of those used to rebuild the document from a whitelist, so a field
+ * this build has never heard of was dropped and then pushed back stripped. That deletes a
+ * newer build's progress from the cloud: exactly the shape of the wipe that lost every
+ * B1/B2 attempt once, one rollout step removed (a cached bundle, a staged rollout, a tab
+ * that has not reloaded). The registry's own extensibility note says a fourth trainer costs
+ * a field on `ProgressDatabase`, so this is the rollout that produces it.
+ */
+describe('a document written by a newer build', () => {
+  /** The row as `push` upserts it — JSON, where a field the types cannot express is visible. */
+  const asRow = (database: ProgressDatabase): Partial<Record<string, unknown>> =>
+    JSON.parse(JSON.stringify(database)) as Partial<Record<string, unknown>>;
+
+  /** A fourth trainer's document, as a build this one predates would have written it. */
+  const newerRow = (): unknown => ({
+    attempts: [attempt(1)],
+    learnDone: {},
+    settings: DEFAULT_SETTINGS,
+    srs: {},
+    activity: {},
+    b3: { attempts: [attempt(9)], learnDone: { d1t0: true }, srs: {}, activity: {} },
+    _updatedAt: '2026-06-01'
+  });
+
+  it('keeps the unknown trainer document when the remote row is normalized', () => {
+    const normalized = normalizeDatabase(newerRow());
+
+    expect(asRow(normalized)['b3']).toEqual({
+      attempts: [attempt(9)],
+      learnDone: { d1t0: true },
+      srs: {},
+      activity: {}
+    });
+    /* And the fields this build does know are still validated, not merely passed through. */
+    expect(normalized.b1?.settings.playsAllowed).toBeDefined();
+  });
+
+  it('keeps it through the pull, the merge and the push back', () => {
+    const remote = normalizeDatabase(newerRow());
+    const local = normalizeDatabase({ attempts: [attempt(2)], _updatedAt: '2026-07-01' });
+
+    const pushed = asRow(mergeProgress(local, remote));
+
+    expect(pushed['b3']).toEqual({
+      attempts: [attempt(9)],
+      learnDone: { d1t0: true },
+      srs: {},
+      activity: {}
+    });
+    /* The known fields still merge as they always did. */
+    expect((pushed['attempts'] as readonly DualLevelAttempt[]).map(a => a.id)).toEqual([1, 2]);
+  });
+
+  it('keeps an unknown field inside a trainer document too', () => {
+    const remote = normalizeDatabase({
+      ...db(),
+      b1: { ...levelDoc(), quizStreak: 4 },
+      _updatedAt: '2026-06-01'
+    });
+    const local = normalizeDatabase({ ...db({ b1: levelDoc() }), _updatedAt: '2026-07-01' });
+
+    const pushed = asRow(mergeProgress(local, remote));
+
+    expect((pushed['b1'] as Partial<Record<string, unknown>>)['quizStreak']).toBe(4);
+  });
+
+  it('takes the newer side when both know the field', () => {
+    const older = normalizeDatabase({ ...db(), b3: { attempts: [] }, _updatedAt: '2026-01-01' });
+    const newer = normalizeDatabase({ ...db(), b3: { attempts: [attempt(9)] }, _updatedAt: '2026-09-01' });
+
+    expect(asRow(mergeProgress(newer, older))['b3']).toEqual({ attempts: [attempt(9)] });
+    expect(asRow(mergeProgress(older, newer))['b3']).toEqual({ attempts: [attempt(9)] });
+  });
+});

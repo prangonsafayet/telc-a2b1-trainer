@@ -56,6 +56,7 @@ const unchanged = <T extends object>(before: Partial<T>, after: T): boolean =>
 const normalizeTrainerDoc = (raw: unknown): LevelTrainerDoc => {
   const input = (typeof raw === 'object' && raw !== null ? raw : {}) as Partial<LevelTrainerDoc>;
   const normalized: LevelTrainerDoc = {
+    ...input,
     attempts: Array.isArray(input.attempts) ? input.attempts : [],
     learnDone: typeof input.learnDone === 'object' ? input.learnDone : {},
     srs: typeof input.srs === 'object' ? input.srs : {},
@@ -68,11 +69,19 @@ const normalizeTrainerDoc = (raw: unknown): LevelTrainerDoc => {
 /**
  * Coerces anything that claims to be a progress document into a usable one. Data can
  * arrive from an older version of the app, a hand-edited import file or the cloud, so
- * every field is defaulted rather than trusted.
+ * every field is defaulted rather than trusted — and every field it does not recognise is
+ * carried through untouched, because the writer may simply be a newer build than this one.
  */
 export const normalizeDatabase = (raw: unknown): ProgressDatabase => {
   const input = (typeof raw === 'object' && raw !== null ? raw : {}) as Partial<ProgressDatabase>;
   return {
+    /* Unrecognised fields are carried over, not dropped. This function runs over the *remote*
+       row on its way into `mergeProgress`, so a whitelist rebuild here means a device on an
+       older cached build strips a newer build's field — a fourth trainer's document, say —
+       and pushes the stripped copy back, deleting that progress from the cloud. That is the
+       trainer-document wipe again, one rollout step removed. Every known field below is still
+       validated, so nothing untrusted is believed. */
+    ...input,
     attempts: Array.isArray(input.attempts) ? input.attempts : [],
     learnDone: typeof input.learnDone === 'object' ? input.learnDone : {},
     settings: withDefaults(DEFAULT_SETTINGS, input.settings),
