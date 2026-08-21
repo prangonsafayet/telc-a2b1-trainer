@@ -84,7 +84,13 @@ export const usePractice = (trainer: TrainerId): PracticeController => {
     [vocab, srs, today]
   );
 
-  const session = usePracticeStore(state => state.session);
+  /*
+   * The store is module-global and survives a route change, so a session started under one
+   * trainer must not appear under another: it would render that trainer's cards and grade
+   * them into this one's SRS. Same guard the exam runner applies to a resumable run.
+   */
+  const stored = usePracticeStore(state => state.session);
+  const session = stored?.trainer === trainer ? stored : null;
   const storeStartFlashcards = usePracticeStore(state => state.startFlashcards);
   const storeStartQuiz = usePracticeStore(state => state.startQuiz);
   const flip = usePracticeStore(state => state.flip);
@@ -107,9 +113,13 @@ export const usePractice = (trainer: TrainerId): PracticeController => {
 
   const startFlashcards = useCallback(
     (category: PracticeCategory) => {
-      storeStartFlashcards(category, pickSessionCards(vocab, category, srs, today, FLASHCARD_SESSION_SIZE));
+      storeStartFlashcards(
+        trainer,
+        category,
+        pickSessionCards(vocab, category, srs, today, FLASHCARD_SESSION_SIZE)
+      );
     },
-    [storeStartFlashcards, vocab, srs, today]
+    [storeStartFlashcards, trainer, vocab, srs, today]
   );
 
   const startQuiz = useCallback(
@@ -119,31 +129,31 @@ export const usePractice = (trainer: TrainerId): PracticeController => {
           ? STUDY_CATEGORIES.flatMap(candidate => idsFor(vocab, candidate))
           : idsFor(vocab, category);
       const dueIds = ids.filter(id => isDue(srs[id], today));
-      storeStartQuiz(category, buildQuiz(vocab, category, QUIZ_SESSION_SIZE, dueIds));
+      storeStartQuiz(trainer, category, buildQuiz(vocab, category, QUIZ_SESSION_SIZE, dueIds));
     },
-    [storeStartQuiz, vocab, srs, today]
+    [storeStartQuiz, trainer, vocab, srs, today]
   );
 
   const gradeCard = useCallback(
     (knewIt: boolean) => {
       const current = usePracticeStore.getState().session;
-      if (current?.kind !== 'flashcards') return;
+      if (current?.kind !== 'flashcards' || current.trainer !== trainer) return;
       const card = current.cards[current.index];
       if (card) recordReview(card.id, knewIt);
       storeGrade(knewIt);
     },
-    [recordReview, storeGrade]
+    [recordReview, storeGrade, trainer]
   );
 
   const chooseOption = useCallback(
     (option: number) => {
       const current = usePracticeStore.getState().session;
-      if (current?.kind !== 'quiz' || current.chosen !== null) return;
+      if (current?.kind !== 'quiz' || current.trainer !== trainer || current.chosen !== null) return;
       const question = current.questions[current.index];
       if (question) recordReview(question.id, option === question.answer);
       storeChoose(option);
     },
-    [recordReview, storeChoose]
+    [recordReview, storeChoose, trainer]
   );
 
   return useMemo(

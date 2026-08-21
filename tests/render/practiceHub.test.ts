@@ -133,3 +133,46 @@ describe.each(SINGLE_LEVEL_TRAINERS)('the practice hub — %s', trainer => {
     await view.unmount();
   });
 });
+
+/*
+ * The practice store is module-global and is deliberately not persisted, so it survives a
+ * route change between trainers. Before the session carried its trainer, a session left
+ * open under one trainer rendered its cards under the next one and graded them into that
+ * trainer's SRS — the exam runner has always guarded the equivalent case for a stored run.
+ */
+describe('a session does not follow the user to another trainer', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    usePracticeStore.getState().end();
+  });
+
+  it('leaves the second trainer with no session, and grades nothing into its document', async () => {
+    const [first, second] = SINGLE_LEVEL_TRAINERS;
+    if (first === undefined || second === undefined) throw new Error('need two single-level trainers');
+
+    const firstView = await mount(`${TRAINERS[first].basePath}/practice`);
+    await click(findByText(/Flashcards/));
+    const started = usePracticeStore.getState().session;
+    if (started?.kind !== 'flashcards') throw new Error('expected a flashcard session to start');
+    expect(started.trainer).toBe(first);
+
+    /* The store still holds the first trainer's session while the second trainer mounts. */
+    const view = await mount(`${TRAINERS[second].basePath}/practice`);
+    expect(usePracticeStore.getState().session?.trainer).toBe(first);
+
+    /*
+     * "End session" renders only while a session is live. It is asserted present on the
+     * first trainer before being asserted absent on the second, so the absence means the
+     * session did not follow — not merely that the marker was mistyped.
+     */
+    expect(firstView.text()).toMatch(/End session/);
+    expect(view.text()).toMatch(/Flashcards/);
+    expect(view.text()).not.toMatch(/End session/);
+
+    const secondKey = TRAINERS[second].docKey;
+    if (secondKey === null) throw new Error(`${second} has no docKey`);
+    const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    const db = raw === null ? {} : (JSON.parse(raw) as Partial<Record<string, { srs?: SrsMap }>>);
+    expect(db[secondKey]?.srs ?? {}).toEqual({});
+  });
+});

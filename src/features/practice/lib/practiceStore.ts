@@ -2,13 +2,17 @@
  * The in-progress practice session (flashcards or quiz), in a zustand store with immer.
  * Deliberately not persisted: a session is minutes long, and every graded answer is
  * already folded into the trainer document's SRS state as it happens.
+ *
+ * The store is module-global, so it outlives a route change between trainers. Every session
+ * therefore records the trainer it was started for, and `usePractice` surfaces it only to
+ * that trainer — otherwise a B1 session left open would grade B1 cards into B2's SRS.
  */
 
 import { castDraft } from 'immer';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-import { type StudyCategory, type StudyCard } from '@shared/types';
+import { type StudyCard, type StudyCategory, type TrainerId } from '@shared/types';
 
 import { type QuizQuestion } from './quiz.ts';
 
@@ -16,6 +20,8 @@ export type PracticeCategory = StudyCategory | 'mixed';
 
 export interface FlashcardSession {
   readonly kind: 'flashcards';
+  /** Which trainer's vocabulary this session was started from — see `usePractice`. */
+  readonly trainer: TrainerId;
   readonly category: PracticeCategory;
   readonly cards: readonly StudyCard[];
   readonly index: number;
@@ -26,6 +32,8 @@ export interface FlashcardSession {
 
 export interface QuizSession {
   readonly kind: 'quiz';
+  /** Which trainer's vocabulary this session was started from — see `usePractice`. */
+  readonly trainer: TrainerId;
   readonly category: PracticeCategory;
   readonly questions: readonly QuizQuestion[];
   readonly index: number;
@@ -39,8 +47,16 @@ export type PracticeSession = FlashcardSession | QuizSession;
 
 export interface PracticeStore {
   readonly session: PracticeSession | null;
-  readonly startFlashcards: (category: PracticeCategory, cards: readonly StudyCard[]) => void;
-  readonly startQuiz: (category: PracticeCategory, questions: readonly QuizQuestion[]) => void;
+  readonly startFlashcards: (
+    trainer: TrainerId,
+    category: PracticeCategory,
+    cards: readonly StudyCard[]
+  ) => void;
+  readonly startQuiz: (
+    trainer: TrainerId,
+    category: PracticeCategory,
+    questions: readonly QuizQuestion[]
+  ) => void;
   readonly flip: () => void;
   /** Flashcards: grade the open card and move on. */
   readonly grade: (knewIt: boolean) => void;
@@ -55,10 +71,11 @@ export const usePracticeStore = create<PracticeStore>()(
   immer(set => ({
     session: null,
 
-    startFlashcards: (category, cards) => {
+    startFlashcards: (trainer, category, cards) => {
       set(state => {
         state.session = castDraft({
           kind: 'flashcards' as const,
+          trainer,
           category,
           cards,
           index: 0,
@@ -69,10 +86,11 @@ export const usePracticeStore = create<PracticeStore>()(
       });
     },
 
-    startQuiz: (category, questions) => {
+    startQuiz: (trainer, category, questions) => {
       set(state => {
         state.session = castDraft({
           kind: 'quiz' as const,
+          trainer,
           category,
           questions,
           index: 0,
