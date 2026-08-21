@@ -21,7 +21,11 @@ export default defineConfig({
         resolve: { alias: LAYER_ALIASES },
         test: {
           name: 'logic',
-          include: ['tests/unit/**/*.test.ts'],
+          /* `.js` as well as `.ts`: a suite that has to import a file outside
+             `tsconfig.app.json` — `vite.config.ts` belongs to the Node project — cannot be
+             `.ts`, because tsc refuses the cross-project import (TS6307). Plain JS is how
+             the e2e specs solve the same problem. */
+          include: ['tests/unit/**/*.test.{ts,js}'],
           environment: 'node',
           /* The content files are large; a slow first import is not a hanging test. */
           testTimeout: 20_000

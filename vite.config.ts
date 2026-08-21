@@ -4,6 +4,8 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
+import { crawlerDisallows, sitemapPages, trainerBasePaths } from './scripts/siteMeta.mjs';
+
 /* VITE_* values are inlined at build time, so a build that runs without them produces a
    site with cloud sync permanently off — and nothing in the hosting dashboard will say
    so. Fail loudly in the build log instead. */
@@ -23,7 +25,6 @@ const siteUrlHtml = (env: Record<string, string>): Plugin => {
             '[site-url-html] VITE_SITE_URL is not set — canonical, og:url and og:image tags are omitted from index.html.'
           );
           /* Better to omit these tags than to publish a wrong absolute URL. */
-          /* Better to omit these than to publish a wrong absolute URL. */
           return html
             .replace(
               /^.*(?:rel="canonical"|property="og:url"|property="og:image"|name="twitter:image").*$\n?/gm,
@@ -36,14 +37,16 @@ const siteUrlHtml = (env: Record<string, string>): Plugin => {
     },
     generateBundle() {
       if (!site) return;
-      const pages = ['/', '/learn', '/guide'];
+      const basePaths = trainerBasePaths();
       this.emitFile({
         type: 'asset',
         fileName: 'sitemap.xml',
         source:
           '<?xml version="1.0" encoding="UTF-8"?>\n' +
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-          pages.map(u => `  <url><loc>${site}${u}</loc><changefreq>monthly</changefreq></url>`).join('\n') +
+          sitemapPages(basePaths)
+            .map(u => `  <url><loc>${site}${u}</loc><changefreq>monthly</changefreq></url>`)
+            .join('\n') +
           '\n</urlset>\n'
       });
       this.emitFile({
@@ -52,8 +55,10 @@ const siteUrlHtml = (env: Record<string, string>): Plugin => {
         source:
           'User-agent: *\nAllow: /\n\n' +
           '# Per-user attempt screens hold nothing crawlable.\n' +
-          'Disallow: /exam/\nDisallow: /results/\nDisallow: /review/\n\n' +
-          `Sitemap: ${site}/sitemap.xml\n`
+          crawlerDisallows(basePaths)
+            .map(path => `Disallow: ${path}`)
+            .join('\n') +
+          `\n\nSitemap: ${site}/sitemap.xml\n`
       });
     }
   };
