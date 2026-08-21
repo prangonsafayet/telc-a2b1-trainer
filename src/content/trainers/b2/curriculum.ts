@@ -90,7 +90,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
     },
     muendlich: {
       title: 'Redemittel: Über Erfahrungen sprechen, Diskussion, Konsens',
-      html: `<p><b>Teil 1 — Über Erfahrungen sprechen (ca. 3 Min., eine eigene Erfahrung erzählen — KEINE Präsentation):</b><br>
+      html: `<p><b>Teil 1 — Über Erfahrungen sprechen (ca. 2,5 Min. pro Person, eine eigene Erfahrung erzählen — KEINE Präsentation):</b><br>
 · Einstieg: Ich möchte Ihnen von einer Erfahrung erzählen, bei der … · Bei mir war das so: …<br>
 · Verlauf: Zuerst …, dann …, am Ende …<br>
 · Gefühl & Bewertung: Aus meiner Erfahrung … · Damals habe ich mich … gefühlt, weil … · Rückblickend würde ich sagen, dass …<br>

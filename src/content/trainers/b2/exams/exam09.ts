@@ -392,7 +392,7 @@ Werner Kluge`
     teil1: {
       titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Engagement oder eine Organisation, die ich bewundere“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Engagement oder eine Organisation, die ich bewundere“ (ca. 2,5 Minuten pro Person). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
         'Beschreiben Sie, wie Sie diese Person, Gruppe oder Organisation kennengelernt haben.',
         'Erzählen Sie, was Sie an diesem Engagement beeindruckt hat.',

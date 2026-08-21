@@ -10,7 +10,7 @@ export const B1_PAPER: TrainerPaper = {
 
   briefing: {
     lesen:
-      '3 parts, 20 items, 75 points. Teil 1: match 5 texts to 10 headlines (5 pts each). Teil 2: read one article, answer 5 a/b/c questions (5 pts each). Teil 3: match 10 situations to 12 ads — some situations may have no perfect-looking ad, pick the best fit (2.5 pts each). Budget ≈ 20 minutes per part and never leave a blank!',
+      '3 parts, 20 items, 75 points. Teil 1: match 5 texts to 10 headlines (5 pts each). Teil 2: read one article, answer 5 a/b/c questions (5 pts each). Teil 3: match 10 situations to 12 ads — some situations may have no perfect-looking ad, pick the best fit (2.5 pts each). Budget ≈ 20 minutes per Teil out of the 65 this trainer gives Lesen, and never leave a blank!',
     sprachbausteine:
       '2 parts, 20 items, 30 points. Teil 1: a letter with 10 grammar gaps — pick a, b or c (1.5 pts each). Teil 2: a letter with 10 gaps — fill them from a bank of 15 words, each word fits only once (1.5 pts each). Look left AND right of every gap.',
     hoeren:

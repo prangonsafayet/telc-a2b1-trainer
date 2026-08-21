@@ -389,7 +389,7 @@ Daniela Petzold`
     teil1: {
       titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Eine technische Entwicklung, die meinen Alltag verändert hat“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Eine technische Entwicklung, die meinen Alltag verändert hat“ (ca. 2,5 Minuten pro Person). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
         'Beschreiben Sie, wie Sie diese technische Entwicklung zum ersten Mal genutzt haben.',
         'Erzählen Sie, was sich dadurch in Ihrem Alltag konkret verändert hat.',

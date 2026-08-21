@@ -36,7 +36,7 @@ Teil 1: Einander kennenlernen (15 pts, ~3 min) · Teil 2: Über ein Thema sprech
 
 <h2 id="g-lesen">3. Crack: Lesen (part of the 90-minute block, 75 points)</h2>
 <div class="card">
-<div class="tactic"><b>Budget ≈60 min for Lesen and 30 for Sprachbausteine — but watch a clock, not a bell.</b> Nothing in the exam tells you when to switch; decide your own split before you sit down and hold to it.</div>
+<div class="tactic"><b>Budget ≈65 min for Lesen and ≈25 for Sprachbausteine — but watch a clock, not a bell.</b> telc prescribes only the 90-minute block; nothing in the exam tells you when to switch. That 65/25 is the split this trainer's timer uses, because Lesen carries 75 of the 105 points in the block. Decide your own split before you sit down and hold to it.</div>
 <div class="tactic"><b>Teil 1: read the 5 short texts first, the headlines second.</b> Underline who is writing and why — a headline echoes the purpose of a text (looking for, offering, warning, inviting…), not just a noun the two happen to share. Five of the 10 headlines are never used; don't force a fit that isn't there.</div>
 <div class="tactic"><b>Teil 2: work the five questions in text order.</b> The article is long enough that hunting for the relevant paragraph beats reading start to finish. Wrong options usually recycle a phrase from the text in a context that quietly changes its meaning.</div>
 <div class="tactic"><b>Teil 3: pull the hard facts out of each situation first</b> — who, what, when, how much — before scanning the 12 ads. Two ads are pure distractors, near-misses on price, age group or availability. If nothing fits perfectly, pick the closest match; there is no "none of the above" option.</div>

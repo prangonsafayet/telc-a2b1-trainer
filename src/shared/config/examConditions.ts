@@ -16,7 +16,7 @@ export interface SettingChoice {
 
 export const WRITING_MINUTE_CHOICES: Readonly<Record<ExamFormatId, readonly SettingChoice[]>> = {
   'dual-level': [
-    { value: 10, label: '10 minutes (official)' },
+    { value: 10, label: '10 minutes (exam pace)' },
     { value: 15, label: '15 minutes (relaxed)' }
   ],
   'single-level': [
@@ -58,10 +58,15 @@ export const PASS_RULES: Readonly<Record<ExamFormatId, string>> = {
 };
 
 /**
- * What the official paper allows, said next to the writing-time choice. The number comes
- * from the trainer's own paper rather than from a second list, so the two cannot disagree.
+ * How long the paper gives for writing, said next to the choice. The number comes from the
+ * trainer's own paper rather than from a second list, so the two cannot disagree. Only the
+ * single-level paper's 30 minutes is a published telc figure; the A2·B1 Schreiben slot is
+ * this app's, so it is not claimed as official (see `a2b1/paper.ts`).
  */
-export const officialWritingHint = (minutes: number): string => `Official: ${String(minutes)} minutes.`;
+export const writingTimeHint = (format: ExamFormatId, minutes: number): string =>
+  format === 'single-level'
+    ? `Official: ${String(minutes)} minutes.`
+    : `This trainer's pace: ${String(minutes)} minutes.`;
 
 export const PLAYS_ALLOWED_CHOICES: Readonly<Record<ExamFormatId, readonly SettingChoice[]>> = {
   'dual-level': [

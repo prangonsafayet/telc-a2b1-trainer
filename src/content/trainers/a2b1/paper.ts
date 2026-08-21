@@ -1,11 +1,13 @@
 import { type TrainerPaper } from '@shared/types';
 
-/* How the telc Deutsch A2·B1 sitting runs: its official timings, the briefing shown before each
+/* How the telc Deutsch A2·B1 sitting runs: its timings, the briefing shown before each
    module, and the copy its module renderers need. Plain text throughout — only the guide,
    the curriculum intro and the cheatsheets are injected as HTML. */
 
 export const A2B1_PAPER: TrainerPaper = {
-  /* Lesen 45, Sprachbausteine 35, Hören 35, Schreiben 10 (official), Sprechen 15. */
+  /* Lesen 45, Sprachbausteine 35, Hören 35 and Sprechen 15 come from telc's own Testformat
+     for A2·B1; the 10-minute Schreiben slot is this trainer's, since the source document
+     records no official duration for it. */
   minutes: { lesen: 45, sprachbausteine: 35, hoeren: 35, schreiben: 10, sprechen: 15 },
 
   briefing: {

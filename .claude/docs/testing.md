@@ -36,6 +36,7 @@ npm run test:watch   # vitest in watch mode
 | `unit/mergeProgress`         | cloud sync's field-by-field merge, so no attempt, curriculum tick, SRS box or streak is silently dropped                                           |
 | `unit/dashboardModel`        | dashboard meters, their heading and weak-area detection against each paper's own pass line, not the other paper's                                  |
 | `unit/attemptSummary`        | the pass line a results screen marks its bars at, per paper — the bar primitive used to default it to the A2·B1 paper's                            |
+| `unit/examConditions`        | which exam-condition numbers the copy may call telc's and which it must call the app's own                                                         |
 | `render/routes`              | every route mounts with no React warning                                                                                                           |
 | `render/contentInjection`    | authored HTML is injected, never shown as text                                                                                                     |
 | `render/authVisibility`      | the signed-out warnings appear everywhere                                                                                                          |

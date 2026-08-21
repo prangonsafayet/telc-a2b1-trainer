@@ -404,7 +404,7 @@ Tomasz Kowalski`
     teil1: {
       titel: 'Teil 1 — Über Erfahrungen sprechen',
       anweisung:
-        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Umweltproblem, das mich beschäftigt“ (ca. 2,5 Minuten). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
+        'Erzählen Sie Ihrer Partnerin / Ihrem Partner von einer eigenen Erfahrung zum Thema „Ein Umweltproblem, das mich beschäftigt“ (ca. 2,5 Minuten pro Person). Gehen Sie auf die Punkte ein und reagieren Sie anschließend auf die Fragen Ihres Partners.',
       punkte: [
         'Beschreiben Sie eine konkrete Situation, in der Ihnen das Problem bewusst wurde.',
         'Erzählen Sie, was genau passiert ist.',

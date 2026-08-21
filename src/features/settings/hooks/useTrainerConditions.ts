@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
 import {
-  officialWritingHint,
   PLAYS_ALLOWED_CHOICES,
   PLAYS_ALLOWED_HINTS,
   WRITING_MINUTE_CHOICES,
+  writingTimeHint,
   type SettingChoice
 } from '@shared/config/examConditions.ts';
 import { TRAINERS } from '@shared/config/trainers.ts';
@@ -18,7 +18,7 @@ export interface TrainerConditions {
   readonly accent: string;
   readonly settings: TrainerExamSettings;
   readonly writingChoices: readonly SettingChoice[];
-  /** What the official paper allows for writing, next to the choice. */
+  /** How long the paper gives for writing, next to the choice. */
   readonly writingHint: string;
   readonly playsChoices: readonly SettingChoice[];
   /** What the real sitting does with its audio, next to the choice. */
@@ -43,7 +43,7 @@ export const useTrainerConditions = (trainer: TrainerId): TrainerConditions => {
       accent,
       settings,
       writingChoices: WRITING_MINUTE_CHOICES[format],
-      writingHint: officialWritingHint(officialWritingMinutes),
+      writingHint: writingTimeHint(format, officialWritingMinutes),
       playsChoices: PLAYS_ALLOWED_CHOICES[format],
       playsHint: PLAYS_ALLOWED_HINTS[format],
       setSetting

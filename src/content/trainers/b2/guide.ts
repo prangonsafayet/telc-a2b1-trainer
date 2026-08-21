@@ -25,7 +25,7 @@ Sprachbausteine — 2 Teile, 20 items, 30 points: Teil 1 is a text with 10 gramm
 Teil 1: 5 short texts, richtig/falsch (5 pts each) · Teil 2: one long interview, 10 richtig/falsch statements (2.5 pts each) · Teil 3: 5 announcements, richtig/falsch (5 pts each). Same task types as B1, compressed into roughly two-thirds the time — the recordings run faster and give you less room to relisten.</p>
 <p><b>Schriftlicher Ausdruck (Writing)</b> — 30 minutes, 45 points. Write a <b>halbformelle E-Mail</b> (semi-formal) that fully answers what the prompt asks — not a formal Behördenbrief, and not a choice between two tasks.</p>
 <p><b>Mündlicher Ausdruck (Speaking)</b> — ≈15 minutes, in pairs, 75 points, with <b>20 minutes Vorbereitungszeit</b> beforehand.<br>
-Teil 1: Über Erfahrungen sprechen (25 pts, ~5 min) · Teil 2: Diskussion (25 pts, ~5 min) · Teil 3: Gemeinsam etwas planen (25 pts, ~5 min).</p>
+Teil 1: Über Erfahrungen sprechen (25 pts, ~5 min) · Teil 2: Diskussion (25 pts, ~5 min) · Teil 3: Gemeinsam etwas planen (25 pts, ~5 min). Those minutes are per part for the pair, so plan on roughly half of each for your own speaking — the task sheets in this trainer say <i>ca. 2,5 Minuten pro Person</i> for Teil 1.</p>
 </div>
 
 <h2 id="g-scoring">2. Scoring &amp; pass rules</h2>
@@ -36,7 +36,7 @@ Teil 1: Über Erfahrungen sprechen (25 pts, ~5 min) · Teil 2: Diskussion (25 pt
 
 <h2 id="g-lesen">3. Crack: Lesen (part of the 90-minute block, 75 points)</h2>
 <div class="card">
-<div class="tactic"><b>Budget ≈60 min for Lesen and 30 for Sprachbausteine — but watch a clock, not a bell.</b> Nothing in the exam tells you when to switch; decide your own split before you sit down and hold to it.</div>
+<div class="tactic"><b>Budget ≈65 min for Lesen and ≈25 for Sprachbausteine — but watch a clock, not a bell.</b> telc prescribes only the 90-minute block; nothing in the exam tells you when to switch. That 65/25 is the split this trainer's timer uses, because Lesen carries 75 of the 105 points in the block. Decide your own split before you sit down and hold to it.</div>
 <div class="tactic"><b>Teil 1: at B2 the headlines get abstract.</b> They increasingly name the underlying idea of a text rather than repeating its vocabulary — a text about commuters complaining reads under a headline about "Mobilität in der Stadt", not "Verkehr". Read for the point being made, not just the topic. Five of the 10 headlines are never used.</div>
 <div class="tactic"><b>Teil 2: expect argument, not just fact.</b> The article often weighs a debate; questions test whether you followed the author's stance and reasoning, not only isolated details. Work the five questions in text order and watch for options that state the opposite of the author's actual position.</div>
 <div class="tactic"><b>Teil 3: pull the hard facts out of each situation first</b> — who, what, when, how much — before scanning the 12 ads. Two ads are pure distractors, near-misses on price, audience or availability. If nothing fits perfectly, pick the closest match; there is no "none of the above" option.</div>
