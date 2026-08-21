@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { TRAINERS } from '@shared/config/trainers.ts';
 import { toIsoDate } from '@shared/lib/format.ts';
 import {
+  type ActivityMap,
   type DualLevelAttempt,
   type LearnDoneMap,
   type LevelTrainerSettings,
@@ -16,9 +17,6 @@ import {
 import { bumpActivity, emptyTrainerDoc } from '../lib/progressDb.ts';
 
 import { useProgress } from './useProgress.ts';
-
-/** Practice touches per local ISO date. */
-export type ActivityMap = Partial<Record<string, number>>;
 
 /** The study state of one trainer, whichever slice of the document holds it. */
 export interface TrainerSliceState {

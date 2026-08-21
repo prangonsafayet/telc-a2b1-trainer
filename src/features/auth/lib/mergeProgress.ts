@@ -1,4 +1,5 @@
 import {
+  type ActivityMap,
   type DualLevelAttempt,
   type LearnDoneMap,
   type LevelTrainerDoc,
@@ -6,9 +7,6 @@ import {
   type SingleLevelAttempt,
   type SrsMap
 } from '@shared/types';
-
-/** Practice touches per local ISO date, as both the root slice and a document hold them. */
-type ActivityMap = LevelTrainerDoc['activity'];
 
 /** Attempts are immutable once written, so a union by id is always right. */
 const unionAttempts = <T extends DualLevelAttempt | SingleLevelAttempt>(

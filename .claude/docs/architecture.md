@@ -2,8 +2,9 @@
 
 ```
 src/app        composition root — providers, router, layout. May import anything.
-src/features   vertical slices, each with components/ hooks/ lib/ routes/ and an
-               index.ts naming its public surface.
+src/features   vertical slices, each with components/ hooks/ lib/ routes/ and — where
+               another feature needs something from it — an index.ts naming its
+               public surface.
 src/shared     feature-agnostic building blocks — ui/ primitives, components, hooks,
                lib, config, types, providers.
 src/content    inert data, keyed by trainer — `content/trainers/<id>/` holds that
@@ -84,6 +85,14 @@ re-prove each rule by introducing a violation and confirming lint rejects it.
 (`@features/exam/routes/RunnerPage.tsx`) so importing the exam domain does not drag three
 screens and their dependencies along. An earlier version did export them and produced an
 import cycle that hung the settings route with a permanent loading skeleton.
+
+That is also why `dashboard`, `guide`, `history`, `learn`, `settings`, `practice` and
+`feedback` have no `index.ts` at all: the first five had barrels that exported nothing but
+their route component — the exact pattern above — and the last two had barrels nothing
+imported. `@features/auth`, `@features/exam`, `@features/plan` and `@features/progress`
+are the four features another feature actually reads, so they are the four with a barrel.
+A barrel is the one legal door for a cross-feature import; a feature nobody imports does
+not need a door, and an export list nobody reads is an inventory, not a contract.
 
 **If two features need the same thing, it belongs in `src/shared`** — not in whichever
 feature defined it first. That is why the confirm dialog, the speech layer and the

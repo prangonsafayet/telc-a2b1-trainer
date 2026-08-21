@@ -58,6 +58,13 @@ export interface Settings extends TrainerExamSettings {
 /** Learn-plan checkbox state, keyed `d<day>t<index>`. */
 export type LearnDoneMap = Partial<Record<string, boolean>>;
 
+/**
+ * Practice touches per local ISO date — what a streak is counted from. Named once here
+ * because four places hold the same map: the root slice, every trainer document, the slice
+ * a screen reads, and cloud sync's merge, which had declared its own copy of the type.
+ */
+export type ActivityMap = Partial<Record<string, number>>;
+
 /** The whole persisted document — what localStorage holds and what cloud sync merges. */
 export interface ProgressDatabase {
   readonly attempts: readonly DualLevelAttempt[];
@@ -70,7 +77,7 @@ export interface ProgressDatabase {
    */
   readonly srs: SrsMap;
   /** The root trainer's practice touches per local ISO date — drives its streak. */
-  readonly activity: Partial<Record<string, number>>;
+  readonly activity: ActivityMap;
   /**
    * The B1 and B2 trainer documents. Optional so documents written by older builds
    * stay readable; `normalizeDatabase` fills them in.

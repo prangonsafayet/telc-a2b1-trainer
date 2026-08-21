@@ -1,12 +1,12 @@
 /**
- * Public surface of the plan feature: the adaptive schedule other features read.
+ * Public surface of the plan feature: the adaptive schedule other features read, and the
+ * copy they render it with.
  *
- * The engine is exported alongside the hook because the settings page previews a plan
- * shape for a date the user has not saved yet.
+ * The engine itself (`buildScheduleFrom` and its helpers) is deliberately not here. Its
+ * only caller outside `features/plan` is `tests/unit/schedule.test.ts`, which deep-imports
+ * `lib/buildSchedule.ts` anyway — the settings page previews a plan shape through
+ * `describePlanShape`, not by running the engine.
  */
-export { buildScheduleFrom, splitWorkDays, sprintAnchors } from './lib/buildSchedule.ts';
-export type { ScheduleSource } from './lib/buildSchedule.ts';
-export { trainerScheduleSource } from './lib/trainerSource.ts';
 export { useTrainerSchedule } from './hooks/useTrainerSchedule.ts';
 export {
   describeClamp,
@@ -14,7 +14,6 @@ export {
   describeMockLead,
   describePlanShape,
   examSlotLabel,
-  shortDateLabel,
   slotHeading,
   slotKindLabel
 } from './lib/describeSchedule.ts';

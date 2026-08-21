@@ -2,7 +2,7 @@
 
 import { type ExamModule, type ExamPaper } from './exam.ts';
 import { type LearnPlan } from './learn.ts';
-import { type LearnDoneMap } from './progress.ts';
+import { type ActivityMap, type LearnDoneMap } from './progress.ts';
 import { type SingleLevelAttempt, type SingleLevelExam } from './singleLevelExam.ts';
 import { type SrsMap, type VocabBank } from './vocab.ts';
 
@@ -117,7 +117,7 @@ export interface LevelTrainerDoc {
   /** Spaced-repetition state, keyed by vocab/grammar item id. */
   readonly srs: SrsMap;
   /** Practice touches per local ISO date — drives the streak display. */
-  readonly activity: Partial<Record<string, number>>;
+  readonly activity: ActivityMap;
   readonly settings: LevelTrainerSettings;
 }
 
