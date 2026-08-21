@@ -51,7 +51,7 @@ const NotConfiguredCard = () => {
         </ul>
 
         {d.keyIsSecret ? (
-          <p className="rounded-md border-l-4 border-destructive bg-[color-mix(in_oklab,var(--destructive)_10%,transparent)] p-3 text-destructive">
+          <p className="rounded-md border-l-4 border-destructive bg-[color-mix(in_oklab,var(--destructive)_10%,transparent)] p-3 text-destructive-on-tint">
             <b>Stop.</b> That key is a service-role/secret key. It bypasses row-level security and must never
             be put in a browser app. Rotate it in Supabase, then use the <b>anon / publishable</b> key
             instead.

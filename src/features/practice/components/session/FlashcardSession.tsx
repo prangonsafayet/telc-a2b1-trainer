@@ -61,8 +61,8 @@ const FlashcardSession = ({ session, done, onFlip, onGrade, onRestart, onClose }
               <X /> Didn&apos;t know
             </Button>
             <Button
+              variant="success"
               size="lg"
-              className="bg-[color:var(--success)] text-white hover:bg-[color:var(--success)]/90"
               onClick={() => {
                 onGrade(true);
               }}

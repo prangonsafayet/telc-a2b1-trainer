@@ -54,7 +54,15 @@ describe.each(SINGLE_LEVEL_TRAINERS)('the practice hub — %s', trainer => {
     expect(storedSrs()[cardId]).toBeUndefined();
 
     await click(findByText(/Flip card/));
-    await click(findByText(/Knew it/));
+
+    /* The primary action goes through Button's `success` variant rather than a copy of its
+       classes — the copy shipped `text-white`, which measures 3.89:1 on the green in
+       Chromium's light theme and 2.70:1 in dark. See tests/render/readableColors.test.ts. */
+    const knewIt = findByText(/Knew it/);
+    expect(knewIt?.className).toContain('text-success-on-fill');
+    expect(knewIt?.className).not.toContain('text-white');
+
+    await click(knewIt);
 
     const entry = storedSrs()[cardId];
     expect(entry?.box).toBe(1);

@@ -13,7 +13,7 @@ const badgeVariants = cva(
         default: 'border-transparent bg-primary text-primary-foreground',
         secondary: 'border-transparent bg-secondary text-secondary-foreground',
         destructive:
-          'border-transparent bg-[color-mix(in_oklab,var(--destructive)_14%,transparent)] text-destructive',
+          'border-transparent bg-[color-mix(in_oklab,var(--destructive)_14%,transparent)] text-destructive-on-tint',
         outline: 'text-foreground',
         success:
           'border-transparent bg-[color-mix(in_oklab,var(--success)_16%,transparent)] text-[color:var(--success-foreground)]',

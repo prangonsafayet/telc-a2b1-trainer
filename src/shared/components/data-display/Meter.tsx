@@ -22,7 +22,7 @@ const Meter = ({ label, value, of, colorByScore = false, thresholdPercent, thres
     !colorByScore || pct >= thresholdPercent
       ? 'bg-primary'
       : pct >= 40
-        ? 'bg-[color:var(--warning)]'
+        ? 'bg-warning-foreground'
         : 'bg-destructive';
 
   /* Start empty and fill on the next frame so the bar animates in. */

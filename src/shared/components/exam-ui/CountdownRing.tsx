@@ -53,7 +53,7 @@ const CountdownRing = ({ secondsRemaining, totalSeconds, size = 64, className }:
           strokeDashoffset={circumference * (1 - fraction)}
           className={cn(
             'transition-[stroke-dashoffset,color] duration-1000 ease-linear',
-            critical ? 'text-destructive' : warning ? 'text-[color:var(--warning)]' : 'text-primary'
+            critical ? 'text-destructive' : warning ? 'text-warning-foreground' : 'text-primary'
           )}
         />
       </svg>
