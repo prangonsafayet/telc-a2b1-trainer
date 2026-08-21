@@ -27,9 +27,11 @@ export const WRITING_MINUTE_CHOICES: Readonly<Record<ExamFormatId, readonly Sett
 
 /**
  * The share of a scored section a pass needs, per paper. The A2·B1 paper wants 42 of 60 in
- * three of its four skills; the single-level paper wants 60% of the written and of the oral
- * part. Every consumer — the dashboard meters, the weak-area detection and the copy that
- * names the line — reads this, so the two papers' lines cannot be crossed.
+ * three of its four skills, which telc publishes; the 60% this trainer marks the single-level
+ * paper's written and oral parts at is the app's own working target, since telc publishes only
+ * that paper's weighting table (see `SINGLE_LEVEL_WRITTEN_PASS`). Every consumer — the
+ * dashboard meters, the weak-area detection and the copy that names the line — reads this, so
+ * the two papers' lines cannot be crossed.
  */
 export const PASS_PERCENT: Readonly<Record<ExamFormatId, number>> = {
   'dual-level': 70,
@@ -51,7 +53,8 @@ export const PAPER_TOTAL_MAX: Readonly<Record<ExamFormatId, number>> = {
 /** How each paper is passed, in one sentence — the lead under a dashboard title. */
 export const PASS_RULES: Readonly<Record<ExamFormatId, string>> = {
   'dual-level': 'Aim: ≥ 168/240 overall, with ≥ 42/60 in three skills and ≥ 24/60 in the fourth = B1.',
-  'single-level': 'Pass rule: ≥ 135/225 written and ≥ 45/75 oral — 60% in each part, judged separately.'
+  'single-level':
+    'Aim: ≥ 135/225 written and ≥ 45/75 oral — this trainer marks each part at 60%, judged separately.'
 };
 
 /**

@@ -86,7 +86,7 @@ export const B1_CURRICULUM: LearnPlan = {
       title: 'Kick-off & Kasus-Check',
       focus: 'Akkusativ vs. Dativ — the backbone of every B1 sentence',
       tasks: [
-        'Read the B1 exam guide: the five modules, the points, and the pass rule (60% written + 60% oral).',
+        'Read the B1 exam guide: the five modules, the points, and why the written and the oral part are judged separately — this trainer marks each at 60%.',
         'Review the Kasus reference table in the practice hub, then take the quiz: 15 Kasus items.',
         'One flashcard session (20 cards) of nouns in the practice hub — this becomes your daily routine.'
       ],
@@ -467,7 +467,7 @@ export const B1_CURRICULUM: LearnPlan = {
       ai: [
         {
           t: 'Trend analysis',
-          p: 'Ich bin in Woche 3 meiner telc-B1-Vorbereitung und füge meine Modelltest-Ergebnisse pro Modul ein (Test 3 bis 6). Analysiere den Trend auf Englisch: Wo verliere ich noch Punkte gegenüber der 60%-Grenze und wo gegen ein gutes Ergebnis? Erstelle einen konkreten Plan für die letzte Woche: welcher Skill an welchem Tag, mit je einer messbaren Übung. Danach 10 deutsche Blitzfragen zu meinem schwächsten Grammatikthema.'
+          p: 'Ich bin in Woche 3 meiner telc-B1-Vorbereitung und füge meine Modelltest-Ergebnisse pro Modul ein (Test 3 bis 6). Analysiere den Trend auf Englisch: Wo verliere ich noch Punkte gegenüber der 60-Prozent-Marke, mit der dieser Trainer rechnet, und wo gegen ein gutes Ergebnis? Erstelle einen konkreten Plan für die letzte Woche: welcher Skill an welchem Tag, mit je einer messbaren Übung. Danach 10 deutsche Blitzfragen zu meinem schwächsten Grammatikthema.'
         }
       ]
     },
@@ -529,17 +529,17 @@ export const B1_CURRICULUM: LearnPlan = {
       day: 25,
       tier: 'extension',
       title: 'Modelltest 8',
-      focus: 'The 60% line should be far below you now',
+      focus: 'Both halves comfortably clear',
       tasks: [
         'Take Modelltest 8 under real timing.',
-        'Check the pass math in your results: written 60% and oral 60% are separate hurdles — is your Sprechen practice keeping up?',
+        'Check the pass math in your results: this trainer marks the written and the oral part separately, 60% each — is your Sprechen practice keeping up?',
         'Review every red item and do one flashcard session (20 cards) of your weakest category.'
       ],
       cheats: [],
       ai: [
         {
           t: 'Margin check',
-          p: 'Ich füge meine Modulergebnisse aus telc-B1-Modelltest 8 ein. Rechne mir auf Englisch vor, wie weit ich über oder unter der 60%-Grenze im schriftlichen Teil liege und wie viele Fehler pro Modul ich mir am Prüfungstag leisten kann. Dann simuliere die 5 Aufgabentypen, in denen ich zuletzt Punkte verloren habe — eine nach der anderen, auf Deutsch, mit sofortiger Korrektur.'
+          p: 'Ich füge meine Modulergebnisse aus telc-B1-Modelltest 8 ein. Rechne mir auf Englisch vor, wie weit ich über oder unter 60 Prozent im schriftlichen Teil liege (die Marke, mit der mein Trainer rechnet), und wie viele Fehler pro Modul ich mir am Prüfungstag leisten kann. Dann simuliere die 5 Aufgabentypen, in denen ich zuletzt Punkte verloren habe — eine nach der anderen, auf Deutsch, mit sofortiger Korrektur.'
         }
       ]
     },
@@ -557,7 +557,7 @@ export const B1_CURRICULUM: LearnPlan = {
       ai: [
         {
           t: 'Double examiner',
-          p: 'Du bist telc-B1-Prüfer für die produktiven Teile. Erst Schreiben: Gib mir eine halbformelle Briefaufgabe mit 4 Leitpunkten, ich schreibe in 25 Minuten, du bewertest nach den drei Kriterien mit Punktzahl. Dann Sprechen: Simuliere Teil 2 und Teil 3 auf Deutsch, bleib in der Rolle, und gib mir erst danach Feedback auf Englisch — mit einer ehrlichen Einschätzung, ob das heute die 60% im mündlichen Teil schafft.'
+          p: 'Du bist telc-B1-Prüfer für die produktiven Teile. Erst Schreiben: Gib mir eine halbformelle Briefaufgabe mit 4 Leitpunkten, ich schreibe in 25 Minuten, du bewertest nach den drei Kriterien mit Punktzahl. Dann Sprechen: Simuliere Teil 2 und Teil 3 auf Deutsch, bleib in der Rolle, und gib mir erst danach Feedback auf Englisch — mit einer ehrlichen Einschätzung, ob das heute 60 Prozent im mündlichen Teil erreichen würde.'
         }
       ]
     },

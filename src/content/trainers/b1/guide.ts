@@ -28,10 +28,10 @@ Teil 1: 5 short texts, richtig/falsch (5 pts each) · Teil 2: one long interview
 Teil 1: Einander kennenlernen (15 pts, ~3 min) · Teil 2: Über ein Thema sprechen (30 pts, ~6 min) · Teil 3: Gemeinsam etwas planen (30 pts, ~6 min).</p>
 </div>
 
-<h2 id="g-scoring">2. Scoring &amp; pass rules (official)</h2>
+<h2 id="g-scoring">2. Scoring &amp; pass rules</h2>
 <div class="card">
 <p>300 points total, split into two Teilergebnisse: <b>Teilergebnis I (written) = 225</b> — Lesen 75, Sprachbausteine 30, Hören 75, Schreiben 45 — and <b>Teilergebnis II (oral) = 75</b>. Weighted as Lesen 25%, Sprachbausteine 10%, Hören 25%, Schreiben 15%, Sprechen 25%.</p>
-<div class="callout"><b>Be honest with yourself about the pass rule.</b> telc's own published documents give only this weighting table, not one confirmed percentage threshold per part. Plan for needing a genuinely strong result in <b>both</b> the written and the oral part — they are judged separately — rather than hoping one carries the other.</div>
+<div class="callout"><b>Be honest with yourself about the pass rule.</b> telc's own published documents give only this weighting table, not one confirmed percentage threshold per part. Plan for needing a genuinely strong result in <b>both</b> the written and the oral part — they are judged separately — rather than hoping one carries the other. This trainer marks each part at 60% (135/225 written, 45/75 oral): that is its own working target, not a published telc rule.</div>
 </div>
 
 <h2 id="g-lesen">3. Crack: Lesen (part of the 90-minute block, 75 points)</h2>

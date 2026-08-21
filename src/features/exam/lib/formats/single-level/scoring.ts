@@ -86,7 +86,11 @@ export interface FullExamGrade {
   readonly result: SingleLevelResult;
 }
 
-/** The official rule: ≥135/225 written AND ≥45/75 oral — no compensation between them. */
+/**
+ * The rule this trainer marks by: ≥135/225 written AND ≥45/75 oral, with no compensation
+ * between them. The 60% line is this app's working assumption, not a figure telc publishes —
+ * see `SINGLE_LEVEL_WRITTEN_PASS` in `@shared/config/singleLevelExam.ts`.
+ */
 export const gradeFullExam = (scores: SingleLevelSectionScores): FullExamGrade => {
   const written =
     (scores.lesen ?? 0) + (scores.sprachbausteine ?? 0) + (scores.hoeren ?? 0) + (scores.schreiben ?? 0);
