@@ -4,7 +4,8 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-import { crawlerDisallows, sitemapPages, trainerBasePaths } from './scripts/siteMeta.mjs';
+import { crawlerDisallows, sitemapPages } from './scripts/siteMeta.mjs';
+import { trainerBasePaths } from './scripts/trainerRegistry.mjs';
 
 /* VITE_* values are inlined at build time, so a build that runs without them produces a
    site with cloud sync permanently off — and nothing in the hosting dashboard will say

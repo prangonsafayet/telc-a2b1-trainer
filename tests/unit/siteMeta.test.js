@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { TRAINERS, TRAINER_ORDER } from '@shared/config/trainers.ts';
 
-import { crawlerDisallows, sitemapPages, trainerBasePaths } from '../../scripts/siteMeta.mjs';
+import { crawlerDisallows, sitemapPages } from '../../scripts/siteMeta.mjs';
+import { trainerBasePaths } from '../../scripts/trainerRegistry.mjs';
 
 /*
  * The emitted sitemap.xml and robots.txt used to name three routes — `/`, `/learn`,

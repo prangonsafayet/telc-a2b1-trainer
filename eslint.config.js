@@ -13,6 +13,8 @@ import preferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import prettier from 'eslint-config-prettier';
 
+import { trainerIds } from './scripts/trainerRegistry.mjs';
+
 /* Architecture rules, enforced rather than documented.
  *
  *   src/app       the shell: providers, router, layout. May import anything.
@@ -154,6 +156,11 @@ const SHARED_UI_STAYS_GENERIC = {
    Naming 'b1' anywhere else is how the three trainers grew special cases in the first
    place, so it is refused: read the fact from `TRAINERS[trainer]`, or add it there.
 
+   The id list is READ from the registry rather than restated here — see
+   `scripts/trainerRegistry.mjs`. A hardcoded copy was the single most dangerous edit point in
+   the whole design: miss it when adding a trainer and this rule silently stops covering the
+   new id, so `mode === 'c1'` becomes legal everywhere and nothing fails.
+
    Four exempt places. The registry itself and the content folders are keyed by trainer by
    definition. The other two are the persisted document's own plumbing —
    `progress/lib/progressDb.ts` and `auth/lib/mergeProgress.ts` — which architecture.md
@@ -166,7 +173,7 @@ const SHARED_UI_STAYS_GENERIC = {
    the ids (`type TrainerId = 'a2b1' | 'b1' | 'b2'`) still typecheck — it is trainer ids used
    as VALUES that are banned. Unlike no-restricted-imports this is a different rule key, so
    it neither replaces nor is replaced by the layer entries above. */
-const TRAINER_IDS = ['a2b1', 'b1', 'b2'];
+const TRAINER_IDS = trainerIds();
 
 const TRAINER_ID_SYNTAX = TRAINER_IDS.flatMap(id =>
   [

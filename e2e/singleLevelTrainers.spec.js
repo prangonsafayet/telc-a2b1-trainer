@@ -1,21 +1,27 @@
 import { expect, test } from '@playwright/test';
 
+import { trainerDescriptors } from '../scripts/trainerRegistry.mjs';
+
 /*
  * B1 and B2 set the newer single-level telc paper, and had no Playwright coverage at all —
  * everything in exam.spec.js and smoke.spec.js only ever visits the root (A2·B1) trainer.
  *
  * e2e specs are plain JS with no bundler alias resolution, so they cannot import
- * `TRAINER_ORDER`/`TRAINERS` from src/shared/config/trainers.ts the way the Vitest suites
- * do. This list is kept as close to that registry as a plain-JS file can: it is the only
- * place a trainer's route or name is named twice, and should change if the registry does.
+ * `TRAINER_ORDER`/`TRAINERS` from src/shared/config/trainers.ts the way the Vitest suites do.
+ * They can import plain Node, though, and `scripts/trainerRegistry.mjs` reads the descriptors
+ * straight out of that file — so this spec no longer keeps a copy of the trainer list, and a
+ * fourth trainer is covered here without editing it.
  */
-const SINGLE_LEVEL_TRAINERS = [
-  { path: '/b1', name: 'telc Deutsch B1' },
-  { path: '/b2', name: 'telc Deutsch B2' }
-];
+const TRAINERS = trainerDescriptors().map(trainer => ({
+  path: trainer.basePath || '/',
+  name: trainer.name,
+  format: trainer.format
+}));
+
+const SINGLE_LEVEL_TRAINERS = TRAINERS.filter(trainer => trainer.format === 'single-level');
 
 /** Every trainer the switcher offers, root first. */
-const ALL_TRAINERS = [{ path: '/', name: 'telc Deutsch A2·B1' }, ...SINGLE_LEVEL_TRAINERS];
+const ALL_TRAINERS = TRAINERS;
 
 /**
  * A trainer's name is registry data, not a pattern. No current name holds a regex
