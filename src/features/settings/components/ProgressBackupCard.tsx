@@ -20,8 +20,9 @@ const ProgressBackupCard = () => {
           </Button>
         </div>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          The file is JSON and holds every trainer&apos;s attempts, plans and settings. Importing one replaces
-          what is in this browser.
+          The file is JSON and holds every trainer&apos;s attempts, plans and settings. Importing one asks
+          first, then replaces what is in this browser for the trainers the file carries; a trainer it does
+          not mention keeps its progress. If you are signed in, the result syncs to your other devices.
         </p>
       </CardContent>
     </Card>

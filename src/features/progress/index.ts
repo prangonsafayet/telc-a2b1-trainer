@@ -2,6 +2,7 @@
 export { ProgressProvider } from './providers/ProgressProvider.tsx';
 export { useProgress, useSettings } from './hooks/useProgress.ts';
 export { useProgressBackup } from './hooks/useProgressBackup.ts';
+export { describeImport, planImport } from './lib/importProgress.ts';
 export { touchActivity, useTrainerSlice } from './hooks/useTrainerSlice.ts';
 export {
   EMPTY_DATABASE,
@@ -11,6 +12,7 @@ export {
   stamp
 } from './lib/progressDb.ts';
 export type { ProgressBackup } from './hooks/useProgressBackup.ts';
+export type { ImportPlan } from './lib/importProgress.ts';
 export type { ProgressContextValue, ProgressRecipe } from './providers/ProgressProvider.tsx';
 export type {
   ActivityMap,
