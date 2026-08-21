@@ -168,6 +168,40 @@ const SHARED_UI_STAYS_GENERIC = {
    it neither replaces nor is replaced by the layer entries above. */
 const TRAINER_IDS = ['a2b1', 'b1', 'b2'];
 
+const TRAINER_ID_SYNTAX = TRAINER_IDS.flatMap(id =>
+  [
+    /* `'b1'` as a value, including a computed key: `mode === 'b1'`, `db['b1']`. */
+    `:not(TSLiteralType) > Literal[value='${id}']`,
+    /* An object key that names one: `{ b1: … }`. A TYPE member is a different node
+       (`TSPropertySignature`), so the unions and `ProgressDatabase` still declare theirs. */
+    `Property > Identifier.key[name='${id}']`,
+    /* Reaching one out by name: `db.b1`, `TRAINERS.a2b1`. */
+    `MemberExpression > Identifier.property[name='${id}']`
+  ].map(selector => ({
+    selector,
+    message: `'${id}' is a trainer id: read the fact you need from TRAINERS[trainer] in @shared/config/trainers.ts instead of naming the trainer. If the fact does not exist yet, add it to the descriptor — that is what makes a fourth trainer one registry entry.`
+  }))
+);
+
+/* Primitives come from `@shared/ui`, and until now that was prose only: CLAUDE.md and
+   conventions.md both list it as a non-negotiable, but no rule matched a JSX element name,
+   so a raw `<button>` shipped in the flip card and nothing said a word. The import rules
+   next door were made real for the same reason — architecture.md: "The dependency rules
+   are ESLint rules, not conventions."
+
+   `JSXOpeningElement > JSXIdentifier` matches only the element's own name: attribute names
+   hang off `JSXAttribute`, not off the opening element, so `<Input type="text" />` is fine.
+   A lowercase name is always an intrinsic element, so `<Table>` from the barrel does not
+   match while `<table>` does. */
+const RAW_HTML_CONTROLS = ['button', 'input', 'select', 'textarea', 'form', 'table', 'label'].map(
+  element => ({
+    selector: `JSXOpeningElement > JSXIdentifier[name='${element}']`,
+    message: `<${element}> is a design-system primitive: import it from '@shared/ui'. If the one you need is missing, add it to src/shared/ui in the same style and export it from the barrel — do not reach for raw HTML.`
+  })
+);
+
+const syntax = (...groups) => ({ 'no-restricted-syntax': ['error', ...groups.flat()] });
+
 const NO_TRAINER_ID_LITERALS = {
   name: 'no-trainer-id-literals',
   files: ['src/**/*.{ts,tsx}'],
@@ -177,25 +211,20 @@ const NO_TRAINER_ID_LITERALS = {
     'src/features/progress/lib/progressDb.ts',
     'src/features/auth/lib/mergeProgress.ts'
   ],
-  rules: {
-    'no-restricted-syntax': [
-      'error',
-      ...TRAINER_IDS.flatMap(id =>
-        [
-          /* `'b1'` as a value, including a computed key: `mode === 'b1'`, `db['b1']`. */
-          `:not(TSLiteralType) > Literal[value='${id}']`,
-          /* An object key that names one: `{ b1: … }`. A TYPE member is a different node
-             (`TSPropertySignature`), so the unions and `ProgressDatabase` still declare theirs. */
-          `Property > Identifier.key[name='${id}']`,
-          /* Reaching one out by name: `db.b1`, `TRAINERS.a2b1`. */
-          `MemberExpression > Identifier.property[name='${id}']`
-        ].map(selector => ({
-          selector,
-          message: `'${id}' is a trainer id: read the fact you need from TRAINERS[trainer] in @shared/config/trainers.ts instead of naming the trainer. If the fact does not exist yet, add it to the descriptor — that is what makes a fourth trainer one registry entry.`
-        }))
-      )
-    ]
-  }
+  rules: syntax(TRAINER_ID_SYNTAX)
+};
+
+/* `no-restricted-syntax` is configured, not accumulated, exactly like `no-restricted-imports`
+   above: this entry matches every `.tsx` the entry above matches, so it has to restate the
+   trainer-id selectors or it would switch them off for every component in the app. None of
+   the four trainer-id exemptions is a `.tsx` file, so restating them here changes nothing
+   about which files they cover. Its own exemption is the design system itself — those files
+   are where the raw elements are supposed to live. */
+const NO_RAW_HTML_CONTROLS = {
+  name: 'no-raw-html-controls',
+  files: ['src/**/*.tsx'],
+  ignores: ['src/shared/ui/**'],
+  rules: syntax(TRAINER_ID_SYNTAX, RAW_HTML_CONTROLS)
 };
 
 const CONTENT_IS_DATA_ONLY = {
@@ -390,6 +419,7 @@ export default tseslint.config(
   SHARED_UI_STAYS_GENERIC,
   CONTENT_IS_DATA_ONLY,
   NO_TRAINER_ID_LITERALS,
+  NO_RAW_HTML_CONTROLS,
 
   {
     /* One component per file. The vendored shadcn files ship several per file and are

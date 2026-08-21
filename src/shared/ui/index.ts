@@ -54,6 +54,8 @@ export { Input } from './input.tsx';
 export type { InputProps } from './input.tsx';
 export { Label } from './label.tsx';
 export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from './popover.tsx';
+export { Pressable } from './pressable.tsx';
+export type { PressableProps } from './pressable.tsx';
 export { Progress } from './progress.tsx';
 export type { ProgressProps } from './progress.tsx';
 export { RadioGroup, RadioGroupItem } from './radio-group.tsx';

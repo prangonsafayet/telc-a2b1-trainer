@@ -76,6 +76,24 @@ describe.each(SINGLE_LEVEL_TRAINERS)('the practice hub — %s', trainer => {
     await view.unmount();
   });
 
+  /* The card is the control — the whole 3D face is clickable — so it has to stay a real
+     button with its own label. It was a raw `<button>` until `Pressable` existed, and the
+     lint rule that now refuses raw controls cannot say whether the replacement still works. */
+  it('flips when the card itself is clicked, not only the Flip button', async () => {
+    const view = await mount(`${info.basePath}/practice`);
+    await click(findByText(/Flashcards/));
+
+    const front = bySelector('button[aria-label="Show the English side"]');
+    expect(front).toHaveLength(1);
+    await click(front[0]);
+
+    expect(bySelector('button[aria-label="Show the German side"]')).toHaveLength(1);
+    const flipped = usePracticeStore.getState().session;
+    expect(flipped?.kind === 'flashcards' && flipped.flipped).toBe(true);
+
+    await view.unmount();
+  });
+
   it('grading "Didn\'t know" resets the box to 1 and counts a wrong answer', async () => {
     const view = await mount(`${info.basePath}/practice`);
     await click(findByText(/Flashcards/));
