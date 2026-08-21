@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/logo.svg" alt="" width="76" height="76">
   <h1>telc Deutsch Trainer</h1>
-  <p><strong>Three telc exams — A2·B1, B1, B2 — 35 complete mock exams under real timing, with official scoring.</strong></p>
+  <p><strong>Three telc exams — A2·B1, B1, B2 — 35 complete mock exams under real timing, marked by the official weighting.</strong></p>
   <p>
     <a href="https://github.com/prangonsafayet/telc-a2b1-trainer/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/prangonsafayet/telc-a2b1-trainer/actions/workflows/ci.yml/badge.svg"></a>
     <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
@@ -131,7 +131,7 @@ verified in a real browser via the network log, not just by chunk names in the
 build report.
 
 **Two test layers, because they catch different things.** Vitest runs the pure
-logic in Node and the mounted app in happy-dom — 1,003 assertions across 24 files
+logic in Node and the mounted app in happy-dom — 1,212 assertions across 39 files
 in a few seconds, including a sweep of the schedule engine across every runway
 length from five days to ninety, and a check that an attempt survives a
 mid-module reload with its clock still running. Playwright covers what no DOM
