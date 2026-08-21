@@ -10,9 +10,20 @@ export const fmtClock = (seconds: number): string => {
   return `${String(minutes)}:${String(rest).padStart(2, '0')}`;
 };
 
-/** ISO timestamp → `dd.mm.yy`. */
+/**
+ * ISO timestamp or calendar day → `dd.mm.yy`.
+ *
+ * Goes through `parseIsoDate` first for the reason that helper exists: `new Date()` reads a
+ * bare `YYYY-MM-DD` as UTC midnight, which is the previous day anywhere west of Greenwich.
+ * Every caller passes a full timestamp today — `attempt.date` — where that does not apply,
+ * but this is the one formatter in the module and a stored `examDate` is one call away.
+ */
 export const fmtDate = (iso: string): string =>
-  new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
+  (parseIsoDate(iso) ?? new Date(iso)).toLocaleDateString('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit'
+  });
 
 export const wordCount = (text: string | undefined): number => {
   const trimmed = text?.trim();

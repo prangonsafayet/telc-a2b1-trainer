@@ -45,21 +45,10 @@ const DUAL_LEVEL_COLUMNS = [
   'Sprechen',
   'Total',
   'Result',
-  'Time',
-  ''
+  'Time'
 ] as const;
 
-const SINGLE_LEVEL_COLUMNS = [
-  'Date',
-  'Test',
-  'Mode',
-  'Written',
-  'Oral',
-  'Total',
-  'Result',
-  'Time',
-  ''
-] as const;
+const SINGLE_LEVEL_COLUMNS = ['Date', 'Test', 'Mode', 'Written', 'Oral', 'Total', 'Result', 'Time'] as const;
 
 /**
  * Every stored attempt of one trainer as table rows, newest first. Which columns those are

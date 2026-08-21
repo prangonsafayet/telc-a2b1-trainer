@@ -1,7 +1,13 @@
 import { Headphones } from 'lucide-react';
 
-import { Callout, QuestionItem, QuestionText, RichtigFalsch, Teil } from '@shared/components';
-import AudioPlayButton from '@shared/components/exam-ui/AudioPlayButton.tsx';
+import {
+  AudioPlayButton,
+  Callout,
+  QuestionItem,
+  QuestionText,
+  RichtigFalsch,
+  Teil
+} from '@shared/components';
 import { booleanAnswer, itemKey } from '@shared/lib/answers.ts';
 import { listeningRate } from '@shared/lib/paper.ts';
 

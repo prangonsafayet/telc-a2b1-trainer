@@ -1,6 +1,7 @@
 import { Headphones } from 'lucide-react';
 
 import {
+  AudioPlayButton,
   Callout,
   MultipleChoice,
   QuestionItem,
@@ -9,7 +10,6 @@ import {
   RichtigFalsch,
   Teil
 } from '@shared/components';
-import AudioPlayButton from '@shared/components/exam-ui/AudioPlayButton.tsx';
 import { booleanAnswer, itemKey, numberAnswer, textAnswer } from '@shared/lib/answers.ts';
 import { audioForKey, rateForExam } from '@shared/lib/speech.ts';
 import { Input } from '@shared/ui';

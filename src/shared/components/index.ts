@@ -11,6 +11,7 @@ export { default as ScoreHistoryChart } from './data-display/ScoreHistoryChart.t
 export { default as PageTitle } from './layout/PageTitle.tsx';
 export { default as SectionTitle } from './layout/SectionTitle.tsx';
 
+export { default as AudioPlayButton } from './exam-ui/AudioPlayButton.tsx';
 export { default as CountdownRing } from './exam-ui/CountdownRing.tsx';
 export { default as CriteriaRatingPanel } from './exam-ui/CriteriaRatingPanel.tsx';
 export { default as ExamModuleToolbar } from './exam-ui/ExamModuleToolbar.tsx';
