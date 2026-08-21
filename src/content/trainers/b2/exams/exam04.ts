@@ -428,7 +428,7 @@ Anlagen: Lebenslauf, Zeugnisse`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Besonders war daran, dass …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Habt ihr/Haben Sie so etwas Ähnliches schon erlebt?'
       ]
     },

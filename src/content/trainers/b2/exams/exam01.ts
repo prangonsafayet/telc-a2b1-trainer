@@ -401,7 +401,7 @@ Selin Aydin`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung kann ich sagen, dass …',
         'Besonders beeindruckt hat mich, dass …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Habt ihr/Haben Sie so etwas auch schon erlebt?'
       ]
     },

@@ -423,7 +423,7 @@ Elena Petrova`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Negativ war für mich vor allem, dass …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Wie ist das eigentlich bei dir/Ihnen?'
       ]
     },

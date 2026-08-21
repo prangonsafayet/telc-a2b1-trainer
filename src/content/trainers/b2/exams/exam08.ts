@@ -401,7 +401,7 @@ Daniela Petzold`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Früher musste ich …, heute dagegen …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Habt ihr/Haben Sie das auch schon einmal erlebt?'
       ]
     },

@@ -416,7 +416,7 @@ Daniel Okafor`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Inzwischen hat sich für mich vieles verändert: …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Wie ist das eigentlich bei dir/Ihnen?'
       ]
     },

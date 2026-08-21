@@ -419,7 +419,7 @@ Daniel Okafor`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Am Anfang fiel es mir schwer, weil …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Habt ihr/Haben Sie so etwas auch schon erlebt?'
       ]
     },

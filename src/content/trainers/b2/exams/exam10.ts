@@ -399,7 +399,7 @@ Helga Winterberg`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Rückblickend hat mich vor allem … geprägt.',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Daraus habe ich gelernt, dass …',
         'Habt ihr/Haben Sie schon einmal etwas Ähnliches erlebt?'
       ]
     },

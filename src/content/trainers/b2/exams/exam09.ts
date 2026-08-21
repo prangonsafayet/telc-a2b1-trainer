@@ -404,7 +404,7 @@ Werner Kluge`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Besonders beeindruckt hat mich, dass …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Wärt ihr/Wären Sie auch bereit, euch/sich dort zu engagieren?'
       ]
     },

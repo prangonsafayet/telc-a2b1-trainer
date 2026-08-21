@@ -416,7 +416,7 @@ Tomasz Kowalski`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Besonders bewusst wurde mir das, als …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Kennt ihr/Kennen Sie das auch aus eurem/Ihrem Alltag?'
       ]
     },

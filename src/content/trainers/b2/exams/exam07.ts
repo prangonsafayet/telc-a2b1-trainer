@@ -424,7 +424,7 @@ Marta Nowak`
         'Bei mir war das so: …',
         'Aus meiner Erfahrung …',
         'Das Besondere an diesem Ort war, dass …',
-        'Das kann ich gut nachvollziehen, weil …',
+        'Rückblickend würde ich sagen, dass …',
         'Wie ist das bei dir/Ihnen — hast du/haben Sie so etwas auch erlebt?'
       ]
     },
