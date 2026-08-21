@@ -1,3 +1,9 @@
+/*
+ * NOT vendored shadcn output any more, unlike its siblings in this folder: the `Dropdown`
+ * below is local work that replaces react-day-picker's own month/year pickers. `npx shadcn
+ * add calendar` would overwrite it — diff before accepting that file.
+ */
+
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react';
 import { DayPicker, type ChevronProps, type DropdownProps } from 'react-day-picker';
 import { de } from 'react-day-picker/locale';
@@ -25,6 +31,9 @@ const Dropdown = ({ options = [], value, onChange, 'aria-label': ariaLabel, disa
     {...optional('value', value == null ? undefined : String(value))}
     {...optional('disabled', disabled)}
     onValueChange={next => {
+      /* A double assertion, and the honest option: day-picker's `onChange` wants a real
+         `ChangeEvent<HTMLSelectElement>` and reads only `target.value` off it. `optional()`
+         cannot help — this is a callback argument, not a prop. */
       onChange?.({ target: { value: next } } as unknown as React.ChangeEvent<HTMLSelectElement>);
     }}
   >

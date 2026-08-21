@@ -79,8 +79,11 @@ const ExamCard = ({ card, onStart }: ExamCardProps) => (
         </Button>
         <Select
           value=""
-          onValueChange={mode => {
-            onStart(card.id, mode as AttemptMode);
+          onValueChange={value => {
+            /* Radix hands back the raw option string. The typed mode is already in the model
+               that produced the options, so it is looked up rather than asserted. */
+            const choice = card.modules.find(module => module.mode === value);
+            if (choice) onStart(card.id, choice.mode);
           }}
         >
           <SelectTrigger size="sm" className="w-full" aria-label={`Practice one module of ${card.title}`}>
