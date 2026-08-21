@@ -366,7 +366,7 @@ Tomasz Kowalski`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Leserbrief: Werbeverbot für ungesunde Lebensmittel',
@@ -397,7 +397,7 @@ Daniel Okafor`
       }
     ],
     tipps:
-      'Beim Leserbrief gehören der Bezug auf den Artikel und das Datum dazu. Nutzen Sie Konnektoren (jedoch, daher, allerdings) und stützen Sie Ihre Meinung mit einer eigenen Erfahrung. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
+      'Beim Leserbrief gehören der Bezug auf den Artikel und das Datum dazu. Nutzen Sie Konnektoren (jedoch, daher, allerdings) und stützen Sie Ihre Meinung mit einer eigenen Erfahrung. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: Zielumfang etwa 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {

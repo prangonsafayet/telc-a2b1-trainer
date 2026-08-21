@@ -16,7 +16,7 @@ export const B2_PAPER: TrainerPaper = {
     hoeren:
       '3 parts, 20 items, 75 points, ≈20 minutes. Teil 1: 5 radio clips → richtig/falsch (5 pts). Teil 2: one long interview → 10 richtig/falsch statements (2.5 pts). Teil 3: 5 announcements → richtig/falsch (5 pts). Each audio plays a limited number of times, like the real exam. Read the statements BEFORE you press play!',
     schreiben:
-      'Write one halbformelle E-Mail of 150–220 words, 45 points. Answer everything the task raises — all four Leitpunkte, fully — with a fitting greeting and sign-off; not a formal Behördenbrief. Keep 5 minutes to check structure and endings. You will score yourself against the sample answer afterwards.',
+      'Write one halbformelle E-Mail, 45 points. Answer everything the task raises — all four Leitpunkte, fully — with a Betreff line, a "Sehr geehrte …" greeting and a fitting sign-off; you are a private person writing to an institution, so no Amtsdeutsch and no Du. This trainer aims you at roughly 150–220 words; telc publishes no count. Keep 5 minutes to check structure and endings. You will score yourself against the sample answer afterwards.',
     sprechen:
       '3 parts, 75 points, with 20 minutes preparation in the real exam. Teil 1: Über Erfahrungen sprechen — talk about your own experience (25 pts). Teil 2: Diskussion about a short text (25 pts). Teil 3: Gemeinsam etwas planen (25 pts). Record yourself if you allow microphone access, then listen back and rate yourself honestly.'
   },
@@ -25,7 +25,7 @@ export const B2_PAPER: TrainerPaper = {
 
   writingTarget: { min: 150, max: 220 },
   writingTitle: 'Schriftlicher Ausdruck',
-  writingPlaceholder: 'Liebe Frau …, / Sehr geehrter Herr …,',
+  writingPlaceholder: 'Sehr geehrte Damen und Herren, / Sehr geehrte Frau …,',
 
   sprechenChips: ['25 Punkte · ~5 Min.', '25 Punkte · ~5 Min.', '25 Punkte · ~5 Min.'],
   prepNote: {

@@ -351,7 +351,7 @@ Helga Winterberg`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Leserbrief: Braucht unsere Stadt mehr Tourismus?',
@@ -380,7 +380,7 @@ Helga Winterberg`
       }
     ],
     tipps:
-      'Beim Leserbrief gehören der Bezug auf den Artikel, eine klare Position und ein eigenes Beispiel dazu. Verwenden Sie Konnektoren (jedoch, zweifellos, statt … zu). Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, Anrede und Grußformel vorhanden.'
+      'Beim Leserbrief gehören der Bezug auf den Artikel, eine klare Position und ein eigenes Beispiel dazu. Verwenden Sie Konnektoren (jedoch, zweifellos, statt … zu). Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: Zielumfang etwa 150–220 Wörter, Anrede und Grußformel vorhanden.'
   },
 
   sprechen: {

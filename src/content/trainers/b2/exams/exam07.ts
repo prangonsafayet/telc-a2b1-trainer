@@ -376,7 +376,7 @@ Marta Nowak`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Anfrage: Wohnung bei einer Genossenschaft',
@@ -405,7 +405,7 @@ Marta Nowak`
       }
     ],
     tipps:
-      'Bei einer Anfrage gilt: erst der Anlass, dann das konkrete Anliegen, zum Schluss die höfliche Bitte um Antwort. Nutzen Sie den Konjunktiv II (könnten, würde, wüsste gern) und Konnektoren (da, außerdem, hierfür). Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
+      'Bei einer Anfrage gilt: erst der Anlass, dann das konkrete Anliegen, zum Schluss die höfliche Bitte um Antwort. Nutzen Sie den Konjunktiv II (könnten, würde, wüsste gern) und Konnektoren (da, außerdem, hierfür). Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: Zielumfang etwa 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {

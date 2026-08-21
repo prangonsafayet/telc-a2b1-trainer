@@ -351,7 +351,7 @@ Martin Krause`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Anfrage: Betriebliche Weiterbildung',
@@ -382,7 +382,7 @@ Selin Aydin`
       }
     ],
     tipps:
-      'Eine halbformelle Anfrage bleibt höflich und konkret: Nutzen Sie den Konjunktiv II für Fragen und Bitten („Ich würde gern wissen, ob …“, „Könnten Sie mir sagen, …?“). Gehen Sie auf alle vier Leitpunkte ein und schließen Sie mit einer klaren Bitte. Prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
+      'Eine halbformelle Anfrage bleibt höflich und konkret: Nutzen Sie den Konjunktiv II für Fragen und Bitten („Ich würde gern wissen, ob …“, „Könnten Sie mir sagen, …?“). Gehen Sie auf alle vier Leitpunkte ein und schließen Sie mit einer klaren Bitte. Prüfen Sie am Ende: Zielumfang etwa 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {

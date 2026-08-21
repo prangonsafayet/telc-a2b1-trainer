@@ -378,7 +378,7 @@ Sabine Dörner
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Bewerbung: Mitarbeit im Gesundheitszentrum',
@@ -409,7 +409,7 @@ Anlagen: Lebenslauf, Zeugnisse`
       }
     ],
     tipps:
-      'Bei der Bewerbung zählen Struktur und positiver Ton: Bezug zur Anzeige, Qualifikationen mit Beispielen, ein konkreter Anfangstermin und der Wunsch nach einem Gespräch. Gehen Sie auf alle vier Leitpunkte ein. Prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
+      'Bei der Bewerbung zählen Struktur und positiver Ton: Bezug zur Anzeige, Qualifikationen mit Beispielen, ein konkreter Anfangstermin und der Wunsch nach einem Gespräch. Gehen Sie auf alle vier Leitpunkte ein. Prüfen Sie am Ende: Zielumfang etwa 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {

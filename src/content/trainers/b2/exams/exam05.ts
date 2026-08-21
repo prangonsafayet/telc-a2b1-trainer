@@ -369,7 +369,7 @@ Ana Ribeiro`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Bewerbung: Weiterbildungsstipendium',
@@ -400,7 +400,7 @@ Daniel Okafor`
       }
     ],
     tipps:
-      'Gliedern Sie in Absätze: Anlass, Sachverhalt, Begründung, Schluss. Nutzen Sie Konnektoren (daher, jedoch, sodass) und den Konjunktiv II für höfliche Bitten. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
+      'Gliedern Sie in Absätze: Anlass, Sachverhalt, Begründung, Schluss. Nutzen Sie Konnektoren (daher, jedoch, sodass) und den Konjunktiv II für höfliche Bitten. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: Zielumfang etwa 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {

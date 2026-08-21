@@ -72,19 +72,21 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
 <p><b>Zweiteilige Konnektoren:</b> je … desto (je mehr, desto besser) · sowohl … als auch · weder … noch · entweder … oder · zwar … aber · einerseits … andererseits · nicht nur … sondern auch.</p>`
     },
     brief: {
-      title: 'Die halbformelle E-Mail (45 Punkte, 150–220 Wörter)',
-      html: `<p><b>The task:</b> 30 minutes, ONE task — no choice between two. Write a <b>halbformelle E-Mail</b> of 150–220 words that answers everything the prompt raises, covering all Leitpunkte fully. Register sits between "Sehr geehrte Damen und Herren" and casual Du: "Lieber Herr Fischer" or "Guten Tag Frau Berger" is usually right — not a formal Behördenbrief.</p>
+      title: 'Die halbformelle E-Mail (45 Punkte, 30 Minuten)',
+      html: `<p><b>The task:</b> 30 minutes, ONE task — no choice between two. Write a <b>halbformelle E-Mail</b> that answers everything the prompt raises, covering all four Leitpunkte fully. Aim for roughly <b>150–220 words</b> — this trainer's target, since telc publishes no word count.</p>
+<p><b>What "halbformell" means here:</b> you write as a named private person to an institution — eine Redaktion, ein Amt, eine Genossenschaft, eine Personalabteilung. So: <b>Sehr geehrte Damen und Herren,</b> or <b>Sehr geehrte Frau Weber,</b> plus a Betreff line, sachlich und höflich — kein Amtsdeutsch, kein Du. That is exactly the register of all ten Musterlösungen in this trainer.</p>
 <p><b>Fixed skeleton — memorize it:</b><br>
-1. <b>Betreff</b> — one subject line on its own, written the way every Musterlösung here writes it (<i>Betreff: …</i>), then a blank line: <i>Betreff: Beschwerde über die Lieferung vom 12. Mai</i> / <i>Anfrage zu Ihrem Kursangebot</i> / <i>Bewerbung als …</i><br>
-2. <b>Anrede:</b> Sehr geehrte Damen und Herren, / Sehr geehrte Frau Weber, / Lieber Herr Fischer, — after the comma continue <b>lowercase</b>.<br>
+1. <b>Betreff</b> — one subject line on its own, written the way every Musterlösung here writes it (<i>Betreff: …</i>), then a blank line: <i>Betreff: Leserbrief zum Artikel „…“ vom 12. Mai</i> / <i>Anfrage zu Ihrem Kursangebot</i> / <i>Bewerbung als …</i><br>
+2. <b>Anrede:</b> Sehr geehrte Damen und Herren, (institution, no name) / Sehr geehrte Frau Weber, (named contact) — after the comma continue <b>lowercase</b>. "Lieber Herr Fischer," only fits someone you already know personally; no task here does.<br>
 3. <b>Einstieg — why are you writing?</b> Ich wende mich an Sie, weil … · Mit großem Interesse habe ich Ihre Anzeige gelesen. · Ich beziehe mich auf Ihr Schreiben vom …<br>
 4. <b>Hauptteil</b> — one short paragraph per Leitpunkt, connected with daher, allerdings, außerdem, aus diesem Grund.<br>
 5. <b>Schluss + Erwartung:</b> Ich wäre Ihnen dankbar, wenn Sie … · Über eine baldige Antwort würde ich mich freuen. · Für Rückfragen stehe ich Ihnen gerne zur Verfügung.<br>
 6. <b>Gruß:</b> Mit freundlichen Grüßen / Viele Grüße + voller Name (kein Komma nach dem Gruß, kein "LG"!).</p>
+<p><b>Leserbrief moves (the commonest task in this trainer — 4 of 10):</b> Mit großem Interesse habe ich Ihren Artikel „…“ vom 12. Mai gelesen. · Als … kann ich das nur bestätigen / muss ich Ihnen widersprechen. · Der Autor übersieht jedoch, dass … · Meine eigene Erfahrung zeigt: … · Ich fordere daher, dass … · Ich würde mich freuen, wenn Ihre Zeitung dem Thema weiter Raum gäbe.</p>
 <p><b>Beschwerde moves:</b> Leider musste ich feststellen, dass … · Die Ware weist erhebliche Mängel auf. · Ich bitte Sie, den Schaden bis zum … zu beheben. · Andernfalls sehe ich mich gezwungen, vom Kauf zurückzutreten. · Ich erwarte eine Rückerstattung des Betrags.</p>
 <p><b>Anfrage moves:</b> Könnten Sie mir bitte mitteilen, ob/wann/wie …? · Ich hätte einige Fragen bezüglich … · Wäre es möglich, …? · Ich würde gerne wissen, welche Kosten entstehen.</p>
 <p><b>Bewerbung moves:</b> hiermit bewerbe ich mich um die Stelle als … · Zurzeit arbeite ich als … · Ich verfüge über Erfahrung im Bereich … · Über eine Einladung zu einem Vorstellungsgespräch würde ich mich sehr freuen.</p>
-<p><b>Checklist (3 min):</b> alle Leitpunkte vollständig beantwortet? 150–220 Wörter? Betreff da? durchgehend Sie/Ihnen/Ihr groß? Konjunktiv II für Bitten? mindestens zwei formelle Konnektoren? Nomen groß, Verb an Position 2 bzw. am Ende?</p>`
+<p><b>Checklist (3 min):</b> alle vier Leitpunkte vollständig beantwortet? Zielumfang etwa 150–220 Wörter? Betreff da? durchgehend Sie/Ihnen/Ihr groß? Konjunktiv II für Bitten? mindestens zwei formelle Konnektoren? Nomen groß, Verb an Position 2 bzw. am Ende?</p>`
     },
     muendlich: {
       title: 'Redemittel: Über Erfahrungen sprechen, Diskussion, Konsens',
@@ -318,11 +320,11 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
     {
       day: 12,
       tier: 'core',
-      title: 'Die halbformelle E-Mail I — Beschwerde',
-      focus: 'The 45-point letter: skeleton + complaint moves',
+      title: 'Die halbformelle E-Mail I — Leserbrief',
+      focus: 'The 45-point letter: skeleton + Leserbrief moves',
       tasks: [
-        'Cheatsheet: Die halbformelle E-Mail — memorize the skeleton (Betreff, Anrede, Einstieg, Hauptteil, Schluss, Gruß) and the Beschwerde moves.',
-        'Write one halbformelle E-Mail complaint (150–220 words, 30 minutes) and self-check with the cheatsheet checklist.',
+        'Cheatsheet: Die halbformelle E-Mail — memorize the skeleton (Betreff, Anrede, Einstieg, Hauptteil, Schluss, Gruß) and the Leserbrief moves.',
+        'Write one Leserbrief as a halbformelle E-Mail in 30 minutes (aim for roughly 150–220 words) and self-check with the cheatsheet checklist.',
         'Collect your 10 favourite formal phrases on one sheet — these become your standard repertoire.',
         'One flashcard session (20 cards) of nouns.'
       ],
@@ -330,7 +332,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       ai: [
         {
           t: 'E-Mail-Prüfer',
-          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine realistische Beschwerde-Aufgabe (Situation + 4 Leitpunkte). Ich schreibe eine halbformelle E-Mail mit 150–220 Wörtern. Bewerte sie nach den telc-Kriterien mit maximal 45 Punkten, prüfe streng Register (halbformell, kein Behördenbrief), Betreff, Anrede, Konnektoren und Konjunktiv II bei Bitten, korrigiere alle Fehler und zeige eine Musterlösung. Dann die nächste Aufgabe.'
+          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine realistische Leserbrief-Aufgabe: eine kurze Zeitungsmeldung als Anlass plus 4 Leitpunkte. Ich schreibe einen Leserbrief als halbformelle E-Mail an die Redaktion (Zielumfang etwa 150–220 Wörter). Bewerte sie nach den telc-Kriterien mit maximal 45 Punkten, prüfe streng Register (Sehr geehrte Damen und Herren, sachlich, kein Amtsdeutsch), Betreff, den Bezug auf den Artikel, Konnektoren und Konjunktiv II bei Bitten, korrigiere alle Fehler und zeige eine Musterlösung. Dann die nächste Aufgabe.'
         }
       ]
     },
@@ -359,7 +361,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       focus: 'Anfrage & Bewerbung — the other two letter types',
       tasks: [
         'Cheatsheet: Die halbformelle E-Mail — learn the Anfrage and Bewerbung moves.',
-        'Write one halbformelle Anfrage e-mail (150–220 words, timed) and self-check with the checklist.',
+        'Write one halbformelle Anfrage e-mail, timed (aim for roughly 150–220 words), and self-check with the checklist.',
         'Compare your Modelltest 1 and 2 scores per module; write down your two weakest modules.',
         'Review ALL flashcards from days 8–13. From tomorrow the extension tier deepens speaking and argumentation.'
       ],
@@ -367,7 +369,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       ai: [
         {
           t: 'Anfrage-Prüfer',
-          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine Anfrage-Aufgabe (z. B. an eine Sprachschule oder einen Anbieter, mit 4 Leitpunkten). Ich schreibe 150–220 Wörter. Bewerte mit maximal 45 Punkten, korrigiere alles und zeige eine Musterlösung. Danach eine kurze Bewerbungs-Aufgabe als Bonus.'
+          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine Anfrage-Aufgabe (z. B. an eine Sprachschule oder einen Anbieter, mit 4 Leitpunkten). Ich schreibe eine halbformelle E-Mail mit einem Zielumfang von etwa 150–220 Wörtern. Bewerte mit maximal 45 Punkten, korrigiere alles und zeige eine Musterlösung. Danach eine kurze Bewerbungs-Aufgabe als Bonus.'
         }
       ]
     },
@@ -453,7 +455,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       tasks: [
         'Cheatsheet: Redemittel — drill the Vorschlagen/Abwägen/Kompromiss phrases for Teil 3 aloud.',
         'Plan 2 scenarios out loud, solo, 3 minutes each (a farewell party for a colleague, a weekend trip): Vorschlag, Gegenvorschlag, Einigung.',
-        'Write one halbformelle Bewerbung e-mail (150–220 words, timed) and self-check with the cheatsheet.',
+        'Write one halbformelle Bewerbung e-mail, timed (aim for roughly 150–220 words), and self-check with the cheatsheet.',
         'One flashcard session (20 cards) of verbs.'
       ],
       cheats: ['muendlich', 'brief'],
@@ -570,7 +572,7 @@ Der Minister sagte, die Lage <b>sei</b> stabil und man <b>werde</b> weitere Maß
       ai: [
         {
           t: 'Doppel-Prüfer',
-          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine Beschwerde-Aufgabe UND separat eine Anfrage-Aufgabe zum Üben — nicht als Wahl, im echten Test bekomme ich nur eine E-Mail-Aufgabe. Ich schreibe für jede eine halbformelle E-Mail mit 150–220 Wörtern in 30 Minuten. Bewerte beide nach den telc-Kriterien mit maximal 45 Punkten, korrigiere alles und zeige je eine Musterlösung.'
+          p: 'Du bist telc-Prüfer für Deutsch B2. Gib mir eine Leserbrief-Aufgabe UND separat eine Anfrage-Aufgabe zum Üben — nicht als Wahl, im echten Test bekomme ich nur eine E-Mail-Aufgabe. Ich schreibe für jede eine halbformelle E-Mail in 30 Minuten, Zielumfang etwa 150–220 Wörter. Bewerte beide nach den telc-Kriterien mit maximal 45 Punkten, korrigiere alles und zeige je eine Musterlösung.'
         }
       ]
     },

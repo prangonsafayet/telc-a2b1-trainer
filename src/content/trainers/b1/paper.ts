@@ -16,7 +16,7 @@ export const B1_PAPER: TrainerPaper = {
     hoeren:
       '3 parts, 20 items, 75 points, ≈30 minutes. Teil 1: 5 short texts → richtig/falsch (5 pts). Teil 2: one long interview → 10 richtig/falsch statements (2.5 pts). Teil 3: 5 announcements → richtig/falsch (5 pts). Each audio plays a limited number of times, like the real exam. Read the statements BEFORE you press play!',
     schreiben:
-      'Reply to the e-mail, 45 points. Write something on ALL FOUR of the Leitpunkte (≈80+ words), with a fitting greeting and sign-off. Plan 2 minutes, write, keep 3 minutes to check verb positions, endings and capital letters. You will score yourself against the sample answer afterwards.',
+      'Reply to the e-mail, 45 points. Write something on ALL FOUR of the Leitpunkte, with a fitting greeting and sign-off. This trainer aims you at roughly 80–150 words; telc publishes no count. Plan 2 minutes, write, keep 3 minutes to check verb positions, endings and capital letters. You will score yourself against the sample answer afterwards.',
     sprechen:
       '3 parts, 75 points, with 20 minutes preparation in the real exam, like the real paired oral exam. Teil 1: Einander kennenlernen — get to know your partner (15 pts). Teil 2: Über ein Thema sprechen (30 pts). Teil 3: Gemeinsam etwas planen (30 pts). Record yourself if you allow microphone access, then listen back and rate yourself honestly.'
   },

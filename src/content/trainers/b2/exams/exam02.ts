@@ -375,7 +375,7 @@ Peter Albrecht`,
 
   schreiben: {
     anweisung:
-      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail (150–220 Wörter) und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
+      'Sie haben 30 Minuten Zeit. Schreiben Sie eine halbformelle E-Mail und gehen Sie auf alle vier Leitpunkte ein. Achten Sie auf eine passende Anrede und einen passenden Gruß.',
     tasks: [
       {
         titel: 'Leserbrief: Handyverbot an Schulen',
@@ -404,7 +404,7 @@ Elena Petrova`
       }
     ],
     tipps:
-      'Beim Leserbrief gehören der Bezug auf den Artikel und eine klar begründete Meinung dazu. Nutzen Sie Konnektoren (dennoch, außerdem, daher), um Ihre Argumentation zu verbinden. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: 150–220 Wörter, passende Anrede und Grußformel.'
+      'Beim Leserbrief gehören der Bezug auf den Artikel und eine klar begründete Meinung dazu. Nutzen Sie Konnektoren (dennoch, außerdem, daher), um Ihre Argumentation zu verbinden. Gehen Sie auf alle vier Leitpunkte ein und prüfen Sie am Ende: Zielumfang etwa 150–220 Wörter, passende Anrede und Grußformel.'
   },
 
   sprechen: {
