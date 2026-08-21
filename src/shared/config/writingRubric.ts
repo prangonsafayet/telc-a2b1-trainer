@@ -46,6 +46,14 @@ export const FORMAL_ERROR_BANDS: readonly { readonly under: number; readonly poi
 export const MIN_CUE_LENGTH = 4;
 
 /**
+ * Below this share of the task's minimum length, a text is too short to have completed the
+ * task whatever it happens to mention — the D band, not a deduction. App-owned: telc's
+ * Aufgabenbewältigung descriptors talk about content, and the length is set by the
+ * Aufgabenstellung, so the two are combined here rather than sourced from one document.
+ */
+export const TOO_SHORT_RATIO = 0.6;
+
+/**
  * How far into the text an opening may sit and still count as the greeting, in words — and
  * how far from the end a closing may sit and still count as the sign-off.
  *
@@ -136,6 +144,9 @@ export const CONNECTORS: readonly string[] = [
   'jedoch',
   'allerdings',
   /* Structuring an argument — the B2 register */
+  'stattdessen',
+  'dagegen',
+  'dadurch',
   'zuerst',
   'zunaechst',
   'schliesslich',
@@ -154,6 +165,19 @@ export const CONNECTORS: readonly string[] = [
  * trotzdem …)".
  */
 export const CONNECTOR_TARGET = 3;
+
+/**
+ * The shortest task the connector check is applied to, in words, and it is the same source
+ * that gives the number above: the B1 cheatsheet asks for three different connectors in the
+ * 80–150-word letter, while the A2·B1 `writing` cheatsheet's checklist for the 40–80-word
+ * e-mail asks only "greeting + sign-off present?" and says nothing about connectors.
+ *
+ * So the check starts where the app's own advice starts. Measured consequence: all fifteen
+ * dual-level Musterlösungen contain nought to two connectors — an A2-level e-mail of parallel
+ * main clauses legitimately has none — and holding them to a B1 letter's standard would dock a
+ * band off every model answer the app itself prints.
+ */
+export const CONNECTOR_CHECK_MIN_WORDS = 80;
 
 /**
  * Closed-class German words: articles, possessives, pronouns, prepositions, conjunctions,

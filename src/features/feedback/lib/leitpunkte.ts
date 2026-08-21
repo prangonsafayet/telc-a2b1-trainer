@@ -1,6 +1,9 @@
 import { FUNCTION_WORDS, MIN_CUE_LENGTH, PROMPT_VERBS } from '@shared/config/writingRubric.ts';
 import { germanStem, germanWords } from '@shared/lib/germanText.ts';
 
+/** Shortest learner word allowed to match a cue that contains it. */
+const MIN_TWO_WAY_LENGTH = 5;
+
 /**
  * The content words of one Leitpunkt — the words that could show a learner addressed it.
  *
@@ -18,12 +21,28 @@ export const cuesFor = (leitpunkt: string): readonly string[] => [
 ];
 
 /**
- * Whether each Leitpunkt looks addressed. Both sides are stemmed and compared as substrings,
- * so an inflected or compounded form still counts ("Kleidung" against "Kleidungsstücke").
+ * A cue counts as used when it and one of the learner's words contain each other, stemmed.
  *
- * It over-credits a learner who merely echoes the prompt's nouns, and it cannot see a point
- * answered in the learner's own words — which is why the score this feeds is labelled
- * provisional and shown beside the learner's own mark rather than instead of it.
+ * Both directions, because German compounds and derives in both: the prompt may name the
+ * compound and the learner the head ("Verbesserungsvorschlag" answered with "Vorschlag") as
+ * readily as the other way round ("Kleidung" answered with "Kleidungsstücke"). The learner's
+ * word has to be five characters for the containing-the-cue direction, or short common stems
+ * would swallow everything — "mach" inside "mitmach" would let any "ich mache" answer a point
+ * about joining in.
+ */
+const cueIsUsed = (written: readonly string[], cue: string): boolean =>
+  written.some(word => word.includes(cue) || (word.length >= MIN_TWO_WAY_LENGTH && cue.includes(word)));
+
+/**
+ * Whether each Leitpunkt looks addressed.
+ *
+ * It over-credits a learner who merely echoes the prompt's nouns, and it under-credits one who
+ * answers in their own words: a point that names a category ("Nennen Sie eine Uhrzeit") is
+ * answered by an instance ("um 14 Uhr"), and no offline lexical matcher can see that. Measured,
+ * not assumed — scored against the 35 authored Musterlösungen, this marks a point untouched in
+ * twelve of them although each addresses every point. Closing that gap needs semantics, which
+ * this feature is built without on purpose, so the score it feeds is labelled provisional and
+ * shown beside the learner's own mark rather than instead of it.
  *
  * A point with no content words at all gets the benefit of the doubt rather than a `false`.
  * Two of the 125 authored points are like that — "Sagen Sie: Sie machen gern mit." and
@@ -38,6 +57,6 @@ export const coveredLeitpunkte = (text: string, leitpunkte: readonly string[]): 
   return leitpunkte.map(point => {
     const cues = cuesFor(point).map(germanStem);
     if (cues.length === 0) return true;
-    return cues.some(cue => written.some(word => word.includes(cue)));
+    return cues.some(cue => cueIsUsed(written, cue));
   });
 };
