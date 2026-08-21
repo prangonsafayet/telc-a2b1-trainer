@@ -39,6 +39,11 @@ export interface CloudSyncState {
   readonly resendConfirmation: (email: string) => Promise<boolean>;
   readonly sendPasswordReset: (email: string) => Promise<void>;
   readonly fullSync: (options?: { readonly announce?: boolean }) => Promise<void>;
+  /**
+   * Deletes this account's stored row. True when it is gone (or there was nothing to
+   * delete); false when the database could not be reached, which the caller has to say.
+   */
+  readonly deleteRemote: () => Promise<boolean>;
   readonly signOut: () => Promise<void>;
 }
 
@@ -132,6 +137,24 @@ export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     },
     [user, dbRef, replaceLocal, push]
   );
+
+  /**
+   * The one operation the union-only merge cannot express. Emptying the local document and
+   * letting the debounced push carry it up is not a delete: another signed-in device merges
+   * its full copy with the empty remote and restores everything. Removing the row is what
+   * makes "delete" mean delete on this account's side of it.
+   */
+  const deleteRemote = useCallback(async (): Promise<boolean> => {
+    if (!supabase || !user) return true;
+    try {
+      const { error } = await supabase.from(PROGRESS_TABLE).delete().eq('user_id', user.id);
+      if (error) throw new Error(error.message);
+      return true;
+    } catch (error) {
+      setStatus(`Could not delete the cloud copy: ${errorMessage(error)}`);
+      return false;
+    }
+  }, [user]);
 
   /* Surface a failed or cancelled OAuth callback instead of silently landing signed out. */
   useEffect(() => {
@@ -423,6 +446,7 @@ export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     resendConfirmation,
     sendPasswordReset,
     fullSync,
+    deleteRemote,
     signOut
   };
 };

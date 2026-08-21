@@ -26,9 +26,11 @@ const DeleteProgressCard = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="max-w-2xl text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">This cannot be undone.</span> Every attempt, score and
-          learn-plan tick of every trainer goes, and the exam conditions return to their defaults. Export a
-          backup first if you may want any of it again.
+          <span className="font-medium text-foreground">Everything in this browser goes.</span> Every attempt,
+          score and learn-plan tick of every trainer, any exam in progress, and the exam conditions return to
+          their defaults. Signed in, your cloud copy goes with it — but another device that still holds a copy
+          will restore it on its next sync, so delete there too. Export a backup first if you may want any of
+          it again.
         </p>
         <Button variant="destructive" onClick={() => void deleteAllProgress()}>
           <Trash2 /> Delete all progress

@@ -1,4 +1,4 @@
-import { TRAINERS } from '@shared/config/trainers.ts';
+import { TRAINERS, TRAINER_ORDER } from '@shared/config/trainers.ts';
 import { type ExamFormatId, type TrainerId } from '@shared/types';
 
 import { type ExamRunFormat } from '@features/exam/types/examFormat.ts';
@@ -17,3 +17,14 @@ const RUN_FORMATS: Readonly<Record<ExamFormatId, ExamRunFormat>> = {
  * nothing here.
  */
 export const runFormatFor = (trainer: TrainerId): ExamRunFormat => RUN_FORMATS[TRAINERS[trainer].format];
+
+/**
+ * Discards every trainer's run in progress, whichever paper it belongs to.
+ *
+ * "Delete all progress" used to leave both run keys behind, so a half-finished attempt —
+ * answers, remaining time and the text typed into the writing module — survived a full wipe
+ * and the dashboard offered to resume it immediately afterwards.
+ */
+export const clearAllRuns = (): void => {
+  for (const trainer of TRAINER_ORDER) runFormatFor(trainer).runStore.clear(trainer);
+};

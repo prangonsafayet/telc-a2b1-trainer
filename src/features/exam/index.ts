@@ -5,5 +5,5 @@
  * the exam domain never drags three screens along with it.
  */
 export { useStartAttempt } from './hooks/useStartAttempt.ts';
-export { runFormatFor } from './lib/formats/runFormats.ts';
+export { clearAllRuns, runFormatFor } from './lib/formats/runFormats.ts';
 export type { ExamRun } from './types/run.ts';
