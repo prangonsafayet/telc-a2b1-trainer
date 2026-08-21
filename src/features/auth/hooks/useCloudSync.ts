@@ -220,10 +220,18 @@ export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
   /* Debounced push whenever the local document changes after the first sync. */
   useEffect(() => {
     if (!supabase || !user || !updatedAt) return undefined;
-    if (pushedAtRef.current === null || pushedAtRef.current === updatedAt) return undefined;
+    if (pushedAtRef.current === updatedAt) return undefined;
 
     clearTimeout(pushTimerRef.current);
     pushTimerRef.current = setTimeout(() => {
+      /* Nothing has been pulled yet, so the sign-in sync failed (or has not finished).
+         Pushing now would upsert this device's document over a remote nobody has merged
+         with, so the retry is a full sync rather than a push. Gating the push alone on this
+         meant one failed sync stalled every later change for the rest of the session. */
+      if (pushedAtRef.current === null) {
+        void fullSync();
+        return;
+      }
       push(dbRef.current).catch(() => {
         setChip({
           text: 'offline',
@@ -235,7 +243,7 @@ export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     return () => {
       clearTimeout(pushTimerRef.current);
     };
-  }, [updatedAt, user, push, dbRef]);
+  }, [updatedAt, user, push, fullSync, dbRef]);
 
   /**
    * Hands off to the provider's consent screen. On success the browser navigates away, so
