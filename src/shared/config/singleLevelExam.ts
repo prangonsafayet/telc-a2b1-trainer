@@ -5,10 +5,9 @@
  * lives on that trainer's `TrainerPaper` in `src/content/trainers/<id>/paper.ts`.
  */
 
-import { addDays, toIsoDate } from '@shared/lib/format.ts';
 import { type ExamModule, type LevelTrainerSettings } from '@shared/types';
 
-import { DEFAULT_PREP_DAYS, EXAM_MODULES } from './exam.ts';
+import { defaultExamDate, EXAM_MODULES } from './exam.ts';
 
 /**
  * Module order of a full B1/B2 sitting. Both telc papers run the same five modules in the
@@ -94,9 +93,18 @@ export const SINGLE_LEVEL_RATING_CRITERIA: Readonly<
 /** Multiplier from a 0–5 criteria rating to points. */
 export const SINGLE_LEVEL_RATING_SCALE = 3;
 
-/** A fresh trainer document needs a date the schedule can work with. */
-export const defaultLevelSettings = (): LevelTrainerSettings => ({
-  examDate: addDays(toIsoDate(new Date()), DEFAULT_PREP_DAYS) ?? toIsoDate(new Date()),
-  writingMinutes: 30,
+/**
+ * A fresh trainer document needs a date the schedule can work with, and the writing time
+ * its own paper allows.
+ *
+ * `writingMinutes` is a parameter rather than a constant because it is a per-*trainer* fact
+ * that already exists on `TRAINERS[trainer].paper.minutes.schreiben` — B1 and B2 both run
+ * 30 today, which is exactly why a hardcoded 30 would have gone on looking right while
+ * silently giving a fourth single-level trainer the wrong default. `playsAllowed` stays here:
+ * playing each listening clip once is a property of this paper, not of a trainer.
+ */
+export const defaultLevelSettings = (writingMinutes: number): LevelTrainerSettings => ({
+  examDate: defaultExamDate(),
+  writingMinutes,
   playsAllowed: 1
 });

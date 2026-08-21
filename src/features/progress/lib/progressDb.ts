@@ -1,18 +1,23 @@
 import { DEFAULT_SETTINGS } from '@shared/config/exam.ts';
 import { defaultLevelSettings } from '@shared/config/singleLevelExam.ts';
+import { TRAINERS } from '@shared/config/trainers.ts';
 import { readLocalJson, writeLocal } from '@shared/lib/storage.ts';
-import { type LevelTrainerDoc, type ProgressDatabase } from '@shared/types';
+import { type LevelTrainerDoc, type ProgressDatabase, type TrainerId } from '@shared/types';
 
 /** localStorage key. Stable since v1 — do not rename without a migration. */
 export const PROGRESS_STORAGE_KEY = 'telcTrainerV1';
 
-/** A fresh B1/B2 trainer document. */
-export const emptyTrainerDoc = (): LevelTrainerDoc => ({
+/**
+ * A fresh trainer document, with the writing time that trainer's own paper allows — read
+ * from its registry descriptor rather than defaulted, so a trainer whose official Schreiben
+ * runs for something other than 30 minutes does not silently inherit B1's.
+ */
+export const emptyTrainerDoc = (trainer: TrainerId): LevelTrainerDoc => ({
   attempts: [],
   learnDone: {},
   srs: {},
   activity: {},
-  settings: defaultLevelSettings()
+  settings: defaultLevelSettings(TRAINERS[trainer].paper.minutes.schreiben)
 });
 
 export const EMPTY_DATABASE: ProgressDatabase = {
@@ -21,8 +26,8 @@ export const EMPTY_DATABASE: ProgressDatabase = {
   settings: DEFAULT_SETTINGS,
   srs: {},
   activity: {},
-  b1: emptyTrainerDoc(),
-  b2: emptyTrainerDoc()
+  b1: emptyTrainerDoc('b1'),
+  b2: emptyTrainerDoc('b2')
 };
 
 /**
@@ -63,7 +68,7 @@ const unchanged = <T extends object>(before: Partial<T>, after: T): boolean =>
   Object.keys(after).every(key => before[key as keyof T] === after[key as keyof T]);
 
 /** Coerces anything that claims to be a trainer document, defaulting every field. */
-const normalizeTrainerDoc = (raw: unknown): LevelTrainerDoc => {
+const normalizeTrainerDoc = (trainer: TrainerId, raw: unknown): LevelTrainerDoc => {
   const input = (typeof raw === 'object' && raw !== null ? raw : {}) as Partial<LevelTrainerDoc>;
   const normalized: LevelTrainerDoc = {
     ...input,
@@ -71,7 +76,7 @@ const normalizeTrainerDoc = (raw: unknown): LevelTrainerDoc => {
     learnDone: isMap(input.learnDone) ? input.learnDone : {},
     srs: isMap(input.srs) ? input.srs : {},
     activity: isMap(input.activity) ? input.activity : {},
-    settings: withDefaults(defaultLevelSettings(), input.settings)
+    settings: withDefaults(defaultLevelSettings(TRAINERS[trainer].paper.minutes.schreiben), input.settings)
   };
   return unchanged(input, normalized) ? (input as LevelTrainerDoc) : normalized;
 };
@@ -97,8 +102,8 @@ export const normalizeDatabase = (raw: unknown): ProgressDatabase => {
     settings: withDefaults(DEFAULT_SETTINGS, input.settings),
     srs: isMap(input.srs) ? input.srs : {},
     activity: isMap(input.activity) ? input.activity : {},
-    b1: normalizeTrainerDoc(input.b1),
-    b2: normalizeTrainerDoc(input.b2),
+    b1: normalizeTrainerDoc('b1', input.b1),
+    b2: normalizeTrainerDoc('b2', input.b2),
     ...(input._updatedAt ? { _updatedAt: input._updatedAt } : {})
   };
 };

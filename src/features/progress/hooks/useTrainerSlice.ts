@@ -82,8 +82,8 @@ export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
   /* Always a document, so the hook order never depends on which trainer is active; the
      root trainer's branch below simply does not read it. */
   const doc = useMemo(
-    () => (docKey === null ? emptyTrainerDoc() : (db[docKey] ?? emptyTrainerDoc())),
-    [db, docKey]
+    () => (docKey === null ? emptyTrainerDoc(trainer) : (db[docKey] ?? emptyTrainerDoc(trainer))),
+    [db, docKey, trainer]
   );
 
   const stored: readonly { readonly examId: number }[] = docKey === null ? db.attempts : doc.attempts;
@@ -96,23 +96,23 @@ export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
           const next = recipe({ learnDone: current.learnDone, srs: current.srs, activity: current.activity });
           return { ...current, ...next };
         }
-        const slice = current[docKey] ?? emptyTrainerDoc();
+        const slice = current[docKey] ?? emptyTrainerDoc(trainer);
         const next = recipe({ learnDone: slice.learnDone, srs: slice.srs, activity: slice.activity });
         return { ...current, [docKey]: { ...slice, ...next } };
       });
     },
-    [update, docKey]
+    [update, docKey, trainer]
   );
 
   const setSetting = useCallback(
     <K extends keyof TrainerExamSettings>(key: K, value: TrainerExamSettings[K]) => {
       update(current => {
         if (docKey === null) return { ...current, settings: { ...current.settings, [key]: value } };
-        const slice = current[docKey] ?? emptyTrainerDoc();
+        const slice = current[docKey] ?? emptyTrainerDoc(trainer);
         return { ...current, [docKey]: { ...slice, settings: { ...slice.settings, [key]: value } } };
       });
     },
-    [update, docKey]
+    [update, docKey, trainer]
   );
 
   /* Both writers count the sitting towards the streak: taking a Modelltest is study. */
@@ -131,7 +131,7 @@ export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
     (attempt: SingleLevelAttempt) => {
       update(current => {
         if (docKey === null) return current;
-        const slice = current[docKey] ?? emptyTrainerDoc();
+        const slice = current[docKey] ?? emptyTrainerDoc(trainer);
         return {
           ...current,
           [docKey]: {
@@ -142,7 +142,7 @@ export const useTrainerSlice = (trainer: TrainerId): TrainerSlice => {
         };
       });
     },
-    [update, docKey]
+    [update, docKey, trainer]
   );
 
   return useMemo<TrainerSlice>(() => {
