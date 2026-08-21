@@ -487,7 +487,8 @@ export default tseslint.config(
     files: [
       'src/**/*.{ts,tsx}',
       'tests/**/*.{ts,tsx}',
-      'e2e/**/*.ts',
+      /* The e2e specs are plain JS — `.ts` alone matched nothing, so the rule was inert. */
+      'e2e/**/*.{js,ts}',
       'scripts/**/*.{js,mjs,ts}',
       '*.{js,mjs,cjs,ts}'
     ],

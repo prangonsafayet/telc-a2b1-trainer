@@ -5,19 +5,19 @@ import { expect, test } from '@playwright/test';
  * deterministically. The shapes mirror what Supabase actually returns — in particular the
  * obfuscated "already registered" response, which is a 200 with an empty identities array.
  */
-async function stubSignUp(page, body, status = 200) {
+const stubSignUp = async (page, body, status = 200) => {
   await page.route('**/auth/v1/signup*', route =>
     route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) })
   );
-}
+};
 
-async function openSignUp(page) {
+const openSignUp = async page => {
   await page.goto('/settings');
   await page.getByRole('tab', { name: /Create account/ }).click();
   await page.getByLabel('Email', { exact: true }).fill('learner@example.com');
   await page.getByLabel('Password', { exact: true }).fill('Correct-Horse-9');
   await page.getByLabel('Repeat password').fill('Correct-Horse-9');
-}
+};
 
 test('an already-confirmed email is told to sign in, not to check its inbox', async ({ page }) => {
   /* Obfuscated response: no error, no session, identities empty. */
