@@ -70,6 +70,8 @@ export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
 
   /** `_updatedAt` of the document last pushed; `null` until the first sync completes. */
   const pushedAtRef = useRef<string | null>(null);
+  /** A callback is consumed once. StrictMode remounts the effect; the code is not reusable. */
+  const callbackHandledRef = useRef(false);
   const pushTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   /** Everything that only makes sense while signed in. */
@@ -156,24 +158,63 @@ export const useCloudSync = ({ dbRef, replaceLocal, updatedAt }: CloudSyncOption
     }
   }, [user]);
 
-  /* Surface a failed or cancelled OAuth callback instead of silently landing signed out. */
+  /*
+   * Surface a failed sign-in instead of silently landing signed out. Two shapes arrive
+   * here. The provider or GoTrue can bounce back with `error` / `error_description`, which
+   * says plainly what went wrong. A PKCE callback instead carries an ordinary-looking
+   * `?code=` whose *exchange* then fails — a verifier written on another origin, a code
+   * already spent, an expired one. supabase-js runs that exchange itself
+   * (`detectSessionInUrl`) and swallows the rejection, so this second shape used to drop
+   * the user back on the sign-in card with nothing at all to read.
+   */
   useEffect(() => {
+    if (callbackHandledRef.current) return;
+    callbackHandledRef.current = true;
+
     const query = new URLSearchParams(window.location.search);
     const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-    const failure =
+
+    /* A spent code left in the address bar is re-tried on every refresh, and always fails. */
+    const stripCallbackParams = (): void => {
+      const url = new URL(window.location.href);
+      for (const key of ['error', 'error_description', 'error_code', 'code']) url.searchParams.delete(key);
+      url.hash = '';
+      window.history.replaceState({}, '', url.toString());
+    };
+
+    const reported =
       query.get('error_description') ??
       query.get('error') ??
       hash.get('error_description') ??
       hash.get('error');
-    if (!failure) return;
+    if (reported) {
+      toast.error('Sign-in was not completed', {
+        description: decodeURIComponent(reported).replace(/\+/g, ' ')
+      });
+      stripCallbackParams();
+      return;
+    }
 
-    toast.error('Sign-in was not completed', {
-      description: decodeURIComponent(failure).replace(/\+/g, ' ')
-    });
-    const url = new URL(window.location.href);
-    for (const key of ['error', 'error_description', 'error_code']) url.searchParams.delete(key);
-    url.hash = '';
-    window.history.replaceState({}, '', url.toString());
+    const code = query.get('code');
+    if (code === null || !supabase) return;
+    const client = supabase;
+
+    /*
+     * `getSession` resolves only once the client has finished its own URL exchange, so a
+     * session still missing here means that exchange failed. Running it again is safe —
+     * the first attempt consumed nothing — and it is the only way to read the reason. A
+     * transient failure recovers the sign-in outright; a real one finally names itself.
+     */
+    void (async (): Promise<void> => {
+      const { data } = await client.auth.getSession();
+      if (data.session) return;
+
+      const { error } = await client.auth.exchangeCodeForSession(code);
+      stripCallbackParams();
+      if (!error) return;
+
+      toast.error('Sign-in could not be completed', { description: error.message });
+    })();
   }, []);
 
   /*
